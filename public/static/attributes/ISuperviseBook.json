@@ -1,0 +1,313 @@
+{
+  "classId": "idm.componet.db.isupervisebook",
+  "comName": "督办台账",
+  "className": "ISuperviseBook",
+  "comType": "common",
+  "comLangue": "vue",
+  "compositeAttr": [
+    {
+        "type": "input",
+        "layoutType": "inline",
+        "text": "唯一标识",
+        "bindKey": "ctrlId",
+        "disabled": true,
+        "default": "@[packageid]",
+        "desc": ""
+    },
+    {
+      "type": "group",
+      "text": "基本属性",
+      "desc": "提供设置组件能达到展示效果的基本属性设置信息",
+      "children": [
+        {
+          "type": "inputNumber",
+          "layoutType": "inline",
+          "text": "图片样式",
+          "bindKey": "emptySize",
+          "desc":"暂无数据图片高度：100",
+          "default": 100
+        },
+        {
+          "type": "input",
+          "layoutType": "input",
+          "text": "表格高度",
+          "desc": "表格最大高度",
+          "bindKey": "tableMaxHeight",
+          "default": "calc(100% - 100px)"
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "text": "分页设置",
+      "children": [
+          {
+            "type": "select",
+            "layoutType": "inline",
+            "text": "位置",
+            "bindKey": "paginationPostion",
+            "dictionary": [
+                {
+                    "label": "居左",
+                    "value": "left"
+                },
+                {
+                    "label": "居中",
+                    "value": "center"
+                },
+                {
+                    "label": "居右",
+                    "value": "right"
+                }
+            ],
+            "default": "right"
+          },
+          {
+              "type": "textarea",
+              "layoutType": "inline",
+              "text": "分页条数",
+              "bindKey": "pageSizeOptions",
+              "desc":"指定每页可以显示多少条，以逗号隔开，例如：10,20,30,40",
+              "default": "10,20,30,40"
+          },
+          {
+              "type": "inputNumber",
+              "layoutType": "inline",
+              "text": "默认条数",
+              "bindKey": "defaultPageSize",
+              "maxLength": 300,
+              "minLength": 1,
+              "desc":"默认的每页条数，一般指定分页条数设置的其中一个即可",
+              "default": 30
+          },
+          {
+              "type": "switch",
+              "layoutType": "inline",
+              "text": "禁用分页",
+              "bindKey": "disabledPagination",
+              "default": false
+          },
+          {
+              "type": "switch",
+              "layoutType": "inline",
+              "text": "快速跳转",
+              "bindKey": "showQuickJumper",
+              "desc":"设置是否可以快速跳转至某页",
+              "default": true
+          },
+          {
+              "type": "switch",
+              "layoutType": "inline",
+              "text": "改变分页",
+              "bindKey": "showSizeChanger",
+              "desc":"设置是否可以改变每页的大小",
+              "default": false
+          },
+          {
+              "type": "textarea",
+              "layoutType": "block",
+              "text": "总量显示格式化",
+              "bindKey": "showTotalFormat",
+              "desc":"设置用于显示数据总量和当前数据顺序，示例：@[range[0]]-@[range[1]] of @[total] items",
+              "placeholder":"示例：@[range[0]]-@[range[1]] of @[total] items",
+              "default": "当前显示@[range[0]]-@[range[1]]，总共@[total]条"
+          }
+      ]
+    },
+    {
+      "type": "group",
+      "text": "外层样式",
+      "desc": "点击？查看样式设置用法指南",
+      "helpUrl": "",
+      "children": [
+          {
+            "type": "inlineGroup",
+            "text": "宽高",
+            "children": [
+              {
+                "type": "input",
+                "layoutType": "block",
+                "text": "宽",
+                "desc": "填写auto则为自适应，或者使用px、%、vw等单位，比如100%、100px、100vw等等",
+                "bindKey": "width",
+                "width": "60px",
+                "default": "100%"
+              },
+              {
+                "type": "input",
+                "layoutType": "block",
+                "text": "高",
+                "desc": "填写auto则为自适应，或者使用px、%、vh等单位，比如100%、100px、100vh等等",
+                "bindKey": "height",
+                "width": "60px",
+                "default": "100%"
+              }
+            ]
+          },
+          {
+            "type": "box",
+            "layoutType": "block",
+            "text": "内外边距",
+            "bindKey": "ulbox",
+            "default": {
+              "marginTopVal": "",
+              "marginRightVal": "",
+              "marginBottomVal": "",
+              "marginLeftVal": "",
+              "paddingTopVal": "20px",
+              "paddingRightVal": "20px",
+              "paddingBottomVal": "20px",
+              "paddingLeftVal": "20px"
+            }
+          },
+          {
+            "type": "colorPicker",
+            "layoutType": "inline",
+            "text": "背景色",
+            "bindKey": "bgColor",
+            "placeholder": "请选择颜色",
+            "default": {
+                "hex": "#ffffff",
+                "hex8": "#ffffff"
+            }
+          },
+          {
+            "type": "input",
+            "layoutType": "inline",
+            "text": "容器阴影",
+            "bindKey": "boxShadow",
+            "default": ""
+          },
+          {
+            "type": "border",
+            "layoutType": "block",
+            "text": "边框",
+            "bindKey": "boxborder"
+          }
+      ]
+    },
+    {
+      "type": "table",
+      "text": "主题设置",
+      "desc": "点击？查看主题设置用法指南",
+      "bindKey": "themeList",
+      "tabText": "主题[index]",
+      "default": [
+        {
+          "key": "blue",
+          "mainColor": {
+            "hex": "#0073CA",
+            "hex8": "#0073CAFF"
+          }
+        },
+        {
+          "key": "red",
+          "mainColor": {
+            "hex": "#E21A1A",
+            "hex8": "#E21A1AFF"
+          }
+        },
+        {
+          "key": "green",
+          "mainColor": {
+            "hex": "#0EAF64",
+            "hex8": "#0EAF64FF"
+          }
+        }
+      ],
+      "children": [
+        {
+          "type": "select",
+          "layoutType": "inline",
+          "text": "主题标识",
+          "bindKey": "key",
+          "desc": "用于设置主题的标识，此项需要搭配自定义开发切换主题的功能，例如：蓝色标识为blue，用户切换主题的时候存储到数据库中的标识为blue，则这里填写为blue",
+          "default": "",
+          "placeholder": "例如：blue",
+          "ctrlAttrObject": {
+            "mode": "combobox"
+          },
+          "dictionary": [
+            {
+              "label": "blue",
+              "value": "blue"
+            },
+            {
+              "label": "red",
+              "value": "red"
+            },
+            {
+              "label": "green",
+              "value": "green"
+            }
+          ]
+        },
+        {
+          "type": "colorPicker",
+          "layoutType": "inline",
+          "text": "主要颜色",
+          "bindKey": "mainColor",
+          "desc": "主题的主要颜色",
+          "placeholder": "请选择颜色",
+          "display": "@[key]"
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "text": "高级",
+      "desc": "点击？查看样式设置用法指南",
+      "helpUrl": "",
+      "children": [
+        {
+          "type": "actionSelect",
+          "layoutType": "block",
+          "text": "接口参数函数",
+          "bindKey": "handleFieldFunc",
+          "desc": "接口参数：自定义函数参数：{_this: this, search: 搜索内容}",
+          "multiple": false
+        },
+        {
+          "type": "actionSelect",
+          "layoutType": "block",
+          "text": "接口返回数据处理函数",
+          "bindKey": "hanldeInterfaceFunc",
+          "desc": "接口参数：自定义函数参数：{_this: this, data: data}",
+          "multiple": false
+        },
+        {
+          "type": "actionSelect",
+          "layoutType": "block",
+          "text": "操作项函数",
+          "bindKey": "handleActionFunc",
+          "desc": "接口参数：自定义函数参数：{_this: this, option: option}",
+          "multiple": false
+        },
+        {
+          "type": "actionSelect",
+          "layoutType": "block",
+          "text": "表格点击跳转链接函数",
+          "bindKey": "handleTableFunc",
+          "desc": "接口参数：自定义函数参数：{_this: this, item: item}",
+          "multiple": false
+        },
+        {
+          "type": "actionSelect",
+          "layoutType": "block",
+          "text": "子项跳转函数",
+          "bindKey": "handleChildFunc",
+          "desc": "接口参数：自定义函数参数：{_this: this, item: item}",
+          "multiple": false
+        },
+        {
+          "type": "actionSelect",
+          "layoutType": "block",
+          "text": "附件跳转函数",
+          "bindKey": "handleFileFunc",
+          "desc": "接口参数：自定义函数参数：{_this: this, item: item}",
+          "multiple": false
+        }
+      ]
+    }
+  ]
+}

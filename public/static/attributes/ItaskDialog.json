@@ -1,0 +1,319 @@
+{
+  "classId": "idm.componet.db.itaskDialog",
+  "comName": "任务弹框",
+  "className": "ItaskDialog",
+  "comType": "common",
+  "comLangue": "vue",
+  "compositeAttr": [
+    {
+        "type": "input",
+        "layoutType": "inline",
+        "text": "唯一标识",
+        "bindKey": "ctrlId",
+        "disabled": true,
+        "default": "@[packageid]",
+        "desc": ""
+    },
+    {
+        "type": "group",
+        "text": "基础属性",
+        "desc": "点击？查看样式设置用法指南",
+        "helpUrl": "",
+        "children": [
+          {
+            "type": "input",
+            "layoutType": "inline",
+            "text": "时间轴下",
+            "desc": "时间轴距离下边距离可以写px、%, 比如： 10px",
+            "bindKey": "timeLiBottom",
+            "default": "20px"
+          },
+          {
+            "type": "font",
+            "layoutType": "block",
+            "text": "日期文字",
+            "desc": "日期文字样式",
+            "bindKey": "timeLiFont",
+            "default": {
+                "fontColors": {
+                    "hex": "#333",
+                    "hex8": "#333"
+                }
+            }
+          },
+          {
+            "type": "input",
+            "layoutType": "inline",
+            "text": "时间距右",
+            "desc": "时间距右右距离可以写px、%, 比如： 20px",
+            "bindKey": "timeDateRight",
+            "default": "20px"
+          },
+          {
+            "type": "input",
+            "layoutType": "inline",
+            "text": "时间距左",
+            "desc": "时间距左距离可以写px、%, 比如： 20px",
+            "bindKey": "timeDateLeft",
+            "default": "20px"
+          },
+          {
+            "type": "select",
+            "layoutType": "inline",
+            "text": "时间轴线",
+            "desc": "时间轴线选择：实线、虚线",
+            "bindKey": "timeChooseLine",
+            "dictionary": [
+                {
+                    "label": "实线",
+                    "value": "solid"
+                },
+                {
+                    "label": "虚线",
+                    "value": "dotted"
+                }
+            ],
+            "default": "dotted"
+          },
+          {
+            "type": "colorPicker",
+            "layoutType": "block",
+            "desc": "时间轴颜色",
+            "text": "时间轴颜色",
+            "bindKey": "timeLineColor"
+          },
+          {
+            "type": "font",
+            "layoutType": "block",
+            "text": "内容样式",
+            "desc": "内容文字样式",
+            "bindKey": "timeContentFont"
+          },
+          {
+            "type": "font",
+            "layoutType": "block",
+            "text": "附件样式",
+            "desc": "附件文字样式",
+            "bindKey": "fileContentFont"
+          }
+        ]
+    },
+    {
+      "type": "group",
+      "text": "外层样式",
+      "desc": "点击？查看样式设置用法指南",
+      "helpUrl": "",
+      "children": [
+          {
+            "type": "inlineGroup",
+            "text": "宽高",
+            "children": [
+              {
+                "type": "input",
+                "layoutType": "block",
+                "text": "宽",
+                "desc": "填写auto则为自适应，或者使用px、%、vw等单位，比如100%、100px、100vw等等",
+                "bindKey": "width",
+                "width": "60px",
+                "default": "100%"
+              },
+              {
+                "type": "input",
+                "layoutType": "block",
+                "text": "高",
+                "desc": "填写auto则为自适应，或者使用px、%、vh等单位，比如100%、100px、100vh等等",
+                "bindKey": "height",
+                "width": "60px",
+                "default": "100%"
+              }
+            ]
+          },
+          {
+            "type": "box",
+            "layoutType": "block",
+            "text": "内外边距",
+            "bindKey": "ulbox",
+            "default": {
+              "marginTopVal": "",
+              "marginRightVal": "",
+              "marginBottomVal": "",
+              "marginLeftVal": "",
+              "paddingTopVal": "10px",
+              "paddingRightVal": "20px",
+              "paddingBottomVal": "10px",
+              "paddingLeftVal": "20px"
+            }
+          },
+          {
+            "type": "colorPicker",
+            "layoutType": "inline",
+            "text": "背景色",
+            "bindKey": "bgColor",
+            "placeholder": "请选择颜色",
+            "default": {
+                "hex": "#ffffff",
+                "hex8": "#ffffff"
+            }
+          },
+          {
+            "type": "input",
+            "layoutType": "inline",
+            "text": "容器阴影",
+            "bindKey": "boxShadow",
+            "default": ""
+          },
+          {
+            "type": "border",
+            "layoutType": "block",
+            "text": "边框",
+            "bindKey": "boxborder"
+          }
+      ]
+    },
+    {
+      "type": "table",
+      "text": "主题设置",
+      "desc": "点击？查看主题设置用法指南",
+      "bindKey": "themeList",
+      "tabText": "主题[index]",
+      "default": [
+        {
+          "key": "blue",
+          "mainColor": {
+            "hex": "#0073CA",
+            "hex8": "#0073CAFF"
+          }
+        },
+        {
+          "key": "red",
+          "mainColor": {
+            "hex": "#E21A1A",
+            "hex8": "#E21A1AFF"
+          }
+        },
+        {
+          "key": "green",
+          "mainColor": {
+            "hex": "#0EAF64",
+            "hex8": "#0EAF64FF"
+          }
+        }
+      ],
+      "children": [
+        {
+          "type": "select",
+          "layoutType": "inline",
+          "text": "主题标识",
+          "bindKey": "key",
+          "desc": "用于设置主题的标识，此项需要搭配自定义开发切换主题的功能，例如：蓝色标识为blue，用户切换主题的时候存储到数据库中的标识为blue，则这里填写为blue",
+          "default": "",
+          "placeholder": "例如：blue",
+          "ctrlAttrObject": {
+            "mode": "combobox"
+          },
+          "dictionary": [
+            {
+              "label": "blue",
+              "value": "blue"
+            },
+            {
+              "label": "red",
+              "value": "red"
+            },
+            {
+              "label": "green",
+              "value": "green"
+            }
+          ]
+        },
+        {
+          "type": "colorPicker",
+          "layoutType": "inline",
+          "text": "主要颜色",
+          "bindKey": "mainColor",
+          "desc": "主题的主要颜色",
+          "placeholder": "请选择颜色",
+          "display": "@[key]"
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "text": "高级",
+      "desc": "点击？查看样式设置用法指南",
+      "helpUrl": "",
+      "children": [
+        {
+          "type": "dataSourceSelect",
+          "layoutType": "inline",
+          "text": "数据源",
+          "desc": "用于选择数据源",
+          "bindKey": "dataSourceForm"
+        },
+        {
+          "type": "actionSelect",
+          "layoutType": "block",
+          "text": "接口参数",
+          "bindKey": "dataSourceParamFunc",
+          "desc": "接口参数：自定义函数参数：{_this: this, params: params}",
+          "multiple": false
+        },
+        {
+          "type": "actionSelect",
+          "layoutType": "block",
+          "text": "子项跳转函数",
+          "bindKey": "handleChildFunc",
+          "desc": "接口参数：自定义函数参数：{_this: this, item: item}",
+          "multiple": false
+        },
+        {
+          "type": "actionSelect",
+          "layoutType": "block",
+          "text": "附件跳转函数",
+          "bindKey": "handleFileFunc",
+          "desc": "接口参数：自定义函数参数：{_this: this, item: item}",
+          "multiple": false
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "text": "字段设置",
+      "desc": "设置组件中展示的对应字段",
+      "children": [
+        {
+          "type": "dataSourceFiledSelect",
+          "layoutType": "inline",
+          "text": "日期",
+          "desc": "日期字段",
+          "bindKey": "timeField",
+          "default": "feedbackTime"
+        },
+        {
+          "type": "dataSourceFiledSelect",
+          "layoutType": "inline",
+          "text": "标题",
+          "desc": "标题字段",
+          "bindKey": "contentFiled",
+          "default": "feedbackContent"
+        },
+        {
+          "type": "dataSourceFiledSelect",
+          "layoutType": "inline",
+          "text": "附件",
+          "desc": "附件数组",
+          "bindKey": "fileGroupField",
+          "default": "feedbackAttachFiles"
+        },
+        {
+          "type": "dataSourceFiledSelect",
+          "layoutType": "inline",
+          "text": "附件名称",
+          "desc": "附件名称",
+          "bindKey": "fileNameField",
+          "default": "fileName"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "version": "1.0.0",
+  "lasttime": "2024-04-117 09:38:08",
+  "author": "申龙",
+  "className": "db",
+  "module": [
+    {
+      "classId": "idm.componet.db.itasklistDetail",
+      "comName": "任务明细",
+      "className": "ItasklistDetail",
+      "comType": "common",
+      "comLangue": "vue"
+    },
+    {
+      "classId": "idm.componet.db.isubTaskInfo",
+      "comName": "子任务信息",
+      "className": "ISubTaskInfo",
+      "comType": "common",
+      "comLangue": "vue"
+    },
+    {
+      "classId": "idm.componet.db.itaskDialog",
+      "comName": "任务弹框",
+      "className": "ItaskDialog",
+      "comType": "common",
+      "comLangue": "vue"
+    },
+    {
+      "classId": "idm.componet.db.isupervisebook",
+      "comName": "督办台账",
+      "className": "ISuperviseBook",
+      "comType": "common",
+      "comLangue": "vue"
+    },
+    {
+      "classId": "idm.componet.db.Isuperviseprojectstat",
+      "comName": "督办立项统计",
+      "className": "ISuperviseProjectStat",
+      "comType": "common",
+      "comLangue": "vue"
+    },
+    {
+      "classId": "idm.componet.db.Isupervisestat",
+      "comName": "督办统计",
+      "className": "ISuperviseStat",
+      "comType": "common",
+      "comLangue": "vue"
+    }
+  ]
+}
