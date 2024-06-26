@@ -83,7 +83,7 @@
                               <img src="../assets/zhuban.png" alt="" style="width: 16px;height: 16px;margin-right: 7px;">
                               <span v-for="(subitem, subindex) in item.hostList" :key="subindex"
                                 class="task-span"
-                                :class="subitem.dbStatus == '1' ? 'task-ban-gray' : 'task-ban-blue'">
+                                :class="subitem.dbStatus <=  1 ? 'task-ban-gray' : 'task-ban-blue'">
                                 {{ subitem.unitName }}
                               </span>
                             </span>
@@ -91,7 +91,7 @@
                               <img src="../assets/xieban.png" alt="" style="width: 16px;height: 16px;margin-right: 7px;">
                               <span v-for="(subitem, subindex) in item.assistList" :key="subindex"
                                 class="task-span"
-                                :class="subitem.dbStatus == '1' ? 'task-ban-gray' : 'task-ban-blue'">
+                                :class="subitem.dbStatus <=  1 ? 'task-ban-gray' : 'task-ban-blue'">
                                 {{ subitem.unitName }}
                               </span>
                             </span>

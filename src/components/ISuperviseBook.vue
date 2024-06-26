@@ -149,14 +149,14 @@
                             <span class="task-li-flex task-typeicon" v-if="item.hostList && item.hostList.length">
                               <img src="../assets/zhuban.png" alt="" class="task-ban-img" >
                               <span v-for="(subitem, subindex) in item.hostList" :key="subindex" class="task-ban-span"
-                                :class="subitem.dbStatus == '1' ? 'task-ban-gray' : 'task-ban-blue'">
+                                :class="subitem.dbStatus <=  1 ? 'task-ban-gray' : 'task-ban-blue'">
                                 {{ subitem.unitName }}
                               </span>
                             </span>
-                            <span style="display:flex;align-items:center;margin-left:30px;" class="task-typeicon" v-if="item.assistList && item.assistList.length">
+                            <span style="display:flex;align-items:center;padding-left:30px;" class="task-typeicon" v-if="item.assistList && item.assistList.length">
                               <img src="../assets/xieban.png" alt="" class="task-ban-img">
                               <span v-for="(subitem, subindex) in item.assistList" :key="subindex" class="task-ban-span"
-                                :class="subitem.dbStatus == '1' ? 'task-ban-gray' : 'task-ban-blue'">
+                                :class="subitem.dbStatus <=  1 ? 'task-ban-gray' : 'task-ban-blue'">
                                 {{ subitem.unitName }}
                               </span>
                             </span>
@@ -865,6 +865,7 @@ export default {
   transition: all 1s ease-in-out;
   border: 1px solid #e8e8e8;
   .task-li-box{
+    position: relative;
     display: flex;
     justify-content: space-between;
     background-color: #EEEEEE;
@@ -936,6 +937,8 @@ export default {
     .task-nameicon{
       position: absolute;
       right: 130px;
+      top: 50%;
+      transform: translateY(-50%);
       img{
         width: 18px;
         height: 18px;
