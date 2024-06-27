@@ -18,7 +18,7 @@
             <div>
               <img src="../assets/home.png" alt="" class="taskinfo-title-icon" >
               <span style="margin-right: 10px;">{{ item.handlerUnitText }}</span>
-              <span style="font-size: 14px;">({{ item.startDate }} ~ {{ item.endDate }})，{{ item.feedbackPeriodText }}</span>
+              <span style="font-size: 14px;">({{ item.startDate }} ~ {{ item.endDate }}) &nbsp;{{ item.feedbackPeriodText }}</span>
               <!-- <span>{{ item.hostHandlerText }}</span> -->
             </div>
             <div style="margin-top: 15px;" v-if="item.handlerText">
