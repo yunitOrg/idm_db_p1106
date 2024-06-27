@@ -63,10 +63,10 @@
         <span slot="dbStatusText" slot-scope="text, record" >
           <span v-if="record.timeoutStatus == '2'" class="subtask-table-red subtask-table-redborder">{{ record.timeoutStatusText }}</span>
           <span :class="{
-            'subtask-table-gray': record.dbStatus == '2',
-            'subtask-table-lan': record.dbStatus == '3',
-            'subtask-table-green': record.dbStatus == '4',
-            'subtask-table-red': record.dbStatus == '5',
+            'subtask-table-gray': record.dbStatus == '2' || record.dbStatus == '3',
+            'subtask-table-lan': record.dbStatus == '4',
+            'subtask-table-green': record.dbStatus == '5',
+            'subtask-table-red': record.dbStatus == '6',
             }">
           {{ text }}</span>
         </span>
