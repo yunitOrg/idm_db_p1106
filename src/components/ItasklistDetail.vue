@@ -286,13 +286,15 @@ export default {
     // 获取组件总高度
     getComponentsHeight() {
       this.$nextTick(() => {
-        try{
-          let height = this.$refs.taskRef.offsetHeight - 15
-          console.log(this.$refs.taskRef.offsetHeight)
-          top.updateSonTaskIframeHeight(height)
-        }catch(e) {
-          console.log('获取总高度', e)
-        }
+        setTimeout(() => {
+          try{
+            let height = this.$refs.taskRef.offsetHeight
+            console.log(this.$refs.taskRef.offsetHeight)
+            top.updateSonTaskIframeHeight(height)
+          }catch(e) {
+            console.log('获取总高度', e)
+          }
+        }, 100)
       })
     },
     // 加工数据

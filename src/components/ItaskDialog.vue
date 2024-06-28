@@ -173,7 +173,7 @@ export default {
               liObject['padding'] = `0 0 ${element}`
               break
             case 'timeLiFont':
-              IDM.style.setFontStyle(timeObject, element);
+              IDM.style.setFontStyle(timeObject, element, true);
               break
             case 'timeDateRight':
               timeMarginLeftObject['margin'] = `0 0 0 ${element}`
@@ -188,10 +188,10 @@ export default {
               borderStyle['border-color'] = element && element.hex8;
               break
             case 'timeContentFont':
-              IDM.style.setFontStyle(contentFontObject, element);
+              IDM.style.setFontStyle(contentFontObject, element, true);
               break
             case 'fileContentFont':
-              IDM.style.setFontStyle(fileStyleObject, element);
+              IDM.style.setFontStyle(fileStyleObject, element, true);
               break
           }
         }
