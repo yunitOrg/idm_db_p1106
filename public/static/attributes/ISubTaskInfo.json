@@ -26,6 +26,14 @@
             "bindKey": "emptySize",
             "desc":"暂无数据图片高度：100",
             "default": 100
+          },
+          {
+            "type": "switch",
+            "layoutType": "inline",
+            "text": "按钮组",
+            "bindKey": "btngroup",
+            "desc":"是否展示按钮组，比如：平台不需要按钮组则关闭，二开需要展示按钮组则展开",
+            "default": false
           }
         ]
       },
@@ -261,6 +269,22 @@
             "layoutType": "block",
             "text": "附件跳转函数",
             "bindKey": "handleFileFunc",
+            "desc": "接口参数：自定义函数参数：{_this: this, item: item}",
+            "multiple": false
+          },
+          {
+            "type": "actionSelect",
+            "layoutType": "block",
+            "text": "按钮组-催办",
+            "bindKey": "hanldeCuiban",
+            "desc": "接口参数：自定义函数参数：{_this: this, item: item}",
+            "multiple": false
+          },
+          {
+            "type": "actionSelect",
+            "layoutType": "block",
+            "text": "按钮组-再落实",
+            "bindKey": "handleLuoshi",
             "desc": "接口参数：自定义函数参数：{_this: this, item: item}",
             "multiple": false
           }

@@ -13,9 +13,12 @@
         <taskInfo
           origin="ItasklistDetail"
           :themeList="propData.themeList"
+          :btngroup="propData.btngroup"
           :porpsList="singMoreShowData"
           @handleContentJump="handleContentJump"
           @handleFileOpen="handleFileOpen"
+          @handleCuiCata="handleCuiCata"
+          @handleCuiBell="handleCuiBell"
         ></taskInfo>
       </template>
       <template v-else>
@@ -39,7 +42,9 @@ export default {
       singMoreShowData: [],
       moduleObject: {},
       taskId: '',
-      propData: this.$root.propData.compositeAttr || {}
+      propData: this.$root.propData.compositeAttr || {
+        btngroup: false
+      }
     }
   },
   mounted() {
@@ -71,6 +76,26 @@ export default {
         })
       } else {
         window.open(item.lastFeedbackUrl)
+      }
+    },
+    // 催办
+    handleCuiCata(item) {
+      if(this.propData.hanldeCuiban && this.propData.hanldeCuiban.length > 0) {
+        let name = this.propData.hanldeCuiban[0].name
+        window[name] && window[name].call(this, {
+          _this: this,
+          item: item
+        })
+      }
+    },
+    // 在落实
+    handleCuiBell(item) {
+      if(this.propData.handleLuoshi && this.propData.handleLuoshi.length > 0) {
+        let name = this.propData.handleLuoshi[0].name
+        window[name] && window[name].call(this, {
+          _this: this,
+          item: item
+        })
       }
     },
     propDataWatchHandle(propData) {

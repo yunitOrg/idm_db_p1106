@@ -44,8 +44,15 @@
             <div class="right-svg" v-if="item.lastFeedbackContent && item.feedbackType != 1">
               <div @click="handleShowDialog(item)">
                 <img :src="handleHistoryImg()" alt="">
-                <!-- <svg-icon v-if="porpsList?.length" icon-class="history" class="rightSvg" ></svg-icon> -->
               </div>
+              <template v-if="btngroup">
+                <div style="margin-left: 5px;" @click="handleCuiCata(item)">
+                  <img :src="hanldeImg('bell.png')" alt="">
+                </div>
+                <div style="margin-left: 5px;" @click="handleCuiBell(item)">
+                  <img :src="hanldeImg('able.png')" alt="">
+                </div>
+              </template>
             </div>
           </div>
         </div>
@@ -110,6 +117,9 @@ export default {
     },
     origin: {
       type: String
+    },
+    btngroup: {
+      type: Boolean
     }
   },
   data() {
@@ -134,6 +144,9 @@ export default {
   methods: {
     handleHistoryImg() {
       return IDM.url.getModuleAssetsWebPath(require('../assets/history.png'), this.moduleObject)
+    },
+    hanldeImg(img) {
+      return IDM.url.getModuleAssetsWebPath(require(`../assets/${img}`), this.moduleObject)
     },
     handleJump(item) {
       this.$emit('handleContentJump', item)
@@ -171,6 +184,14 @@ export default {
           }
         }
       }
+    },
+    // 催办
+    handleCuiCata(item) {
+      this.$emit('handleCuiCata', item)
+    },
+    // 在落实
+    handleCuiBell(item) {
+      this.$emit('handleCuiBell', item)
     },
     /**
      * @Desc 设置主题
@@ -403,8 +424,9 @@ export default {
     color: #333333;
   }
   .right-svg{
-    position: absolute;
-    right: 120px;
+    // position: absolute;
+    // right: 120px;
+    width: 20%;
     display: flex;
     cursor: pointer;
     svg{
@@ -412,6 +434,10 @@ export default {
       width: 18px;
       height: 18px;
       margin-left: 20px;
+    }
+    img{
+      width: 18px;
+      height: 18px;
     }
   }
   .rightSvg{

@@ -83,7 +83,6 @@
               </p>
             </template>
             <img src="../assets//more.png" alt="">
-            <!-- <svg-icon icon-class="detail" class="optionSvg"></svg-icon> -->
           </a-popover>
         </span>
         <!--展开图标-->
