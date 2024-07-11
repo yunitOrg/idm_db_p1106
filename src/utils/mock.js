@@ -348,3 +348,59 @@ export function getTableList() {
         }
     ]
 }
+
+/**
+ * @Desc 下发跟踪
+ */
+export function getTaskGenList() {
+    return [
+        {
+            underPart: '办公室（外事办公室）',
+            time: '2024-02-01 22:30',
+            status: '已签收、办理中',
+            signTime: '2024-02-04 22:30',
+            people: '王绍习',
+            id: '123'
+        },
+        {
+            underPart: '办公室（外事办公室）',
+            time: '2024-02-01 22:30',
+            status: '已签收、办理中',
+            signTime: '2024-02-04 22:30',
+            people: '王绍习',
+            id: '323'
+        },
+        {
+            underPart: '办公室（外事办公室）',
+            time: '2024-02-01 22:30',
+            status: '已签收、办理中',
+            signTime: '2024-02-04 22:30',
+            people: '王绍习',
+            id: '4343'
+        },
+        {
+            underPart: '办公室（外事办公室）',
+            time: '2024-02-01 22:30',
+            status: '已签收、办理中',
+            signTime: '2024-02-04 22:30',
+            people: '王绍习',
+            id: '656'
+        },
+        {
+            underPart: '办公室（外事办公室）',
+            time: '2024-02-01 22:30',
+            status: '已签收、办理中',
+            signTime: '2024-02-04 22:30',
+            people: '王绍习',
+            id: '7676'
+        },
+        {
+            underPart: '办公室（外事办公室）',
+            time: '2024-02-01 22:30',
+            status: '已签收、办理中',
+            signTime: '2024-02-04 22:30',
+            people: '王绍习',
+            id: '343'
+        }
+    ]
+}
