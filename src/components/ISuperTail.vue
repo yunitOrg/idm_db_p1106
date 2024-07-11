@@ -228,8 +228,7 @@ export default {
       window.IDM.setStyleToPageHead(this.moduleObject.id + " .isupertail-li+.isupertail-li", innerLi);
     },
     getMockData() {
-      // this.list = getTaskGenList()
-      this.list = []
+      this.list = getTaskGenList()
     },
     initData() {
       if (this.moduleObject.env !== 'production') {
