@@ -52,6 +52,13 @@
       "className": "ISuperTail",
       "comType": "common",
       "comLangue": "vue"
+    },
+    {
+      "classId": "idm.componet.db.IMenu",
+      "comName": "菜单",
+      "className": "IMenu",
+      "comType": "common",
+      "comLangue": "vue"
     }
   ]
 }
