@@ -97,8 +97,18 @@
                             </span>
                           </div>
                           <template v-if="judgeComState">
-                            <div @click.stop="handleShowDetail(item)">
-                              <svg-icon :icon-class="item.isShow ? 'hide-box' : 'show-box'" class="task-icon"></svg-icon>
+                            <div style="display:flex;">
+                              <template v-if="propData.btngroup">
+                                <div class="task-groupbtn" style="margin-right: 5px;" @click="handleCuiCata(item)">
+                                  <img :src="hanldeImg('bell.png')" alt="">
+                                </div>
+                                <div class="task-groupbtn" style="margin-right: 5px;" @click="handleCuiBell(item)">
+                                  <img :src="hanldeImg('able.png')" alt="">
+                                </div>
+                              </template>
+                              <div @click.stop="handleShowDetail(item)">
+                                <svg-icon :icon-class="item.isShow ? 'hide-box' : 'show-box'" class="task-icon"></svg-icon>
+                              </div>
                             </div>
                           </template>
                         </div>
@@ -182,6 +192,29 @@ export default {
     this.windowMountAttribute()
   },
   methods: {
+    hanldeImg(img) {
+      return IDM.url.getModuleAssetsWebPath(require(`../assets/${img}`), this.moduleObject)
+    },
+    // 催办
+    handleCuiCata(item) {
+      if(this.propData.hanldeCuiban && this.propData.hanldeCuiban.length > 0) {
+        let name = this.propData.hanldeCuiban[0].name
+        window[name] && window[name].call(this, {
+          _this: this,
+          item: item
+        })
+      }
+    },
+    // 在落实
+    handleCuiBell(item) {
+      if(this.propData.handleLuoshi && this.propData.handleLuoshi.length > 0) {
+        let name = this.propData.handleLuoshi[0].name
+        window[name] && window[name].call(this, {
+          _this: this,
+          item: item
+        })
+      }
+    },
     // 附件跳转
     handleFileOpen(item) {
       if(this.propData.handleFileFunc && this.propData.handleFileFunc.length > 0) {
@@ -495,6 +528,12 @@ export default {
     align-items:center;
     margin-top:10px;
     justify-content:space-between;
+  }
+  .task-groupbtn{
+    img {
+      width: 20px;
+      height: 20px;
+    }
   }
   .task-span{
     color: #7DA3E4;
