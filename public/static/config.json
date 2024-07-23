@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0",
+  "version": "1.0.1",
   "lasttime": "2024-04-117 09:38:08",
   "author": "申龙",
   "className": "db",
@@ -57,6 +57,20 @@
       "classId": "idm.componet.db.IMenu",
       "comName": "菜单",
       "className": "IMenu",
+      "comType": "common",
+      "comLangue": "vue"
+    },
+    {
+      "classId": "idm.componet.db.IFormSearch",
+      "comName": "搜索表单",
+      "className": "IFormSearch",
+      "comType": "common",
+      "comLangue": "vue"
+    },
+    {
+      "classId": "idm.componet.db.ITable",
+      "comName": "表格",
+      "className": "ITable",
       "comType": "common",
       "comLangue": "vue"
     }

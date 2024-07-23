@@ -1,0 +1,32 @@
+{
+    "classId": "idm.componet.db.IFormSearch",
+    "comName": "搜索表单",
+    "className": "IFormSearch",
+    "comType": "common",
+    "comLangue": "vue",
+    "compositeAttr": [
+        {
+            "type": "group",
+            "text": "数据变动联动组件",
+            "desc": "当数据有变动会联动这里选择的组件，把当前结果的对象传递给这些组件",
+            "children": [
+                {
+                    "type": "pageModuleSelect",
+                    "layoutType": "block",
+                    "text": "需求组件范围",
+                    "desc": "当前数据变动需要联动其他组件需求值（比如下拉框选项接口参数等）的组件范围",
+                    "bindKey": "linkageDemandPageModule",
+                    "multiple": true
+                },
+                {
+                    "type": "pageModuleSelect",
+                    "layoutType": "block",
+                    "text": "结果组件范围",
+                    "desc": "当前数据变动需要联动其他组件变更结果值的组件范围",
+                    "bindKey": "linkageResultPageModule",
+                    "multiple": true
+                }
+            ]
+        }
+    ]
+}

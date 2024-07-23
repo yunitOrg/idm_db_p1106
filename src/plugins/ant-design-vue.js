@@ -20,7 +20,9 @@ import 'ant-design-vue/lib/checkbox/style/css'
 import 'ant-design-vue/lib/message/style/css'
 import 'ant-design-vue/lib/radio/style/css'
 import 'ant-design-vue/lib/menu/style/css'
-
+import 'ant-design-vue/lib/form/style/css'
+import 'ant-design-vue/lib/form-model/style/css'
+import 'ant-design-vue/lib/space/style/css'
 import {
     Input,
     Select,
@@ -44,7 +46,10 @@ import {
     Row,
     Checkbox,
     Radio,
-    Menu
+    Menu,
+    FormModel,
+    Space,
+    Form
 } from 'ant-design-vue'
 
 Vue.use(Input)
@@ -69,4 +74,9 @@ Vue.use(Row)
 Vue.use(Checkbox)
 Vue.use(Radio)
 Vue.use(Menu)
+Vue.use(FormModel)
+Vue.use(FormModel.Item)
+Vue.use(Form)
+Vue.use(Form.Item)
+Vue.use(Space)
 Vue.prototype.$message = message
