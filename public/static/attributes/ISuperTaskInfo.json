@@ -1,0 +1,8 @@
+{
+    "classId": "idm.componet.db.ISuperTaskInfo",
+    "comName": "任务信息",
+    "className": "ISuperTaskInfo",
+    "comType": "common",
+    "comLangue": "vue",
+    "compositeAttr": []
+}

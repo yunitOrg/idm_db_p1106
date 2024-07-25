@@ -2,7 +2,7 @@
     <div idm-ctrl="idm_module" :id="moduleObject.id" :idm-ctrl-id="moduleObject.id" class="wrap">
         <a-form-model :model="filter" @submit="submitHandle" @submit.native.prevent layout="inline" class="filter-wrap">
             <a-form-model-item prop="keyword">
-                <a-input-search v-model="filter.keyword" placeholder="请输入检索内容" />
+                <a-input-search v-model="filter.contentQuery" placeholder="请输入检索内容" />
             </a-form-model-item>
             <a-form-model-item>
                 <a-space>
@@ -57,6 +57,7 @@ export default {
             })
         },
         resetHandle() {
+            this.filter = {}
             this.IDM.broadcast?.send({
                 type: 'linkageDemand',
                 messageKey: 'reset',

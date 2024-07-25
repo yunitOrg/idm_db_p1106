@@ -1,6 +1,6 @@
 {
   "version": "1.0.1",
-  "lasttime": "2024-04-117 09:38:08",
+  "lasttime": "2024-04-17 09:38:08",
   "author": "申龙",
   "className": "db",
   "module": [
@@ -71,6 +71,13 @@
       "classId": "idm.componet.db.ITable",
       "comName": "表格",
       "className": "ITable",
+      "comType": "common",
+      "comLangue": "vue"
+    },
+    {
+      "classId": "idm.componet.db.ISuperTaskInfo",
+      "comName": "任务信息",
+      "className": "ISuperTaskInfo",
       "comType": "common",
       "comLangue": "vue"
     }

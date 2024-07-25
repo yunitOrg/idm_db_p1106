@@ -225,12 +225,28 @@
                             "value": "text"
                         },
                         {
+                            "label": "链接",
+                            "value": "href"
+                        },
+                        {
                             "label": "选项",
                             "value": "select"
                         },
                         {
                             "label": "日期",
                             "value": "date"
+                        },
+                        {
+                            "label": "序号",
+                            "value": "index"
+                        },
+                        {
+                            "label": "按钮组",
+                            "value": "actions"
+                        },
+                        {
+                            "label": "菜单",
+                            "value": "menus"
                         }
                     ]
                 },
@@ -459,6 +475,14 @@
                     ]
                 },
                 {
+                    "type": "input",
+                    "layoutType": "inline",
+                    "text": "链接",
+                    "bindKey": "href",
+                    "desc": "支持表达式",
+                    "default": ""
+                },
+                {
                     "type": "switch",
                     "layoutType": "inline",
                     "text": "筛选",
@@ -569,6 +593,26 @@
                 }
             ],
             "default": []
+        },
+        {
+            "text": "高级设置",
+            "type": "group",
+            "children": [
+                {
+                    "type": "input",
+                    "text": "行标识",
+                    "bindKey": "rowKey",
+                    "default": "id",
+                    "layoutType": "inline"
+                },
+                {
+                    "type": "switch",
+                    "text": "扩展行",
+                    "bindKey": "expandedRow",
+                    "default": false,
+                    "layoutType": "inline"
+                }
+            ]
         }
     ]
 }

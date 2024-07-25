@@ -39,11 +39,11 @@ export const fetchData = ({ dataSourceType, customInterface, customFunction }, {
                                             ...params,
                                             ...customInterface.responseDataFun[0].param
                                         })
-                                    resolve(resultData)
                                 } catch (error) {
                                     reject(error)
                                 }
                             }
+                            resolve(resultData)
                         })
                         .catch(function (error) {
                             if (customInterface.requestErrorFun && customInterface.requestErrorFun.length > 0) {
@@ -72,8 +72,10 @@ export const fetchData = ({ dataSourceType, customInterface, customFunction }, {
                                 ...params,
                                 ...customFunction[0].param
                             })
-                        resolve(resValue)
-                    } catch (error) {}
+                    } catch (error) {
+
+                    }
+                    resolve(resValue)
                 }
                 break
             case 'pageContainer':
