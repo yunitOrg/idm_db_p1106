@@ -14,27 +14,56 @@
                 <!-- <a-range-picker v-if="field.type == 'date'" v-model="filter[field.value]" /> -->
             </a-form-model-item>
         </a-form-model>
-        <a-table :columns="columns" :dataSource="dataSource" :pagination="pagination" :rowKey="propData.rowKey" @change="handleTableChange" @expandedRowsChange="handleExpand">
-            <template #href="value, record, index">
-                {{ value }}
-            </template>
-            <template #actions="value, record">
-                <a-space v-if="value && value.length">
-                    <a-button v-for="(item, index) in value" :key="index" @click.stop="handleOptions({ item: item, fatherItem: record })">
-                        {{ item.text }}
-                    </a-button>
-                </a-space>
-            </template>
-            <template #menus="value, record">
-                <a-dropdown v-if="value && value.length">
-                    <a-menu slot="overlay" :selectable="false" @click="({ key }) => handleOptions({ item: value.find((n) => n.value == key), fatherItem: record })">
-                        <a-menu-item v-for="item in value" :key="item.value">
-                            {{ item.text }}
-                        </a-menu-item>
-                    </a-menu>
-                    <img src="../assets//more.png" alt="" />
-                </a-dropdown>
-            </template>
+        <a-table :dataSource="dataSource" :pagination="pagination" :rowKey="propData.rowKey" @change="handleTableChange" @expandedRowsChange="handleExpand">
+            <a-table-column v-for="column in propData.columns" :title="column.label" :data-index="column.value" :sorter="column.sorter" :key="column.key">
+                <template #default="value, record, index">
+                    <template v-if="column.type == 'index'">
+                        {{ index + 1 }}
+                    </template>
+                    <template v-else-if="column.type == 'select'">
+                        {{ optionData[column.value]?.find((n) => n.key == value)?.value }}
+                    </template>
+                    <template v-else-if="column.type == 'href'">
+                        <a
+                            :href="
+                                urlGetWebPath(
+                                    expressReplace(
+                                        column.href,
+                                        {
+                                            moduleObject,
+                                            record
+                                        },
+                                        true
+                                    )
+                                )
+                            "
+                            :target="column.target"
+                            >{{ value }}</a
+                        >
+                    </template>
+                    <template v-else-if="column.type == 'actions'">
+                        <a-space v-if="value && value.length">
+                            <a-button v-for="item in value" :key="item[column.valueKey]" @click.stop="handleMenuClick(item[column.valueKey], value, record, column)">
+                                {{ item[column.labelKey] }}
+                            </a-button>
+                        </a-space>
+                    </template>
+                    <template v-else-if="column.type == 'menus'">
+                        <a-dropdown v-if="value && value.length">
+                            <a-menu slot="overlay" :selectable="false" @click="({ key }) => handleMenuClick(key, value, record, column)">
+                                <a-menu-item v-for="item in value" :key="item[column.valueKey]">
+                                    {{ item[column.labelKey] }}
+                                </a-menu-item>
+                            </a-menu>
+                            <img src="../assets/more.png" alt="" />
+                        </a-dropdown>
+                    </template>
+                    <template v-else>
+                        {{ value }}
+                    </template>
+                </template>
+            </a-table-column>
+
             <template v-if="propData.expandedRow" #expandedRowRender="record">
                 <div class="drag_container" idm-ctrl-inner :idm-ctrl-id="moduleObject.id" :idm-container-index="record[propData.rowKey]"></div>
             </template>
@@ -54,7 +83,13 @@ export default {
             dataSource: [
                 {
                     id: '1',
-                    title: '标题'
+                    title: '标题',
+                    buttonList: [
+                        {
+                            text: '按钮1',
+                            value: '1'
+                        }
+                    ]
                 }
             ],
             totalCount: 0,
@@ -63,7 +98,9 @@ export default {
             pagination: {
                 current: 1,
                 pageSize: 10,
-                total: 0
+                total: 0,
+                showSizeChanger: true,
+                showTotal: (total, range) => `当前显示${range[0]}-${range[1]}，总共${total}条`
             },
             conditionObject: {},
             optionData: {},
@@ -86,33 +123,12 @@ export default {
                         href: '/aaa/@[id]'
                     },
                     {
-                        label: '类型',
-                        value: 'category',
-                        type: 'select',
-                        select: [
-                            {
-                                key: 1,
-                                value: '类型1'
-                            },
-                            {
-                                key: 2,
-                                value: '类型2'
-                            }
-                        ],
-                        sorter: true,
-                        filter: true
-                    },
-                    {
-                        label: '时间',
-                        value: 'date',
-                        type: 'date',
-                        sorter: true,
-                        filter: true
-                    },
-                    {
                         label: '操作',
                         value: 'buttonList',
-                        type: 'menus'
+                        type: 'menus',
+                        dataSource: 'record',
+                        labelKey: 'text',
+                        valueKey: 'value'
                     }
                 ],
                 rowKey: 'id',
@@ -129,8 +145,6 @@ export default {
                             return this.optionData[column.value]?.find((n) => n.key == value)?.value
                         case 'index':
                             return index + 1
-                        case 'href':
-                            return <a href={window.IDM.express.replace(column.href, record, true)}>{value}</a>
                         default:
                             return value
                     }
@@ -162,6 +176,8 @@ export default {
         this.init()
     },
     methods: {
+        urlGetWebPath: window.IDM.url.getWebPath,
+        expressReplace: window.IDM.express.replace,
         setContextValue(object) {
             console.debug('iTable setContextValue', object)
         },
@@ -265,6 +281,12 @@ export default {
         },
         initData() {
             if (window.IDM.env_develop_mode) {
+                this.dataSource = [
+                    {
+                        id: '1',
+                        title: '标题'
+                    }
+                ]
                 return
             }
             //把已选择的清空
@@ -444,6 +466,17 @@ export default {
                         }
                         break
                 }
+            }
+        },
+        handleMenuClick(key, value, record, column) {
+            if (Array.isArray(column.hanldeInterfaceFunc) && column.hanldeInterfaceFunc.length > 0) {
+                window[column.hanldeInterfaceFunc[0].name]?.call(this, {
+                    _this: this,
+                    key,
+                    value,
+                    record,
+                    column
+                })
             }
         }
     }

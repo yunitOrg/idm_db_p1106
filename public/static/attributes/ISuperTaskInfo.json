@@ -4,5 +4,62 @@
     "className": "ISuperTaskInfo",
     "comType": "common",
     "comLangue": "vue",
-    "compositeAttr": []
+    "compositeAttr": [
+        {
+            "type": "group",
+            "text": "高级",
+            "desc": "点击？查看样式设置用法指南",
+            "helpUrl": "",
+            "children": [
+                {
+                    "type": "actionSelect",
+                    "layoutType": "block",
+                    "text": "接口参数函数",
+                    "bindKey": "handleFieldFunc",
+                    "desc": "接口参数：自定义函数参数：{_this: this, search: 搜索内容}",
+                    "multiple": false
+                },
+                {
+                    "type": "actionSelect",
+                    "layoutType": "block",
+                    "text": "接口返回数据处理函数",
+                    "bindKey": "hanldeInterfaceFunc",
+                    "desc": "接口参数：自定义函数参数：{_this: this, data: data}",
+                    "multiple": false
+                },
+                {
+                    "type": "actionSelect",
+                    "layoutType": "block",
+                    "text": "操作项函数",
+                    "bindKey": "handleActionFunc",
+                    "desc": "接口参数：自定义函数参数：{_this: this, option: option}",
+                    "multiple": false
+                },
+                {
+                    "type": "actionSelect",
+                    "layoutType": "block",
+                    "text": "表格点击跳转链接函数",
+                    "bindKey": "handleTableFunc",
+                    "desc": "接口参数：自定义函数参数：{_this: this, item: item}",
+                    "multiple": false
+                },
+                {
+                    "type": "actionSelect",
+                    "layoutType": "block",
+                    "text": "子项跳转函数",
+                    "bindKey": "handleChildFunc",
+                    "desc": "接口参数：自定义函数参数：{_this: this, item: item}",
+                    "multiple": false
+                },
+                {
+                    "type": "actionSelect",
+                    "layoutType": "block",
+                    "text": "附件跳转函数",
+                    "bindKey": "handleFileFunc",
+                    "desc": "接口参数：自定义函数参数：{_this: this, item: item}",
+                    "multiple": false
+                }
+            ]
+        }
+    ]
 }

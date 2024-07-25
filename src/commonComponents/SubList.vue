@@ -12,7 +12,7 @@
                 @handleFileOpen="handleFileOpen"
             >
                 <template #default="{ data }">
-                    <SubList :record="data" :moduleObject="moduleObject" />
+                    <SubList :record="data" :propData="propData" :moduleObject="moduleObject" />
                 </template>
             </TaskItem>
         </template>
@@ -41,6 +41,10 @@ export default {
             type: Object,
             required: true
         },
+        propData: {
+            type: Object,
+            required: true
+        },
         moduleObject: {
             type: Object
         }
@@ -52,10 +56,8 @@ export default {
     },
     data() {
         return {
-            singMoreShowData: [], // 多任务里面
             env_develop_mode: window.IDM.env_develop_mode,
-            dataSource: [],
-            propData: this.$root.propData.compositeAttr || {}
+            dataSource: []
         }
     },
     mounted() {

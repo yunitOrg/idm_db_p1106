@@ -475,12 +475,76 @@
                     ]
                 },
                 {
-                    "type": "input",
-                    "layoutType": "inline",
-                    "text": "链接",
-                    "bindKey": "href",
-                    "desc": "支持表达式",
-                    "default": ""
+                    "type": "group",
+                    "display": "@[type=='menus']",
+                    "text": "菜单设置",
+                    "children": [
+                        {
+                            "text": "数据来源",
+                            "type": "select",
+                            "layoutType": "inline",
+                            "bindKey": "dataSource",
+                            "default": "record",
+                            "dictionary": [
+                                {
+                                    "value": "record",
+                                    "label": "记录"
+                                }
+                            ]
+                        },
+                        {
+                            "text": "文字字段",
+                            "type": "input",
+                            "bindKey": "labelKey",
+                            "default": "text"
+                        },
+                        {
+                            "text": "标识字段",
+                            "type": "input",
+                            "bindKey": "valueKey",
+                            "default": "value"
+                        },
+                        {
+                            "type": "actionSelect",
+                            "layoutType": "block",
+                            "text": "事件函数",
+                            "bindKey": "hanldeInterfaceFunc",
+                            "desc": "接口参数：自定义函数参数：{_this: this, data: data}",
+                            "multiple": false
+                        }
+                    ]
+                },
+                {
+                    "display": "@[type=='href']",
+                    "text": "链接设置",
+                    "type": "group",
+                    "children": [
+                        {
+                            "type": "input",
+                            "layoutType": "inline",
+                            "text": "链接",
+                            "bindKey": "href",
+                            "desc": "支持表达式",
+                            "default": ""
+                        },
+                        {
+                            "type": "select",
+                            "layoutType": "inline",
+                            "text": "打开方式",
+                            "bindKey": "target",
+                            "default": "_blank",
+                            "dictionary": [
+                                {
+                                    "label": "新窗口",
+                                    "value": "_blank"
+                                },
+                                {
+                                    "label": "当前窗口",
+                                    "value": "_self"
+                                }
+                            ]
+                        }
+                    ]
                 },
                 {
                     "type": "switch",

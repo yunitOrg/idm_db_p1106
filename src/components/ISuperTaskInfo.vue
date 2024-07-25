@@ -1,6 +1,6 @@
 <template>
     <div class="pervise-wrap">
-        <SubList :record="record" :moduleObject="moduleObject" />
+        <SubList :record="record" :propData="propData" :moduleObject="moduleObject" />
         <div v-if="env_develop_mode">任务信息</div>
     </div>
 </template>
@@ -15,10 +15,8 @@ export default {
     },
     data() {
         return {
-            singMoreShowData: [], // 多任务里面
             moduleObject: {},
             env_develop_mode: window.IDM.env_develop_mode,
-            dataSource: [],
             record: {},
             propData: this.$root.propData.compositeAttr || {}
         }
