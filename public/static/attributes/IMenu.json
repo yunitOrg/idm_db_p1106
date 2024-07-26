@@ -1,6 +1,6 @@
 {
     "classId": "idm.componet.db.IMenu",
-    "comName": "菜单",
+    "comName": "表格菜单",
     "className": "IMenu",
     "comType": "common",
     "comLangue": "vue",

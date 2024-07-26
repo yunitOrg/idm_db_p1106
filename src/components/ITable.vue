@@ -2,19 +2,18 @@
     <div idm-ctrl="idm_module" :id="moduleObject.id" :idm-ctrl-id="moduleObject.id" class="wrap">
         <a-form-model :model="filter" layout="inline" class="filter-wrap">
             <a-form-model-item v-for="field in fields" :key="field.value" :label="field.label" :prop="field.value">
-                <a-input v-if="field.type == 'text'" v-model="filter[field.value]" />
                 <a-select v-if="field.type == 'select'" v-model="filter[field.value]" :mode="field.selectMode" :allowClear="true" style="min-width: 100px">
                     <a-select-option v-for="item in optionData[field.value]" :key="item.key" :value="item.key">{{ item.value }}</a-select-option>
                 </a-select>
-                <template v-if="field.type == 'date'">
+                <template v-else-if="field.type == 'date'">
                     <a-date-picker v-model="filter[`${field.value}Start`]" />
                     ~
                     <a-date-picker v-model="filter[`${field.value}End`]" />
                 </template>
-                <!-- <a-range-picker v-if="field.type == 'date'" v-model="filter[field.value]" /> -->
+                <a-input v-else v-model="filter[field.value]" />
             </a-form-model-item>
         </a-form-model>
-        <a-table :dataSource="dataSource" :pagination="pagination" :rowKey="propData.rowKey" @change="handleTableChange" @expandedRowsChange="handleExpand">
+        <a-table :dataSource="dataSource" :pagination="pagination" :rowKey="propData.rowKey" @change="handleTableChange" @expand="handleExpand" :expandRowByClick="false">
             <a-table-column v-for="column in propData.columns" :title="column.label" :data-index="column.value" :sorter="column.sorter" :key="column.key">
                 <template #default="value, record, index">
                     <template v-if="column.type == 'index'">
@@ -42,21 +41,23 @@
                         >
                     </template>
                     <template v-else-if="column.type == 'actions'">
-                        <a-space v-if="value && value.length">
-                            <a-button v-for="item in value" :key="item[column.valueKey]" @click.stop="handleMenuClick(item[column.valueKey], value, record, column)">
-                                {{ item[column.labelKey] }}
-                            </a-button>
-                        </a-space>
-                    </template>
-                    <template v-else-if="column.type == 'menus'">
-                        <a-dropdown v-if="value && value.length">
+                        <a-dropdown v-if="column.dropdown">
                             <a-menu slot="overlay" :selectable="false" @click="({ key }) => handleMenuClick(key, value, record, column)">
-                                <a-menu-item v-for="item in value" :key="item[column.valueKey]">
+                                <a-menu-item v-for="item in getActions(value, column)" :key="item[column.valueKey]">
                                     {{ item[column.labelKey] }}
                                 </a-menu-item>
                             </a-menu>
                             <img src="../assets/more.png" alt="" />
                         </a-dropdown>
+                        <a-space v-else>
+                            <a-button
+                                v-for="item in getActions(value, column)"
+                                :key="item[column.valueKey]"
+                                @click.stop="handleMenuClick(item[column.valueKey], value, record, column)"
+                            >
+                                {{ item[column.labelKey] }}
+                            </a-button>
+                        </a-space>
                     </template>
                     <template v-else>
                         {{ value }}
@@ -74,7 +75,7 @@
 <script>
 import { commonParam, dataUtil } from '../utils'
 import bindStyle from '../mixins/bindStyle'
-import { nextTick, h } from 'vue'
+import { nextTick } from 'vue'
 export default {
     mixins: [bindStyle],
     data() {
@@ -125,10 +126,11 @@ export default {
                     {
                         label: '操作',
                         value: 'buttonList',
-                        type: 'menus',
+                        type: 'actions',
                         dataSource: 'record',
                         labelKey: 'text',
-                        valueKey: 'value'
+                        valueKey: 'value',
+                        dropdown: true
                     }
                 ],
                 rowKey: 'id',
@@ -137,36 +139,6 @@ export default {
         }
     },
     computed: {
-        columns() {
-            return this.propData.columns.map((column, columnIndex) => {
-                const customRender = (value, record, index) => {
-                    switch (column.type) {
-                        case 'select':
-                            return this.optionData[column.value]?.find((n) => n.key == value)?.value
-                        case 'index':
-                            return index + 1
-                        default:
-                            return value
-                    }
-                }
-                return Object.assign(
-                    {
-                        title: column.label,
-                        dataIndex: column.value,
-                        sorter: column.sorter
-                    },
-                    ['actions', 'menus'].includes(column.type)
-                        ? {
-                              scopedSlots: {
-                                  customRender: column.type
-                              }
-                          }
-                        : {
-                              customRender
-                          }
-                )
-            })
-        },
         fields() {
             return this.propData.columns.filter((n) => n.filter)
         }
@@ -408,22 +380,23 @@ export default {
                 this.pagination.total = totalCount
             }
         },
-        handleExpand(expandedRowKeys) {
+        handleExpand(expanded, record) {
             if (window.IDM.env_develop_mode) {
                 return
             }
-            nextTick(() => {
-                expandedRowKeys.forEach((key) => {
+            if (expanded) {
+                nextTick(() => {
+                    console.log('render', record[this.propData.rowKey], record)
                     this.moduleObject.dynamicRenderModuleGroupInitData(
                         this.moduleObject.packageid,
-                        key,
+                        record[this.propData.rowKey],
                         {
-                            record: this.dataSource.find((n) => n[this.propData.rowKey] == key)
+                            record
                         },
                         false
                     )
                 })
-            })
+            }
         },
         handleOptions(obj) {
             console.log('handleOptions', obj)
@@ -478,6 +451,12 @@ export default {
                     column
                 })
             }
+        },
+        getActions(value, column) {
+            if (column.dataSource == 'record') {
+                return value
+            }
+            return column.actions
         }
     }
 }
@@ -492,5 +471,73 @@ export default {
 .filter-wrap {
     padding: 10px;
     background-color: #f5f5f5;
+    :deep(.ant-form-item-label) {
+        color: #333333;
+        font-size: 16px;
+        font-weight: 500;
+    }
+}
+:deep(.ant-table) {
+    border: 1px solid #e8e8e8;
+    border-radius: 3px;
+    .ant-table-thead > tr > th {
+        color: #333 !important;
+        font-size: 16px !important;
+        font-weight: bold !important;
+        padding: 10px 10px !important;
+        background-color: #f6fbfa !important;
+    }
+    .ant-table-tbody .odd {
+        cursor: pointer;
+    }
+    .ant-table-tbody .even {
+        background-color: #f6fbfa;
+        cursor: pointer;
+    }
+    .ant-table-tbody > tr > td {
+        color: #333333;
+        font-size: 16px;
+        font-weight: 500;
+    }
+    .ant-table-thead > tr > th:nth-child(2) {
+        text-align: center !important;
+    }
+    .ant-table-tbody > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td {
+        background: none !important;
+    }
+    .ant-table-expanded-row {
+        > td {
+            padding: 0;
+        }
+    }
+}
+.subtaskinfo {
+    .subtask-li {
+        border-top: 1px dashed #ccc;
+    }
+    .subtask-li:first-child {
+        border: 0;
+    }
+}
+.pervise-kong {
+    padding: 10px;
+}
+.pervise-single-wrap {
+    padding: 0 0 0 30px;
+    .taskInfo-li {
+        position: relative;
+    }
+    .taskInfo-li + .taskInfo-li {
+        &::after {
+            content: '';
+            width: calc(100% - 30px);
+            height: 1px;
+            border-top: 1px dotted #ccc;
+            position: absolute;
+            top: 0;
+            box-sizing: border-box;
+            left: 0;
+        }
+    }
 }
 </style>

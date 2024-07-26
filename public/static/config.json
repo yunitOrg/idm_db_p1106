@@ -55,7 +55,7 @@
     },
     {
       "classId": "idm.componet.db.IMenu",
-      "comName": "菜单",
+      "comName": "表格菜单",
       "className": "IMenu",
       "comType": "common",
       "comLangue": "vue"
@@ -69,7 +69,7 @@
     },
     {
       "classId": "idm.componet.db.ITable",
-      "comName": "表格",
+      "comName": "动态表格",
       "className": "ITable",
       "comType": "common",
       "comLangue": "vue"

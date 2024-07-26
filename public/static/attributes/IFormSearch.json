@@ -7,6 +7,19 @@
     "compositeAttr": [
         {
             "type": "group",
+            "text": "基本设置",
+            "children": [
+                {
+                    "type": "input",
+                    "text": "内容索引",
+                    "layoutType": "inline",
+                    "bindKey": "fieldKey",
+                    "default": "contentQuery"
+                }
+            ]
+        },
+        {
+            "type": "group",
             "text": "数据变动联动组件",
             "desc": "当数据有变动会联动这里选择的组件，把当前结果的对象传递给这些组件",
             "children": [

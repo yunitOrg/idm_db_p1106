@@ -2,7 +2,7 @@
     <div idm-ctrl="idm_module" :id="moduleObject.id" :idm-ctrl-id="moduleObject.id" class="wrap">
         <a-form-model :model="filter" @submit="submitHandle" @submit.native.prevent layout="inline" class="filter-wrap">
             <a-form-model-item prop="keyword">
-                <a-input-search v-model="filter.contentQuery" placeholder="请输入检索内容" />
+                <a-input-search v-model="filter[fieldKey]" placeholder="请输入检索内容" />
             </a-form-model-item>
             <a-form-model-item>
                 <a-space>
@@ -22,7 +22,9 @@ export default {
         return {
             moduleObject: {},
             filter: {},
-            propData: this.$root.propData.compositeAttr || {}
+            propData: this.$root.propData.compositeAttr || {
+                fieldKey: 'contentQuery'
+            }
         }
     },
     computed: {},

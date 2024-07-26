@@ -1,10 +1,30 @@
 {
     "classId": "idm.componet.db.ITable",
-    "comName": "表格",
+    "comName": "动态表格",
     "className": "ITable",
     "comType": "common",
     "comLangue": "vue",
     "compositeAttr": [
+        {
+            "text": "基本设置",
+            "type": "group",
+            "children": [
+                {
+                    "type": "input",
+                    "text": "行标识",
+                    "bindKey": "rowKey",
+                    "default": "id",
+                    "layoutType": "inline"
+                },
+                {
+                    "type": "switch",
+                    "text": "扩展行",
+                    "bindKey": "expandedRow",
+                    "default": false,
+                    "layoutType": "inline"
+                }
+            ]
+        },
         {
             "type": "group",
             "text": "列表数据源",
@@ -243,10 +263,6 @@
                         {
                             "label": "按钮组",
                             "value": "actions"
-                        },
-                        {
-                            "label": "菜单",
-                            "value": "menus"
                         }
                     ]
                 },
@@ -476,9 +492,16 @@
                 },
                 {
                     "type": "group",
-                    "display": "@[type=='menus']",
-                    "text": "菜单设置",
+                    "display": "@[type=='actions']",
+                    "text": "按钮设置",
                     "children": [
+                        {
+                            "text": "折叠",
+                            "type": "switch",
+                            "layoutType": "inline",
+                            "bindKey": "dropdown",
+                            "default": true
+                        },
                         {
                             "text": "数据来源",
                             "type": "select",
@@ -487,20 +510,48 @@
                             "default": "record",
                             "dictionary": [
                                 {
+                                    "value": "static",
+                                    "label": "静态"
+                                },
+                                {
                                     "value": "record",
                                     "label": "记录"
                                 }
                             ]
                         },
                         {
+                            "display": "@[dataSource=='static']",
+                            "text": "按钮",
+                            "type": "table",
+                            "layoutType": "inline",
+                            "tabText": "按钮[index]",
+                            "bindKey": "actions",
+                            "children": [
+                                {
+                                    "text": "标识",
+                                    "type": "text",
+                                    "layoutType": "inline",
+                                    "bindKey": "value"
+                                },
+                                {
+                                    "text": "文本",
+                                    "type": "text",
+                                    "layoutType": "inline",
+                                    "bindKey": "text"
+                                }
+                            ]
+                        },
+                        {
                             "text": "文字字段",
                             "type": "input",
+                            "layoutType": "inline",
                             "bindKey": "labelKey",
                             "default": "text"
                         },
                         {
                             "text": "标识字段",
                             "type": "input",
+                            "layoutType": "inline",
                             "bindKey": "valueKey",
                             "default": "value"
                         },
@@ -657,26 +708,6 @@
                 }
             ],
             "default": []
-        },
-        {
-            "text": "高级设置",
-            "type": "group",
-            "children": [
-                {
-                    "type": "input",
-                    "text": "行标识",
-                    "bindKey": "rowKey",
-                    "default": "id",
-                    "layoutType": "inline"
-                },
-                {
-                    "type": "switch",
-                    "text": "扩展行",
-                    "bindKey": "expandedRow",
-                    "default": false,
-                    "layoutType": "inline"
-                }
-            ]
         }
     ]
 }
