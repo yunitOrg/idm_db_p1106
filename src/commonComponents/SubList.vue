@@ -26,14 +26,12 @@
                 @handleFileOpen="handleFileOpen"
             />
         </template>
-        <div v-if="env_develop_mode">任务信息</div>
     </div>
 </template>
 <script>
 import NoticeItem from './NoticeItem.vue'
 import TaskItem from './TaskItem.vue'
 import API from '../api/index'
-import bindStyle from '../mixins/bindStyle'
 export default {
     name: 'SubList',
     props: {
@@ -49,19 +47,17 @@ export default {
             type: Object
         }
     },
-    mixins: [bindStyle],
     components: {
         NoticeItem,
         TaskItem
     },
     data() {
         return {
-            env_develop_mode: window.IDM.env_develop_mode,
             dataSource: []
         }
     },
     mounted() {
-        this.init()
+        this.initData()
     },
     watch: {
         record: {
@@ -210,7 +206,6 @@ export default {
         },
         propDataWatchHandle(propData) {
             this.propData = propData.compositeAttr || {}
-            this.init()
         },
         async initData() {
             switch (this.record.assignType) {
@@ -248,10 +243,6 @@ export default {
                 default:
                     break
             }
-        },
-        init() {
-            this.handleStyle()
-            this.convertThemeListAttrToStyleObject()
         }
     }
 }

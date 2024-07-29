@@ -1,74 +1,93 @@
 <template>
-    <div idm-ctrl="idm_module" :id="moduleObject.id" :idm-ctrl-id="moduleObject.id" class="wrap">
-        <a-form-model :model="filter" layout="inline" class="filter-wrap">
-            <a-form-model-item v-for="field in fields" :key="field.value" :label="field.label" :prop="field.value">
-                <a-select v-if="field.type == 'select'" v-model="filter[field.value]" :mode="field.selectMode" :allowClear="true" style="min-width: 100px">
-                    <a-select-option v-for="item in optionData[field.value]" :key="item.key" :value="item.key">{{ item.value }}</a-select-option>
-                </a-select>
-                <template v-else-if="field.type == 'date'">
-                    <a-date-picker v-model="filter[`${field.value}Start`]" />
-                    ~
-                    <a-date-picker v-model="filter[`${field.value}End`]" />
-                </template>
-                <a-input v-else v-model="filter[field.value]" />
-            </a-form-model-item>
-        </a-form-model>
-        <a-table :dataSource="dataSource" :pagination="pagination" :rowKey="propData.rowKey" @change="handleTableChange" @expand="handleExpand" :expandRowByClick="false">
-            <a-table-column v-for="column in propData.columns" :title="column.label" :data-index="column.value" :sorter="column.sorter" :key="column.key">
-                <template #default="value, record, index">
-                    <template v-if="column.type == 'index'">
-                        {{ index + 1 }}
-                    </template>
-                    <template v-else-if="column.type == 'select'">
-                        {{ optionData[column.value]?.find((n) => n.key == value)?.value }}
-                    </template>
-                    <template v-else-if="column.type == 'href'">
-                        <a
-                            :href="
-                                urlGetWebPath(
-                                    expressReplace(
-                                        column.href,
-                                        {
-                                            moduleObject,
-                                            record
-                                        },
-                                        true
-                                    )
-                                )
-                            "
-                            :target="column.target"
-                            >{{ value }}</a
-                        >
-                    </template>
-                    <template v-else-if="column.type == 'actions'">
-                        <a-dropdown v-if="column.dropdown">
-                            <a-menu slot="overlay" :selectable="false" @click="({ key }) => handleMenuClick(key, value, record, column)">
-                                <a-menu-item v-for="item in getActions(value, column)" :key="item[column.valueKey]">
-                                    {{ item[column.labelKey] }}
-                                </a-menu-item>
-                            </a-menu>
-                            <img src="../assets/more.png" alt="" />
-                        </a-dropdown>
-                        <a-space v-else>
-                            <a-button
-                                v-for="item in getActions(value, column)"
-                                :key="item[column.valueKey]"
-                                @click.stop="handleMenuClick(item[column.valueKey], value, record, column)"
-                            >
-                                {{ item[column.labelKey] }}
-                            </a-button>
-                        </a-space>
-                    </template>
-                    <template v-else>
-                        {{ value }}
-                    </template>
-                </template>
-            </a-table-column>
+    <div idm-ctrl="idm_module" :id="moduleObject.id" :idm-ctrl-id="moduleObject.id">
+        <a-config-provider :locale="locale">
+            <div class="table-wrap">
+                <a-form-model :model="filter" layout="inline" class="filter-wrap">
+                    <a-form-model-item v-for="field in fields" :key="field.value" :label="field.label" :prop="field.value">
+                        <a-select v-if="field.type == 'select'" v-model="filter[field.value]" :mode="field.selectMode" :allowClear="true" style="min-width: 100px">
+                            <a-select-option v-for="item in optionData[field.value]" :key="item.key" :value="item.key">{{ item.value }}</a-select-option>
+                        </a-select>
+                        <template v-else-if="field.type == 'date'">
+                            <a-date-picker v-model="filter[`${field.value}Start`]" />
+                            ~
+                            <a-date-picker v-model="filter[`${field.value}End`]" />
+                        </template>
+                        <a-input v-else v-model="filter[field.value]" />
+                    </a-form-model-item>
+                </a-form-model>
+                <a-table
+                    :dataSource="dataSource"
+                    :pagination="pagination"
+                    :rowKey="propData.rowKey"
+                    :loading="loading"
+                    @change="handleTableChange"
+                    @expand="handleExpand"
+                    :defaultExpandAllRows="env_develop_mode"
+                    :expandRowByClick="!env_develop_mode"
+                    :expandIconAsCell="false"
+                    :expandIconColumnIndex="1"
+                    :rowClassName="(_, index) => (index % 2 == 0 ? 'odd' : 'even')"
+                    :scroll="{ y: propData.tableMaxHeight }"
+                >
+                    <a-table-column v-for="(column, columnIndex) in propData.columns" :title="column.label" :data-index="column.value" :sorter="column.sorter" :key="columnIndex">
+                        <template #default="value, record, index">
+                            <template v-if="column.type == 'index'">
+                                {{ index + 1 }}
+                            </template>
+                            <template v-else-if="column.type == 'select'">
+                                {{ optionData[column.value]?.find((n) => n.key == value)?.value }}
+                            </template>
+                            <template v-else-if="column.type == 'href'">
+                                <a
+                                    :href="
+                                        urlGetWebPath(
+                                            expressReplace(
+                                                column.href,
+                                                {
+                                                    moduleObject,
+                                                    record
+                                                },
+                                                true
+                                            )
+                                        )
+                                    "
+                                    :target="column.target"
+                                    @click.stop
+                                    >{{ value }}</a
+                                >
+                            </template>
+                            <template v-else-if="column.type == 'actions'">
+                                <a-dropdown v-if="column.dropdown">
+                                    <a-menu slot="overlay" :selectable="false" @click="({ key }) => handleMenuClick(key, value, record, column)">
+                                        <a-menu-item v-for="item in getActions(value, record, column)" :key="item.value">
+                                            {{ item.label }}
+                                        </a-menu-item>
+                                    </a-menu>
+                                    <img src="../assets/more.png" alt="" />
+                                </a-dropdown>
+                                <a-space v-else>
+                                    <a-button v-for="item in getActions(value, record, column)" :key="item.value" @click.stop="handleMenuClick(item.value, value, record, column)">
+                                        {{ item.label }}
+                                    </a-button>
+                                </a-space>
+                            </template>
+                            <template v-else>
+                                {{ value }}
+                            </template>
+                        </template>
+                    </a-table-column>
 
-            <template v-if="propData.expandedRow" #expandedRowRender="record">
-                <div class="drag_container" idm-ctrl-inner :idm-ctrl-id="moduleObject.id" :idm-container-index="record[propData.rowKey]"></div>
-            </template>
-        </a-table>
+                    <template slot="expandIcon">
+                        <div style="display: inline-block">
+                            <svg-icon icon-class="move" style="font-size: 18px; color: #134fed; cursor: pointer; margin-right: 3px"></svg-icon>
+                        </div>
+                    </template>
+                    <template v-if="propData.expandedRow" #expandedRowRender="record">
+                        <div class="drag_container" idm-ctrl-inner :idm-ctrl-id="moduleObject.id" :idm-container-index="record[propData.rowKey]"></div>
+                    </template>
+                </a-table>
+            </div>
+        </a-config-provider>
     </div>
 </template>
 
@@ -76,10 +95,16 @@
 import { commonParam, dataUtil } from '../utils'
 import bindStyle from '../mixins/bindStyle'
 import { nextTick } from 'vue'
+import zh_CN from 'ant-design-vue/lib/locale/zh_CN'
 export default {
-    mixins: [bindStyle],
+    mixins: [
+        bindStyle({
+            wrap: '.table-wrap'
+        })
+    ],
     data() {
         return {
+            locale: zh_CN,
             moduleObject: {},
             dataSource: [
                 {
@@ -96,6 +121,7 @@ export default {
             totalCount: 0,
             filter: {},
             sort: {},
+            loading: false,
             pagination: {
                 current: 1,
                 pageSize: 10,
@@ -105,6 +131,7 @@ export default {
             },
             conditionObject: {},
             optionData: {},
+            env_develop_mode: window.IDM.env_develop_mode,
             propData: this.$root.propData.compositeAttr || {
                 dataSourceType: 'customInterface',
                 columns: [
@@ -452,9 +479,14 @@ export default {
                 })
             }
         },
-        getActions(value, column) {
-            if (column.dataSource == 'record') {
-                return value
+        getActions(value, record, column) {
+            if (Array.isArray(column.handleActionsFunc) && column.handleActionsFunc.length > 0) {
+                return window[column.handleActionsFunc[0].name]?.call(this, {
+                    _this: this,
+                    value,
+                    record,
+                    column
+                })
             }
             return column.actions
         }
@@ -463,7 +495,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.wrap {
+.table-wrap {
     display: flex;
     flex-direction: column;
     gap: 10px;

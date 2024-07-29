@@ -1,6 +1,6 @@
 <template>
-    <div idm-ctrl="idm_module" :id="moduleObject.id" :idm-ctrl-id="moduleObject.id" class="wrap">
-        <a-form-model :model="filter" @submit="submitHandle" @submit.native.prevent layout="inline" class="filter-wrap">
+    <div idm-ctrl="idm_module" :id="moduleObject.id" :idm-ctrl-id="moduleObject.id">
+        <a-form-model :model="filter" @submit="submitHandle" @submit.native.prevent layout="inline" class="form-search-wrap">
             <a-form-model-item :prop="propData.fieldKey">
                 <a-input-search v-model="filter[propData.fieldKey]" placeholder="请输入检索内容" />
             </a-form-model-item>
@@ -17,7 +17,11 @@
 <script>
 import bindStyle from '../mixins/bindStyle'
 export default {
-    mixins: [bindStyle],
+    mixins: [
+        bindStyle({
+            wrap: '.form-search-wrap'
+        })
+    ],
     data() {
         return {
             moduleObject: {},

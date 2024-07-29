@@ -137,8 +137,6 @@ export default {
     },
     mounted() {
         this.moduleObject = this.$root.moduleObject
-        console.log('mounted', this.porpsList)
-        this.init()
     },
     methods: {
         handleHistoryImg() {
@@ -191,48 +189,6 @@ export default {
         // 在落实
         handleCuiBell(item) {
             this.$emit('handleCuiBell', item)
-        },
-        /**
-         * @Desc 设置主题
-         */
-        ThemeListAttrToStyle() {
-            var themeList = this.themeList
-            if (!themeList) {
-                return
-            }
-            const themeNamePrefix = IDM.setting && IDM.setting.applications && IDM.setting.applications.themeNamePrefix ? IDM.setting.applications.themeNamePrefix : 'idm-theme-'
-            for (var i = 0; i < themeList.length; i++) {
-                var item = themeList[i]
-                let bulletBgColorObj = {
-                    color: item.mainColor ? IDM.hex8ToRgbaString(item.mainColor.hex8) : ''
-                }
-                let svgStyle = {
-                    color: item.mainColor ? IDM.hex8ToRgbaString(item.mainColor.hex8) : '',
-                    fill: item.mainColor ? IDM.hex8ToRgbaString(item.mainColor.hex8) : ''
-                }
-                let timeDateStyle = {
-                    'border-left-color': item.mainColor ? IDM.hex8ToRgbaString(item.mainColor.hex8) : ''
-                }
-                let dotObject = {
-                    'border-color': item.mainColor ? IDM.hex8ToRgbaString(item.mainColor.hex8) : ''
-                }
-                let dotAfterObject = {
-                    'background-color': item.mainColor ? IDM.hex8ToRgbaString(item.mainColor.hex8) : ''
-                }
-                // IDM.setStyleToPageHead(`.${themeNamePrefix}${item.key} .taskInfo .taskInfo-li .right-content`, bulletBgColorObj)
-                IDM.setStyleToPageHead(`.${themeNamePrefix}${item.key} .taskInfo .taskInfo-li .rightSvg`, svgStyle)
-                // IDM.setStyleToPageHead(`.${themeNamePrefix}${item.key} .taskInfo .task-font`, bulletBgColorObj)
-
-                IDM.setStyleToPageHead(`.${themeNamePrefix}${item.key} .task-dialog .right-file`, bulletBgColorObj)
-                IDM.setStyleToPageHead(`.${themeNamePrefix}${item.key} .task-dialog .ant-timeline-item-tail`, timeDateStyle)
-                IDM.setStyleToPageHead(`.${themeNamePrefix}${item.key} .task-dialog .subtaskdot`, dotObject)
-                IDM.setStyleToPageHead(`.${themeNamePrefix}${item.key} .task-dialog .subtaskdot:after`, dotAfterObject)
-            }
-        },
-        initData() {},
-        init() {
-            this.ThemeListAttrToStyle()
-            this.initData()
         }
     }
 }

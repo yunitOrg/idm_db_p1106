@@ -12,6 +12,7 @@
                 {
                     "type": "input",
                     "text": "行标识",
+                    "desc": "数据行唯一标识，一般为id",
                     "bindKey": "rowKey",
                     "default": "id",
                     "layoutType": "inline"
@@ -19,9 +20,80 @@
                 {
                     "type": "switch",
                     "text": "扩展行",
+                    "desc": "是否开启扩展行，点击行后展示",
                     "bindKey": "expandedRow",
                     "default": false,
                     "layoutType": "inline"
+                },
+                {
+                    "type": "input",
+                    "layoutType": "input",
+                    "text": "表格高度",
+                    "desc": "表格最大高度，超出后显示滚动条",
+                    "bindKey": "tableMaxHeight",
+                    "default": "calc(100vh - 300px)"
+                }
+            ]
+        },
+        {
+            "type": "group",
+            "text": "外层样式",
+            "desc": "点击？查看样式设置用法指南",
+            "helpUrl": "",
+            "children": [
+                {
+                    "type": "inlineGroup",
+                    "text": "宽高",
+                    "children": [
+                        {
+                            "type": "input",
+                            "layoutType": "block",
+                            "text": "宽",
+                            "desc": "填写auto则为自适应，或者使用px、%、vw等单位，比如100%、100px、100vw等等",
+                            "bindKey": "width",
+                            "width": "60px",
+                            "default": "100%"
+                        },
+                        {
+                            "type": "input",
+                            "layoutType": "block",
+                            "text": "高",
+                            "desc": "填写auto则为自适应，或者使用px、%、vh等单位，比如100%、100px、100vh等等",
+                            "bindKey": "height",
+                            "width": "60px",
+                            "default": "100%"
+                        }
+                    ]
+                },
+                {
+                    "type": "box",
+                    "layoutType": "block",
+                    "text": "内外边距",
+                    "bindKey": "ulbox"
+                },
+                {
+                    "type": "colorPicker",
+                    "layoutType": "inline",
+                    "text": "背景色",
+                    "bindKey": "bgColor",
+                    "placeholder": "请选择颜色",
+                    "default": {
+                        "hex": "#ffffff",
+                        "hex8": "#ffffff"
+                    }
+                },
+                {
+                    "type": "input",
+                    "layoutType": "inline",
+                    "text": "容器阴影",
+                    "bindKey": "boxShadow",
+                    "default": ""
+                },
+                {
+                    "type": "border",
+                    "layoutType": "block",
+                    "text": "边框",
+                    "bindKey": "boxborder"
                 }
             ]
         },
@@ -222,6 +294,7 @@
                     "type": "input",
                     "layoutType": "inline",
                     "text": "名称",
+                    "desc": "列标题，展示在表头",
                     "bindKey": "label",
                     "default": ""
                 },
@@ -230,7 +303,7 @@
                     "layoutType": "inline",
                     "text": "标识",
                     "bindKey": "value",
-                    "desc": "每个标签的标识，这个必须唯一且不能为空，否则会功能或数据异常，注意标识不能为：editable、key、idm_datakey",
+                    "desc": "每个列的标识，这个不能为空，否则会功能或数据异常",
                     "default": ""
                 },
                 {
@@ -278,10 +351,6 @@
                             "bindKey": "dataSourceType",
                             "default": "static",
                             "dictionary": [
-                                {
-                                    "label": "静态选项",
-                                    "value": "static"
-                                },
                                 {
                                     "label": "自定义接口",
                                     "value": "customInterface"
@@ -377,35 +446,13 @@
                             "multiple": false
                         },
                         {
-                            "type": "table",
-                            "text": "接收其他组件联动参数",
-                            "bindKey": "linkageParamList",
-                            "tabText": "参数[index]",
+                            "type": "actionSelect",
+                            "layoutType": "block",
+                            "text": "请求错误自定义函数",
+                            "bindKey": "requestErrorFun",
+                            "desc": "请求接口失败时候会调用此处的自定义函数",
                             "display": "@[dataSourceType=='customInterface']",
-                            "children": [
-                                {
-                                    "type": "input",
-                                    "layoutType": "inline",
-                                    "text": "表单标识",
-                                    "bindKey": "msgKey",
-                                    "default": ""
-                                },
-                                {
-                                    "type": "input",
-                                    "layoutType": "inline",
-                                    "text": "参数别名",
-                                    "bindKey": "paramKey",
-                                    "default": ""
-                                },
-                                {
-                                    "type": "actionSelect",
-                                    "layoutType": "block",
-                                    "text": "参数处理函数",
-                                    "bindKey": "paramFun",
-                                    "desc": "收到其他组件联动参数后会根据表单标识调用这里设置的函数返回自定义的参数内容，返回格式为字符串或对象，例如：{text:'',value:''}或者直接字符串",
-                                    "multiple": false
-                                }
-                            ]
+                            "multiple": false
                         },
                         {
                             "type": "actionSelect",
@@ -413,15 +460,6 @@
                             "text": "返回数据处理函数",
                             "bindKey": "responseDataFun",
                             "desc": "针对请求接口成功后返回的数据格式处理，返回列表需要的数据格式",
-                            "display": "@[dataSourceType=='customInterface']",
-                            "multiple": false
-                        },
-                        {
-                            "type": "actionSelect",
-                            "layoutType": "block",
-                            "text": "请求错误自定义函数",
-                            "bindKey": "requestErrorFun",
-                            "desc": "请求接口失败时候会调用此处的自定义函数",
                             "display": "@[dataSourceType=='customInterface']",
                             "multiple": false
                         },
@@ -497,70 +535,26 @@
                     "children": [
                         {
                             "text": "折叠",
+                            "desc": "开启折叠后展示为下拉菜单",
                             "type": "switch",
                             "layoutType": "inline",
                             "bindKey": "dropdown",
                             "default": true
                         },
                         {
-                            "text": "数据来源",
-                            "type": "select",
-                            "layoutType": "inline",
-                            "bindKey": "dataSource",
-                            "default": "record",
-                            "dictionary": [
-                                {
-                                    "value": "static",
-                                    "label": "静态"
-                                },
-                                {
-                                    "value": "record",
-                                    "label": "记录"
-                                }
-                            ]
-                        },
-                        {
-                            "display": "@[dataSource=='static']",
-                            "text": "按钮",
-                            "type": "table",
-                            "layoutType": "inline",
-                            "tabText": "按钮[index]",
-                            "bindKey": "actions",
-                            "children": [
-                                {
-                                    "text": "标识",
-                                    "type": "text",
-                                    "layoutType": "inline",
-                                    "bindKey": "value"
-                                },
-                                {
-                                    "text": "文本",
-                                    "type": "text",
-                                    "layoutType": "inline",
-                                    "bindKey": "text"
-                                }
-                            ]
-                        },
-                        {
-                            "text": "文字字段",
-                            "type": "input",
-                            "layoutType": "inline",
-                            "bindKey": "labelKey",
-                            "default": "text"
-                        },
-                        {
-                            "text": "标识字段",
-                            "type": "input",
-                            "layoutType": "inline",
-                            "bindKey": "valueKey",
-                            "default": "value"
+                            "type": "actionSelect",
+                            "layoutType": "block",
+                            "text": "数据源函数",
+                            "bindKey": "handleActionsFunc",
+                            "desc": "自定义函数参数：{_this: this, value: 字段值, record: 记录对象, column: 列配置} 返回值格式： [{value:string,label:string}]",
+                            "multiple": false
                         },
                         {
                             "type": "actionSelect",
                             "layoutType": "block",
                             "text": "事件函数",
                             "bindKey": "hanldeInterfaceFunc",
-                            "desc": "接口参数：自定义函数参数：{_this: this, data: data}",
+                            "desc": "自定义函数参数：{_this: this, data: data}",
                             "multiple": false
                         }
                     ]
@@ -575,7 +569,7 @@
                             "layoutType": "inline",
                             "text": "链接",
                             "bindKey": "href",
-                            "desc": "支持表达式",
+                            "desc": "支持表达式，可用参数：moduleObject，record",
                             "default": ""
                         },
                         {
@@ -602,7 +596,7 @@
                     "layoutType": "inline",
                     "text": "筛选",
                     "bindKey": "filter",
-                    "desc": "",
+                    "desc": "开启远程筛选",
                     "default": false
                 },
                 {
@@ -610,7 +604,7 @@
                     "layoutType": "inline",
                     "text": "排序",
                     "bindKey": "sorter",
-                    "desc": "",
+                    "desc": "开启远程排序",
                     "default": false
                 }
             ]
