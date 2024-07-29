@@ -44,7 +44,8 @@ export default {
             required: true
         },
         moduleObject: {
-            type: Object
+            type: Object,
+            required: true
         }
     },
     components: {
@@ -55,9 +56,6 @@ export default {
         return {
             dataSource: []
         }
-    },
-    mounted() {
-        this.initData()
     },
     watch: {
         record: {
@@ -104,47 +102,12 @@ export default {
                 window.open(item.lastFeedbackUrl)
             }
         },
-        // 切换时间
-        onChangeTime(date) {
-            this.search.startDate = date.length > 0 ? date[0] : ''
-            this.search.endDate = date.length > 0 ? date[1] : ''
-        },
         // 督办类型选择
         async handleSuperSelectData(type, result) {
             let res = type == 1 ? await API.ApiPprovalTypeSelect() : await API.ApiDbStatusSelect()
             if (res.code == '200') {
                 this[result] = res.data
             }
-        },
-        /**
-         * 类别转换 预转换
-         * @param pk 源文件ID
-         * @param convertId 转换规则ID
-         */
-        changeFileByConvert(sourcePk, convertId, urlParam) {
-            window.IDM.http.post(
-                'ctrl/convert/moduleRuleConvert',
-                {
-                    convertId: convertId, //指定转换的类型
-                    initDataSource: 1, // 0：转换后的数据直接存到数据库 1：转换后的数据存到redis中
-                    srcInfo: sourcePk //原来数据的主键
-                },
-                function (result) {
-                    if ('success' == result.type) {
-                        var data = result.data
-                        var url =
-                            window.DSF.getURLRoot() + 'ctrl/formControl/form?moduleId=' + data.moduleId + '&pk=' + data.pk + '&sourcePk=' + sourcePk + '&relationId=' + sourcePk
-                        url += '&initDataSource=1' //增加初始化
-                        if (urlParam !== undefined) {
-                            url += urlParam
-                        }
-                        window.open(url)
-                        // simpleWin(this, {"url": url, "isfresh": true, "name": result.data.moduleName});
-                    } else {
-                        // layuiError(result.message)
-                    }
-                }
-            )
         },
         // 操作项
         handleOptions(obj) {
@@ -155,54 +118,7 @@ export default {
                         _this: this,
                         option: obj
                     })
-            } else {
-                // 一般不会进入else 都会有处理函数
-                let { item, fatherItem } = obj
-                switch (item.value) {
-                    case 'approval_terminate': // 立项办结
-                        this.changeFileByConvert(fatherItem.id, '240517100312L9QgULGuY1BqbsvLY6n', `&fid=${fatherItem.id}&sourceType=1`)
-                        break
-                    case 'task_urge':
-                        {
-                            // 任务催办
-                            let id = ''
-                            if (fatherItem.isSingleTask == 1) {
-                                // 单任务立项
-                                id = fatherItem.taskId
-                            } else {
-                                id = fatherItem.id
-                            }
-                            let url = `ctrl/formControl/sysForm?moduleId=240509093547WwIEk66utTYmu3WTy1a&formId=240510102244FeFxPwYSdJ9pr1bPILG&nodeId=0&fid=${id}&sourceType=2`
-                            url && window.open(url)
-                        }
-                        break
-                    case 'task_terminate': // 任务办结
-                        this.changeFileByConvert(fatherItem.fid, '240517100312L9QgULGuY1BqbsvLY6n', `&fid=${fatherItem.id}&sourceType=2`)
-                        break
-                    case 'notice_urge':
-                        {
-                            // 通知催办
-                            let url = `ctrl/formControl/sysForm?moduleId=240509093547WwIEk66utTYmu3WTy1a&formId=240510102244FeFxPwYSdJ9pr1bPILG&nodeId=0&fid=${fatherItem.id}&sourceType=3`
-                            url && window.open(url)
-                        }
-                        break
-                }
             }
-        },
-        // 点击标题跳转url
-        handleJumpUrl(recodrd) {
-            if (this.propData.handleTableFunc && this.propData.handleTableFunc.length > 0) {
-                let name = this.propData.handleTableFunc[0].name
-                window[name] &&
-                    window[name].call(this, {
-                        _this: this,
-                        item: recodrd
-                    })
-            }
-        },
-        // 子项展开收缩
-        async handleShowList(item) {
-            item.isShow = !item.isShow
         },
         propDataWatchHandle(propData) {
             this.propData = propData.compositeAttr || {}

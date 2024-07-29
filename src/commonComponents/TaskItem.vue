@@ -81,7 +81,8 @@ export default {
             required: true
         },
         moduleObject: {
-            type: Object
+            type: Object,
+            required: true
         }
     },
     data() {
