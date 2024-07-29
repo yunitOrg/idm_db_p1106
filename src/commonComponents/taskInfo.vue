@@ -7,8 +7,7 @@
           <div class="subtask-label">
             <span :class="{
               'subtask-yellow': item.dbStatus == '1' || item.dbStatus == '4',
-              'subtask-blue': item.dbStatus == '2',
-              'subtask-gray': item.dbStatus == '3',
+              'subtask-blue': item.dbStatus == '2' || item.dbStatus == '3',
               'subtask-green': item.dbStatus == '6' || item.dbStatus == '5',
               'subtask-red': item.dbStatus == '7',
             }" v-if="item.dbStatusText">{{ item.dbStatusText }}</span>

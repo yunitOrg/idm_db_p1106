@@ -20,6 +20,13 @@
       "desc": "提供设置组件能达到展示效果的基本属性设置信息",
       "children": [
         {
+          "type": "switch",
+          "layoutType": "inline",
+          "text": "是否排序",
+          "bindKey": "isSorte",
+          "default": true
+        },
+        {
           "type": "inputNumber",
           "layoutType": "inline",
           "text": "图片样式",

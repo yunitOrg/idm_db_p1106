@@ -45,11 +45,13 @@
         </div>
       </div>
       <template v-if="reload">
+        <a-config-provider :locale="locale">
       <a-table
         :columns="columns"
         :data-source="listData"
         :pagination="false"
         @expand="getInnerData"
+        @change="tableOnChange"
         :loading="loading"
         :expandIconAsCell="false"
         :expandIconColumnIndex="1"
@@ -194,6 +196,7 @@
           </div>
         </template>
       </a-table>
+    </a-config-provider>
       
       <div class="pagination" :style="`text-align: ${propData.paginationPostion}`">
         <a-config-provider :locale="locale">
@@ -250,6 +253,7 @@ export default {
       singMoreShowData: [], // 多任务里面
       superType: [], // 督办类型数据
       superState: [], // 项目状态数据
+      sortOrder: 'ascend', // 默认正序排序
       moduleObject: {},
       propData: this.$root.propData.compositeAttr || {
         emptySize: '100',
@@ -258,6 +262,7 @@ export default {
         paginationPostion: 'right',
         showSizeChanger: false,
         defaultPageSize: '30',
+        isSorte: true,
         pageSizeOptions: '10,20,30,40',
         showTotalFormat: '当前显示@[range[0]]-@[range[1]]，总共@[total]条',
         ulbox: {
@@ -280,11 +285,13 @@ export default {
         },
         { title: '项目状态', dataIndex: 'dbStatusText', align: 'left', key: 'dbStatusText',
           width: '10%',
-          scopedSlots: { customRender: 'dbStatusText' } },
-        { title: '编号', dataIndex: 'wh', align: 'center', key: 'wh', width: '10%' },
+          scopedSlots: { customRender: 'dbStatusText' },
+        },
+        { title: '编号', dataIndex: 'wh', align: 'center', key: 'wh', width: '10%',
+         },
         { title: '标题', dataIndex: 'bt', align: 'center', key: 'bt',
           width: '20%',
-          scopedSlots: { customRender: 'bt' }
+          scopedSlots: { customRender: 'bt' },
         },
         { title: '督办类型', dataIndex: 'approvalTypeText', align: 'center', key: 'approvalTypeText', width: '9%'},
         { title: '立项日期', dataIndex: 'ngrq', align: 'center', key: 'ngrq', width: '9%' },
@@ -299,18 +306,39 @@ export default {
     }
   },
   mounted() {
+    this.addSorteField();
     this.moduleObject = this.$root.moduleObject;
-    this.search.pageSize = this.propData.defaultPageSize
+    this.search.pageSize = this.propData.defaultPageSize;
+    
     this.handleSuperSelectData(1, 'superType')
     this.handleSuperSelectData(2, 'superState')
     this.init()
   },
   methods: {
+    addSorteField() {
+      let ary = ['dbStatusText', 'wh', 'bt', 'approvalTypeText', 'ngrq', 'handoverDate', 'endDate'];
+      this.columns.forEach(item => {
+        if (this.propData.isSorte && ary.includes(item.dataIndex)) {
+          item.sorter = true;
+        }
+      })
+    },
     handleJiaImg() {
       return IDM.url.getModuleAssetsWebPath(require('../assets/jia.png'), this.moduleObject)
     },
     handleJianImg() {
       return IDM.url.getModuleAssetsWebPath(require('../assets/jian.png'), this.moduleObject)
+    },
+    // 排序
+    tableOnChange(pagination, filters, sorter) {
+      if (this.propData.isSorte) {
+        if(sorter.order) {
+          this.search.orderType = sorter.columnKey;
+          this.search.reversed = sorter.order == "ascend"
+          this.sortOrder = sorter.order;
+          this.initData()
+        }
+      }
     },
     // 附件跳转
     handleFileOpen(item) {
