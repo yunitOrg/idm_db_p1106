@@ -92,14 +92,14 @@ export default {
         // 子项跳转
         handleContentJump(item) {
             if (this.propData.handleChildFunc && this.propData.handleChildFunc.length > 0) {
-                let name = this.propData.handleChildFunc[0].name
+                const name = this.propData.handleChildFunc[0].name
                 window[name] &&
                     window[name].call(this, {
                         _this: this,
                         item: item
                     })
             } else {
-                window.open(item.lastFeedbackUrl)
+                window.open(window.IDM.url.getWebPath(item.lastFeedbackUrl))
             }
         },
         // 督办类型选择
