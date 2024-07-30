@@ -136,7 +136,7 @@ module.exports = {
         extensions: ['.js', '.vue', '.json'],
         alias: {
           //按需引入ant design的图标，防止打包文件过大，如果使用ant design vue请放开此注释
-        //   '@ant-design/icons/lib/dist$': resolve('src/plugins/antdicons.js')
+          '@ant-design/icons/lib/dist$': resolve('src/plugins/antdicons.js')
         }
       }
     },
