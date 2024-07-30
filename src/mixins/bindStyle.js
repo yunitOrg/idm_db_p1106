@@ -1,28 +1,36 @@
-export default function (config) {
+export default function () {
     return {
+        data() {
+            return {
+                className: {
+                    wrap: window.IDM.uuid()
+                }
+            }
+        },
+        mounted() {
+            this._bindTheme()
+            this._bindStyle()
+        },
         methods: {
             /**
              * @Desc 设置主题
              */
-            convertThemeListAttrToStyleObject() {
-                var themeList = this.propData.themeList
-                if (!themeList) {
+            _bindTheme() {
+                const themeList = this.propData.themeList || []
+                if (!Array.isArray(themeList) || themeList.length == 0) {
                     return
                 }
-                const themeNamePrefix =
-                    IDM.setting && IDM.setting.applications && IDM.setting.applications.themeNamePrefix ? IDM.setting.applications.themeNamePrefix : 'idm-theme-'
-                for (var i = 0; i < themeList.length; i++) {
-                    var item = themeList[i]
-                    let bulletBgColorObj = {
-                        color: item.mainColor ? IDM.hex8ToRgbaString(item.mainColor.hex8) : ''
-                    }
-                    IDM.setStyleToPageHead(`.${themeNamePrefix}${item.key} #${this.moduleObject.id || 'module_demo'} ${config.wrap}`, bulletBgColorObj)
-                }
+                const themeNamePrefix = window.IDM?.setting?.applications?.themeNamePrefix || 'idm-theme-'
+                themeList.forEach((item) => {
+                    IDM.setStyleToPageHead(`.${themeNamePrefix}${item.key} #${this.moduleObject.id || 'module_demo'} .${this.className.wrap}`, {
+                        color: item.mainColor ? window.IDM?.hex8ToRgbaString(item.mainColor.hex8) : ''
+                    })
+                })
             },
             /**
              * @Desc 设置样式
              */
-            handleStyle() {
+            _bindStyle() {
                 let styleObject = {}
                 for (const key in this.propData) {
                     if (this.propData.hasOwnProperty.call(this.propData, key)) {
@@ -52,7 +60,7 @@ export default function (config) {
                         }
                     }
                 }
-                window.IDM.setStyleToPageHead(`${this.moduleObject.id} ${config.wrap}`, styleObject)
+                window.IDM.setStyleToPageHead(`.${this.moduleObject.id} .${this.className.wrap}`, styleObject)
             }
         }
     }

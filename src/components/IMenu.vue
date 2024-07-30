@@ -1,6 +1,6 @@
 <template>
     <div idm-ctrl="idm_module" :id="moduleObject.id" :idm-ctrl-id="moduleObject.id">
-        <div class="menu-wrap">
+        <div :class="className.wrap">
             <a-menu v-model="current" :mode="mode" :selectable="true">
                 <a-menu-item v-for="item in items" :key="item.value">{{ item.label }}</a-menu-item>
             </a-menu>
@@ -12,14 +12,10 @@
 import { commonParam } from '../utils'
 import bindStyle from '../mixins/bindStyle'
 export default {
-    mixins: [
-        bindStyle({
-            wrap: '.menu-wrap'
-        })
-    ],
+    mixins: [bindStyle()],
     data() {
         return {
-            moduleObject: {},
+            moduleObject: this.$root.moduleObject,
             mode: 'horizontal',
             current: [],
             items: [],
@@ -30,7 +26,6 @@ export default {
         }
     },
     mounted() {
-        this.moduleObject = this.$root.moduleObject
         this.init()
     },
     computed: {
@@ -93,11 +88,7 @@ export default {
         },
         init() {
             this.initData()
-            this.handleStyle()
-            this.convertThemeListAttrToStyleObject()
         }
     }
 }
 </script>
-
-<style lang="scss" scoped></style>

@@ -16,10 +16,10 @@ export async function openWindow(url) {
  * 所有地址url参数转换
  */
 export const commonParam = () => {
-    const urlObject = IDM.url.queryObject()
+    const urlObject = window.IDM?.url?.queryObject() || {}
     return {
-        pageId: window.IDM.broadcast && window.IDM.broadcast.pageModule ? window.IDM.broadcast.pageModule.id : '',
-        urlData: JSON.stringify(urlObject)
+        pageId: window.IDM?.broadcast?.pageModule?.id || '',
+        urlData: JSON.stringify(urlObject),
     }
 }
 export * as dataUtil from './dataUtil'

@@ -1,7 +1,7 @@
 <template>
     <div idm-ctrl="idm_module" :id="moduleObject.id" :idm-ctrl-id="moduleObject.id">
         <a-config-provider :locale="locale">
-            <div class="table-wrap">
+            <div class="table-wrap" :class="className.wrap">
                 <a-form-model :model="filter" layout="inline" class="filter-wrap">
                     <a-form-model-item v-for="field in fields" :key="field.value" :label="field.label" :prop="field.value">
                         <a-select v-if="field.type == 'select'" v-model="filter[field.value]" :mode="field.selectMode" :allowClear="true" style="min-width: 100px">
@@ -97,27 +97,12 @@ import bindStyle from '../mixins/bindStyle'
 import { nextTick } from 'vue'
 import zh_CN from 'ant-design-vue/lib/locale/zh_CN'
 export default {
-    mixins: [
-        bindStyle({
-            wrap: '.table-wrap'
-        })
-    ],
+    mixins: [bindStyle()],
     data() {
         return {
             locale: zh_CN,
-            moduleObject: {},
-            dataSource: [
-                {
-                    id: '1',
-                    title: '标题',
-                    buttonList: [
-                        {
-                            text: '按钮1',
-                            value: '1'
-                        }
-                    ]
-                }
-            ],
+            moduleObject: this.$root.moduleObject,
+            dataSource: [],
             totalCount: 0,
             filter: {},
             sort: {},
@@ -138,17 +123,14 @@ export default {
                     {
                         label: 'ID',
                         value: 'id',
-                        type: 'text',
-                        sorter: true,
-                        filter: true
+                        type: 'text'
                     },
                     {
                         label: '名称',
                         value: 'title',
-                        type: 'href',
-                        sorter: true,
+                        type: 'text',
                         filter: true,
-                        href: '/aaa/@[id]'
+                        sorter: true
                     },
                     {
                         label: '操作',
@@ -171,7 +153,6 @@ export default {
         }
     },
     mounted() {
-        this.moduleObject = this.$root.moduleObject
         this.init()
     },
     methods: {
@@ -254,8 +235,6 @@ export default {
         init() {
             this.initData()
             this.loadColumnsOptions()
-            this.handleStyle()
-            this.convertThemeListAttrToStyleObject()
         },
         /**
          * 消息变动实时重新加载
@@ -540,35 +519,6 @@ export default {
     .ant-table-expanded-row {
         > td {
             padding: 0;
-        }
-    }
-}
-.subtaskinfo {
-    .subtask-li {
-        border-top: 1px dashed #ccc;
-    }
-    .subtask-li:first-child {
-        border: 0;
-    }
-}
-.pervise-kong {
-    padding: 10px;
-}
-.pervise-single-wrap {
-    padding: 0 0 0 30px;
-    .taskInfo-li {
-        position: relative;
-    }
-    .taskInfo-li + .taskInfo-li {
-        &::after {
-            content: '';
-            width: calc(100% - 30px);
-            height: 1px;
-            border-top: 1px dotted #ccc;
-            position: absolute;
-            top: 0;
-            box-sizing: border-box;
-            left: 0;
         }
     }
 }

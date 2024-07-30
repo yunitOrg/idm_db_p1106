@@ -1,6 +1,6 @@
 <template>
     <div idm-ctrl="idm_module" :id="moduleObject.id" :idm-ctrl-id="moduleObject.id">
-        <a-form-model :model="filter" @submit="submitHandle" @submit.native.prevent layout="inline" class="form-search-wrap">
+        <a-form-model :model="filter" @submit="submitHandle" @submit.native.prevent layout="inline" :class="className.wrap">
             <a-form-model-item :prop="propData.fieldKey">
                 <a-input-search v-model="filter[propData.fieldKey]" placeholder="请输入检索内容" />
             </a-form-model-item>
@@ -17,24 +17,15 @@
 <script>
 import bindStyle from '../mixins/bindStyle'
 export default {
-    mixins: [
-        bindStyle({
-            wrap: '.form-search-wrap'
-        })
-    ],
+    mixins: [bindStyle()],
     data() {
         return {
-            moduleObject: {},
+            moduleObject: this.$root.moduleObject,
             filter: {},
             propData: this.$root.propData.compositeAttr || {
                 fieldKey: 'contentQuery'
             }
         }
-    },
-    computed: {},
-    mounted() {
-        this.moduleObject = this.$root.moduleObject
-        this.init()
     },
     methods: {
         setContextValue(object) {
@@ -43,13 +34,6 @@ export default {
         propDataWatchHandle(propData) {
             this.propData = propData.compositeAttr
             console.debug('iTable propDataWatchHandle', propData)
-            this.init()
-        },
-        initData() {},
-        init() {
-            this.initData()
-            this.handleStyle()
-            this.convertThemeListAttrToStyleObject()
         },
         receiveBroadcastMessage(data) {
             console.debug('iFormSearch receiveBroadcastMessage', data)
@@ -73,5 +57,3 @@ export default {
     }
 }
 </script>
-
-<style lang="scss" scoped></style>
