@@ -285,18 +285,21 @@ export default {
         },
         { title: '项目状态', dataIndex: 'dbStatusText', align: 'left', key: 'dbStatusText',
           width: '10%',
+          sortField: 'dbStatus',
           scopedSlots: { customRender: 'dbStatusText' },
         },
         { title: '编号', dataIndex: 'wh', align: 'center', key: 'wh', width: '10%',
+          sortField: 'wh',
          },
         { title: '标题', dataIndex: 'bt', align: 'center', key: 'bt',
           width: '20%',
+          sortField: 'bt',
           scopedSlots: { customRender: 'bt' },
         },
-        { title: '督办类型', dataIndex: 'approvalTypeText', align: 'center', key: 'approvalTypeText', width: '9%'},
-        { title: '立项日期', dataIndex: 'ngrq', align: 'center', key: 'ngrq', width: '9%' },
-        { title: '交办日期', dataIndex: 'handoverDate', align: 'center', key: 'handoverDate', width: '9%' },
-        { title: '办结期限', dataIndex: 'endDate', align: 'center', key: 'endDate', width: '9%' },
+        { title: '督办类型', dataIndex: 'approvalTypeText', align: 'center', key: 'approvalTypeText', width: '9%', sortField: 'approvalType'},
+        { title: '立项日期', dataIndex: 'ngrq', align: 'center', key: 'ngrq', width: '9%', sortField: 'ngrq' },
+        { title: '交办日期', dataIndex: 'handoverDate', align: 'center', key: 'handoverDate', width: '9%', sortField: 'handoverDate' },
+        { title: '办结期限', dataIndex: 'endDate', align: 'center', key: 'endDate', width: '9%', sortField: 'endDate' },
         { title: '主办部门', dataIndex: 'hostStr', align: 'center', key: 'hostStr', width: '8%' },
         { title: '协办部门', dataIndex: 'assistStr', align: 'center', key: 'assistStr', width: '8%' },
         { title: '操作', key: 'operation', align: 'center', width: '100px', scopedSlots: { customRender: 'operation' } },
@@ -333,7 +336,7 @@ export default {
     tableOnChange(pagination, filters, sorter) {
       if (this.propData.isSorte) {
         if(sorter.order) {
-          this.search.orderType = sorter.columnKey;
+          this.search.orderType = sorter.column.sortField;
           this.search.reversed = sorter.order == "ascend"
           this.sortOrder = sorter.order;
           this.initData()
