@@ -401,6 +401,40 @@
                         {
                             "label": "组件",
                             "value": "component"
+                        },
+                        {
+                            "label": "自定义函数",
+                            "value": "htmlFunction"
+                        }
+                    ]
+                },
+                {
+                    "type": "group",
+                    "display": "@[type=='text']",
+                    "text": "文本设置",
+                    "children": [
+                        {
+                            "type": "input",
+                            "layoutType": "inline",
+                            "text": "文本模板",
+                            "bindKey": "textTemplate",
+                            "desc": "自定义文本模板，不填默认为字段值，支持表达式，可选参数 value:字段值 record:行数据 column:列配置 columnIndex:列索引",
+                            "default": ""
+                        }
+                    ]
+                },
+                {
+                    "type": "group",
+                    "display": "@[type=='htmlFunction']",
+                    "text": "自定义函数设置",
+                    "children": [
+                        {
+                            "type": "actionSelect",
+                            "layoutType": "block",
+                            "text": "自定义函数",
+                            "bindKey": "htmlFunction",
+                            "desc": "获取渲染结果的时候会调用此方法，参数 {record:行数据 column:列配置 columnIndex:列索引}，返回数据格式如下：html",
+                            "multiple": false
                         }
                     ]
                 },
@@ -556,23 +590,6 @@
                             "desc": "获取数据源的时候会调用此方法，返回数据格式如下：{total:0,rows:[{}]}",
                             "display": "@[dataSourceType=='customFunction']",
                             "multiple": false
-                        },
-                        {
-                            "type": "table",
-                            "layoutType": "inline",
-                            "text": "静态选项",
-                            "bindKey": "select",
-                            "children": [
-                                {
-                                    "type": "text",
-                                    "text": "key"
-                                },
-                                {
-                                    "type": "text",
-                                    "text": "value"
-                                }
-                            ],
-                            "display": "@[dataSourceType=='static']"
                         },
                         {
                             "type": "select",

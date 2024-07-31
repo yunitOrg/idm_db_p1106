@@ -2,7 +2,7 @@
     <div idm-ctrl="idm_module" :id="moduleObject.id" :idm-ctrl-id="moduleObject.id">
         <a-config-provider :locale="locale">
             <div class="table-wrap" :class="className.wrap">
-                <a-form-model :model="filter" layout="inline" class="filter-wrap">
+                <a-form-model v-if="fields.length > 0" :model="filter" layout="inline" class="filter-wrap">
                     <a-form-model-item v-for="field in fields" :key="field.value" :label="field.label" :prop="field.value">
                         <a-select v-if="field.type == 'select'" v-model="filter[field.value]" :mode="field.selectMode" :allowClear="true" style="min-width: 100px">
                             <a-select-option v-for="item in optionData[field.value]" :key="item.key" :value="item.key">{{ item.value }}</a-select-option>
@@ -27,8 +27,8 @@
                     :expandIconAsCell="false"
                     :expandIconColumnIndex="propData.expandIconColumnIndex || 1"
                     :indentSize="0"
-                    :rowClassName="(_, index) => (index % 2 == 0 ? 'odd' : 'even')"
                     :scroll="{ y: propData.tableMaxHeight }"
+                    :rowClassName="(_, index) => (index % 2 == 0 ? 'odd' : 'even')"
                 >
                     <a-table-column
                         v-for="(column, columnIndex) in propData.columns"
@@ -43,6 +43,16 @@
                         <template #default="value, record, index">
                             <template v-if="column.type == 'index'">
                                 {{ index + 1 }}
+                            </template>
+                            <template v-else-if="column.type == 'text'">
+                                {{
+                                    expressReplace(column.textTemplate || '@[value]', {
+                                        value,
+                                        record,
+                                        column,
+                                        columnIndex
+                                    })
+                                }}
                             </template>
                             <template v-else-if="column.type == 'select'">
                                 {{ optionData[column.value]?.find((n) => n.key == value)?.value }}
@@ -88,6 +98,9 @@
                                     :idm-ctrl-id="moduleObject.id"
                                     :idm-container-index="`record-${record[propData.rowKey]}-${columnIndex}`"
                                 ></div>
+                            </template>
+                            <template v-else-if="column.type == 'htmlFunction'">
+                                <div v-html="column.htmlFunction?.call(this, { record, column, columnIndex })"></div>
                             </template>
                             <template v-else>
                                 {{ value }}
@@ -150,10 +163,7 @@ export default {
                     {
                         label: '名称',
                         value: 'title',
-                        type: 'text',
-                        filter: true,
-                        sorter: true,
-                        headerAlign: 'center'
+                        type: 'text'
                     },
                     {
                         label: '操作',
@@ -407,6 +417,13 @@ export default {
             if (totalCount && totalCount != -1) {
                 this.pagination.total = totalCount
             }
+            this.dataSource.map((record) => {
+                this.propData.columns.map((column, columnIndex) => {
+                    if (column.type == 'component') {
+                        this.moduleObject.removeDynamicRenderModuleGroup?.call(this, this.moduleObject.packageid, `record-${record[this.propData.rowKey]}-${columnIndex}`, false)
+                    }
+                })
+            })
             nextTick(() => {
                 this.dataSource.map((record) => {
                     this.propData.columns.map((column, columnIndex) => {
@@ -429,6 +446,7 @@ export default {
             if (window.IDM.env_develop_mode) {
                 return
             }
+            this.moduleObject.removeDynamicRenderModuleGroup?.call(this, this.moduleObject.packageid, `expand-${record[this.propData.rowKey]}`, false)
             if (expanded) {
                 nextTick(() => {
                     this.moduleObject.dynamicRenderModuleGroupInitData?.call(
@@ -504,14 +522,11 @@ export default {
         background-color: #f6fbfa !important;
     }
     .ant-table-tbody {
-        &.odd {
-            cursor: pointer;
-        }
-        &.even {
-            background-color: #f6fbfa;
-            cursor: pointer;
-        }
         > tr {
+            cursor: pointer;
+            &.even {
+                background-color: #f6fbfa;
+            }
             > td {
                 color: #333333;
                 font-size: 16px;
