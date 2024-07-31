@@ -1,7 +1,7 @@
 <template>
     <div idm-ctrl="idm_module" :id="moduleObject.id" :idm-ctrl-id="moduleObject.id">
         <div class="pervise-wrap super-task-info-wrap" :class="className.wrap">
-            <SubList :record="record" :propData="propData" :moduleObject="moduleObject" />
+            <SubList v-if="record" :record="record" :propData="propData" :moduleObject="moduleObject" />
             <div v-if="env_develop_mode" class="placeholder">任务信息</div>
         </div>
     </div>
@@ -18,7 +18,7 @@ export default {
         return {
             moduleObject: this.$root.moduleObject,
             env_develop_mode: window.IDM.env_develop_mode,
-            record: {},
+            record: null,
             propData: this.$root.propData.compositeAttr || {}
         }
     },

@@ -59,8 +59,13 @@ export default {
     },
     watch: {
         record: {
-            handler() {
-                this.initData()
+            handler(record) {
+                this.initData(record).then((data) => {
+                    this.dataSource = data
+                    if (record.assignType != 1 && this.dataSource.length == 0) {
+                        window.IDM.message.info('督办任务分解立项流程尚未流转完毕')
+                    }
+                })
             },
             deep: true,
             immediate: true
@@ -123,41 +128,38 @@ export default {
         propDataWatchHandle(propData) {
             this.propData = propData.compositeAttr || {}
         },
-        async initData() {
-            switch (this.record.assignType) {
+        initData(record) {
+            switch (record.assignType) {
                 case 2:
                 case 4:
-                    window.IDM.http
+                    return window.IDM.http
                         .get('ctrl/dbNotice/getNextNoticeByNoticeId', {
-                            noticeId: this.record.id
+                            noticeId: record.id
                         })
                         .then(({ data }) => {
-                            this.dataSource = data.data
+                            return data.data
                         })
-                    break
                 case 3:
-                    window.IDM.http
+                    return window.IDM.http
                         .get('ctrl/dbTask/getSplitTaskByNoticeId', {
-                            noticeId: this.record.id
+                            noticeId: record.id
                         })
                         .then(({ data }) => {
-                            this.dataSource = data.data.map((n) => ({
+                            return data.data.map((n) => ({
                                 ...n,
                                 assignType: -1
                             }))
                         })
-                    break
                 case -1:
-                    window.IDM.http
+                    return window.IDM.http
                         .get('ctrl/dbNotice/getNextNoticeByTaskId', {
-                            taskId: this.record.id
+                            taskId: record.id
                         })
                         .then(({ data }) => {
-                            this.dataSource = data.data
+                            return data.data
                         })
-                    break
                 default:
-                    break
+                    return Promise.resolve([])
             }
         }
     }

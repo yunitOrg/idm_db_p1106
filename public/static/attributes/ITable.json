@@ -19,10 +19,19 @@
                 },
                 {
                     "type": "switch",
-                    "text": "扩展行",
-                    "desc": "是否开启扩展行，点击行后展示",
+                    "text": "展开行",
+                    "desc": "是否开启展开行，点击行后展示",
                     "bindKey": "expandedRow",
                     "default": false,
+                    "layoutType": "inline"
+                },
+                {
+                    "display": "@[expandedRow==true]",
+                    "type": "inputNumber",
+                    "text": "展开行图标位置",
+                    "desc": "展开行标展示在第几列，行数据需指定expandable属性来表示是否展示图标",
+                    "bindKey": "expandIconColumnIndex",
+                    "default": 1,
                     "layoutType": "inline"
                 },
                 {
@@ -307,6 +316,58 @@
                     "default": ""
                 },
                 {
+                    "text": "列宽",
+                    "desc": "支持数字与字符串",
+                    "bindKey": "width",
+                    "type": "input",
+                    "layoutType": "inline",
+                    "default": ""
+                },
+                {
+                    "text": "表头对齐方式",
+                    "desc": "设置列表头的对齐方式",
+                    "bindKey": "headerAlign",
+                    "type": "select",
+                    "layoutType": "inline",
+                    "default": "left",
+                    "dictionary": [
+                        {
+                            "label": "左对齐",
+                            "value": "left"
+                        },
+                        {
+                            "label": "居中对齐",
+                            "value": "center"
+                        },
+                        {
+                            "label": "右对齐",
+                            "value": "right"
+                        }
+                    ]
+                },
+                {
+                    "text": "内容对齐方式",
+                    "desc": "设置列内容的对齐方式",
+                    "bindKey": "align",
+                    "type": "select",
+                    "layoutType": "inline",
+                    "default": "left",
+                    "dictionary": [
+                        {
+                            "label": "左对齐",
+                            "value": "left"
+                        },
+                        {
+                            "label": "居中对齐",
+                            "value": "center"
+                        },
+                        {
+                            "label": "右对齐",
+                            "value": "right"
+                        }
+                    ]
+                },
+                {
                     "type": "select",
                     "layoutType": "inline",
                     "text": "展示类型",
@@ -336,6 +397,10 @@
                         {
                             "label": "按钮组",
                             "value": "actions"
+                        },
+                        {
+                            "label": "组件",
+                            "value": "component"
                         }
                     ]
                 },

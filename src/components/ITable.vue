@@ -25,11 +25,21 @@
                     :defaultExpandAllRows="env_develop_mode"
                     :expandRowByClick="!env_develop_mode"
                     :expandIconAsCell="false"
-                    :expandIconColumnIndex="1"
+                    :expandIconColumnIndex="propData.expandIconColumnIndex || 1"
+                    :indentSize="0"
                     :rowClassName="(_, index) => (index % 2 == 0 ? 'odd' : 'even')"
                     :scroll="{ y: propData.tableMaxHeight }"
                 >
-                    <a-table-column v-for="(column, columnIndex) in propData.columns" :title="column.label" :data-index="column.value" :sorter="column.sorter" :key="columnIndex">
+                    <a-table-column
+                        v-for="(column, columnIndex) in propData.columns"
+                        :title="column.label"
+                        :data-index="column.value"
+                        :sorter="column.sorter"
+                        :align="column.align"
+                        :width="column.width"
+                        :customHeaderCell="(e) => handleCustomHeaderCell(column, e)"
+                        :key="columnIndex"
+                    >
                         <template #default="value, record, index">
                             <template v-if="column.type == 'index'">
                                 {{ index + 1 }}
@@ -71,19 +81,25 @@
                                     </a-button>
                                 </a-space>
                             </template>
+                            <template v-else-if="column.type == 'component'">
+                                <div
+                                    class="drag_container"
+                                    idm-ctrl-inner
+                                    :idm-ctrl-id="moduleObject.id"
+                                    :idm-container-index="`record-${record[propData.rowKey]}-${columnIndex}`"
+                                ></div>
+                            </template>
                             <template v-else>
                                 {{ value }}
                             </template>
                         </template>
                     </a-table-column>
 
-                    <template slot="expandIcon">
-                        <div style="display: inline-block">
-                            <svg-icon icon-class="move" style="font-size: 18px; color: #134fed; cursor: pointer; margin-right: 3px"></svg-icon>
-                        </div>
+                    <template #expandIcon="{ record, expanded, expandable }">
+                        <svg-icon v-if="expandable && record.expandable" style="font-size: 18px; color: #134fed; cursor: pointer; margin-right: 3px" icon-class="move"></svg-icon>
                     </template>
                     <template v-if="propData.expandedRow" #expandedRowRender="record">
-                        <div class="drag_container" idm-ctrl-inner :idm-ctrl-id="moduleObject.id" :idm-container-index="record[propData.rowKey]"></div>
+                        <div class="drag_container" idm-ctrl-inner :idm-ctrl-id="moduleObject.id" :idm-container-index="`expand-${record[propData.rowKey]}`"></div>
                     </template>
                 </a-table>
             </div>
@@ -102,7 +118,11 @@ export default {
         return {
             locale: zh_CN,
             moduleObject: this.$root.moduleObject,
-            dataSource: [],
+            dataSource: [
+                {
+                    id: ''
+                }
+            ],
             totalCount: 0,
             filter: {},
             sort: {},
@@ -121,16 +141,19 @@ export default {
                 dataSourceType: 'customInterface',
                 columns: [
                     {
-                        label: 'ID',
+                        label: '序号',
                         value: 'id',
-                        type: 'text'
+                        type: 'index',
+                        headerAlign: 'center',
+                        width: 60
                     },
                     {
                         label: '名称',
                         value: 'title',
                         type: 'text',
                         filter: true,
-                        sorter: true
+                        sorter: true,
+                        headerAlign: 'center'
                     },
                     {
                         label: '操作',
@@ -143,7 +166,7 @@ export default {
                     }
                 ],
                 rowKey: 'id',
-                expandedRow: false
+                expandedRow: true
             }
         }
     },
@@ -258,11 +281,10 @@ export default {
             this.initData()
         },
         initData() {
-            if (window.IDM.env_develop_mode) {
+            if (window.IDM.env_develop_mode || process.env.NODE_ENV != 'production') {
                 this.dataSource = [
                     {
-                        id: '1',
-                        title: '标题'
+                        id: ''
                     }
                 ]
                 return
@@ -385,6 +407,23 @@ export default {
             if (totalCount && totalCount != -1) {
                 this.pagination.total = totalCount
             }
+            nextTick(() => {
+                this.dataSource.map((record) => {
+                    this.propData.columns.map((column, columnIndex) => {
+                        if (column.type == 'component') {
+                            this.moduleObject.dynamicRenderModuleGroupInitData?.call(
+                                this,
+                                this.moduleObject.packageid,
+                                `record-${record[this.propData.rowKey]}-${columnIndex}`,
+                                {
+                                    record
+                                },
+                                false
+                            )
+                        }
+                    })
+                })
+            })
         },
         handleExpand(expanded, record) {
             if (window.IDM.env_develop_mode) {
@@ -392,59 +431,16 @@ export default {
             }
             if (expanded) {
                 nextTick(() => {
-                    console.log('render', record[this.propData.rowKey], record)
-                    this.moduleObject.dynamicRenderModuleGroupInitData(
+                    this.moduleObject.dynamicRenderModuleGroupInitData?.call(
+                        this,
                         this.moduleObject.packageid,
-                        record[this.propData.rowKey],
+                        `expand-${record[this.propData.rowKey]}`,
                         {
                             record
                         },
                         false
                     )
                 })
-            }
-        },
-        handleOptions(obj) {
-            console.log('handleOptions', obj)
-            if (this.propData.handleActionFunc && this.propData.handleActionFunc.length > 0) {
-                let name = this.propData.handleActionFunc[0].name
-                window[name] &&
-                    window[name].call(this, {
-                        _this: this,
-                        option: obj
-                    })
-            } else {
-                // 一般不会进入else 都会有处理函数
-                let { item, fatherItem } = obj
-                switch (item.value) {
-                    case 'approval_terminate': // 立项办结
-                        this.changeFileByConvert(fatherItem.id, '240517100312L9QgULGuY1BqbsvLY6n', `&fid=${fatherItem.id}&sourceType=1`)
-                        break
-                    case 'task_urge':
-                        {
-                            // 任务催办
-                            let id = ''
-                            if (fatherItem.isSingleTask == 1) {
-                                // 单任务立项
-                                id = fatherItem.taskId
-                            } else {
-                                id = fatherItem.id
-                            }
-                            let url = `ctrl/formControl/sysForm?moduleId=240509093547WwIEk66utTYmu3WTy1a&formId=240510102244FeFxPwYSdJ9pr1bPILG&nodeId=0&fid=${id}&sourceType=2`
-                            url && window.open(url)
-                        }
-                        break
-                    case 'task_terminate': // 任务办结
-                        this.changeFileByConvert(fatherItem.fid, '240517100312L9QgULGuY1BqbsvLY6n', `&fid=${fatherItem.id}&sourceType=2`)
-                        break
-                    case 'notice_urge':
-                        {
-                            // 通知催办
-                            let url = `ctrl/formControl/sysForm?moduleId=240509093547WwIEk66utTYmu3WTy1a&formId=240510102244FeFxPwYSdJ9pr1bPILG&nodeId=0&fid=${fatherItem.id}&sourceType=3`
-                            url && window.open(url)
-                        }
-                        break
-                }
             }
         },
         handleMenuClick(key, value, record, column) {
@@ -468,6 +464,15 @@ export default {
                 })
             }
             return column.actions
+        },
+        handleCustomHeaderCell(column) {
+            const style = new Map()
+            if (column.headerAlign) {
+                style.set('text-align', column.headerAlign)
+            }
+            return {
+                style: Object.fromEntries(style.entries())
+            }
         }
     }
 }
@@ -498,28 +503,30 @@ export default {
         padding: 10px 10px !important;
         background-color: #f6fbfa !important;
     }
-    .ant-table-tbody .odd {
-        cursor: pointer;
-    }
-    .ant-table-tbody .even {
-        background-color: #f6fbfa;
-        cursor: pointer;
-    }
-    .ant-table-tbody > tr > td {
-        color: #333333;
-        font-size: 16px;
-        font-weight: 500;
-    }
-    .ant-table-thead > tr > th:nth-child(2) {
-        text-align: center !important;
-    }
-    .ant-table-tbody > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td {
-        background: none !important;
+    .ant-table-tbody {
+        &.odd {
+            cursor: pointer;
+        }
+        &.even {
+            background-color: #f6fbfa;
+            cursor: pointer;
+        }
+        > tr {
+            > td {
+                color: #333333;
+                font-size: 16px;
+                font-weight: 500;
+            }
+        }
     }
     .ant-table-expanded-row {
         > td {
+            border-bottom: none;
             padding: 0;
         }
+    }
+    .ant-table-tbody > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td {
+        background: none !important;
     }
 }
 </style>
