@@ -584,6 +584,9 @@ export default {
         width: 100%;
         display: inline-block;
       }
+      .task-li-titleTop{
+        text-align: justify;
+      }
       .task-li-tip{
         font-size: 16px;
         padding:2px 5px;
@@ -603,10 +606,11 @@ export default {
       }
       .task-li-content{
         flex: 1;
+        text-align: justify;
       }
     }
     .task-nameicon{
-      width: 9%;
+      min-width: 100px;
       display: flex;
       align-items: center;
       justify-content: center;
