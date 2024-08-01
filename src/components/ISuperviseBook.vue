@@ -337,7 +337,7 @@ export default {
       if (this.propData.isSorte) {
         if(sorter.order) {
           this.search.orderType = sorter.column.sortField;
-          this.search.reversed = sorter.order == "ascend"
+          this.search.reversed = sorter.order != "ascend"
           this.sortOrder = sorter.order;
           this.initData()
         }
