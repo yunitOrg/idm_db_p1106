@@ -99,8 +99,8 @@
                                     :idm-container-index="`record-${record[propData.rowKey]}-${columnIndex}`"
                                 ></div>
                             </template>
-                            <template v-else-if="column.type == 'htmlFunction'">
-                                <div v-html="column.htmlFunction?.call(this, { record, column, columnIndex })"></div>
+                            <template v-else-if="column.type == 'htmlFunction'" v-html="handleHtmlRender(value, record, column, columnIndex)">
+                                <span v-html="handleHtmlRender(value, record, column, columnIndex)"></span>
                             </template>
                             <template v-else>
                                 {{ value }}
@@ -491,6 +491,17 @@ export default {
             return {
                 style: Object.fromEntries(style.entries())
             }
+        },
+        handleHtmlRender(value, record, column, columnIndex) {
+            if (Array.isArray(column.htmlFunction) && column.htmlFunction.length > 0) {
+                return window[column.htmlFunction[0].name]?.call(this, {
+                    _this: this,
+                    value,
+                    record,
+                    column,
+                    columnIndex
+                })
+            }
         }
     }
 }
@@ -501,6 +512,35 @@ export default {
     display: flex;
     flex-direction: column;
     gap: 10px;
+}
+:deep(.tag) {
+    color: var(--color);
+    &.tag-border {
+        border: 1px solid var(--color);
+        background-color: var(--bg);
+        border-radius: 3px;
+        padding: 2px 5px;
+    }
+    &.tag-default {
+        --color: #ccc;
+        --bg: #cccccc21;
+    }
+    &.tag-info {
+        --color: #0086d9;
+        --bg: #0086d921;
+    }
+    &.tag-success {
+        --color: #57bd6a;
+        --bg: #57bd6a21;
+    }
+    &.tag-warning {
+        --color: #fa6400;
+        --bg: #fa640021;
+    }
+    &.tag-danger {
+        --color: #e30000;
+        --bg: #e3000021;
+    }
 }
 .filter-wrap {
     padding: 10px;

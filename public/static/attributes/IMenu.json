@@ -68,52 +68,58 @@
             ]
         },
         {
-            "type": "select",
-            "layoutType": "inline",
-            "text": "数据来源",
-            "bindKey": "sourceType",
-            "dictionary": [
-                {
-                    "label": "数据源",
-                    "value": "dataSource"
-                },
-                {
-                    "label": "静态",
-                    "value": "static"
-                }
-            ],
-            "default": "static"
-        },
-        {
-            "type": "dataSourceSelect",
-            "layoutType": "inline",
+            "type": "group",
             "text": "数据源",
-            "bindKey": "dataSource",
-            "default": "",
-            "display": "@[sourceType=='dataSource']"
-        },
-        {
-            "type": "table",
-            "layoutType": "inline",
-            "text": "静态标签",
-            "tabText": "菜单[index]",
-            "bindKey": "items",
-            "display": "@[sourceType=='static']",
             "children": [
                 {
-                    "type": "input",
+                    "type": "select",
                     "layoutType": "inline",
-                    "text": "菜单名称",
-                    "bindKey": "label",
-                    "default": ""
+                    "text": "数据来源",
+                    "bindKey": "sourceType",
+                    "dictionary": [
+                        {
+                            "label": "数据源",
+                            "value": "dataSource"
+                        },
+                        {
+                            "label": "静态",
+                            "value": "static"
+                        }
+                    ],
+                    "default": "static"
                 },
                 {
-                    "type": "input",
+                    "type": "dataSourceSelect",
                     "layoutType": "inline",
-                    "text": "菜单标识",
-                    "bindKey": "value",
-                    "desc": "每个标签的标识，这个必须唯一且不能为空，否则会功能或数据异常，注意标识不能为：editable、key、idm_datakey",
-                    "default": ""
+                    "text": "数据源",
+                    "bindKey": "dataSource",
+                    "default": "",
+                    "display": "@[sourceType=='dataSource']"
+                },
+                {
+                    "type": "table",
+                    "layoutType": "inline",
+                    "text": "静态标签",
+                    "tabText": "菜单[index]",
+                    "bindKey": "items",
+                    "display": "@[sourceType=='static']",
+                    "children": [
+                        {
+                            "type": "input",
+                            "layoutType": "inline",
+                            "text": "菜单名称",
+                            "bindKey": "label",
+                            "default": ""
+                        },
+                        {
+                            "type": "input",
+                            "layoutType": "inline",
+                            "text": "菜单标识",
+                            "bindKey": "value",
+                            "desc": "每个标签的标识，这个必须唯一且不能为空，否则会功能或数据异常，注意标识不能为：editable、key、idm_datakey",
+                            "default": ""
+                        }
+                    ]
                 }
             ]
         },

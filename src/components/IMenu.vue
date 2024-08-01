@@ -92,3 +92,11 @@ export default {
     }
 }
 </script>
+<style lang="scss" scoped>
+:deep(.ant-menu) {
+    .ant-menu-item {
+        font-size: 16px;
+        font-weight: 500;
+    }
+}
+</style>
