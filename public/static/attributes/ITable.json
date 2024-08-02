@@ -688,6 +688,15 @@
                     "bindKey": "sorter",
                     "desc": "开启远程排序",
                     "default": false
+                },
+                {
+                    "display":"@[sorter==true]",
+                    "type": "input",
+                    "layoutType": "inline",
+                    "text": "排序字段",
+                    "bindKey": "sortField",
+                    "desc": "远程排序字段，不填默认为列标识",
+                    "default": ""
                 }
             ]
         },

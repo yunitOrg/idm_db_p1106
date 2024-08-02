@@ -77,13 +77,13 @@
                                 >
                             </template>
                             <template v-else-if="column.type == 'actions'">
-                                <a-dropdown v-if="column.dropdown">
+                                <a-dropdown v-if="column.dropdown && getActions(value, record, column).length > 0">
                                     <a-menu slot="overlay" :selectable="false" @click="({ key }) => handleMenuClick(key, value, record, column)">
-                                        <a-menu-item v-for="item in getActions(value, record, column)" :key="item.value">
+                                        <a-menu-item v-for="item in getActions(value, record, column)" :key="item.value" style="text-align: center">
                                             {{ item.label }}
                                         </a-menu-item>
                                     </a-menu>
-                                    <img src="../assets/more.png" alt="" />
+                                    <img src="../assets/more.png" @click.stop.prevent alt="" />
                                 </a-dropdown>
                                 <a-space v-else>
                                     <a-button v-for="item in getActions(value, record, column)" :key="item.value" @click.stop="handleMenuClick(item.value, value, record, column)">
@@ -394,7 +394,7 @@ export default {
             this.pagination.current = pagination.current
             this.pagination.pageSize = pagination.pageSize
             this.sort = {
-                orderType: sorter.order ? sorter.field : '',
+                orderType: sorter.order ? this.propData.columns[sorter.columnKey]?.sortField || sorter.field : '',
                 reversed: sorter.order ? sorter.order == 'descend' : ''
             }
             this.initData()
