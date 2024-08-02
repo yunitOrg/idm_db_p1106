@@ -463,7 +463,7 @@ export default {
         },
         handleMenuClick(key, value, record, column) {
             if (Array.isArray(column.hanldeInterfaceFunc) && column.hanldeInterfaceFunc.length > 0) {
-                window.IDM.invokeCustomFunctions(this, [
+                window.IDM.invokeCustomFunctions.apply(this, [
                     column.hanldeInterfaceFunc,
                     {
                         key,
