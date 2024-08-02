@@ -463,23 +463,27 @@ export default {
         },
         handleMenuClick(key, value, record, column) {
             if (Array.isArray(column.hanldeInterfaceFunc) && column.hanldeInterfaceFunc.length > 0) {
-                window[column.hanldeInterfaceFunc[0].name]?.call(this, {
-                    _this: this,
-                    key,
-                    value,
-                    record,
-                    column
-                })
+                window.IDM.invokeCustomFunctions(this, [
+                    column.hanldeInterfaceFunc,
+                    {
+                        key,
+                        value,
+                        record,
+                        column
+                    }
+                ])
             }
         },
         getActions(value, record, column) {
-            if (Array.isArray(column.handleActionsFunc) && column.handleActionsFunc.length > 0) {
-                return window[column.handleActionsFunc[0].name]?.call(this, {
-                    _this: this,
-                    value,
-                    record,
-                    column
-                })
+            if (column.handleActionsFunc) {
+                return window.IDM.invokeCustomFunctions.apply(this, [
+                    column.handleActionsFunc,
+                    {
+                        value,
+                        record,
+                        column
+                    }
+                ]).flat()
             }
             return column.actions
         },
@@ -493,15 +497,17 @@ export default {
             }
         },
         handleHtmlRender(value, record, column, columnIndex) {
-            if (Array.isArray(column.htmlFunction) && column.htmlFunction.length > 0) {
-                return window[column.htmlFunction[0].name]?.call(this, {
-                    _this: this,
-                    value,
-                    record,
-                    column,
-                    columnIndex
-                })
-            }
+            return window.IDM.invokeCustomFunctions
+                .apply(this, [
+                    column.htmlFunction,
+                    {
+                        value,
+                        record,
+                        column,
+                        columnIndex
+                    }
+                ])
+                .join()
         }
     }
 }

@@ -696,7 +696,7 @@
                     "text": "排序字段",
                     "bindKey": "sortField",
                     "desc": "远程排序字段，不填默认为列标识",
-                    "default": ""
+                    "default": "@[value]"
                 }
             ]
         },
