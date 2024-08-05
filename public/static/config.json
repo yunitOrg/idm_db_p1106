@@ -61,20 +61,6 @@
       "comLangue": "vue"
     },
     {
-      "classId": "idm.componet.db.IFormSearch",
-      "comName": "搜索表单",
-      "className": "IFormSearch",
-      "comType": "common",
-      "comLangue": "vue"
-    },
-    {
-      "classId": "idm.componet.db.ITable",
-      "comName": "动态表格",
-      "className": "ITable",
-      "comType": "common",
-      "comLangue": "vue"
-    },
-    {
       "classId": "idm.componet.db.ISuperTaskInfo",
       "comName": "任务信息",
       "className": "ISuperTaskInfo",
