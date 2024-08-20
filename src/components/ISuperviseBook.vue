@@ -811,11 +811,13 @@ export default {
 //   border-radius: 4px;
 // }
 .super-decoration{
-  text-decoration: underline;
   color: #2673D3;
   text-align: left;
   width: 100%;
   display: inline-block;
+  &:hover{
+  text-decoration: underline;
+  }
 }
 .subtask-table-gray{
   color: #cccccc;

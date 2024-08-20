@@ -62,7 +62,7 @@ export default {
             handler(record) {
                 this.initData(record).then((data) => {
                     this.dataSource = data
-                    if (record.assignType != 1 && this.dataSource.length == 0) {
+                    if (record.assignType && record.assignType != 1 && this.dataSource.length == 0) {
                         window.IDM.message.info('督办任务分解立项流程尚未流转完毕')
                     }
                 })
