@@ -316,6 +316,9 @@ export default {
     this.handleSuperSelectData(1, 'superType')
     this.handleSuperSelectData(2, 'superState')
     this.init()
+    window.ISuperviseBook = {
+      initData: this.initData
+    }
   },
   methods: {
     addSorteField() {
