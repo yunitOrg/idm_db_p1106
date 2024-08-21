@@ -58,7 +58,7 @@
         :locale="{emptyText: '暂无数据'}"
         expandRowByClick
         :rowClassName="(record, index) => index % 2 == 0 ? 'odd' : 'even'"
-        :scroll="{ y: propData.tableMaxHeight }"
+        :scroll="{ y: propData.tableMaxHeight, x: propData.tableMaxWidth }"
         :rowKey="(record, index) => (record.id)"
         class="components-table-demo-nested">
         <!--状态-->
@@ -262,6 +262,7 @@ export default {
         paginationPostion: 'right',
         showSizeChanger: false,
         defaultPageSize: '30',
+        tableMaxHeight: 'calc(100vh - 300px)',
         isSorte: true,
         pageSizeOptions: '10,20,30,40',
         showTotalFormat: '当前显示@[range[0]]-@[range[1]]，总共@[total]条',
@@ -673,7 +674,7 @@ export default {
       let res = await API.ApiGetDBList(this.search)
       if (res.code == '200') {
         this.loading = false;
-        let data = res.data || {}
+        let data = res || {}
         if (this.propData.hanldeInterfaceFunc && this.propData.hanldeInterfaceFunc.length > 0) {
           let name = this.propData.hanldeInterfaceFunc[0].name
           data = window[name] && window[name].call(this, {

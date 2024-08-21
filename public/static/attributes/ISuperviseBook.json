@@ -41,6 +41,14 @@
           "desc": "表格最大高度",
           "bindKey": "tableMaxHeight",
           "default": "calc(100% - 100px)"
+        },
+        {
+          "type": "input",
+          "layoutType": "input",
+          "text": "表格宽度",
+          "desc": "表格最大宽度",
+          "bindKey": "tableMaxWidth",
+          "default": "calc(100% - 100px)"
         }
       ]
     },
