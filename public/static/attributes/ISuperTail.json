@@ -21,7 +21,7 @@
         "children": [
           {
             "type": "input",
-            "layoutType": "block",
+            "layoutType": "inline",
             "text": "列表高",
             "desc": "填写auto则为自适应，或者使用px、%、vw等单位，比如100%、100px、100vw等等",
             "bindKey": "listHeight",

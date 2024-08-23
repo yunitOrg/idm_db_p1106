@@ -320,7 +320,7 @@ export default {
   }
   .isupertail-ul{
     position: relative;
-    overflow-y: scroll;
+    overflow: auto;
     .isupertail-li{
       display: flex;
       justify-content: space-between;
