@@ -33,6 +33,13 @@
           "desc": "表格最大高度",
           "bindKey": "tableMaxHeight",
           "default": "calc(100% - 100px)"
+        },
+        {
+          "type": "switch",
+          "layoutType": "inline",
+          "text": "关键字",
+          "bindKey": "keyWrod",
+          "default": false
         }
       ]
     },

@@ -25,6 +25,10 @@
           >
           </a-range-picker>
         </a-config-provider>
+        <template v-if="propData.keyWrod">
+          <span class="project-span ml20">关键字：</span>
+          <a-input v-model="search.extKeyword" style="width:200px" placeholder="请输入" allow-clear></a-input>
+        </template>
         <a-button class="super-btn super-theme-btn h40" type="primary" @click="handleSearch">查询</a-button>
         <a-button class="super-btn h40" @click="handleReset">导出</a-button>
       </div>
@@ -83,6 +87,7 @@ export default {
         pageNo: 1,
         pageSize: 30,
         totalCount: 0,
+        extKeyword: '',
         startDate: `${moment().format('YYYY')}-01`,
         endDate:  moment().format('YYYY-MM'),
         time: [moment(`${moment().format('YYYY')}-01`, 'YYYY-MM'), moment(moment().format('YYYY-MM'))]
@@ -107,7 +112,7 @@ export default {
   },
   methods: {
     handleReset() {
-      let url = `/ctrl/dbStatistics/project/type/export?startDate=${this.search.startDate}&endDate=${this.search.endDate}`
+      let url = `/ctrl/dbStatistics/project/type/export?startDate=${this.search.startDate}&endDate=${this.search.endDate}&extKeyword=${this.search.extKeyword}`
       openWindow(url)
     },
     propDataWatchHandle(propData) {
@@ -316,6 +321,9 @@ export default {
   }
   .mbt20{
     margin-bottom: 20px;
+  }
+  .ml20{
+    margin-left: 20px;
   }
   .h40{
     height: 40px;

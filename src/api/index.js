@@ -79,8 +79,13 @@ export default {
      * @Desc 督办-获取督办立项数据
      * @Author hjp
      */
-    async ApiDbstatisProjectList({startDate, endDate}) {
-      const { data } = await window.IDM.http.get(`ctrl/dbStatistics/project`, {startDate: startDate, endDate: endDate}, {
+    async ApiDbstatisProjectList({startDate, endDate, extKeyword}) {
+      let obj = {
+        startDate: startDate,
+        endDate: endDate
+      }
+      extKeyword && (obj.extKeyword = extKeyword);
+      const { data } = await window.IDM.http.get(`ctrl/dbStatistics/project`, obj, {
         headers: {
           'Content-Type': 'application/json'
         },
@@ -91,8 +96,13 @@ export default {
      * @Desc 督办-获取督办数据
      * @Author hjp
      */
-    async ApiProjectTypeList({startDate, endDate}) {
-      const { data } = await window.IDM.http.get(`ctrl/dbStatistics/project/type`, {startDate: startDate, endDate: endDate}, {
+    async ApiProjectTypeList({startDate, endDate, extKeyword}) {
+      let obj = {
+        startDate: startDate,
+        endDate: endDate
+      }
+      extKeyword && (obj.extKeyword = extKeyword);
+      const { data } = await window.IDM.http.get(`ctrl/dbStatistics/project/type`, obj, {
         headers: {
           'Content-Type': 'application/json'
         },
