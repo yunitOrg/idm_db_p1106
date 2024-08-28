@@ -27,7 +27,18 @@
         </a-config-provider>
         <template v-if="propData.keyWrod">
           <span class="project-span ml20">关键字：</span>
-          <a-input v-model="search.extKeyword" style="width:200px" placeholder="请输入" allow-clear></a-input>
+          <!-- <a-input v-model="search.extKeyword" style="width:200px" placeholder="请输入" allow-clear></a-input> -->
+          <a-select
+            v-model="search.extKeyword"
+            show-search
+            allowClear
+            placeholder="请选择关键字"
+            option-filter-prop="children"
+            style="width: 200px"
+            :filter-option="filterOption"
+           >
+            <a-select-option v-for="(item, index) in keywrodlist" :key="index" :value="item.value">{{ item.text }}</a-select-option>
+           </a-select>
         </template>
         <a-button class="super-btn super-theme-btn h40" type="primary" @click="handleSearch">查询</a-button>
         <a-button class="super-btn h40" @click="handleReset">导出</a-button>
@@ -81,6 +92,7 @@ export default {
       locale,
       moduleObject: {},
       data: [],
+      keywrodlist: [],
       tableRealMaxHeight: '',
       mode: ['month', 'month'],
       search: {
@@ -99,6 +111,7 @@ export default {
         papShow: false,
         tableMaxWidth: '100%',
         tableHeightFlag: false,
+        keyWrod: true,
         tableMaxHeight: 'calc(100vh - 100px)',
         pageSizeOptions: '10,20,30,40',
         showTotalFormat: '当前显示@[range[0]]-@[range[1]]，总共@[total]条',
@@ -111,6 +124,11 @@ export default {
     this.init();
   },
   methods: {
+    filterOption(input, option) {
+      return (
+        option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0
+      );
+    },
     handleReset() {
       let url = `/ctrl/dbStatistics/project/type/export?startDate=${this.search.startDate}&endDate=${this.search.endDate}&extKeyword=${this.search.extKeyword}`
       openWindow(url)
@@ -217,7 +235,7 @@ export default {
     // 查看表格是否添加滚动条
     handleTableScrollHeight() {
       this.$nextTick(() => {
-        let table = this.$refs.superTable.$el
+        let table = this.$refs.superTable?.$el
         let tableContent = table.querySelector('.ant-table-body')
         let expectHeight = this.handleDomHeight({height: this.propData.tableMaxHeight}),
           realHeight = tableContent.offsetHeight;
@@ -248,11 +266,21 @@ export default {
       })
     },
     async initData() {
+      let params = {};
+      if (this.propData.handleTableParams && this.propData.handleTableParams.length > 0) {
+        let name = this.propData.handleTableParams[0].name
+        params = window[name] && window[name].call(this, {
+          _this: this,
+          search: this.search,
+          keywrodlist: this.keywrodlist
+        });
+      }
       if (this.propData.dataSourceForm) {
+        let obj = Object.assign({}, this.search, params);
         IDM.datasource.request(this.propData.dataSourceForm[0]?.id, {
             moduleObject: this.moduleObject,
             param: {
-              ...this.search
+              ...obj
             }
           }, (res) => {
             let data = res.data || {}
@@ -274,28 +302,37 @@ export default {
             this.data = data.statistics || []
             this.handleTableScrollHeight()
         })
-        return
-      }
-      let res = await API.ApiProjectTypeList(this.search)
-      if (res.code == '200') {
-        let data = res.data || {}
-        let ary = data.header || []
-        const addCenter = function(ary) {
-          ary.forEach(item => {
-            item.align = 'center'
-            item.width = '100px'
-            if (item.children) {
-              addCenter(item.children)
+      } else {
+        let obj = Object.assign({}, this.search, params);
+        let res = await API.ApiProjectTypeList(obj)
+        if (res.code == '200') {
+            let data = res.data || {}
+            let ary = data.header || []
+            const addCenter = function(ary) {
+              ary.forEach(item => {
+                item.align = 'center'
+                item.width = '100px'
+                if (item.children) {
+                  addCenter(item.children)
+                }
+              })
             }
-          })
+            addCenter(ary)
+            if (ary && ary.length>0) {
+              ary[0]['fixed'] = 'left'
+            }
+            this.columns = ary
+            this.data = data.statistics || []
+            this.handleTableScrollHeight()
         }
-        addCenter(ary)
-        if (ary && ary.length>0) {
-          ary[0]['fixed'] = 'left'
-        }
-        this.columns = ary
-        this.data = data.statistics || []
-        this.handleTableScrollHeight()
+      }
+      // 关键字
+      if (this.propData.keyWorddataSource) {
+        IDM.datasource.request(this.propData.keyWorddataSource[0]?.id, {
+          moduleObject: this.moduleObject,
+          }, (data) => {
+            this.keywrodlist = data;
+        })
       }
     },
     init() {

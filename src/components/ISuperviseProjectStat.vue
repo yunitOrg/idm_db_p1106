@@ -28,7 +28,18 @@
         </a-config-provider>
         <template v-if="propData.keyWrod">
           <span class="project-span ml20">关键字：</span>
-          <a-input v-model="search.extKeyword" style="width:200px" placeholder="请输入" allow-clear></a-input>
+          <!-- <a-input v-model="search.extKeyword" style="width:200px" placeholder="请输入" allow-clear></a-input> -->
+           <a-select
+            v-model="search.extKeyword"
+            show-search
+            allowClear
+            placeholder="请选择关键字"
+            option-filter-prop="children"
+            style="width: 200px"
+            :filter-option="filterOption"
+           >
+            <a-select-option v-for="(item, index) in keywrodlist" :key="index" :value="item.value">{{ item.text }}</a-select-option>
+           </a-select>
         </template>
         <a-button class="super-btn super-theme-btn h40" type="primary" @click="handleSearch">查询</a-button>
         <a-button class="super-btn h40" @click="handleReset">导出</a-button>
@@ -79,6 +90,7 @@ export default {
       tableRealMaxHeight: '',
       data: [],
       mode: ['month', 'month'],
+      keywrodlist: [],
       search: {
         pageNo: 1,
         pageSize: 30,
@@ -89,6 +101,7 @@ export default {
         time: [moment(`${moment().format('YYYY')}-01`, 'YYYY-MM'), moment(moment().format('YYYY-MM'))]
       },
       propData: this.$root.propData.compositeAttr || {
+        keyWrod: true,
         disabledPagination: false,
         showSizeChanger: false,
         showQuickJumper: true,
@@ -166,6 +179,11 @@ export default {
     this.init();
   },
   methods: {
+    filterOption(input, option) {
+      return (
+        option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0
+      );
+    },
     // 导出
     handleReset() {
       let url = `/ctrl/dbStatistics/project/export?startDate=${this.search.startDate}&endDate=${this.search.endDate}&extKeyword=${this.search.extKeyword}`
@@ -273,7 +291,7 @@ export default {
     // 查看表格是否添加滚动条
     handleTableScrollHeight() {
       this.$nextTick(() => {
-        let table = this.$refs.superTable.$el
+        let table = this.$refs.superTable?.$el
         let tableContent = table.querySelector('.ant-table-body')
         let expectHeight = this.handleDomHeight({height: this.propData.tableMaxHeight}),
           realHeight = tableContent.offsetHeight;
@@ -300,22 +318,41 @@ export default {
       })
     },
     async initData() {
+      let params = {};
+      if (this.propData.handleTableParams && this.propData.handleTableParams.length > 0) {
+          let name = this.propData.handleTableParams[0].name
+          params = window[name] && window[name].call(this, {
+            _this: this,
+            search: this.search,
+            keywrodlist: this.keywrodlist
+          });
+        }
       if (this.propData.dataSourceForm) {
+        let obj = Object.assign({}, this.search, params);
         IDM.datasource.request(this.propData.dataSourceForm[0]?.id, {
           moduleObject: this.moduleObject,
           param: {
-            ...this.search
+            ...obj
           }
           }, (data) => {
             this.data = data;
             this.handleTableScrollHeight()
         })
-        return
+      } else {
+        let obj = Object.assign({}, this.search, params);
+        let res = await API.ApiDbstatisProjectList(obj)
+        if (res.code == '200') {
+          this.data = res.data || []
+          this.handleTableScrollHeight()
+        }
       }
-      let res = await API.ApiDbstatisProjectList(this.search)
-      if (res.code == '200') {
-        this.data = res.data || []
-        this.handleTableScrollHeight()
+      // 关键字
+      if (this.propData.keyWorddataSource) {
+        IDM.datasource.request(this.propData.keyWorddataSource[0]?.id, {
+          moduleObject: this.moduleObject,
+          }, (data) => {
+            this.keywrodlist = data;
+        })
       }
     },
     init() {

@@ -204,11 +204,27 @@
       "helpUrl": "",
       "children": [
         {
+          "type": "actionSelect",
+          "layoutType": "block",
+          "text": "表格数据源参数",
+          "bindKey": "handleTableParams",
+          "desc": "接口参数：自定义函数参数：{_this: this, item: item}",
+          "multiple": false
+        },
+        {
           "type": "dataSourceSelect",
           "layoutType": "inline",
           "text": "数据源",
-          "desc": "用于选择数据源",
+          "desc": "表格数据源",
           "bindKey": "dataSourceForm"
+        },
+        {
+          "type": "dataSourceSelect",
+          "layoutType": "block",
+          "disabled": "@[keyWrod]",
+          "text": "关键字数据源",
+          "desc": "关键字下拉框数据源 返回的内容格式：[{value: 1, text: '协办'}]",
+          "bindKey": "keyWorddataSource"
         }
       ]
     }
