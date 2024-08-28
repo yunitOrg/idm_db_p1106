@@ -47,6 +47,7 @@
       <template v-if="reload">
         <a-config-provider :locale="locale">
       <a-table
+        ref="superTable"
         :columns="columns"
         :data-source="listData"
         :pagination="false"
@@ -58,7 +59,7 @@
         :locale="{emptyText: '暂无数据'}"
         expandRowByClick
         :rowClassName="(record, index) => index % 2 == 0 ? 'odd' : 'even'"
-        :scroll="{ y: propData.tableMaxHeight, x: propData.tableMaxWidth }"
+        :scroll="{ y: tableRealMaxHeight, x: propData.tableMaxWidth }"
         :rowKey="(record, index) => (record.id)"
         class="components-table-demo-nested">
         <!--状态-->
@@ -234,6 +235,7 @@ export default {
   data() {
     return {
       locale,
+      tableRealMaxHeight: '',
       loading: false,
       contentSinglBookFlag: false,
       contentMoreBookFlag: false,
@@ -657,6 +659,32 @@ export default {
       this.refreshTable()
       this.initData()
     },
+    handleDomHeight({height}) {
+      let span = document.createElement('span')
+      let result = {}
+      result.width = span.offsetWidth;
+      result.height = span.offsetHeight;
+      span.style.display = 'inline-block';
+      span.style.visibility = 'hidden';
+      span.style.height = height
+      document.body.appendChild(span)
+      result.width = span.offsetWidth
+      result.height = span.offsetHeight;
+      span.parentNode?.removeChild(span)
+      return result
+    },
+    // 查看表格是否添加滚动条
+    handleTableScrollHeight() {
+      this.$nextTick(() => {
+        let table = this.$refs.superTable?.$el
+        let tableContent = table.querySelector('.ant-table-body')
+        let expectHeight = this.handleDomHeight({height: this.propData.tableMaxHeight}),
+          realHeight = tableContent.offsetHeight;
+        if (realHeight > expectHeight.height) {
+          this.tableRealMaxHeight = this.propData.tableMaxHeight
+        }
+      })
+    },
     async initData() {
       // if (this.moduleObject.env !== 'production') {
       //   this.getMockData()
@@ -690,7 +718,7 @@ export default {
             this.$set(item, 'contentSinglBook', [])
           })
         }
-        this.listData.fo
+        this.handleTableScrollHeight();
       }
     },
     init() {
