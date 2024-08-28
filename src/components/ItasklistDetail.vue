@@ -322,7 +322,7 @@ export default {
         setTimeout(() => {
           try{
             let height = this.$refs.taskRef.offsetHeight
-            top.updateSonTaskIframeHeight(height + 30)
+            top.updateSonTaskIframeHeight(height + 20)
           }catch(e) {
             console.log('获取总高度', e)
           }
