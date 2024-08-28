@@ -133,7 +133,9 @@
                               'task-red': item.dbStatus == '4'
                             }">{{ item.dbStatusText }}</span>
                           </span>
-                          <span class="task-center">{{ item[propData.contentFiled || 'taskDesc'] }}</span>
+                          <span class="task-center">
+                            <template v-if="propData.isMoOpen">{{index+1}}. </template>
+                            {{ item[propData.contentFiled || 'taskDesc'] }}</span>
                         </div>
                         <div class="task-subtitle">
                           <div class="task-subtitle-left">
@@ -259,6 +261,7 @@ export default {
       moduleObject: {},
       propData: this.$root.propData.compositeAttr || {
         emptySize: '100',
+        isMoOpen: true,
         showQuickJumper: true,
         disabledPagination: false,
         paginationPostion: 'right',
@@ -268,6 +271,24 @@ export default {
         isSorte: true,
         pageSizeOptions: '10,20,30,40',
         showTotalFormat: '当前显示@[range[0]]-@[range[1]]，总共@[total]条',
+        columnDeleteNameList: [
+          {
+            name: '督办类型',
+          },
+          {
+            name: '主办部门',
+          },
+          {
+            name: '协办部门',
+          }
+        ],
+        columnAddNameList: [
+          {
+            key: 7,
+            name: "承办部门",
+            field: "hostStr"
+          }
+        ],
         ulbox: {
           marginTopVal: "",
           marginRightVal: "",
@@ -321,6 +342,27 @@ export default {
     this.init()
     window.ISuperviseBook = {
       initData: this.initData
+    }
+    // 增加列
+    if (this.propData.columnDeleteNameList &&  this.propData.columnDeleteNameList.length > 0) {
+      this.columns = this.columns.filter(item => {
+        return !this.propData.columnDeleteNameList.map(item => item.name).includes(item.title)
+      })
+    }
+    // 删除列
+    if (this.propData.columnAddNameList &&  this.propData.columnAddNameList.length > 0) {
+      this.propData.columnAddNameList.forEach(item => {
+        let obj = {title: item.name, dataIndex: item.field, align: 'center', key: item.field}
+        this.columns.splice(item.key, 0, obj)
+      })
+    }
+    // 加工列
+    if (this.propData.handleTableColumn && this.propData.handleTableColumn.length > 0) {
+      let name = this.propData.handleTableColumn[0].name
+      this.columns = window[name] && window[name].call(this, {
+        _this: this,
+        columns: this.columns
+      });
     }
   },
   methods: {

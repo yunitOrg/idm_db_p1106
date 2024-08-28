@@ -49,6 +49,55 @@
           "desc": "表格最大宽度",
           "bindKey": "tableMaxWidth",
           "default": "calc(100% - 100px)"
+        },
+        {
+          "type": "switch",
+          "layoutType": "inline",
+          "text": "中烟二开",
+          "desc": "表格督办类型、主办部门、协办部门去掉三列增加承办部门列",
+          "bindKey": "isMoOpen",
+          "default": false
+        },
+        {
+          "type": "table",
+          "text": "删除表格列",
+          "bindKey": "columnDeleteNameList",
+          "tabText": "删除列[index]",
+          "children": [
+            {
+              "type": "input",
+              "layoutType": "inline",
+              "text": "表格名称",
+              "bindKey": "name"
+            }
+          ]
+        },
+        {
+          "type": "table",
+          "text": "增加表格列",
+          "bindKey": "columnAddNameList",
+          "tabText": "增加列[index]",
+          "children": [
+            {
+              "type": "input",
+              "layoutType": "inline",
+              "text": "索引位置",
+              "desc": "表格索引位置",
+              "bindKey": "key"
+            },
+            {
+              "type": "input",
+              "layoutType": "inline",
+              "text": "表格名称",
+              "bindKey": "name"
+            },
+            {
+              "type": "input",
+              "layoutType": "inline",
+              "text": "字段",
+              "bindKey": "field"
+            }
+          ]
         }
       ]
     },
@@ -277,6 +326,14 @@
         {
           "type": "actionSelect",
           "layoutType": "block",
+          "text": "表格表头加工函数",
+          "bindKey": "handleTableColumn",
+          "desc": "接口参数：自定义函数参数：{_this: this, columns: columns}",
+          "multiple": false
+        },
+        {
+          "type": "actionSelect",
+          "layoutType": "block",
           "text": "接口参数函数",
           "bindKey": "handleFieldFunc",
           "desc": "接口参数：自定义函数参数：{_this: this, search: 搜索内容}",
@@ -287,7 +344,7 @@
           "layoutType": "block",
           "text": "接口返回数据处理函数",
           "bindKey": "hanldeInterfaceFunc",
-          "desc": "接口参数：自定义函数参数：{_this: this, data: data}",
+          "desc": "接口参数：自定义函数参数：{_this: this, data: data} 返回格式：{code: '200', count: 10, data: []}",
           "multiple": false
         },
         {

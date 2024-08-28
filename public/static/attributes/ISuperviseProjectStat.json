@@ -200,7 +200,7 @@
           "layoutType": "block",
           "text": "表格数据源参数",
           "bindKey": "handleTableParams",
-          "desc": "接口参数：自定义函数参数：{_this: this, item: item}",
+          "desc": "接口参数：自定义函数参数：{_this: this, search: search, keywrodlist: keywrodlist}",
           "multiple": false
         },
         {
