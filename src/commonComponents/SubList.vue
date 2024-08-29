@@ -60,12 +60,22 @@ export default {
     watch: {
         record: {
             handler(record) {
-                this.initData(record).then((data) => {
-                    this.dataSource = data
-                    if (record.assignType && record.assignType != 1 && this.dataSource.length == 0) {
-                        window.IDM.message.info('督办任务分解立项流程尚未流转完毕')
-                    }
-                })
+                this.initData(record)
+                    .then((data) => {
+                        if (Array.isArray(this.propData.hanldeInterfaceFunc) && this.propData.hanldeInterfaceFunc.length > 0) {
+                            return window.IDM.invokeCustomFunctions(this.propData.hanldeInterfaceFunc, {
+                                record,
+                                data
+                            }).flat()
+                        }
+                        return data
+                    })
+                    .then((data) => {
+                        this.dataSource = data
+                        if (record.assignType && record.assignType != 1 && this.dataSource.length == 0) {
+                            window.IDM.message.info('督办任务分解立项流程尚未流转完毕')
+                        }
+                    })
             },
             deep: true,
             immediate: true
