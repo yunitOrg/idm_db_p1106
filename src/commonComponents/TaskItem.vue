@@ -58,7 +58,7 @@
                 <div class="task-action">
                     <a-popover placement="bottomRight" v-if="data.buttonList && data.buttonList.length">
                         <template slot="content">
-                            <p v-for="(subitem, index) in data.buttonList" :key="index" @click="handleOptions({ item: subitem, fatherItem: data })">
+                            <p v-for="(subitem, index) in data.buttonList" :key="index" @click="handleOptions({ key: subitem.value, value: subitem.value, record: data })">
                                 <span>{{ subitem.text }}</span>
                             </p>
                         </template>
@@ -98,7 +98,7 @@ export default {
             return IDM.url.getModuleAssetsWebPath(require('../assets/jian.png'), this.moduleObject)
         },
         // 子项展开收缩
-        async handleShowList() {
+        handleShowList() {
             this.subVisible = !this.subVisible
         },
         // 操作项

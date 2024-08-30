@@ -1,6 +1,6 @@
 <template>
     <div class="pervise-wrap">
-        <template v-if="record.assignType == 3">
+        <template v-if="isMutipleTask">
             <!-- 任务 -->
             <TaskItem
                 v-for="(item, index) in dataSource"
@@ -16,11 +16,12 @@
                 </template>
             </TaskItem>
         </template>
-        <template v-else-if="[2, 4, -1].includes(record.assignType)">
+        <template v-else-if="isSingleNotice">
             <!-- 通知 -->
             <NoticeItem
                 :themeList="propData.themeList"
                 :porpsList="dataSource"
+                origin="ItasklistDetail"
                 @handleOptions="handleOptions"
                 @handleContentJump="handleContentJump"
                 @handleFileOpen="handleFileOpen"
@@ -31,7 +32,6 @@
 <script>
 import NoticeItem from './NoticeItem.vue'
 import TaskItem from './TaskItem.vue'
-import API from '../api/index'
 export default {
     name: 'SubList',
     props: {
@@ -57,16 +57,42 @@ export default {
             dataSource: []
         }
     },
+    computed: {
+        isMutipleTask() {
+            if (_.isArray(this.propData.handleTaskFunc) && this.propData.handleTaskFunc.length > 0) {
+                return _.every(
+                    window.IDM.invokeCustomFunctions(this.propData.handleTaskFunc, {
+                        record: this.record
+                    }),
+                    Boolean
+                )
+            }
+            return this.record.assignType == 3
+        },
+        isSingleNotice() {
+            if (_.isArray(this.propData.handleNoticeFunc) && this.propData.handleNoticeFunc.length > 0) {
+                return _.every(
+                    window.IDM.invokeCustomFunctions(this.propData.handleNoticeFunc, {
+                        record: this.record
+                    }),
+                    Boolean
+                )
+            }
+            return [2, 4, -1].includes(this.record.assignType)
+        }
+    },
     watch: {
         record: {
             handler(record) {
                 this.initData(record)
                     .then((data) => {
-                        if (Array.isArray(this.propData.hanldeInterfaceFunc) && this.propData.hanldeInterfaceFunc.length > 0) {
-                            return window.IDM.invokeCustomFunctions(this.propData.hanldeInterfaceFunc, {
-                                record,
-                                data
-                            }).flat()
+                        if (_.isArray(this.propData.hanldeInterfaceFunc) && this.propData.hanldeInterfaceFunc.length > 0) {
+                            return _.flatten(
+                                window.IDM.invokeCustomFunctions(this.propData.hanldeInterfaceFunc, {
+                                    record,
+                                    data
+                                })
+                            )
                         }
                         return data
                     })
@@ -117,28 +143,25 @@ export default {
                 window.open(window.IDM.url.getWebPath(item.lastFeedbackUrl))
             }
         },
-        // 督办类型选择
-        async handleSuperSelectData(type, result) {
-            let res = type == 1 ? await API.ApiPprovalTypeSelect() : await API.ApiDbStatusSelect()
-            if (res.code == '200') {
-                this[result] = res.data
-            }
-        },
         // 操作项
         handleOptions(obj) {
-            if (this.propData.handleActionFunc && this.propData.handleActionFunc.length > 0) {
-                let name = this.propData.handleActionFunc[0].name
-                window[name] &&
-                    window[name].call(this, {
-                        _this: this,
-                        option: obj
-                    })
+            if (_.isArray(this.propData.handleActionFunc) && this.propData.handleActionFunc.length > 0) {
+                window.IDM.invokeCustomFunctions(this.propData.handleActionFunc, obj)
             }
         },
         propDataWatchHandle(propData) {
             this.propData = propData.compositeAttr || {}
         },
         initData(record) {
+            if (_.isArray(this.propData.handleRequestFunc) && this.propData.handleRequestFunc.length > 0) {
+                return Promise.all(
+                    window.IDM.invokeCustomFunctions(this.propData.handleRequestFunc, {
+                        record
+                    })
+                ).then((...result) => {
+                    return _.flatten(...result)
+                })
+            }
             switch (record.assignType) {
                 case 2:
                 case 4:
