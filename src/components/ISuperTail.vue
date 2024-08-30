@@ -34,8 +34,8 @@
             </div>
           </div>
           <div class="tail-right">
-            <img :src="hanldeImg('cui.png')" alt="" @click="handleFirstCui(item)">
-            <img :src="hanldeImg('bell.png')" alt="" @click="handleFirstHui(item)">
+            <img :src="hanldeImg('bell.png')" alt="" @click="handleFirstCui(item)" title="催办">
+            <img :src="hanldeImg('cui.png')" alt="" @click="handleFirstHui(item)" title="回收">
           </div>
         </div>
       </template>
