@@ -66,6 +66,13 @@
       "className": "ISuperTaskInfo",
       "comType": "common",
       "comLangue": "vue"
+    },
+    {
+      "classId": "idm.componet.db.Ideaback",
+      "comName": "意见反馈",
+      "className": "IdeaBack",
+      "comType": "common",
+      "comLangue": "vue"
     }
   ]
 }
