@@ -61,11 +61,11 @@
                     </div>
                 </div>
                 <template v-if="porpsList?.length">
-                    <div class="subtaskMore" v-if="!origin">
+                    <div class="subtaskMore">
                         <template v-if="item.buttonList && item.buttonList.length">
                             <a-popover placement="bottomRight">
                                 <template slot="content">
-                                    <p v-for="(subitem, index) in item.buttonList" :key="index" @click="handleOptions(subitem, item)">
+                                    <p v-for="(subitem, index) in item.buttonList" :key="index" @click="handleOptions({ key: subitem.value, record: item })">
                                         <span>{{ subitem.text }}</span>
                                     </p>
                                 </template>
@@ -107,6 +107,10 @@ import API from '../api/index'
 import { getSubTaskList } from '../utils/mock'
 export default {
     props: {
+        propData: {
+            type: Object,
+            required: true
+        },
         porpsList: {
             type: Array,
             default: () => {
@@ -115,9 +119,6 @@ export default {
         },
         themeList: {
             type: Array
-        },
-        origin: {
-            type: String
         },
         btngroup: {
             type: Boolean
@@ -152,24 +153,18 @@ export default {
         handleOpen(item) {
             this.$emit('handleFileOpen', item)
         },
-        handleOptions(item, fatherItem) {
-            this.$emit('handleOptions', {
-                item: item,
-                fatherItem: fatherItem
-            })
+        handleOptions(item) {
+            this.$emit('handleOptions', item)
         },
         handleDialogOk() {
             this.dialogObj.show = false
         },
         // 弹框
         async handleShowDialog(item) {
-            if (this.origin == 'ItasklistDetail') {
-                let iframeUrl = `../p1000/idm/index.html#/preview/2404301716248fZmfPNT5BD7RmeytaG?id=${item.id}`
-                try {
-                    top.openFeedbackHistory(iframeUrl)
-                } catch (e) {
-                    console.log('弹框失败', e)
-                }
+            if (_.isArray(this.propData.handleHistoryFunc) && this.propData.handleHistoryFunc.length > 0) {
+                window.IDM.invokeCustomFunctions(this.propData.handleHistoryFunc, {
+                    record: item
+                })
                 return
             }
             if (this.porpsList) {
