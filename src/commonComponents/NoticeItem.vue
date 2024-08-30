@@ -8,8 +8,7 @@
                         <span
                             :class="{
                                 'subtask-yellow': item.dbStatus == '1' || item.dbStatus == '4',
-                                'subtask-blue': item.dbStatus == '2',
-                                'subtask-gray': item.dbStatus == '3',
+                                'subtask-blue': item.dbStatus == '2' || item.dbStatus=='3',
                                 'subtask-green': item.dbStatus == '6' || item.dbStatus == '5',
                                 'subtask-red': item.dbStatus == '7'
                             }"
@@ -258,6 +257,9 @@ export default {
         display: flex;
         // justify-content: space-between;
         padding: 14px 0 10px 30px;
+    }
+    .taskInfo-li + .taskInfo-li {
+        border-top: 1px dotted #ccc;
     }
     .subtaskLeft {
         display: flex;

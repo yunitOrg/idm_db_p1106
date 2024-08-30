@@ -19,7 +19,7 @@
         <template v-else-if="isSingleNotice">
             <!-- 通知 -->
             <NoticeItem
-            :propData="propData"
+                :propData="propData"
                 :themeList="propData.themeList"
                 :porpsList="dataSource"
                 origin="ItasklistDetail"
