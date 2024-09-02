@@ -6,39 +6,43 @@
     idm-ctrl-id：组件的id，这个必须不能为空
   -->
     <div idm-ctrl="idm_module" :id="moduleObject.id" :idm-ctrl-id="moduleObject.id">
-        <div class="subtaskdialog">
-            <a-timeline v-if="list.length > 0">
-                <a-timeline-item v-for="(item, index) in list" :key="index">
-                    <template slot="dot">
-                        <div class="subtaskdot"></div>
-                    </template>
-                    <div class="right-time">{{ item[propData.timeField || 'feedbackTime'] }}</div>
-                    <div class="right-content">
-                        <span @click="handleJump(item)" class="subtask-span">{{ item[propData.contentFiled || 'feedbackContent'] }}</span>
-                        <div class="right-file">
-                            <div
-                                v-for="(subitem, subindex) in item[propData.fileGroupField || 'feedbackAttachFiles']"
-                                :key="subindex"
-                                :title="subitem.fileName"
-                                @click.stop="handleOpen(subitem)"
-                            >
-                                <svg-icon icon-class="file"></svg-icon>
-                                {{ subitem[propData.fileNameField || 'fileName'] }}
+        <a-config-provider :locale="locale">
+            <div v-if="list.length > 0" class="subtaskdialog">
+                <a-timeline>
+                    <a-timeline-item v-for="(item, index) in list" :key="index">
+                        <template slot="dot">
+                            <div class="subtaskdot"></div>
+                        </template>
+                        <div class="right-time">{{ item[propData.timeField || 'feedbackTime'] }}</div>
+                        <div class="right-content">
+                            <span @click="handleJump(item)" class="subtask-span">{{ item[propData.contentFiled || 'feedbackContent'] }}</span>
+                            <div class="right-file">
+                                <div
+                                    v-for="(subitem, subindex) in item[propData.fileGroupField || 'feedbackAttachFiles']"
+                                    :key="subindex"
+                                    :title="subitem.fileName"
+                                    @click.stop="handleOpen(subitem)"
+                                >
+                                    <svg-icon icon-class="file"></svg-icon>
+                                    {{ subitem[propData.fileNameField || 'fileName'] }}
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </a-timeline-item>
-            </a-timeline>
+                    </a-timeline-item>
+                </a-timeline>
+            </div>
             <a-empty v-else-if="!fetching" />
-        </div>
+        </a-config-provider>
     </div>
 </template>
 
 <script>
 import { getTaskDialog } from '../utils/mock'
+import zh_CN from 'ant-design-vue/lib/locale/zh_CN'
 export default {
     data() {
         return {
+            locale: zh_CN,
             list: [],
             moduleObject: {},
             fetching: true,
@@ -269,7 +273,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .subtaskdialog {
     .ant-timeline-item-tail {
         border-left-style: dotted;
@@ -317,6 +321,16 @@ export default {
             left: 50%;
             transform: translate(-50%, -50%);
         }
+    }
+}
+:deep(.ant-empty) {
+    padding-top: 15vh;
+    .ant-empty-image {
+        height: 80px;
+    }
+    .ant-empty-description {
+        font-size: 16px;
+        color: #999;
     }
 }
 </style>
