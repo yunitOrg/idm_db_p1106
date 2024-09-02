@@ -17,7 +17,7 @@
         <a-form
           :form="form"
           :label-col="{ span: 4 }"
-          :wrapper-col="{ span: 16 }"
+          :wrapper-col="{ span: 18 }"
         >
           <a-form-item>
             <span slot="label" class="font-label">{{ propData.dialogDesc || "反馈描述：" }}</span>
