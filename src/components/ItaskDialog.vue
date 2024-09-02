@@ -275,33 +275,35 @@ export default {
 
 <style lang="scss" scoped>
 .subtaskdialog {
-    .ant-timeline-item-tail {
-        border-left-style: dotted;
-    }
-    .ant-timeline-item-last {
-        padding: 0 !important;
+    :deep(.ant-timeline) {
+        .ant-timeline-item-tail {
+            border-left-style: dotted;
+        }
+        .ant-timeline-item-last {
+            padding: 0 !important;
+            .ant-timeline-item-content {
+                display: flex;
+                min-height: unset;
+            }
+        }
         .ant-timeline-item-content {
             display: flex;
-            min-height: unset;
         }
     }
-    .ant-timeline-item-content {
-        display: flex;
-        .right-content {
-            flex: 1;
-            span {
-                text-align: justify;
-                display: inline-block;
-            }
+    .right-content {
+        flex: 1;
+        span {
+            text-align: justify;
+            display: inline-block;
         }
-        .right-content {
-            cursor: pointer;
-        }
-        .right-file {
-            cursor: pointer;
-            div {
-                padding-top: 5px;
-            }
+    }
+    .right-content {
+        cursor: pointer;
+    }
+    .right-file {
+        cursor: pointer;
+        div {
+            padding-top: 5px;
         }
     }
     .subtaskdot {
