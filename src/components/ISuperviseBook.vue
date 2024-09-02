@@ -59,7 +59,7 @@
         :locale="{emptyText: '暂无数据'}"
         expandRowByClick
         :rowClassName="(record, index) => index % 2 == 0 ? 'odd' : 'even'"
-        :scroll="{ y: tableRealMaxHeight, x: propData.tableMaxWidth }"
+        :scroll="{ y: propData.tableMaxHeight, x: propData.tableMaxWidth }"
         :rowKey="(record, index) => (record.id)"
         class="components-table-demo-nested">
         <!--状态-->
@@ -760,7 +760,7 @@ export default {
             this.$set(item, 'contentSinglBook', [])
           })
         }
-        this.handleTableScrollHeight();
+        // this.handleTableScrollHeight();
       }
     },
     init() {
@@ -1083,5 +1083,14 @@ export default {
       border: 1px solid #FFBA00;
     }
   }
+}
+:deep(.ant-table) {
+    .ant-table-header,
+    .ant-table-body {
+        scrollbar-gutter: stable;
+    }
+    .ant-table-body {
+        overflow-y: auto !important;
+    }
 }
 </style>
