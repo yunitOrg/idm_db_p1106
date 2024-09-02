@@ -38,9 +38,6 @@
               </div>
             </div>
           </a-form-item>
-          <!-- <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
-            
-          </a-form-item> -->
         </a-form>
       </div>
       <a-button class="submit" type="primary" @click="handleSubmit" :style="{
@@ -211,6 +208,8 @@ export default {
     margin-bottom: 5px;
   }
   .filebox{
+    max-height: 200px;
+    overflow: auto;
     box-sizing: border-box;
     padding: 0 10px;
     div{
