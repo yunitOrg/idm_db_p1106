@@ -116,7 +116,7 @@ export default {
             _this: this,
           });
         }
-        let res = await API.ApiIdearBack({file: this.fileAry, content: fieldValue.content, ...params});
+        let res = await API.ApiIdearBack({file: this.fileAry, content: fieldValue.content, params});
         if (res.code == '200') {
           window.IDM.message.success('提交成功');
           this.handleClose()
