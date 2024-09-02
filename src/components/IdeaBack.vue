@@ -17,18 +17,18 @@
         <a-form
           :form="form"
           :label-col="{ span: 4 }"
-          :wrapper-col="{ span: 18 }"
+          :wrapper-col="{ span: 19 }"
         >
           <a-form-item>
             <span slot="label" class="font-label">{{ propData.dialogDesc || "反馈描述：" }}</span>
             <a-textarea :rows="4" placeholder="请输入内容" v-decorator="['content', { rules: [{ required: true, message: '请填写反馈描述!' }] }]"/>
           </a-form-item>
-          <a-form-item class="ddd">
+          <a-form-item>
             <div slot="label" class="font-label">
               <div class="label" style="margin-bottom: -5px;">{{ propData.dialogUpload || "上传附件：" }}</div>
               <span class="label" style="padding-right: 15px;" v-show="propData.dialogTian">（选填）</span>
             </div>
-            <div class="upload" @click="handleUploadFile"><img src="../assets/add.png" alt=""></div>
+            <div class="upload" @click="handleUploadFile" v-if="fileAry.length <= 0"><img src="../assets/add.png" alt=""></div>
             <div class="flex">
               <div class="filebox" v-if="fileAry.length">
                 <div v-for="(item, index) in fileAry" :key="index">
@@ -128,7 +128,8 @@ export default {
      * @Desc 设置样式
      */
     handleStyle() {
-      let styleObject = {}
+      let styleObject = {},
+        titleStyle = {};
       for (const key in this.propData) {
         if (this.propData.hasOwnProperty.call(this.propData, key)) {
             const element = this.propData[key]
@@ -154,10 +155,14 @@ export default {
                 case 'boxborder':
                     IDM.style.setBorderStyle(styleObject, element)
                     break
+                case 'dialogTitleStyle':
+                    IDM.style.setFontStyle(titleStyle, element, true)
+                  break
             }
         }
       }
       window.IDM.setStyleToPageHead(this.moduleObject.id + ' .ideaback', styleObject)
+      window.IDM.setStyleToPageHead(this.moduleObject.id + ' .ideaback .idea-title', titleStyle)
     },
     initData() {
 

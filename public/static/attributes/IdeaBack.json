@@ -28,6 +28,13 @@
             "default": "意见反馈"
           },
           {
+            "type": "font",
+            "layoutType": "block",
+            "text": "弹框标题",
+            "desc": "弹框标题样式",
+            "bindKey": "dialogTitleStyle"
+          },
+          {
             "type": "input",
             "layoutType": "inline",
             "text": "反馈描述",
