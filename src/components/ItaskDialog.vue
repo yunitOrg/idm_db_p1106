@@ -275,6 +275,7 @@ export default {
 
 <style lang="scss" scoped>
 .subtaskdialog {
+    overflow: auto;
     :deep(.ant-timeline) {
         .ant-timeline-item-tail {
             border-left-style: dotted;
