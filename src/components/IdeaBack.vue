@@ -32,7 +32,7 @@
             <div class="flex">
               <div class="filebox" v-if="fileAry.length">
                 <div v-for="(item, index) in fileAry" :key="index">
-                  <span>{{ item.name }}</span>
+                  <span @click="handlePreview(item)">{{ item.name }}</span>
                   <span class="delete" @click="handleDelete(index)"><a-icon type="delete" /></span>
                 </div>
               </div>
@@ -56,6 +56,7 @@ export default {
     return {
       form: this.$form.createForm(this, { name: 'coordinated' }),
       fileAry: [],
+      fileObj: {},
       moduleObject: {},
       propData: this.$root.propData.compositeAttr || {
         dialogTian: true,
@@ -81,10 +82,41 @@ export default {
         console.log("关闭弹框", e)
       }
     },
+    // 预览
+    handlePreview() {
+      if (this.propData.previewFileFunc && this.propData.previewFileFunc.length > 0) {
+        let name = this.propData.previewFileFunc[0].name
+          window[name] && window[name].call(this, {
+          _this: this,
+          fileObj: this.fileObj
+        });
+      }
+    },
+    // 上传文件
+    async handleUpload(file) {
+      let obj = IDM.url.queryObject();
+      let formdata = new FormData();
+      formdata.append('mid', obj.mid);
+      formdata.append('moduleId', obj.moduleId);
+      formdata.append('nrType', obj.nrType);
+      formdata.append('fileId', obj.fileId);
+      formdata.append('file', file);
+      formdata.append('newFileFlag', obj.newFileFlag);
+      formdata.append('pk', obj.pk);
+      const { data } = await window.IDM.http.post('ctrl/file/upload', formdata, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          },
+        })
+      if (data.code == '200') {
+        this.fileObj = data;
+      }
+    },
     // 上传
     handleUploadFile() {
       this.uploadFile(e => {
         let files = e.target.files;
+        this.handleUpload(files[0]);
         this.fileAry.push(files[0]);
       })
     },
@@ -221,6 +253,7 @@ export default {
       color: blue;
       font-size: 16px;
       line-height: 24px;
+      cursor: pointer;
     }
     .delete{
       cursor: pointer;
