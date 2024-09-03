@@ -21,7 +21,7 @@
         >
           <a-form-item>
             <span slot="label" class="font-label">{{ propData.dialogDesc || "反馈描述：" }}</span>
-            <a-textarea :rows="4" placeholder="请输入内容" v-decorator="['content', { rules: [{ required: true, message: '请填写反馈描述!' }] }]"/>
+            <a-textarea style="height: 140px;" placeholder="请输入内容" v-decorator="['content', { rules: [{ required: true, message: '请填写反馈描述!' }] }]"/>
           </a-form-item>
           <a-form-item>
             <div slot="label" class="font-label">
@@ -32,7 +32,7 @@
             <div class="flex">
               <div class="filebox" v-if="fileAry.length">
                 <div v-for="(item, index) in fileAry" :key="index">
-                  <span>{{ index+1 }}. {{ item.name }}</span>
+                  <span>{{ item.name }}</span>
                   <span class="delete" @click="handleDelete(index)"><a-icon type="delete" /></span>
                 </div>
               </div>
@@ -179,7 +179,7 @@ export default {
 .ideaback{
   position: relative;
   .idea-top{
-    height: 80px;
+    height: 60px;
     background-image:  linear-gradient(266deg, #9AC7FF 0%, #6195FE 100%);
     display: flex;
     align-items: center;
@@ -218,13 +218,14 @@ export default {
     box-sizing: border-box;
     padding: 0 10px;
     div{
-      color: #333;
+      color: blue;
       font-size: 16px;
       line-height: 24px;
     }
     .delete{
       cursor: pointer;
       padding-left: 10px;
+      color: #333;
     }
   }
   .font-label{
