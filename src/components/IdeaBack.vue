@@ -13,6 +13,7 @@
         <div class="idea-title">{{ propData.dialogTitle || "意见反馈" }}</div>
         <!-- <img src="../assets/close.png" alt="" @click="handleClose"> -->
       </div>
+      <a-spin class="ideaback-loading" :spinning="loading"></a-spin>
       <div class="mdt20">
         <a-form
           :form="form"
@@ -54,6 +55,7 @@ export default {
   name: 'IdeaBack',
   data() {
     return {
+      loading: false,
       form: this.$form.createForm(this, { name: 'coordinated' }),
       fileAry: [],
       fileObj: {},
@@ -94,6 +96,7 @@ export default {
     },
     // 上传文件
     async handleUpload(file) {
+      this.loading = true;
       let obj = {}
       if (this.propData.uploadFileParamsFunc && this.propData.uploadFileParamsFunc.length > 0) {
         let name = this.propData.uploadFileParamsFunc[0].name
@@ -115,6 +118,10 @@ export default {
         })
       if (data.code == '200') {
         this.fileObj = data;
+        this.fileAry.push(file);
+        this.loading = false;
+      } else {
+        this.loading = false;
       }
     },
     // 上传
@@ -122,7 +129,6 @@ export default {
       this.uploadFile(e => {
         let files = e.target.files;
         this.handleUpload(files[0]);
-        this.fileAry.push(files[0]);
       })
     },
     uploadFile(fn, accept = '', multiple=false, webkitdirectory=false) {
@@ -215,6 +221,12 @@ export default {
 <style lang="scss" scoped>
 .ideaback{
   position: relative;
+  .ideaback-loading{
+    // opacity: 0.1;
+    position: absolute;
+    top: 50%;
+    right: 50%;
+  }
   .idea-top{
     height: 60px;
     background-image:  linear-gradient(266deg, #9AC7FF 0%, #6195FE 100%);
