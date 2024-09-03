@@ -155,6 +155,14 @@
           {
             "type": "actionSelect",
             "layoutType": "block",
+            "text": "上传文件接口参数",
+            "bindKey": "uploadFileParamsFunc",
+            "desc": "接口参数：自定义函数参数：{_this: this}",
+            "multiple": false
+          },
+          {
+            "type": "actionSelect",
+            "layoutType": "block",
             "text": "预览文件",
             "bindKey": "previewFileFunc",
             "desc": "接口参数：自定义函数参数：{_this: this, fileObj: fileObj}",

@@ -94,15 +94,20 @@ export default {
     },
     // 上传文件
     async handleUpload(file) {
-      let obj = IDM.url.queryObject();
+      let obj = {}
+      if (this.propData.uploadFileParamsFunc && this.propData.uploadFileParamsFunc.length > 0) {
+        let name = this.propData.uploadFileParamsFunc[0].name
+        obj = window[name] && window[name].call(this, {
+          _this: this,
+        });
+      } else {
+        obj = IDM.url.queryObject();
+      }
       let formdata = new FormData();
-      formdata.append('mid', obj.mid);
-      formdata.append('moduleId', obj.moduleId);
-      formdata.append('nrType', obj.nrType);
-      formdata.append('fileId', obj.fileId);
+      Object.keys(obj).forEach(item => {
+        formdata.append(item, obj[item])
+      })
       formdata.append('file', file);
-      formdata.append('newFileFlag', obj.newFileFlag);
-      formdata.append('pk', obj.pk);
       const { data } = await window.IDM.http.post('ctrl/file/upload', formdata, {
           headers: {
             'Content-Type': 'multipart/form-data'
