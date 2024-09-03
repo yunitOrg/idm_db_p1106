@@ -21,7 +21,7 @@
         >
           <a-form-item>
             <span slot="label" class="font-label">{{ propData.dialogDesc || "反馈描述：" }}</span>
-            <a-textarea style="height: 140px;" placeholder="请输入内容" v-decorator="['content', { rules: [{ required: true, message: '请填写反馈描述!' }] }]"/>
+            <a-textarea style="height: 140px;" placeholder="请输入内容" v-decorator="['content', { rules: [{ required: true, message: '请填写内容!' }] }]"/>
           </a-form-item>
           <a-form-item>
             <div slot="label" class="font-label">
