@@ -114,6 +114,7 @@
               <template v-if="record.contentSinglBook && record.contentSinglBook.length">
                 <div class="pervise-single-wrap">
                   <taskInfo
+                    :isMoOpen="propData.isMoOpen"
                     :themeList="propData.themeList" 
                     :porpsList="record.contentSinglBook"
                     @handleOptions="handleOptions"
@@ -192,6 +193,7 @@
                     </div>
                     <div class="pervise-single-wrap" v-if="item.isShow">
                       <taskInfo
+                        :isMoOpen="propData.isMoOpen"
                         :themeList="propData.themeList"
                         :porpsList="singMoreShowData"
                         @handleOptions="handleOptions"

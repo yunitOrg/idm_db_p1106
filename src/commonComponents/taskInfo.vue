@@ -17,10 +17,20 @@
             <div>
               <img src="../assets/home.png" alt="" class="taskinfo-title-icon" >
               <span style="margin-right: 10px;">{{ item.handlerUnitText }}</span>
-              <span style="font-size: 14px;">({{ item.startDate }} ~ {{ item.endDate }}) &nbsp;{{ item.feedbackPeriodText }}</span>
-              <!-- <span>{{ item.hostHandlerText }}</span> -->
+              <template v-if="isMoOpen">
+                <span>{{ item.feedbackPeriodText }}</span>
+              </template>
+              <template v-else>
+                <span style="font-size: 14px;">({{ item.startDate }} ~ {{ item.endDate }}) &nbsp;{{ item.feedbackPeriodText }}</span>
+              </template>
             </div>
-            <div style="margin-top: 15px;" v-if="item.handlerText">
+            <template v-if="isMoOpen">
+              <div style="margin-top: 5px;" v-if="item.startDate">
+                <img src="../assets/time1.png" alt="" class="taskinfo-title-icon" >
+                <span>{{ item.startDate }} ~ {{ item.endDate }}</span>
+              </div>
+            </template>
+            <div :style="isMoOpen?`margin-top: 5px`:`margin-top: 15px`" v-if="item.handlerText">
               <img src="../assets/phone.png" alt="" class="taskinfo-title-icon" >
               <span style="margin-right: 5px;">{{ item.handlerText }}</span>
               <span v-if="item.handlerTel">({{ item.handlerTel }})</span>
@@ -108,6 +118,9 @@ import API from '../api/index'
 import { getSubTaskList } from '../utils/mock'
 export default {
   props: {
+    isMoOpen: {
+      type: Boolean
+    },
     porpsList: {
       type: Array
     },
