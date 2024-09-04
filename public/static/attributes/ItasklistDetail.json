@@ -115,6 +115,14 @@
             "bindKey": "btngroup",
             "desc":"是否展示按钮组，比如：平台不需要按钮组则关闭，二开需要展示按钮组则展开",
             "default": false
+          },
+          {
+            "type": "switch",
+            "layoutType": "inline",
+            "text": "中烟二开",
+            "desc": "特定需求",
+            "bindKey": "isMoOpen",
+            "default": false
           }
         ]
       },

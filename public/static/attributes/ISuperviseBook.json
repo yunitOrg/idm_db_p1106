@@ -326,6 +326,14 @@
         {
           "type": "actionSelect",
           "layoutType": "block",
+          "text": "导出按钮",
+          "bindKey": "handleBtnExport",
+          "desc": "接口参数：自定义函数参数：{_this: this, columns: columns}",
+          "multiple": false
+        },
+        {
+          "type": "actionSelect",
+          "layoutType": "block",
           "text": "表格表头加工函数",
           "bindKey": "handleTableColumn",
           "desc": "接口参数：自定义函数参数：{_this: this, columns: columns}",

@@ -129,6 +129,7 @@
               <template v-if="judgeComState">
                 <div class="itasklist-default" v-if="item.isShow">
                   <taskInfo
+                    :isMoOpen="propData.isMoOpen"
                     origin="ItasklistDetail"
                     :themeList="propData.themeList"
                     :porpsList="singMoreShowData"

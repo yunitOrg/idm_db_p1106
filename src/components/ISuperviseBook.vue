@@ -10,11 +10,14 @@
     :idm-ctrl-id="moduleObject.id">
     <div class="supervisebook">
       <div class="superviseTop super-mb20">
-        <a-input v-model="search.contentQuery"  placeholder="请输入检索内容" class="super-input h40">
-          <a-icon slot="suffix" type="search" class="super-searchicon" />
-        </a-input>
-        <a-button class="super-btn super-theme-btn h40" type="primary" @click="handleSearch">检索</a-button>
-        <a-button class="super-btn h40" @click="handleReset">重置</a-button>
+        <div>
+          <a-input v-model="search.contentQuery"  placeholder="请输入检索内容" class="super-input h40">
+            <a-icon slot="suffix" type="search" class="super-searchicon" />
+          </a-input>
+          <a-button class="super-btn super-theme-btn h40" type="primary" @click="handleSearch">检索</a-button>
+          <a-button class="super-btn h40" @click="handleReset">重置</a-button>
+        </div>
+        <a-button class="super-btn h40" @click="handleExport" v-if="!propData.isMoOpen">导出</a-button>
       </div>
       <div class="superviseSearch super-mb10">
         <div class="super-middle" style="width: 25%;">
@@ -455,6 +458,16 @@ export default {
       this.refreshTable()
       this.initData()
     },
+    // 导出
+    handleExport() {
+      if(this.propData.handleBtnExport && this.propData.handleBtnExport.length > 0) {
+        let name = this.propData.handleBtnExport[0].name
+        window[name] && window[name].call(this, {
+          _this: this,
+          search: this.search
+        })
+      }
+    },
     // 重置
     handleReset() {
       this.search.pageNo = 1;
@@ -894,6 +907,10 @@ export default {
 //   min-height: 18px;
 //   border-radius: 4px;
 // }
+.superviseTop{
+  display: flex;
+  justify-content: space-between;
+}
 .super-split{
   padding: 0 5px;
 }

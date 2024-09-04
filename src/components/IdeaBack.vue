@@ -41,7 +41,7 @@
           </a-form-item>
         </a-form>
       </div>
-      <a-button class="submit" type="primary" @click="handleSubmit" :style="{
+      <a-button class="submit" type="primary" @click="handleSubmit" :loading=btnloading :style="{
         right: propData.dialogBtnX,
         bottom: propData.dialogBtnY
       }">提交</a-button>
@@ -55,6 +55,7 @@ export default {
   name: 'IdeaBack',
   data() {
     return {
+      btnloading: false,
       loading: false,
       form: this.$form.createForm(this, { name: 'coordinated' }),
       fileAry: [],
@@ -149,6 +150,7 @@ export default {
         if (err) {
           return
         }
+        this.btnloading = true;
         let params = {};
         if (this.propData.dataSourceParamFunc && this.propData.dataSourceParamFunc.length > 0) {
           let name = this.propData.dataSourceParamFunc[0].name
@@ -160,6 +162,7 @@ export default {
         if (res.code == '200') {
           window.IDM.message.success('提交成功');
           this.handleClose()
+          this.btnloading = false;
         }
       })
     },
