@@ -21,7 +21,7 @@
           <span class="super-mr10">编号</span>
           <a-input v-model="search.whQuery"  placeholder="请输入编号" allowClear class="super-inputbtn"></a-input>
         </div>
-        <div class="super-middle" style="width: 20%;">
+        <div class="super-middle" style="width: 20%;" v-if="!propData.isMoOpen">
           <span class="super-mr10">督办类型</span>
           <a-select v-model="search.approvalType" allowClear style="width: 50%">
             <a-select-option :value="item.value" v-for="(item, index) in superType" :key="index">
@@ -39,9 +39,20 @@
         </div>
         <div class="super-middle" style="width:40%">
           <span class="super-mr10">立项日期</span>
-          <a-config-provider :locale="locale">
-            <a-range-picker  valueFormat="YYYY-MM-DD" @change="onChangeTime" v-model="search.dbTime"/>
-          </a-config-provider>
+          <template v-if="propData.isMoOpen">
+            <a-config-provider :locale="locale">
+              <a-date-picker v-model="search.startDate" valueFormat="YYYY-MM-DD" />
+            </a-config-provider>
+            <span class="super-split">~</span>
+            <a-config-provider :locale="locale">
+              <a-date-picker v-model="search.endDate" valueFormat="YYYY-MM-DD" />
+            </a-config-provider>
+          </template>
+          <template v-else>
+            <a-config-provider :locale="locale">
+              <a-range-picker  valueFormat="YYYY-MM-DD" @change="onChangeTime" v-model="search.dbTime"/>
+            </a-config-provider>
+          </template>
         </div>
       </div>
       <template v-if="reload">
@@ -881,6 +892,9 @@ export default {
 //   min-height: 18px;
 //   border-radius: 4px;
 // }
+.super-split{
+  padding: 0 5px;
+}
 .super-decoration{
   color: #2673D3;
   text-align: left;
