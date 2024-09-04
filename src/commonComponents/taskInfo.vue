@@ -24,7 +24,7 @@
                 <span style="font-size: 14px;">({{ item.startDate }} ~ {{ item.endDate }}) &nbsp;{{ item.feedbackPeriodText }}</span>
               </template>
             </div>
-            <template v-if="isMoOpen">
+            <template v-show="isMoOpen">
               <div style="margin-top: 5px;" v-if="item.startDate">
                 <img :src="hanldeImg('time1.png')" alt="" class="taskinfo-title-icon" >
                 <span>{{ item.startDate }} ~ {{ item.endDate }}</span>
