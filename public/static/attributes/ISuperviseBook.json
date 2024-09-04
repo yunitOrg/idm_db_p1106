@@ -328,7 +328,7 @@
           "layoutType": "block",
           "text": "导出按钮",
           "bindKey": "handleBtnExport",
-          "desc": "接口参数：自定义函数参数：{_this: this, columns: columns}",
+          "desc": "接口参数：自定义函数参数：{_this: this, search: search}",
           "multiple": false
         },
         {
