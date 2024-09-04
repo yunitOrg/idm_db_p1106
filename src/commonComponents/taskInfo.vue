@@ -26,7 +26,7 @@
             </div>
             <template v-if="isMoOpen">
               <div style="margin-top: 5px;" v-if="item.startDate">
-                <img src="../assets/time1.png" alt="" class="taskinfo-title-icon" >
+                <img :src="hanldeImg('time1.png')" alt="" class="taskinfo-title-icon" >
                 <span>{{ item.startDate }} ~ {{ item.endDate }}</span>
               </div>
             </template>
