@@ -10,6 +10,7 @@
               'subtask-blue': item.dbStatus == '2' || item.dbStatus == '3',
               'subtask-green': item.dbStatus == '6' || item.dbStatus == '5',
               'subtask-red': item.dbStatus == '7',
+              'subtask-other': item.dbStatus == '8',
             }" v-if="item.dbStatusText">{{ item.dbStatusText }}</span>
             <span class="subtask-red" v-if="item.timeoutStatusText && item.timeoutStatus != 0">{{ item.timeoutStatusText }}</span>
           </div>
@@ -412,6 +413,11 @@ export default {
       background-color:rgb(227 0 0 / 10%);
       color: #e30000;
       border: 1px solid #e30000;
+    }
+    .subtask-other{
+      background-color:rgba(30, 54, 35,0.1);
+      color: #1e3623;
+      border: 1px solid #1e3623;
     }
     .subtask-green{
       background-color: rgb(87 189 106 / 10%);
