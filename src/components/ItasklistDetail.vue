@@ -98,14 +98,12 @@
                           </div>
                           <template v-if="judgeComState">
                             <div style="display:flex;">
-                              <template v-if="propData.btngroup">
-                                <div class="task-groupbtn" style="margin-right: 5px;" @click="handleCuiCata(item)">
-                                  <img :src="hanldeImg('bell.png')" alt="">
-                                </div>
-                                <div class="task-groupbtn" style="margin-right: 5px;" @click="handleCuiBell(item)">
-                                  <img :src="hanldeImg('able.png')" alt="">
-                                </div>
-                              </template>
+                              <div class="task-groupbtn" v-if="propData.cuibanBtn" style="margin-right: 5px;" @click="handleCuiCata(item)">
+                                <img :src="hanldeImg('bell.png')" alt="">
+                              </div>
+                              <div class="task-groupbtn" v-if="propData.btngroup" style="margin-right: 5px;" @click="handleCuiBell(item)">
+                                <img :src="hanldeImg('able.png')" alt="">
+                              </div>
                               <div @click.stop="handleShowDetail(item)">
                                 <svg-icon :icon-class="item.isShow ? 'hide-box' : 'show-box'" class="task-icon"></svg-icon>
                               </div>

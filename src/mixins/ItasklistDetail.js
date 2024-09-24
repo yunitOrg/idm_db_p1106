@@ -7,6 +7,7 @@ export default {
         height: '100%',
         titleName: '任务明细',
         titleShow: "show",
+        cuibanBtn: false,
         titleIconShow: 'show',
         showHideIcon: 'right',
         showLeftWidth: '25px',
