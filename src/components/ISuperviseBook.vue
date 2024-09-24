@@ -165,7 +165,7 @@
                         </div>
                         <div class="task-ban">
                           <div class="task-li-flex">
-                            <span class="task-li-flex task-typeicon" v-if="item.hostList && item.hostList.length">
+                            <span class="task-li-flex task-typeicon setflex" v-if="item.hostList && item.hostList.length">
                               <img src="../assets/zhuban.png" alt="" class="task-ban-img" >
                               <span v-for="(subitem, subindex) in item.hostList" :key="subindex" class="task-ban-span"
                                 :class="subitem.dbStatus <=  1 ? 'task-ban-gray' : 'task-ban-blue'">
@@ -1034,6 +1034,9 @@ export default {
     display: flex;
     align-items:center;
   }
+  .setflex{
+    flex-wrap: wrap;
+  }
   .task-ban{
     margin-top: 5px;
   }
@@ -1045,7 +1048,7 @@ export default {
   .task-ban-span{
     padding: 2px 6px;
     border-radius:3px;
-    margin-right:5px;
+    margin:3px 5px 3px 3px;
     font-size: 14px;
   }
   .task-ban-gray{

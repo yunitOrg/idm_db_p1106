@@ -79,7 +79,7 @@
                         </div>
                         <div class="task-li-list">
                           <div class="task-li-flex">
-                            <span class="task-li-flex" v-if="item.hostList && item.hostList.length">
+                            <span class="task-li-flex setflex" v-if="item.hostList && item.hostList.length">
                               <img src="../assets/zhuban.png" alt="" style="width: 16px;height: 16px;margin-right: 7px;">
                               <span v-for="(subitem, subindex) in item.hostList" :key="subindex"
                                 class="task-span"
@@ -352,7 +352,7 @@ export default {
       }
     },
     async getMockData() {
-      let res = await API.ApigetTaskApproval({approvalId: '240624172842HXh32meKopKm8dm5Kd7'})
+      let res = await API.ApigetTaskApproval({approvalId: '2409231812266ayTyw0NoKdb5B3gDIP'})
       if (res.code == '200') {
         this.list = res.data;
         this.handleInitProcess()
@@ -540,7 +540,7 @@ export default {
     padding: 2px 6px;
     background-color: #ECF1FB;
     border-radius:3px;
-    margin-right:5px;
+    margin:3px 5px 3px 3px;
     font-size: 14px;
   }
   .task-ban-gray{
@@ -575,6 +575,9 @@ export default {
       display:flex;
       align-items:center;
       font-size: 14px;
+    }
+    .setflex{
+      flex-wrap: wrap;
     }
     .task-name{
       display: flex;
