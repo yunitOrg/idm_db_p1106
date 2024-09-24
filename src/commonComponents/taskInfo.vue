@@ -333,11 +333,12 @@ export default {
 .taskInfo{
   .taskInfo-li{
     display: flex;
-    // justify-content: space-between;
     padding: 14px 0 10px 30px;
   }
   .subtaskLeft{
     display: flex;
+    flex:1;
+    width: 0;
     // flex: 0 0 auto;
     .taskinfo-title-icon{
       width: 20px;
@@ -347,12 +348,9 @@ export default {
   }
   .subtaskRight{
     display: flex;
-    width: calc(100% - 293px - 80px);
     font-size: 16px;
-    // flex: 1;
     .right-content{
       display: flex;
-      width: calc(100% - 120px);
       justify-content: space-between;
       span{
         width: 80%;
@@ -375,9 +373,7 @@ export default {
   .subtaskMore{
     width: 84px;
     text-align: center;
-    position: absolute;
     cursor: pointer;
-    right: 0;
     svg{
       font-size: 18px;
     }
@@ -431,8 +427,6 @@ export default {
     }
   }
   .subtask-popleft{
-    // width: 283px;
-    width: 350px;
     font-size: 16px;
   }
   .right-time{
