@@ -338,7 +338,6 @@ export default {
   .subtaskLeft{
     display: flex;
     flex:1;
-    width: 0;
     // flex: 0 0 auto;
     .taskinfo-title-icon{
       width: 20px;
