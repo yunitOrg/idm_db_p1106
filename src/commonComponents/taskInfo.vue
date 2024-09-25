@@ -337,7 +337,8 @@ export default {
   }
   .subtaskLeft{
     display: flex;
-    flex:1;
+    // flex:1;
+    width: 40%;
     // flex: 0 0 auto;
     .taskinfo-title-icon{
       width: 20px;
@@ -346,9 +347,12 @@ export default {
     }
   }
   .subtaskRight{
+    // flex: 1;
+    width: calc(60% - 84px);
     display: flex;
     font-size: 16px;
     .right-content{
+      width: calc(100% - 82px);
       display: flex;
       justify-content: space-between;
       span{
@@ -357,6 +361,7 @@ export default {
         text-align: justify;
       }
       .task-font{
+        margin-right: 2px;
         cursor: pointer;
       }
       .task-file{
