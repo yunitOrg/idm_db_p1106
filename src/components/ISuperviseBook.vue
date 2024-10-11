@@ -18,11 +18,11 @@
                 <a-button class="super-btn h40" @click="handleExport" v-if="!propData.isMoOpen">导出</a-button>
             </div>
             <div class="superviseSearch super-mb10">
-                <div class="super-middle" style="width: 25%">
+                <div class="super-middle">
                     <span class="super-mr10">编号</span>
                     <a-input v-model="search.whQuery" placeholder="请输入编号" allowClear class="super-inputbtn"></a-input>
                 </div>
-                <div class="super-middle" style="width: 20%" v-if="!propData.isMoOpen">
+                <div class="super-middle" v-if="!propData.isMoOpen">
                     <span class="super-mr10">督办类型</span>
                     <a-select v-model="search.approvalType" allowClear style="width: 50%">
                         <a-select-option :value="item.value" v-for="(item, index) in superType" :key="index">
@@ -30,7 +30,7 @@
                         </a-select-option>
                     </a-select>
                 </div>
-                <div class="super-middle" style="width: 20%">
+                <div class="super-middle">
                     <span class="super-mr10">项目状态</span>
                     <a-select v-model="search.dbStatus" allowClear style="width: 50%">
                         <a-select-option :value="item.value" v-for="(item, index) in superState" :key="index">
@@ -38,7 +38,11 @@
                         </a-select-option>
                     </a-select>
                 </div>
-                <div class="super-middle" style="width: 40%">
+                <div class="super-middle">
+                    <span class="super-mr10">立项人</span>
+                    <a-input v-model="search.approvalPersonQuery" placeholder="请输入立项人" allowClear class="super-inputbtn"></a-input>
+                </div>
+                <div class="super-middle">
                     <span class="super-mr10">立项日期</span>
                     <template v-if="propData.isMoOpen">
                         <a-config-provider :locale="locale">
@@ -363,6 +367,7 @@ export default {
                 },
                 { title: '编号', dataIndex: 'wh', align: 'center', key: 'wh', width: '10%', sortField: 'wh' },
                 { title: '标题', dataIndex: 'bt', align: 'center', key: 'bt', width: '20%', sortField: 'bt', scopedSlots: { customRender: 'bt' } },
+                { title: '立项人', dataIndex: 'approvalPersonText', align: 'center', key: 'approvalPersonText', width: '10%'},
                 { title: '督办类型', dataIndex: 'approvalTypeText', align: 'center', key: 'approvalTypeText', width: '9%', sortField: 'approvalType' },
                 { title: '立项日期', dataIndex: 'ngrq', align: 'center', key: 'ngrq', width: '9%', sortField: 'ngrq' },
                 { title: '交办日期', dataIndex: 'handoverDate', align: 'center', key: 'handoverDate', width: '9%', sortField: 'handoverDate' },
@@ -999,6 +1004,8 @@ export default {
         align-items: center;
         justify-content: center;
         text-align: center;
+        flex:1;
+        width:0;
     }
     .super-mr10 {
         color: #333333;
