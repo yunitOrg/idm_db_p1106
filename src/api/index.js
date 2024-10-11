@@ -7,8 +7,8 @@ export default {
     * @Desc 督办-台账列表
     * @Author hjp
     */
-    async ApiGetDBList({whQuery, contentQuery, approvalType, dbStatus, startDate, endDate, pageNo, pageSize, orderType, reversed}) {
-      const { data } = await window.IDM.http.post('ctrl/dbApproval/getApprovalList', {whQuery, contentQuery, approvalType, dbStatus, startDate, endDate, pageNo, pageSize, orderType, reversed}, {
+    async ApiGetDBList(params) {
+      const { data } = await window.IDM.http.post('ctrl/dbApproval/getApprovalList', params, {
         headers: {
           'Content-Type': 'application/json'
         },
