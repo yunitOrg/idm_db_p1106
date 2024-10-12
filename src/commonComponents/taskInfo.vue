@@ -64,6 +64,7 @@
                 </div>
               </template>
             </div>
+            <div v-if="item.furtherImplementation==1" style="text-align: right; color:red;">再落实</div>
           </div>
         </div>
         <template v-if="porpsList?.length">
