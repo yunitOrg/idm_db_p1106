@@ -367,7 +367,7 @@ export default {
                 },
                 { title: '编号', dataIndex: 'wh', align: 'center', key: 'wh', width: '10%', sortField: 'wh' },
                 { title: '标题', dataIndex: 'bt', align: 'center', key: 'bt', width: '20%', sortField: 'bt', scopedSlots: { customRender: 'bt' } },
-                { title: '立项人', dataIndex: 'approvalPersonText', align: 'center', key: 'approvalPersonText', width: '10%'},
+                { title: '立项人', dataIndex: 'approvalPersonText', align: 'center', key: 'approvalPersonText', width: '10%' },
                 { title: '督办类型', dataIndex: 'approvalTypeText', align: 'center', key: 'approvalTypeText', width: '9%', sortField: 'approvalType' },
                 { title: '立项日期', dataIndex: 'ngrq', align: 'center', key: 'ngrq', width: '9%', sortField: 'ngrq' },
                 { title: '交办日期', dataIndex: 'handoverDate', align: 'center', key: 'handoverDate', width: '9%', sortField: 'handoverDate' },
@@ -801,6 +801,17 @@ export default {
                 }
             })
         },
+        async invokeApi(params) {
+            if (this.propData.apiUrl) {
+                const { data } = await window.IDM.http.post(this.propData.apiUrl, params, {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                return data
+            }
+            return await API.ApiGetDBList(params)
+        },
         async initData() {
             // if (this.moduleObject.env !== 'production') {
             //   this.getMockData()
@@ -817,7 +828,7 @@ export default {
                     })
                 this.search = Object.assign({}, obj, this.search)
             }
-            let res = await API.ApiGetDBList(this.search)
+            let res = await this.invokeApi(this.search)
             if (res.code == '200') {
                 this.loading = false
                 let data = res || {}
@@ -1004,8 +1015,8 @@ export default {
         align-items: center;
         justify-content: center;
         text-align: center;
-        flex:1;
-        width:0;
+        flex: 1;
+        width: 0;
     }
     .super-mr10 {
         color: #333333;

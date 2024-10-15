@@ -324,6 +324,13 @@
       "helpUrl": "",
       "children": [
         {
+          "type": "input",
+          "layoutType": "inline",
+          "text": "接口地址",
+          "bindKey": "apiUrl",
+          "desc": "选填，默认为督办台账"
+        },
+        {
           "type": "actionSelect",
           "layoutType": "block",
           "text": "导出按钮",
