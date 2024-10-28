@@ -17,7 +17,7 @@
                     <a-form-item name="content">
                         <span slot="label" class="font-label">{{ propData.dialogDesc || '反馈描述：' }}</span>
                         <a-textarea
-                            style="height: 140px"
+                            style="height: 140px;resize: none;"
                             placeholder="请输入内容"
                             v-decorator="['content', { initialValue: formData.content, rules: [{ required: true, message: '请填写内容!' }] }]"
                         />
@@ -46,6 +46,9 @@
                                     initialValue: formData.stage
                                 }
                             ]"
+                            :style="{
+                                transform:'translateX(-80px)'
+                            }"
                         >
                             <a-radio :value="0" class="font-label">暂存办理情况</a-radio>
                             <a-radio :value="1" class="font-label">上报办理情况</a-radio>
@@ -194,14 +197,15 @@ export default {
                 params = { files: this.fileAry, ...fieldValue, ...params }
                 if (fieldValue.stage == 0) {
                     localStorage.setItem(this.cacheKey, JSON.stringify(params))
-                    window.IDM.message.success('暂存成功')
                     this.btnloading = false
+                    top.layer.closeAll()
+                    top.layer.msg('暂存成功',{icon:1})
                     return
                 }
                 localStorage.removeItem(this.cacheKey)
                 let res = await API.ApiIdearBack(params)
                 if (res.code == '200') {
-                    window.IDM.message.success('提交成功')
+                    top.layer.msg('提交成功',{icon:1})
                     this.handleClose()
                     this.btnloading = false
                 }
