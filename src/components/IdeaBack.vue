@@ -47,8 +47,8 @@
                                 }
                             ]"
                         >
-                            <a-radio :value="0">暂存办理情况</a-radio>
-                            <a-radio :value="1">上报办理情况</a-radio>
+                            <a-radio :value="0" class="font-label">暂存办理情况</a-radio>
+                            <a-radio :value="1" class="font-label">上报办理情况</a-radio>
                         </a-radio-group>
                     </a-form-item>
                 </a-form>
@@ -191,7 +191,7 @@ export default {
                             _this: this
                         })
                 }
-                params = { files: this.fileAry, file: this.fileObj, ...fieldValue, ...params }
+                params = { files: this.fileAry, ...fieldValue, ...params }
                 if (fieldValue.stage == 0) {
                     localStorage.setItem(this.cacheKey, JSON.stringify(params))
                     window.IDM.message.success('暂存成功')
