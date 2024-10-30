@@ -1,7 +1,7 @@
 <template>
     <div class="cube-wrap">
         <div class="flex">
-            <div class="flex-1 w-0 cube-year">2024年</div>
+            <div class="flex-1 w-0 cube-year">{{ year }}年</div>
             <div
                 class="w-0 flex items-center justify-center swip-control"
                 :style="{
@@ -15,7 +15,7 @@
             <div class="flex-1 w-0"></div>
         </div>
         <div class="flex flex-wrap stat-list">
-            <div v-for="stat in stats" :key="stat.key" class="flex stat-item">
+            <div v-for="stat in stats" :key="stat.key" class="flex items-center stat-item">
                 <div class="stat-item-label">{{ stat.label }}</div>
                 <div class="stat-item-value">
                     <div class="text">{{ stat.value }}</div>
@@ -27,6 +27,10 @@
 <script>
 export default {
     props: {
+        year: {
+            type: String,
+            required: true
+        },
         value: {
             type: Number,
             required: true,
@@ -36,8 +40,8 @@ export default {
             type: Array,
             required: true
         },
-        stats:{
-            type:Array
+        stats: {
+            type: Array
         }
     },
     computed: {
@@ -51,10 +55,10 @@ export default {
                 this.$emit('input', this.value - 1)
                 return
             }
-            this.$emit('input', this.data.length)
+            this.$emit('input', this.data.length - 1)
         },
         nextHandle() {
-            if (this.value < this.data.length-1) {
+            if (this.value < this.data.length - 1) {
                 this.$emit('input', this.value + 1)
                 return
             }
@@ -100,7 +104,6 @@ export default {
 .stat-list {
     .stat-item {
         padding: 0 40px 20px 0;
-        align-items: flex-end;
         &-label {
             color: white;
             font-size: 24px;

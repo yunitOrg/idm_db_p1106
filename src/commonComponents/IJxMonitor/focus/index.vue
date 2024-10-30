@@ -75,6 +75,7 @@ export default {
                 evenRowBGC: 'rgba(6,65,173,0.12)',
                 headerHeight: 48,
                 rowNum: 4,
+                align: ['left','center','center'],
                 data: this.data.urgeData?.map((n) => [n.unitName, n.noticeTotal, n.noticeTimesUrge]) || []
             }
         },
@@ -86,6 +87,7 @@ export default {
                 evenRowBGC: 'rgba(6,65,173,0.12)',
                 headerHeight: 48,
                 rowNum: 4,
+                align: ['left','center','center'],
                 data: this.data.timeoutData?.map((n) => [n.unitName, n.noticeTotal, n.noticeTimeoutPercentage]) || []
             }
         }

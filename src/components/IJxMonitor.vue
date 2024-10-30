@@ -58,6 +58,7 @@
     </div>
 </template>
 <script>
+import dayjs from 'dayjs'
 import Times from '../commonComponents/IJxMonitor/times/index.vue'
 import Trend from '../commonComponents/IJxMonitor/trend/index.vue'
 import Dash from '../commonComponents/IJxMonitor/dash/index.vue'
@@ -77,7 +78,7 @@ export default {
     },
     data() {
         return {
-            year: '2024',
+            year: dayjs().year(),
             propData: {
                 gap: '30px'
             }

@@ -1,6 +1,11 @@
 <template>
     <div class="data-wrap">
-        <Swiper :modules="modules" :autoplay="{ delay: 1000 }" class="h-full">
+        <Swiper
+            :options="{
+                autoplay: { delay: 3000 }
+            }"
+            class="h-full"
+        >
             <SwiperSlide v-for="(group, groupIndex) in groups" :key="groupIndex" class="data-list">
                 <div v-for="item in group" :key="item.orgId" class="data-item">
                     <div class="data-item-value">
@@ -10,17 +15,20 @@
                         {{ item.orgName }}
                     </div>
                 </div>
+                <div class="data-caption">{{ title }}</div>
             </SwiperSlide>
         </Swiper>
-        <div class="data-caption">省级单位</div>
     </div>
 </template>
 <script>
-import SwiperClass, { Autoplay } from 'swiper'
 import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
 import 'swiper/css/swiper.css'
 export default {
     props: {
+        title: {
+            type: String,
+            required: true
+        },
         data: {
             type: Array,
             required: true
@@ -31,9 +39,7 @@ export default {
         SwiperSlide
     },
     data() {
-        return {
-            modules: [Autoplay]
-        }
+        return {}
     },
     computed: {
         groups() {
@@ -85,27 +91,27 @@ export default {
         }
         &:nth-child(1) {
             left: 13%;
-            top: 12%;
+            top: 8%;
         }
         &:nth-child(2) {
             left: 9.5%;
-            top: 32%;
+            top: 29%;
         }
         &:nth-child(3) {
             left: 13%;
-            top: 52%;
+            top: 51%;
         }
         &:nth-child(4) {
             right: 13%;
-            top: 12%;
+            top: 8%;
         }
         &:nth-child(5) {
             right: 9.5%;
-            top: 32%;
+            top: 29%;
         }
         &:nth-child(6) {
             right: 13%;
-            top: 52%;
+            top: 51%;
         }
     }
 }

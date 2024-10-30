@@ -40,7 +40,32 @@ export default {
     },
     data() {
         return {
-            data: [],
+            data: [
+                {
+                    deptId: '240605124740hM7LLCDwoNgbNTUjT1B',
+                    deptName: '九江市人民政府办公室',
+                    total: 0,
+                    finishTotal: 0,
+                    processTime: 24,
+                    inProcessTotal: 0,
+                    stopTotal: 0,
+                    remindTotal: 0,
+                    feedbackPercentage: '0%',
+                    starLevel: 0
+                },
+                {
+                    deptId: '240929163217aniDBqmffNDix7HaIgw',
+                    deptName: '赣州市政府',
+                    total: 0,
+                    finishTotal: 0,
+                    processTime: 3,
+                    inProcessTotal: 0,
+                    stopTotal: 0,
+                    remindTotal: 0,
+                    feedbackPercentage: '0%',
+                    starLevel: 0
+                }
+            ],
             activeTab: 1
         }
     },
@@ -57,8 +82,9 @@ export default {
                 grid: {
                     top: 20,
                     bottom: 20,
-                    left: 120,
-                    right: 40
+                    left: 20,
+                    right: 20,
+                    containLabel: true
                 },
                 xAxis: {
                     type: 'value',
