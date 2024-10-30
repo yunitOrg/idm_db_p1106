@@ -14,15 +14,14 @@ export default {
     },
     data() {
         return {
-            config: {
+            data: []
+        }
+    },
+    computed: {
+        config() {
+            return {
                 tooltip: {
-                    trigger: 'axis',
-                    // axisPointer: {
-                    //     type: 'cross',
-                    //     crossStyle: {
-                    //         color: '#999'
-                    //     }
-                    // }
+                    trigger: 'axis'
                 },
                 legend: {
                     data: ['任务数', '办结数', '反馈数'],
@@ -35,7 +34,7 @@ export default {
                 xAxis: [
                     {
                         type: 'category',
-                        data: ['秘书一处', '秘书二处', '秘书三处', '发改委', '工信厅', '财政厅', '教育厅'],
+                        data: this.data.map((n) => n.deptName),
                         axisPointer: {
                             type: 'shadow'
                         },
@@ -74,26 +73,26 @@ export default {
                         type: 'bar',
                         tooltip: {
                             valueFormatter: function (value) {
-                            return value + ' 个';
+                                return value + ' 个'
                             }
                         },
                         barWidth: '20',
                         itemStyle: {
                             normal: {
-                                borBorderRadius: [5,5,0,0],
-                                color: new echarts.graphic.LinearGradient(0,1,0,0, [
+                                borBorderRadius: [5, 5, 0, 0],
+                                color: new echarts.graphic.LinearGradient(0, 1, 0, 0, [
                                     {
                                         offset: 0,
-                                        color: "#016E65"
+                                        color: '#016E65'
                                     },
                                     {
                                         offset: 1,
-                                        color: "#03FFC6"
+                                        color: '#03FFC6'
                                     }
                                 ])
                             }
                         },
-                        data: [20, 5, 4, 25, 24, 60, 135.6]
+                        data: this.data.map((n) => n.noticeTotal)
                     },
                     {
                         name: '办结数',
@@ -101,27 +100,25 @@ export default {
                         barWidth: '20',
                         tooltip: {
                             valueFormatter: function (value) {
-                            return value + ' 个';
+                                return value + ' 个'
                             }
                         },
                         itemStyle: {
                             normal: {
-                                borBorderRadius: [5,5,0,0],
-                                color: new echarts.graphic.LinearGradient(0,1,0,0, [
+                                borBorderRadius: [5, 5, 0, 0],
+                                color: new echarts.graphic.LinearGradient(0, 1, 0, 0, [
                                     {
                                         offset: 0,
-                                        color: "#454F37"
+                                        color: '#454F37'
                                     },
                                     {
                                         offset: 1,
-                                        color: "#F7B500"
+                                        color: '#F7B500'
                                     }
                                 ])
                             }
                         },
-                        data: [
-                            2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6
-                        ]
+                        data: this.data.map((n) => n.noticeFinishTotal)
                     },
                     {
                         name: '反馈数',
@@ -131,19 +128,40 @@ export default {
                         },
                         tooltip: {
                             valueFormatter: function (value) {
-                            return value + ' 个';
+                                return value + ' 个'
                             }
                         },
-                        // yAxisIndex: 1,
-                        // tooltip: {
-                        //     valueFormatter: function (value) {
-                        //     return value + ' °C';
-                        //     }
-                        // },
-                        data: [2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6]
+                        data: this.data.map((n) => n.feedbackCount)
                     }
                 ]
             }
+        }
+    },
+    watch: {
+        year: {
+            handler() {
+                this.fetchData()
+            },
+            immediate: true
+        }
+    },
+    methods: {
+        fetchData() {
+            window.IDM.http
+                .post(
+                    'ctrl/dbWorkbench/largeSizeDeptNoticeStatistics',
+                    {
+                        year: this.year
+                    },
+                    {
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    }
+                )
+                .then((res) => {
+                    this.data = res.data.data
+                })
         }
     }
 }

@@ -27,40 +27,37 @@ import Chart from '../chart.vue'
 import Section from '../section/index.vue'
 import Tabs from '../tabs.vue'
 export default {
+    props: {
+        year: {
+            type: String,
+            required: true
+        }
+    },
     components: {
         Section,
         Tabs,
         Chart
     },
     data() {
-        const data = [
-            {
-                name: '南阳',
-                value: 167
-            },
-            {
-                name: '周口',
-                value: 67
-            },
-            {
-                name: '漯河',
-                value: 123
-            },
-            {
-                name: '郑州',
-                value: 55
-            },
-            {
-                name: '西峡',
-                value: 98
-            }
-        ]
         return {
-            config: {
+            data: [],
+            activeTab: 1
+        }
+    },
+    computed: {
+        filter() {
+            return {
+                year: this.year,
+                searchType: this.activeTab,
+                asc: 'desc'
+            }
+        },
+        config() {
+            return {
                 grid: {
                     top: 20,
                     bottom: 20,
-                    left: 80,
+                    left: 120,
                     right: 40
                 },
                 xAxis: {
@@ -74,7 +71,7 @@ export default {
                 },
                 yAxis: {
                     type: 'category',
-                    data: data.map((n) => n.name),
+                    data: this.data.map((n) => n.deptName),
                     axisLine: {
                         show: false
                     },
@@ -88,7 +85,7 @@ export default {
                 },
                 series: [
                     {
-                        data: data.map((n) => n.value),
+                        data: this.data.map((n) => n.processTime),
                         type: 'bar',
                         showBackground: true,
                         backgroundStyle: {
@@ -113,8 +110,22 @@ export default {
                         barWidth: 30
                     }
                 ]
+            }
+        }
+    },
+    watch: {
+        filter: {
+            handler() {
+                this.fetchData()
             },
-            activeTab: 1
+            immediate: true
+        }
+    },
+    methods: {
+        fetchData() {
+            window.IDM.http.get('ctrl/dbStatistics/processTimeStatistics', this.filter).then((res) => {
+                this.data = res.data.data
+            })
         }
     }
 }

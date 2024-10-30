@@ -7,6 +7,7 @@
                         <template v-if="stat.type == 1 || stat.type == 2">
                             {{ stat.value }}
                         </template>
+                        <Chart v-else-if="stat.type == 3" :option="chartConfig(stat)" class="h-full" />
                     </div>
                     <div class="stat-item-title">{{ stat.title }}</div>
                 </div>
@@ -19,6 +20,7 @@
     </Section>
 </template>
 <script>
+import Chart from '../chart.vue'
 import Section from '../section/index.vue'
 export default {
     props: {
@@ -28,7 +30,8 @@ export default {
         }
     },
     components: {
-        Section
+        Section,
+        Chart
     },
     data() {
         return {
@@ -41,25 +44,25 @@ export default {
                 {
                     key: '1',
                     title: '催办数',
-                    value: this.data.noticeTimesUrgeTotal,
+                    value: this.data.noticeTimesUrgeTotal || 0,
                     type: 1
                 },
                 {
                     key: '2',
                     title: '催办率',
-                    value: this.data.noticeUrgePercentage,
+                    value: this.data.noticeUrgePercentage || '0%',
                     type: 3
                 },
                 {
                     key: '3',
                     title: '超期数',
-                    value: this.data.noticeTimeoutTotal,
+                    value: this.data.noticeTimeoutTotal || 0,
                     type: 2
                 },
                 {
                     key: '4',
                     title: '超期率',
-                    value: this.data.noticeTimeoutPercentage,
+                    value: this.data.noticeTimeoutPercentage || '0%',
                     type: 3
                 }
             ]
@@ -98,12 +101,103 @@ export default {
     methods: {
         fetchData() {
             window.IDM.http
-                .get('dbWorkbench/largeSizeNoticeStatistics', {
-                    year: this.year
-                })
+                .post(
+                    'ctrl/dbWorkbench/largeSizeNoticeStatistics',
+                    {
+                        year: this.year
+                    },
+                    {
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    }
+                )
                 .then((res) => {
-                    this.data = res.data
+                    this.data = res.data.data
                 })
+        },
+        chartConfig(stat) {
+            return {
+                series: [
+                    {
+                        type: 'gauge',
+                        startAngle: 90,
+                        endAngle: -270,
+                        axisLine: {
+                            show: false,
+                            lineStyle: {
+                                width: 5,
+                                color: [
+                                    [0.3, '#58bdf9'],
+                                    [0.7, '#6f88cb'],
+                                    [1, '#dc8176']
+                                ]
+                            }
+                        },
+                        pointer: {
+                            show: false
+                        },
+                        progress: {
+                            show: true,
+                            itemStyle: {
+                                color: {
+                                    type: 'linear',
+                                    x: 0,
+                                    y: 0,
+                                    x2: 0,
+                                    y2: 1,
+                                    colorStops: [
+                                        {
+                                            offset: 0,
+                                            color: '#58bdf9' // 0% 处的颜色
+                                        },
+                                        {
+                                            offset: 0.5,
+                                            color: '#6f88cb' // 0% 处的颜色
+                                        },
+                                        {
+                                            offset: 1,
+                                            color: '#dc8176' // 100% 处的颜色
+                                        }
+                                    ],
+                                    global: false // 缺省为 false
+                                }
+                            }
+                        },
+                        axisTick: {
+                            distance: -10,
+                            length: 10,
+                            lineStyle: {
+                                color: 'rgba(0,99,184,0.14)',
+                                width: 2
+                            }
+                        },
+                        splitLine: {
+                            distance: -10,
+                            length: 30,
+                            lineStyle: {
+                                color: 'transparent',
+                                width: 4
+                            }
+                        },
+                        axisLabel: {
+                            show: false
+                        },
+                        detail: {
+                            valueAnimation: true,
+                            formatter: '{value}%',
+                            color: 'white',
+                            fontSize: '18px',
+                            offsetCenter: [0, 0]
+                        },
+                        data: [
+                            {
+                                value: parseFloat(stat.value.replace('%', ''))
+                            }
+                        ]
+                    }
+                ]
+            }
         }
     }
 }

@@ -29,7 +29,10 @@ export default {
     },
     data() {
         return {
-            data: {}
+            data: {
+                taskFinishPercentage: '0%',
+                taskFeedbackPercentage: '0%'
+            }
         }
     },
     computed: {
@@ -156,7 +159,7 @@ export default {
                         },
                         data: [
                             {
-                                value: this.data.taskFinishPercentage
+                                value: parseFloat(this.data.taskFinishPercentage.replace('%', ''))
                             }
                         ]
                     },
@@ -256,7 +259,7 @@ export default {
                         },
                         data: [
                             {
-                                value: this.data.taskFeedbackPercentage
+                                value: parseFloat(this.data.taskFeedbackPercentage.replace('%', ''))
                             }
                         ]
                     }
@@ -275,11 +278,19 @@ export default {
     methods: {
         fetchData() {
             window.IDM.http
-                .get('dbWorkbench/largeSizeTaskStatistics', {
-                    year: this.year
-                })
+                .post(
+                    'ctrl/dbWorkbench/largeSizeTaskStatistics',
+                    {
+                        year: this.year
+                    },
+                    {
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    }
+                )
                 .then((res) => {
-                    this.data = res.data
+                    this.data = res.data.data
                 })
         }
     }

@@ -20,44 +20,33 @@
                     ]"
                 />
             </div>
-            <div class="flex flex-wrap stat-wrap">
-                <div class="flex stat-item">
-                    <img src="./images/立项.png" />
-                    <div class="flex-1 w-0">
-                        <div class="title">立项</div>
-                        <div class="flex justify-center items-center value">
-                            <div class="text">{{ data.taskTotal }}</div>
-                            <div v-if="data.incrTaskTotal" class="up">{{ data.incrTaskTotal }}</div>
-                        </div>
+            <div class="flex flex-wrap trend-wrap">
+                <div class="trend-item">
+                    <div class="trend-item-title">立项</div>
+                    <div class="flex justify-center items-center trend-item-value">
+                        <div class="text">{{ data.taskTotal }}</div>
+                        <div v-if="data.incrTaskTotal" class="up">{{ data.incrTaskTotal }}</div>
                     </div>
                 </div>
-                <div class="flex stat-item">
-                    <img src="./images/反馈.png" />
-                    <div class="">
-                        <div class="title">反馈</div>
-                        <div class="flex justify-center items-center value">
-                            <div class="text">{{ data.taskProcessDoneTotal }}</div>
-                            <div v-if="data.incrTaskProcessDoneTotal" class="up">{{ data.incrTaskProcessDoneTotal }}</div>
-                        </div>
+                <div class="trend-item">
+                    <div class="trend-item-title">反馈</div>
+                    <div class="flex justify-center items-center trend-item-value">
+                        <div class="text">{{ data.taskProcessDoneTotal }}</div>
+                        <div v-if="data.incrTaskProcessDoneTotal" class="up">{{ data.incrTaskProcessDoneTotal }}</div>
                     </div>
                 </div>
-                <div class="flex stat-item">
-                    <img src="./images/办结.png" />
-                    <div class="">
-                        <div class="title">办结</div>
-                        <div class="flex justify-center items-center value">
-                            <div class="text">{{ data.taskFinishTotal }}</div>
-                            <div v-if="data.incrTaskFinishTotal" class="up">{{ data.incrTaskFinishTotal }}</div>
-                        </div>
+                <div class="trend-item">
+                    <div class="trend-item-title">办结</div>
+                    <div class="flex justify-center items-center trend-item-value">
+                        <div class="text">{{ data.taskFinishTotal }}</div>
+                        <div v-if="data.incrTaskFinishTotal" class="up">{{ data.incrTaskFinishTotal }}</div>
                     </div>
                 </div>
-                <div class="flex stat-item">
-                    <img src="./images/超期.png" />
-                    <div class="flex-1 w-0">
-                        <div class="title">超期</div>
-                        <div class="flex justify-center items-center value">
-                            <div class="text">{{ data.taskTimeoutTotal }}</div>
-                        </div>
+                <div class="trend-item">
+                    <div class="trend-item-title">办结</div>
+                    <div class="flex justify-center items-center trend-item-value">
+                        <div class="text">{{ data.taskFinishTotal }}</div>
+                        <div v-if="data.incrTaskFinishTotal" class="up">{{ data.incrTaskFinishTotal }}</div>
                     </div>
                 </div>
             </div>
@@ -67,6 +56,10 @@
 <script>
 import Section from '../section/index.vue'
 import Tabs from '../tabs.vue'
+const lx = require('./images/lx.png')
+const fk = require('./images/fk.png')
+const bj = require('./images/bj.png')
+const cq = require('./images/cq.png')
 export default {
     props: {
         year: {
@@ -84,8 +77,16 @@ export default {
             activeTab: 1
         }
     },
+    computed: {
+        filter() {
+            return {
+                dateType: this.activeTab,
+                year: this.year
+            }
+        }
+    },
     watch: {
-        activeTab: {
+        filter: {
             handler() {
                 this.fetchData()
             },
@@ -95,29 +96,33 @@ export default {
     methods: {
         fetchData() {
             window.IDM.http
-                .get('dbWorkbench/largeSizeTaskTrend', {
-                    dateType: this.activeTab,
-                    year: this.year
+                .post('ctrl/dbWorkbench/largeSizeTaskTrend', this.filter, {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
                 })
                 .then((res) => {
-                    this.data = res.data
+                    this.data = res.data.data
                 })
         }
     }
 }
 </script>
 <style lang="scss" scoped>
-.stat-wrap {
+.trend-wrap {
     padding: 40px 0;
-    .stat-item {
+    .trend-item {
         width: 50%;
-        .title {
+        height:106px;
+        padding-left: 148px;
+        background: url('./images/lx.png') no-repeat left center;
+        &-title {
             font-size: 22px;
             background: linear-gradient(to bottom, #ffffff, #09a2e3);
             color: transparent;
             background-clip: text;
         }
-        .value {
+        &-value {
             background: url('./images/dock.png') no-repeat bottom center;
             width: 134px;
             gap: 20px;
@@ -133,6 +138,18 @@ export default {
                 padding: 10px 0 0 20px;
                 background: url('./images/up.png') no-repeat left 17px;
             }
+        }
+        &:nth-child(1) {
+            background-image: url('./images/lx.png');
+        }
+        &:nth-child(2) {
+            background-image: url('./images/fk.png');
+        }
+        &:nth-child(3) {
+            background-image: url('./images/bj.png');
+        }
+        &:nth-child(4) {
+            background-image: url('./images/cq.png');
         }
     }
 }

@@ -13,57 +13,30 @@
                 <div class="text">{{ tab.label }}</div>
             </div>
         </div>
-        <Stat
-            v-model="statIndex"
-            :data="[
-                {
-                    id: 1,
-                    name: '发改委'
-                },
-                {
-                    id: 2,
-                    name: 'aaa'
-                }
-            ]"
-            :stats="[
-                {
-                    id: 1,
-                    value: 12,
-                    label: '督办事项'
-                },
-                {
-                    id: 2,
-                    value: 12,
-                    label: '督办事项'
-                },
-                {
-                    id: 3,
-                    value: 12,
-                    label: '督办事项'
-                }
-            ]"
-        />
-        <div class="flex-1 h-0 data-wrap">
-            <div class="data-caption">省级单位</div>
-            <div>
-                <div v-for="item in data" :key="item.id" class="data-item">
-                    <div class="data-item-value">
-                        <div class="text">在办：{{ item.current }} / 已办结：{{ item.finish }}</div>
-                    </div>
-                    <div class="data-item-title">
-                        {{ item.title }}
-                    </div>
-                </div>
-            </div>
-        </div>
+        <Stat v-model="statIndex" :data="options" :stats="stats" />
+        <Map v-if="activeTab == 1" :data="data" class="flex-1 h-0"> </Map>
+        <Cube v-else class="flex-1 h-0" :title="tabs[activeTab-1].label" :data="data" />
     </div>
 </template>
 <script>
-import Chart from '../chart.vue'
 import Stat from './stat.vue'
+import Map from './map.vue'
+import Cube from './cube.vue'
 export default {
+    props: {
+        year: {
+            type: String,
+            required: true
+        },
+        queryType: {
+            type: String,
+            required: true
+        }
+    },
     components: {
-        Stat
+        Stat,
+        Map,
+        Cube
     },
     data() {
         return {
@@ -82,63 +55,252 @@ export default {
                 }
             ],
             statIndex: 0,
-            stats: [
-                {
-                    id: 1,
-                    value: 12,
-                    label: '督办事项'
-                },
-                {
-                    id: 2,
-                    value: 12,
-                    label: '督办事项'
-                },
-                {
-                    id: 3,
-                    value: 12,
-                    label: '督办事项'
-                }
-            ],
             data: [
                 {
-                    key: '1',
-                    title: '重要批示',
-                    current: 51,
-                    finish: 28
+                    orgId: '240605111547UkW9ZVY3Xn9xROiRyGv',
+                    orgName: '督查处',
+                    total: 0,
+                    process: 0,
+                    finish: 0,
+                    overdue: 0,
+                    feedback: 0,
+                    finishRate: '0%',
+                    feedbackRate: '0%'
                 },
                 {
-                    key: '2',
-                    title: '重要文件',
-                    current: 51,
-                    finish: 28
+                    orgId: '240605112157ipkqr1oMCVpufqqUn0z',
+                    orgName: '省领导',
+                    total: 0,
+                    process: 0,
+                    finish: 0,
+                    overdue: 0,
+                    feedback: 0,
+                    finishRate: '0%',
+                    feedbackRate: '0%'
                 },
                 {
-                    key: '3',
-                    title: '重点任务',
-                    current: 51,
-                    finish: 28
+                    orgId: '240923160329OEmDpKRtsrAPje5r1Mx',
+                    orgName: '秘书处',
+                    total: 0,
+                    process: 0,
+                    finish: 0,
+                    overdue: 0,
+                    feedback: 0,
+                    finishRate: '0%',
+                    feedbackRate: '0%'
                 },
                 {
-                    key: '4',
-                    title: '交办事项',
-                    current: 51,
-                    finish: 28
+                    orgId: '240923160350cl6TI0d9Vt7kcx6LVu1',
+                    orgName: '秘书一处',
+                    total: 0,
+                    process: 0,
+                    finish: 0,
+                    overdue: 0,
+                    feedback: 0,
+                    finishRate: '0%',
+                    feedbackRate: '0%'
                 },
                 {
-                    key: '5',
-                    title: '调查核实',
-                    current: 51,
-                    finish: 28
+                    orgId: '240923160423JR4Y2ysDJUGbhpWm5vS',
+                    orgName: '秘书二处',
+                    total: 0,
+                    process: 0,
+                    finish: 0,
+                    overdue: 0,
+                    feedback: 0,
+                    finishRate: '0%',
+                    feedbackRate: '0%'
                 },
                 {
-                    key: '6',
-                    title: '建议提案',
-                    current: 51,
-                    finish: 28
+                    orgId: '240924102309dfv8qIxGScsWeW5yR6T',
+                    orgName: '会议处',
+                    total: 0,
+                    process: 0,
+                    finish: 0,
+                    overdue: 0,
+                    feedback: 0,
+                    finishRate: '0%',
+                    feedbackRate: '0%'
+                },
+                {
+                    orgId: '240924102327A818IIQ1bSIyuuVSocw',
+                    orgName: '综合处',
+                    total: 0,
+                    process: 0,
+                    finish: 0,
+                    overdue: 0,
+                    feedback: 0,
+                    finishRate: '0%',
+                    feedbackRate: '0%'
+                },
+                {
+                    orgId: '240924102345oApZJR4GF4DkBIGD9t1',
+                    orgName: '调研处',
+                    total: 0,
+                    process: 0,
+                    finish: 0,
+                    overdue: 0,
+                    feedback: 0,
+                    finishRate: '0%',
+                    feedbackRate: '0%'
+                },
+                {
+                    orgId: '240924102417wOe0P1iGSO9vaqvfQm9',
+                    orgName: '政策法规处',
+                    total: 0,
+                    process: 0,
+                    finish: 0,
+                    overdue: 0,
+                    feedback: 0,
+                    finishRate: '0%',
+                    feedbackRate: '0%'
+                },
+                {
+                    orgId: '240924102819ObYECedJflmmmGDaMU1',
+                    orgName: '秘书三处',
+                    total: 0,
+                    process: 0,
+                    finish: 0,
+                    overdue: 0,
+                    feedback: 0,
+                    finishRate: '0%',
+                    feedbackRate: '0%'
+                },
+                {
+                    orgId: '240924102838Ih9Urn11DAt9SJMmCuz',
+                    orgName: '秘书四处',
+                    total: 0,
+                    process: 0,
+                    finish: 0,
+                    overdue: 0,
+                    feedback: 0,
+                    finishRate: '0%',
+                    feedbackRate: '0%'
+                },
+                {
+                    orgId: '240924102850hhAB58VBZDZZPvgM4EV',
+                    orgName: '秘书五处',
+                    total: 0,
+                    process: 0,
+                    finish: 0,
+                    overdue: 0,
+                    feedback: 0,
+                    finishRate: '0%',
+                    feedbackRate: '0%'
+                },
+                {
+                    orgId: '240924102907wsW4JxwwrhOakTtwkCc',
+                    orgName: '秘书六处',
+                    total: 0,
+                    process: 0,
+                    finish: 0,
+                    overdue: 0,
+                    feedback: 0,
+                    finishRate: '0%',
+                    feedbackRate: '0%'
+                },
+                {
+                    orgId: '240929173802IsFVREpjcIL04Zlgb8l',
+                    orgName: '厅领导',
+                    total: 0,
+                    process: 0,
+                    finish: 0,
+                    overdue: 0,
+                    feedback: 0,
+                    finishRate: '0%',
+                    feedbackRate: '0%'
+                },
+                {
+                    orgId: '240929174023rt1yxKFHOq58FCEXhBm',
+                    orgName: '派驻纪检监察组',
+                    total: 0,
+                    process: 0,
+                    finish: 0,
+                    overdue: 0,
+                    feedback: 0,
+                    finishRate: '0%',
+                    feedbackRate: '0%'
                 }
             ],
             config: {},
             activeTab: 1
+        }
+    },
+    computed: {
+        filter() {
+            return {
+                year: this.year,
+                queryType: this.activeTab
+            }
+        },
+
+        options() {
+            return this.data.map((n) => ({
+                id: n.orgId,
+                name: n.orgName
+            }))
+        },
+        stats() {
+            if (this.data.length == 0) return []
+            return [
+                {
+                    id: 'total',
+                    value: this.data[this.statIndex].total,
+                    label: '督办事项'
+                },
+                {
+                    id: 'process',
+                    value: this.data[this.statIndex].process,
+                    label: '办理中'
+                },
+                {
+                    id: 'finish',
+                    value: this.data[this.statIndex].finish,
+                    label: '已办结'
+                },
+                {
+                    id: 'overdue',
+                    value: this.data[this.statIndex].overdue,
+                    label: '超期'
+                },
+                {
+                    id: 'finishRate',
+                    value: this.data[this.statIndex].finishRate,
+                    label: '办结率'
+                },
+                {
+                    id: 'feedback',
+                    value: this.data[this.statIndex].feedback,
+                    label: '已反馈'
+                },
+                {
+                    id: 'feedbackRate',
+                    value: this.data[this.statIndex].feedbackRate,
+                    label: '反馈率'
+                }
+            ]
+        },
+        mapData() {
+            return this.data.map((n) => ({
+                name: n.orgName,
+                value: n.total,
+                ...n
+            }))
+        }
+    },
+    watch: {
+        filter: {
+            handler() {
+                this.fetchData()
+            },
+            immediate: true
+        }
+    },
+    methods: {
+        fetchData() {
+            window.IDM.http.get('ctrl/dbLargeScreen/map', this.filter).then((res) => {
+                this.data = res.data.data
+            })
         }
     }
 }
@@ -182,63 +344,6 @@ export default {
             &:after {
                 background-image: linear-gradient(90deg, rgba(200, 174, 3, 0) 0%, rgba(200, 174, 3, 0.23) 50%, rgba(200, 174, 3, 0) 100%);
             }
-        }
-    }
-}
-
-.data-wrap {
-    position: relative;
-    background: url('./images/data_bg.png') no-repeat center center;
-    color: white;
-    .data-caption {
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -400%);
-        font-size: 30px;
-    }
-    .data-item {
-        position: absolute;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        width: 300px;
-        &-title {
-            font-size: 25px;
-            color: white;
-        }
-        &-value {
-            padding: 16px 0;
-            background: url('./images/data_value_bg.png') no-repeat center bottom;
-            .text {
-                font-size: 20px;
-                @extend .blue-text;
-            }
-        }
-        &:nth-child(1) {
-            left: 13%;
-            top: 12%;
-        }
-        &:nth-child(2) {
-            left: 9.5%;
-            top: 32%;
-        }
-        &:nth-child(3) {
-            left: 13%;
-            top: 52%;
-        }
-        &:nth-child(4) {
-            right: 13%;
-            top: 12%;
-        }
-        &:nth-child(5) {
-            right: 9.5%;
-            top: 32%;
-        }
-        &:nth-child(6) {
-            right: 13%;
-            top: 52%;
         }
     }
 }

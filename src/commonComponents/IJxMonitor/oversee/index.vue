@@ -2,9 +2,7 @@
     <Section title="督办事项">
         <div class="h-full stat-wrap">
             <div v-for="stat in stats" :key="stat.approvalType" class="flex items-stretch stat-item">
-                <div class="flex justify-center items-center stat-item-icon">
-                    <img :src="icons[approvalType]" />
-                </div>
+                <div class="flex justify-center items-center stat-item-icon"></div>
                 <div class="flex-1 w-0 flex flex-col items-center justify-center stat-item-info">
                     <div class="stat-item-title">{{ stat.approvalTypeText }}</div>
                     <div class="stat-item-value">{{ stat.countNum }} / {{ stat.taskFinishTotal }}</div>
@@ -31,15 +29,7 @@ export default {
     },
     data() {
         return {
-            stats: [],
-            icons: {
-                1: require('./images/重要批示.png'),
-                2: require('./images/重要文件.png'),
-                3: require('./images/重点任务.png'),
-                4: require('./images/交办事项.png'),
-                5: require('./images/调查核实.png'),
-                6: require('./images/建议管理.png')
-            }
+            stats: []
         }
     },
     watch: {
@@ -53,11 +43,19 @@ export default {
     methods: {
         fetchData() {
             window.IDM.http
-                .get('dbWorkbench/largeSizeApprovalTypeStatistics', {
-                    year: this.year
-                })
+                .post(
+                    'ctrl/dbWorkbench/largeSizeApprovalTypeStatistics',
+                    {
+                        year: this.year
+                    },
+                    {
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    }
+                )
                 .then((res) => {
-                    this.stats = res.data
+                    this.stats = res.data.data
                 })
         }
     }
@@ -79,11 +77,8 @@ export default {
         height: 149px;
         &-icon {
             width: 149px;
-            > img {
-                width: 64px;
-                height: 64px;
-                object-fit: cover;
-            }
+            height: 149px;
+            background: url('./images/dchs.png') no-repeat center center;
         }
         &-title {
             font-size: 28px;
@@ -96,6 +91,36 @@ export default {
         &-label {
             font-size: 18px;
             gap: 40px;
+        }
+        &:nth-child(1) {
+            .stat-item-icon {
+                background-image: url('./images/zyps.png');
+            }
+        }
+        &:nth-child(2) {
+            .stat-item-icon {
+                background-image: url('./images/zywj.png');
+            }
+        }
+        &:nth-child(3) {
+            .stat-item-icon {
+                background-image: url('./images/zdrw.png');
+            }
+        }
+        &:nth-child(4) {
+            .stat-item-icon {
+                background-image: url('./images/jbsx.png');
+            }
+        }
+        &:nth-child(5) {
+            .stat-item-icon {
+                background-image: url('./images/dchs.png');
+            }
+        }
+        &:nth-child(6) {
+            .stat-item-icon {
+                background-image: url('./images/jygl.png');
+            }
         }
     }
 }
