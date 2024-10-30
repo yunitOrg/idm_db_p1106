@@ -73,6 +73,13 @@
       "className": "IdeaBack",
       "comType": "common",
       "comLangue": "vue"
+    },
+    {
+        "classId": "idm.componet.db.IJxMonitor",
+        "comName": "江西大屏",
+        "className": "IJxMonitor",
+        "comType": "common",
+        "comLangue": "vue"
     }
   ]
 }

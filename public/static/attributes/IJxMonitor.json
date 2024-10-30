@@ -1,0 +1,18 @@
+{
+    "classId": "idm.componet.db.IJxMonitor",
+    "comName": "江西大屏",
+    "className": "IJxMonitor",
+    "comType": "common",
+    "comLangue": "vue",
+    "compositeAttr": [
+        {
+            "type": "input",
+            "layoutType": "inline",
+            "text": "唯一标识",
+            "bindKey": "ctrlId",
+            "disabled": true,
+            "default": "@[packageid]",
+            "desc": ""
+        }
+    ]
+}
