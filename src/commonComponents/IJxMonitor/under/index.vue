@@ -5,6 +5,7 @@
 </template>
 <script>
 import Chart from '../chart.vue'
+import * as echarts from 'echarts'
 import Section from '../section/index.vue'
 export default {
     components: {
@@ -14,206 +15,132 @@ export default {
     data() {
         return {
             config: {
-                series: [
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                    type: 'cross',
+                    crossStyle: {
+                        color: '#999'
+                    }
+                    }
+                },
+                legend: {
+                    data: ['任务数', '办结数', '反馈数'],
+                    top: '3%',
+                    textStyle: {
+                        color: '#ffffff',
+                        fontSize: 14
+                    }
+                },
+                xAxis: [
                     {
-                        type: 'gauge',
-                        startAngle: 180,
-                        endAngle: 0,
-                        min: 0,
-                        max: 100,
-                        splitNumber: 10,
-                        center: ['25%', '70%'],
-                        radius: '100%',
-                        itemStyle: {
-                            color: '#0068FF',
-                            shadowColor: 'rgba(0,138,255,0.45)',
-                            shadowBlur: 10,
-                            shadowOffsetX: 2,
-                            shadowOffsetY: 2
+                        type: 'category',
+                        data: ['秘书一处', '秘书二处', '秘书三处', '发改委', '工信厅', '财政厅', '教育厅'],
+                        axisPointer: {
+                            type: 'shadow'
                         },
-                        progress: {
-                            show: true,
-                            roundCap: true,
-                            width: 15
-                        },
-                        pointer: {
-                            icon: 'path://M2090.36389,615.30999 L2090.36389,615.30999 C2091.48372,615.30999 2092.40383,616.194028 2092.44859,617.312956 L2096.90698,728.755929 C2097.05155,732.369577 2094.2393,735.416212 2090.62566,735.56078 C2090.53845,735.564269 2090.45117,735.566014 2090.36389,735.566014 L2090.36389,735.566014 C2086.74736,735.566014 2083.81557,732.63423 2083.81557,729.017692 C2083.81557,728.930412 2083.81732,728.84314 2083.82081,728.755929 L2088.2792,617.312956 C2088.32396,616.194028 2089.24407,615.30999 2090.36389,615.30999 Z',
-                            length: '75%',
-                            width: 16,
-                            offsetCenter: [0, '5%']
-                        },
-                        axisLine: {
-                            roundCap: true,
-                            lineStyle: {
-                                width: 15
+                        axisLabel: {
+                            textStyle: {
+                                color: '#AFE8FF',
+                                fontSize: 14
                             }
                         },
                         axisTick: {
-                            splitNumber: 2,
-                            lineStyle: {
-                                width: 2,
-                                color: '#0873C4'
-                            }
+                            length: 0
+                        }
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value',
+                        min: 0,
+                        axisLine: {
+                            show: true
                         },
-                        splitLine: {
-                            length: 12,
-                            lineStyle: {
-                                width: 3,
-                                color: '#0873C4'
-                            }
-                        },
-                        axisLabel: false,
-                        title: {
+                        axisTick: {
                             show: false
                         },
-                        detail: {
-                            backgroundColor: {
-                                type: 'linear',
-                                x: 0,
-                                y: 1,
-                                x2: 1,
-                                y2: 1,
-                                colorStops: [
+                        splitLine: {
+                            show: false
+                        },
+                        axisLabel: {
+                            show: false
+                        }
+                    }
+                ],
+                series: [
+                    {
+                        name: '任务数',
+                        type: 'bar',
+                        tooltip: {
+                            valueFormatter: function (value) {
+                            return value + ' 个';
+                            }
+                        },
+                        barWidth: '20',
+                        itemStyle: {
+                            normal: {
+                                borBorderRadius: [5,5,0,0],
+                                color: new echarts.graphic.LinearGradient(0,1,0,0, [
                                     {
                                         offset: 0,
-                                        color: 'rgba(6,65,173,0)'
-                                    },
-                                    {
-                                        offset: 0.9,
-                                        color: 'rgba(14,118,214,0.23)'
+                                        color: "#016E65"
                                     },
                                     {
                                         offset: 1,
-                                        color: 'rgba(0,145,255,0.23)'
+                                        color: "#03FFC6"
                                     }
-                                ]
-                            },
-                            width: '200%',
-                            lineHeight: 36,
-                            height: 36,
-                            offsetCenter: [0, '30%'],
-                            valueAnimation: true,
-                            formatter: function (value) {
-                                return '{label|办结率}{value|' + value.toFixed(0) + '%}'
-                            },
-                            rich: {
-                                value: {
-                                    fontSize: 28,
-                                    fontWeight: 'bold',
-                                    color: '#fff'
-                                },
-                                label: {
-                                    fontSize: 14,
-                                    color: '#DCF0FF',
-                                    padding: [0, 5, 0, 0]
-                                }
+                                ])
+                            }
+                        },
+                        data: [20, 5, 4, 25, 24, 60, 135.6]
+                    },
+                    {
+                        name: '办结数',
+                        type: 'bar',
+                        barWidth: '20',
+                        tooltip: {
+                            valueFormatter: function (value) {
+                            return value + ' 个';
+                            }
+                        },
+                        itemStyle: {
+                            normal: {
+                                borBorderRadius: [5,5,0,0],
+                                color: new echarts.graphic.LinearGradient(0,1,0,0, [
+                                    {
+                                        offset: 0,
+                                        color: "#454F37"
+                                    },
+                                    {
+                                        offset: 1,
+                                        color: "#F7B500"
+                                    }
+                                ])
                             }
                         },
                         data: [
-                            {
-                                value: 70
-                            }
+                            2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6
                         ]
                     },
                     {
-                        type: 'gauge',
-                        startAngle: 180,
-                        endAngle: 0,
-                        min: 0,
-                        max: 100,
-                        splitNumber: 10,
-                        center: ['75%', '70%'],
-                        radius: '100%',
+                        name: '反馈数',
+                        type: 'line',
                         itemStyle: {
-                            color: '#0068FF',
-                            shadowColor: 'rgba(0,138,255,0.45)',
-                            shadowBlur: 10,
-                            shadowOffsetX: 2,
-                            shadowOffsetY: 2
+                            color: '#32C5FF'
                         },
-                        progress: {
-                            show: true,
-                            roundCap: true,
-                            width: 15
-                        },
-                        pointer: {
-                            icon: 'path://M2090.36389,615.30999 L2090.36389,615.30999 C2091.48372,615.30999 2092.40383,616.194028 2092.44859,617.312956 L2096.90698,728.755929 C2097.05155,732.369577 2094.2393,735.416212 2090.62566,735.56078 C2090.53845,735.564269 2090.45117,735.566014 2090.36389,735.566014 L2090.36389,735.566014 C2086.74736,735.566014 2083.81557,732.63423 2083.81557,729.017692 C2083.81557,728.930412 2083.81732,728.84314 2083.82081,728.755929 L2088.2792,617.312956 C2088.32396,616.194028 2089.24407,615.30999 2090.36389,615.30999 Z',
-                            length: '75%',
-                            width: 16,
-                            offsetCenter: [0, '5%']
-                        },
-                        axisLine: {
-                            roundCap: true,
-                            lineStyle: {
-                                width: 15
+                        tooltip: {
+                            valueFormatter: function (value) {
+                            return value + ' 个';
                             }
                         },
-                        axisTick: {
-                            splitNumber: 2,
-                            lineStyle: {
-                                width: 2,
-                                color: '#0873C4'
-                            }
-                        },
-                        splitLine: {
-                            length: 12,
-                            lineStyle: {
-                                width: 3,
-                                color: '#0873C4'
-                            }
-                        },
-                        axisLabel: false,
-                        title: {
-                            show: false
-                        },
-                        detail: {
-                            backgroundColor: {
-                                type: 'linear',
-                                x: 0,
-                                y: 0,
-                                x2: 0,
-                                y2: 1,
-                                colorStops: [
-                                    {
-                                        offset: 0,
-                                        color: 'rgba(6,65,173,0)'
-                                    },
-                                    {
-                                        offset: 0.9,
-                                        color: 'rgba(14,118,214,0.23)'
-                                    },
-                                    {
-                                        offset: 1,
-                                        color: 'rgba(0,145,255,0.23)'
-                                    }
-                                ]
-                            },
-                            width: '200%',
-                            lineHeight: 36,
-                            height: 36,
-                            offsetCenter: [0, '30%'],
-                            valueAnimation: true,
-                            formatter: function (value) {
-                                return '{label|办结率}{value|' + value.toFixed(0) + '%}'
-                            },
-                            rich: {
-                                value: {
-                                    fontSize: 29,
-                                    fontWeight: 'bold',
-                                    color: '#fff'
-                                },
-                                label: {
-                                    fontSize: 14,
-                                    color: '#DCF0FF',
-                                    padding: [0, 5, 0, 0]
-                                }
-                            }
-                        },
-                        data: [
-                            {
-                                value: 70
-                            }
-                        ]
+                        // yAxisIndex: 1,
+                        // tooltip: {
+                        //     valueFormatter: function (value) {
+                        //     return value + ' °C';
+                        //     }
+                        // },
+                        data: [2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6]
                     }
                 ]
             }
