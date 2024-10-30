@@ -21,16 +21,17 @@
                     gap: propData.gap
                 }"
             >
-                <Trend class="flex-1 w-0" />
-                <Dash class="flex-1 w-0" />
+                <Trend :year="year" class="flex-1 w-0" />
+                <Dash :year="year" class="flex-1 w-0" />
             </div>
             <Under
+                :year="year"
                 :style="{
                     flex: 2
                 }"
             />
         </div>
-        <Map class="flex-1 w-0 flex flex-col" />
+        <Main :year="year" class="flex-1 w-0 flex flex-col" />
         <div
             class="flex-1 w-0 flex flex-col"
             :style="{
@@ -44,10 +45,11 @@
                     gap: propData.gap
                 }"
             >
-                <Focus class="flex-1 w-0" />
-                <Times class="flex-1 w-0" />
+                <Focus :year="year" class="flex-1 w-0" />
+                <Times :year="year" class="flex-1 w-0" />
             </div>
             <Oversee
+                :year="year"
                 :style="{
                     flex: 2
                 }"
@@ -61,7 +63,7 @@ import Trend from '../commonComponents/IJxMonitor/trend/index.vue'
 import Dash from '../commonComponents/IJxMonitor/dash/index.vue'
 import Oversee from '../commonComponents/IJxMonitor/oversee/index.vue'
 import Focus from '../commonComponents/IJxMonitor/focus/index.vue'
-import Map from '../commonComponents/IJxMonitor/map/index.vue'
+import Main from '../commonComponents/IJxMonitor/main/index.vue'
 import Under from '../commonComponents/IJxMonitor/under/index.vue'
 export default {
     components: {
@@ -70,11 +72,12 @@ export default {
         Dash,
         Oversee,
         Focus,
-        Map,
+        Main,
         Under
     },
     data() {
         return {
+            year: '2024',
             propData: {
                 gap: '30px'
             }

@@ -1,13 +1,13 @@
 <template>
     <Section title="督办事项">
         <div class="h-full stat-wrap">
-            <div v-for="(stat, statIndex) in stats" :key="stat.key" class="flex items-stretch stat-item">
+            <div v-for="stat in stats" :key="stat.approvalType" class="flex items-stretch stat-item">
                 <div class="flex justify-center items-center stat-item-icon">
-                    <img :src="icons[statIndex]" />
+                    <img :src="icons[approvalType]" />
                 </div>
                 <div class="flex-1 w-0 flex flex-col items-center justify-center stat-item-info">
-                    <div class="stat-item-title">{{ stat.title }}</div>
-                    <div class="stat-item-value">{{ stat.total }} / {{ stat.finish }}</div>
+                    <div class="stat-item-title">{{ stat.approvalTypeText }}</div>
+                    <div class="stat-item-value">{{ stat.countNum }} / {{ stat.taskFinishTotal }}</div>
                     <div class="flex stat-item-label">
                         <div>总数</div>
                         <div>已办结</div>
@@ -20,57 +20,45 @@
 <script>
 import Section from '../section/index.vue'
 export default {
+    props: {
+        year: {
+            type: String,
+            required: true
+        }
+    },
     components: {
         Section
     },
     data() {
         return {
-            stats: [
-                {
-                    key: '1',
-                    title: '重要批示',
-                    total: 51,
-                    finish: 28
-                },
-                {
-                    key: '1',
-                    title: '重要文件',
-                    total: 51,
-                    finish: 28
-                },
-                {
-                    key: '1',
-                    title: '重点任务',
-                    total: 51,
-                    finish: 28
-                },
-                {
-                    key: '1',
-                    title: '交办事项',
-                    total: 51,
-                    finish: 28
-                },
-                {
-                    key: '1',
-                    title: '调查核实',
-                    total: 51,
-                    finish: 28
-                },
-                {
-                    key: '1',
-                    title: '建议提案',
-                    total: 51,
-                    finish: 28
-                }
-            ],
-            icons: [
-                require('./images/重要批示.png'),
-                require('./images/重要文件.png'),
-                require('./images/重点任务.png'),
-                require('./images/交办事项.png'),
-                require('./images/调查核实.png'),
-                require('./images/建议管理.png')
-            ]
+            stats: [],
+            icons: {
+                1: require('./images/重要批示.png'),
+                2: require('./images/重要文件.png'),
+                3: require('./images/重点任务.png'),
+                4: require('./images/交办事项.png'),
+                5: require('./images/调查核实.png'),
+                6: require('./images/建议管理.png')
+            }
+        }
+    },
+    watch: {
+        year: {
+            handler() {
+                this.fetchData()
+            },
+            immediate: true
+        }
+    },
+    methods: {
+        fetchData() {
+            window.IDM.http
+                .get('dbWorkbench/largeSizeApprovalTypeStatistics', {
+                    year: this.year
+                })
+                .then((res) => {
+                    this.stats = res.data
+                })
         }
     }
 }

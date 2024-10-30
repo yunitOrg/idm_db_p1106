@@ -17,35 +17,48 @@
 import Chart from '../chart.vue'
 import Section from '../section/index.vue'
 export default {
+    props: {
+        year: {
+            type: String,
+            required: true
+        }
+    },
     components: {
         Section,
         Chart
     },
     data() {
         return {
-            stats: [
+            data: {}
+        }
+    },
+    computed: {
+        stats() {
+            return [
                 {
                     key: '1',
                     title: '立项数',
-                    value: '321'
+                    value: this.data.taskTotal
                 },
                 {
                     key: '2',
                     title: '在办数',
-                    value: '321'
+                    value: this.data.taskInProcessTotal
                 },
                 {
                     key: '3',
                     title: '办结数',
-                    value: '321'
+                    value: this.data.taskFinishTotal
                 },
                 {
                     key: '4',
                     title: '反馈数',
-                    value: '321'
+                    value: this.data.taskProcessDoneTotal
                 }
-            ],
-            config: {
+            ]
+        },
+        config() {
+            return {
                 series: [
                     {
                         type: 'gauge',
@@ -143,7 +156,7 @@ export default {
                         },
                         data: [
                             {
-                                value: 70
+                                value: this.data.taskFinishPercentage
                             }
                         ]
                     },
@@ -243,13 +256,31 @@ export default {
                         },
                         data: [
                             {
-                                value: 70
+                                value: this.data.taskFeedbackPercentage
                             }
                         ]
                     }
                 ]
+            }
+        }
+    },
+    watch: {
+        year: {
+            handler() {
+                this.fetchData()
             },
-            activeTab: 1
+            immediate: true
+        }
+    },
+    methods: {
+        fetchData() {
+            window.IDM.http
+                .get('dbWorkbench/largeSizeTaskStatistics', {
+                    year: this.year
+                })
+                .then((res) => {
+                    this.data = res.data
+                })
         }
     }
 }

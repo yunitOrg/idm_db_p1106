@@ -26,8 +26,8 @@
                     <div class="flex-1 w-0">
                         <div class="title">立项</div>
                         <div class="flex justify-center items-center value">
-                            <div class="text">3</div>
-                            <div class="up">1</div>
+                            <div class="text">{{ data.taskTotal }}</div>
+                            <div v-if="data.incrTaskTotal" class="up">{{ data.incrTaskTotal }}</div>
                         </div>
                     </div>
                 </div>
@@ -36,8 +36,8 @@
                     <div class="">
                         <div class="title">反馈</div>
                         <div class="flex justify-center items-center value">
-                            <div class="text">13</div>
-                            <div class="up">5</div>
+                            <div class="text">{{ data.taskProcessDoneTotal }}</div>
+                            <div v-if="data.incrTaskProcessDoneTotal" class="up">{{ data.incrTaskProcessDoneTotal }}</div>
                         </div>
                     </div>
                 </div>
@@ -46,8 +46,8 @@
                     <div class="">
                         <div class="title">办结</div>
                         <div class="flex justify-center items-center value">
-                            <div class="text">2</div>
-                            <div class="up">1</div>
+                            <div class="text">{{ data.taskFinishTotal }}</div>
+                            <div v-if="data.incrTaskFinishTotal" class="up">{{ data.incrTaskFinishTotal }}</div>
                         </div>
                     </div>
                 </div>
@@ -56,7 +56,7 @@
                     <div class="flex-1 w-0">
                         <div class="title">超期</div>
                         <div class="flex justify-center items-center value">
-                            <div class="text">0</div>
+                            <div class="text">{{ data.taskTimeoutTotal }}</div>
                         </div>
                     </div>
                 </div>
@@ -68,44 +68,47 @@
 import Section from '../section/index.vue'
 import Tabs from '../tabs.vue'
 export default {
+    props: {
+        year: {
+            type: String,
+            required: true
+        }
+    },
     components: {
         Section,
         Tabs
     },
     data() {
         return {
-            config: {
-                data: [
-                    {
-                        name: '南阳',
-                        value: 167
-                    },
-                    {
-                        name: '周口',
-                        value: 67
-                    },
-                    {
-                        name: '漯河',
-                        value: 123
-                    },
-                    {
-                        name: '郑州',
-                        value: 55
-                    },
-                    {
-                        name: '西峡',
-                        value: 98
-                    }
-                ]
-            },
+            data: {},
             activeTab: 1
+        }
+    },
+    watch: {
+        activeTab: {
+            handler() {
+                this.fetchData()
+            },
+            immediate: true
+        }
+    },
+    methods: {
+        fetchData() {
+            window.IDM.http
+                .get('dbWorkbench/largeSizeTaskTrend', {
+                    dateType: this.activeTab,
+                    year: this.year
+                })
+                .then((res) => {
+                    this.data = res.data
+                })
         }
     }
 }
 </script>
 <style lang="scss" scoped>
 .stat-wrap {
-    padding:40px 0;
+    padding: 40px 0;
     .stat-item {
         width: 50%;
         .title {

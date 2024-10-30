@@ -13,30 +13,36 @@
                 <div class="text">{{ tab.label }}</div>
             </div>
         </div>
-        <div class="cube-wrap">
-            <div class="flex">
-                <div class="flex-1 w-0 cube-year">2024年</div>
-                <div
-                    class="w-0 flex items-center justify-center swip-control"
-                    :style="{
-                        flex: 2
-                    }"
-                >
-                    <div class="btn-prev"></div>
-                    <div class="name">发改委</div>
-                    <div class="btn-next"></div>
-                </div>
-                <div class="flex-1 w-0"></div>
-            </div>
-            <div class="flex flex-wrap stat-list">
-                <div v-for="stat in stats" :key="stat.key" class="flex stat-item">
-                    <div class="stat-item-label">{{ stat.label }}</div>
-                    <div class="stat-item-value">
-                        <div class="text">{{ stat.value }}</div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <Stat
+            v-model="statIndex"
+            :data="[
+                {
+                    id: 1,
+                    name: '发改委'
+                },
+                {
+                    id: 2,
+                    name: 'aaa'
+                }
+            ]"
+            :stats="[
+                {
+                    id: 1,
+                    value: 12,
+                    label: '督办事项'
+                },
+                {
+                    id: 2,
+                    value: 12,
+                    label: '督办事项'
+                },
+                {
+                    id: 3,
+                    value: 12,
+                    label: '督办事项'
+                }
+            ]"
+        />
         <div class="flex-1 h-0 data-wrap">
             <div class="data-caption">省级单位</div>
             <div>
@@ -54,8 +60,11 @@
 </template>
 <script>
 import Chart from '../chart.vue'
+import Stat from './stat.vue'
 export default {
-    components: {},
+    components: {
+        Stat
+    },
     data() {
         return {
             tabs: [
@@ -72,6 +81,7 @@ export default {
                     label: '办公厅'
                 }
             ],
+            statIndex: 0,
             stats: [
                 {
                     id: 1,
@@ -175,16 +185,7 @@ export default {
         }
     }
 }
-.cube-wrap {
-    padding: 12px 30px;
-    border: 1px solid rgba(46, 195, 200, 1);
-    box-shadow: inset 0px 1px 18px 10px rgba(52, 103, 219, 0.46);
-    border-radius: 10px;
-    .cube-year {
-        @extend .blue-text;
-        font-size: 48px;
-    }
-}
+
 .data-wrap {
     position: relative;
     background: url('./images/data_bg.png') no-repeat center center;
@@ -238,40 +239,6 @@ export default {
         &:nth-child(6) {
             right: 13%;
             top: 52%;
-        }
-    }
-}
-.swip-control {
-    color: white;
-    gap: 30px;
-    .name {
-        font-size: 28px;
-    }
-    .btn-prev,
-    .btn-next {
-        background: url('./images/swiper_btn_prev.png') no-repeat center/100% 100%;
-        width: 30px;
-        height: 30px;
-        cursor: pointer;
-    }
-    .btn-next {
-        transform: rotate(180deg);
-    }
-}
-.stat-list {
-    .stat-item {
-        padding: 0 40px 20px 0;
-        align-items: flex-end;
-        &-label {
-            color: white;
-            font-size: 24px;
-            &:after {
-                content: '：';
-            }
-        }
-        &-value {
-            font-size: 34px;
-            color: #32c5ff;
         }
     }
 }

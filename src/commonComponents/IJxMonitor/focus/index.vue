@@ -12,8 +12,8 @@
                 </div>
             </div>
             <div class="flex-1 h-0 flex items-stretch stat-table-wrap">
-                <dv-scroll-board :config="config" class="flex-1 w-0" />
-                <dv-scroll-board :config="config" class="flex-1 w-0" />
+                <dv-scroll-board :config="urgeConfig" class="flex-1 w-0" />
+                <dv-scroll-board :config="timeoutConfig" class="flex-1 w-0" />
             </div>
         </div>
     </Section>
@@ -21,57 +21,89 @@
 <script>
 import Section from '../section/index.vue'
 export default {
+    props: {
+        year: {
+            type: String,
+            required: true
+        }
+    },
     components: {
         Section
     },
     data() {
         return {
-            stats: [
+            data: {}
+        }
+    },
+    computed: {
+        stats() {
+            return [
                 {
                     key: '1',
                     title: '催办数',
-                    value: 7,
+                    value: this.data.noticeTimesUrgeTotal,
                     type: 1
                 },
                 {
                     key: '2',
                     title: '催办率',
-                    value: 70,
+                    value: this.data.noticeUrgePercentage,
                     type: 3
                 },
                 {
                     key: '3',
                     title: '超期数',
-                    value: 2,
+                    value: this.data.noticeTimeoutTotal,
                     type: 2
                 },
                 {
                     key: '4',
                     title: '超期率',
-                    value: 4,
+                    value: this.data.noticeTimeoutPercentage,
                     type: 3
                 }
-            ],
-            config: {
+            ]
+        },
+        urgeConfig() {
+            return {
                 header: ['部门', '催办数', '催办率'],
                 headerBGC: 'rgba(6,65,173,0.36)',
                 oddRowBGC: 'transparent',
                 evenRowBGC: 'rgba(6,65,173,0.12)',
                 headerHeight: 48,
                 rowNum: 4,
-                data: [
-                    ['行1列1', '行1列2', '行1列3'],
-                    ['行2列1', '行2列2', '行2列3'],
-                    ['行3列1', '行3列2', '行3列3'],
-                    ['行4列1', '行4列2', '行4列3'],
-                    ['行5列1', '行5列2', '行5列3'],
-                    ['行6列1', '行6列2', '行6列3'],
-                    ['行7列1', '行7列2', '行7列3'],
-                    ['行8列1', '行8列2', '行8列3'],
-                    ['行9列1', '行9列2', '行9列3'],
-                    ['行10列1', '行10列2', '行10列3']
-                ]
+                data: this.data.urgeData?.map((n) => [n.unitName, n.noticeTotal, n.noticeTimesUrge]) || []
             }
+        },
+        timeoutConfig() {
+            return {
+                header: ['部门', '超期数', '超期率'],
+                headerBGC: 'rgba(6,65,173,0.36)',
+                oddRowBGC: 'transparent',
+                evenRowBGC: 'rgba(6,65,173,0.12)',
+                headerHeight: 48,
+                rowNum: 4,
+                data: this.data.timeoutData?.map((n) => [n.unitName, n.noticeTotal, n.noticeTimeoutPercentage]) || []
+            }
+        }
+    },
+    watch: {
+        year: {
+            handler() {
+                this.fetchData()
+            },
+            immediate: true
+        }
+    },
+    methods: {
+        fetchData() {
+            window.IDM.http
+                .get('dbWorkbench/largeSizeNoticeStatistics', {
+                    year: this.year
+                })
+                .then((res) => {
+                    this.data = res.data
+                })
         }
     }
 }
