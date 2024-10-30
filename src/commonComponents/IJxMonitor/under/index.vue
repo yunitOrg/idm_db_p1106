@@ -17,12 +17,12 @@ export default {
             config: {
                 tooltip: {
                     trigger: 'axis',
-                    axisPointer: {
-                    type: 'cross',
-                    crossStyle: {
-                        color: '#999'
-                    }
-                    }
+                    // axisPointer: {
+                    //     type: 'cross',
+                    //     crossStyle: {
+                    //         color: '#999'
+                    //     }
+                    // }
                 },
                 legend: {
                     data: ['任务数', '办结数', '反馈数'],
