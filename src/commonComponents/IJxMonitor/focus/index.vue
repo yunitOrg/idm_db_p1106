@@ -35,30 +35,7 @@ export default {
     },
     data() {
         return {
-            data: {
-                noticeTimesUrgeTotal: 5,
-                timeoutData: [
-                    {
-                        noticeTimeout: 21,
-                        unitName: '省政府办公厅',
-                        unitId: '240605111401g1o0QttSs1ruJ5Eftmr',
-                        noticeTotal: 65,
-                        noticeTimeoutPercentage: '32%'
-                    }
-                ],
-                noticeUrgePercentage: '7%',
-                urgeData: [
-                    {
-                        unitName: '省政府办公厅',
-                        noticeUrgePercentage: '7%',
-                        unitId: '240605111401g1o0QttSs1ruJ5Eftmr',
-                        noticeTotal: 65,
-                        noticeTimesUrge: 5
-                    }
-                ],
-                noticeTimeoutTotal: 21,
-                noticeTimeoutPercentage: '32%'
-            }
+            data: {}
         }
     },
     computed: {
@@ -273,6 +250,9 @@ export default {
 }
 .stat-table {
     :deep(.rows) {
+        .row-item {
+            overflow: hidden;
+        }
         .ceil {
             overflow: visible;
             text-overflow: unset;

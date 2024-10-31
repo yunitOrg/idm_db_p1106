@@ -9,7 +9,7 @@
                 }"
             >
                 <div @click="prevHandle" class="btn-prev"></div>
-                <div class="name">{{ current.name }}</div>
+                <div class="name">{{ current?.name }}</div>
                 <div @click="nextHandle" class="btn-next"></div>
             </div>
             <div class="flex-1 w-0"></div>

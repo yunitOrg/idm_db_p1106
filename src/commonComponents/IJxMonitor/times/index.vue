@@ -91,7 +91,7 @@ export default {
                 },
                 series: [
                     {
-                        data: this.data.map((n) => n.processTime),
+                        data: this.data.map((n) => Math.floor(n.processTime * 10) / 10),
                         type: 'bar',
                         showBackground: true,
                         backgroundStyle: {

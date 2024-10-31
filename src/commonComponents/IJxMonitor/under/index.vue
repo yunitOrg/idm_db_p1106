@@ -31,42 +31,48 @@ export default {
                         fontSize: 14
                     }
                 },
-                xAxis: [
-                    {
-                        type: 'category',
-                        data: this.data.map((n) => n.deptName),
-                        axisPointer: {
-                            type: 'shadow'
+                grid: {
+                    left: 80,
+                    right: 80,
+                    bottom: 100
+                },
+                xAxis: {
+                    type: 'category',
+                    data: this.data.map((n) => n.deptName),
+                    boundaryGap: [10, 10],
+                    axisPointer: {
+                        type: 'shadow'
+                    },
+                    axisLabel: {
+                        textStyle: {
+                            color: '#AFE8FF',
+                            fontSize: 14
                         },
-                        axisLabel: {
-                            textStyle: {
-                                color: '#AFE8FF',
-                                fontSize: 14
-                            }
-                        },
-                        axisTick: {
-                            length: 0
-                        }
+                        hideOverlap: false,
+                        width: 100,
+                        overflow: 'break',
+                        interval: 0
+                    },
+                    axisTick: {
+                        show: false
                     }
-                ],
-                yAxis: [
-                    {
-                        type: 'value',
-                        min: 0,
-                        axisLine: {
-                            show: true
-                        },
-                        axisTick: {
-                            show: false
-                        },
-                        splitLine: {
-                            show: false
-                        },
-                        axisLabel: {
-                            show: false
-                        }
+                },
+                yAxis: {
+                    type: 'value',
+                    min: 0,
+                    axisLine: {
+                        show: true
+                    },
+                    axisTick: {
+                        show: false
+                    },
+                    splitLine: {
+                        show: false
+                    },
+                    axisLabel: {
+                        show: false
                     }
-                ],
+                },
                 series: [
                     {
                         name: '任务数',
@@ -132,6 +138,14 @@ export default {
                             }
                         },
                         data: this.data.map((n) => n.feedbackCount)
+                    }
+                ],
+                dataZoom: [
+                    {
+                        type: 'slider',
+                        xAxisIndex: 0,
+                        startValue: 0,
+                        endValue: 8
                     }
                 ]
             }
