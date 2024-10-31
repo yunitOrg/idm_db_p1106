@@ -77,6 +77,9 @@ export default {
         justify-content: center;
         align-items: center;
         width: 300px;
+        &:hover {
+            text-shadow: 0 0 10px #32c5ff;
+        }
         &-title {
             font-size: 25px;
             color: white;

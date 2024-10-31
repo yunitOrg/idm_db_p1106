@@ -106,8 +106,12 @@ export default {
                     },
                     axisLabel: {
                         fontSize: '20px',
-                        color: 'white'
-                    }
+                        color: 'white',
+                        overflow: 'break',
+                        lineHeight:30,
+                        width: 100
+                    },
+                    inverse: true
                 },
                 series: [
                     {
@@ -133,7 +137,8 @@ export default {
                         itemStyle: {
                             borderRadius: [0, 30, 30, 0]
                         },
-                        barWidth: 30
+                        barWidth: 30,
+                        legendHoverLink: false
                     }
                 ]
             }
