@@ -40,32 +40,7 @@ export default {
     },
     data() {
         return {
-            data: [
-                {
-                    deptId: '240605124740hM7LLCDwoNgbNTUjT1B',
-                    deptName: '九江市人民政府办公室',
-                    total: 0,
-                    finishTotal: 0,
-                    processTime: 24,
-                    inProcessTotal: 0,
-                    stopTotal: 0,
-                    remindTotal: 0,
-                    feedbackPercentage: '0%',
-                    starLevel: 0
-                },
-                {
-                    deptId: '240929163217aniDBqmffNDix7HaIgw',
-                    deptName: '赣州市政府',
-                    total: 0,
-                    finishTotal: 0,
-                    processTime: 3,
-                    inProcessTotal: 0,
-                    stopTotal: 0,
-                    remindTotal: 0,
-                    feedbackPercentage: '0%',
-                    starLevel: 0
-                }
-            ],
+            data: [],
             activeTab: 1
         }
     },
@@ -74,7 +49,7 @@ export default {
             return {
                 year: this.year,
                 searchType: this.activeTab,
-                asc: 'desc'
+                asc: 'asc'
             }
         },
         config() {
@@ -83,7 +58,7 @@ export default {
                     top: 20,
                     bottom: 20,
                     left: 20,
-                    right: 20,
+                    right: 60,
                     containLabel: true
                 },
                 xAxis: {
@@ -108,10 +83,11 @@ export default {
                         fontSize: '20px',
                         color: 'white',
                         overflow: 'break',
-                        lineHeight:30,
+                        lineHeight: 30,
                         width: 100
                     },
-                    inverse: true
+                    inverse: true,
+                    max: 4
                 },
                 series: [
                     {
@@ -138,7 +114,12 @@ export default {
                             borderRadius: [0, 30, 30, 0]
                         },
                         barWidth: 30,
-                        legendHoverLink: false
+                        legendHoverLink: false,
+                        label: {
+                            show: true,
+                            position: 'right',
+                            fontSize: 20
+                        }
                     }
                 ]
             }

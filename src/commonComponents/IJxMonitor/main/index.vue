@@ -14,8 +14,8 @@
             </div>
         </div>
         <Stat v-model="statIndex" :year="year" :data="options" :stats="stats" />
-        <Map v-if="activeTab == 1" :data="mapData" class="flex-1 h-0"> </Map>
-        <Cube v-else class="flex-1 h-0" :title="tabs[activeTab - 1].label" :data="data" />
+        <Map v-if="activeTab == 1" :data="mapData" class="flex-1 h-0"></Map>
+        <Cube v-else class="flex-1 h-0" :title="tabs[activeTab - 1].label" :data="data" :key="activeTab" />
     </div>
 </template>
 <script>

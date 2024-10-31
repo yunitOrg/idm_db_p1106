@@ -43,10 +43,9 @@
                     </div>
                 </div>
                 <div class="trend-item">
-                    <div class="trend-item-title">办结</div>
+                    <div class="trend-item-title">超期</div>
                     <div class="flex justify-center items-center trend-item-value">
-                        <div class="text">{{ data.taskFinishTotal }}</div>
-                        <div v-if="data.incrTaskFinishTotal" class="up">{{ data.incrTaskFinishTotal }}</div>
+                        <div class="text">{{ data.taskTimeoutTotal }}</div>
                     </div>
                 </div>
             </div>

@@ -80,6 +80,9 @@ export default {
             height: 149px;
             background: url('./images/dchs.png') no-repeat center center;
         }
+        &-info {
+            padding-right: 40px;
+        }
         &-title {
             font-size: 28px;
             color: #17f8f8;

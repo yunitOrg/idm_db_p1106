@@ -77,9 +77,6 @@ export default {
         justify-content: center;
         align-items: center;
         width: 300px;
-        &:hover {
-            text-shadow: 0 0 10px #32c5ff;
-        }
         &-title {
             font-size: 25px;
             color: white;
@@ -89,7 +86,8 @@ export default {
             background: url('./images/data_value_bg.png') no-repeat center bottom;
             .text {
                 font-size: 20px;
-                @extend .blue-text;
+                color: #ffe000;
+                text-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
             }
         }
         &:nth-child(1) {

@@ -1,6 +1,6 @@
 <template>
     <div
-        class="h-full flex items-stretch wrap"
+        class="h-full flex items-stretch"
         :style="{
             padding: '20px 40px',
             gap: propData.gap,
@@ -128,10 +128,5 @@ export default {
 }
 .h-0 {
     height: 0;
-}
-</style>
-<style lang="scss" scoped>
-.wrap {
-    background: #020e29;
 }
 </style>

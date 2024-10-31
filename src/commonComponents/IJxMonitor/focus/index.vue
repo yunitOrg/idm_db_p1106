@@ -13,8 +13,8 @@
                 </div>
             </div>
             <div class="flex-1 h-0 flex items-stretch stat-table-wrap">
-                <dv-scroll-board :config="urgeConfig" class="flex-1 w-0" />
-                <dv-scroll-board :config="timeoutConfig" class="flex-1 w-0" />
+                <dv-scroll-board :config="urgeConfig" class="flex-1 w-0 stat-table" />
+                <dv-scroll-board :config="timeoutConfig" class="flex-1 w-0 stat-table" />
             </div>
         </div>
     </Section>
@@ -35,7 +35,30 @@ export default {
     },
     data() {
         return {
-            data: {}
+            data: {
+                noticeTimesUrgeTotal: 5,
+                timeoutData: [
+                    {
+                        noticeTimeout: 21,
+                        unitName: '省政府办公厅',
+                        unitId: '240605111401g1o0QttSs1ruJ5Eftmr',
+                        noticeTotal: 65,
+                        noticeTimeoutPercentage: '32%'
+                    }
+                ],
+                noticeUrgePercentage: '7%',
+                urgeData: [
+                    {
+                        unitName: '省政府办公厅',
+                        noticeUrgePercentage: '7%',
+                        unitId: '240605111401g1o0QttSs1ruJ5Eftmr',
+                        noticeTotal: 65,
+                        noticeTimesUrge: 5
+                    }
+                ],
+                noticeTimeoutTotal: 21,
+                noticeTimeoutPercentage: '32%'
+            }
         }
     },
     computed: {
@@ -75,8 +98,8 @@ export default {
                 evenRowBGC: 'rgba(6,65,173,0.12)',
                 headerHeight: 48,
                 rowNum: 4,
-                align: ['left','center','center'],
-                data: this.data.urgeData?.map((n) => [n.unitName, n.noticeTotal, n.noticeTimesUrge]) || []
+                align: ['left', 'center', 'center'],
+                data: this.data.urgeData?.map((n) => [n.unitName, n.noticeTimesUrge, n.noticeUrgePercentage]) || []
             }
         },
         timeoutConfig() {
@@ -87,8 +110,8 @@ export default {
                 evenRowBGC: 'rgba(6,65,173,0.12)',
                 headerHeight: 48,
                 rowNum: 4,
-                align: ['left','center','center'],
-                data: this.data.timeoutData?.map((n) => [n.unitName, n.noticeTotal, n.noticeTimeoutPercentage]) || []
+                align: ['left', 'center', 'center'],
+                data: this.data.timeoutData?.map((n) => [n.unitName, n.noticeTimeout, n.noticeTimeoutPercentage]) || []
             }
         }
     },
@@ -230,7 +253,7 @@ export default {
         }
         &-type-1,
         &-type-2 {
-            background: url('./images/type1.png') no-repeat center -10px/ 100% auto;
+            background: url('./images/type1.png') no-repeat center -10px;
             .stat-item-value {
                 display: flex;
                 align-items: center;
@@ -245,6 +268,14 @@ export default {
             .stat-item-title {
                 border-top: 1px solid rgba(74, 123, 255, 0.4);
             }
+        }
+    }
+}
+.stat-table {
+    :deep(.rows) {
+        .ceil {
+            overflow: visible;
+            text-overflow: unset;
         }
     }
 }
