@@ -26,6 +26,10 @@ export default {
     mounted() {
         this.instance = echarts.init(this.$refs.chart)
         this.setOption(this.option)
+        const obs = new ResizeObserver((e) => {
+            this.instance.resize()
+        })
+        obs.observe(this.$refs.chart)
     },
     methods: {
         setOption(option) {

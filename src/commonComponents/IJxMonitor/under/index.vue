@@ -40,6 +40,12 @@ export default {
                     type: 'category',
                     data: this.data.map((n) => n.deptName),
                     boundaryGap: [10, 10],
+                    axisLine: {
+                        show: true,
+                        lineStyle: {
+                            color: 'rgba(86,216,255,0.37)'
+                        }
+                    },
                     axisPointer: {
                         type: 'shadow'
                     },
@@ -61,7 +67,10 @@ export default {
                     type: 'value',
                     min: 0,
                     axisLine: {
-                        show: true
+                        show: true,
+                        lineStyle: {
+                            color: 'rgba(86,216,255,0.37)'
+                        }
                     },
                     axisTick: {
                         show: false
