@@ -7,15 +7,15 @@
                 :tabs="[
                     {
                         value: 1,
-                        label: '省设市区'
+                        label: '省设区市'
                     },
                     {
                         value: 2,
-                        label: '省级单位'
+                        label: '省直单位'
                     },
                     {
                         value: 3,
-                        label: '办公厅'
+                        label: '省办公厅'
                     }
                 ]"
             />
