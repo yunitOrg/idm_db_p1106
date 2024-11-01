@@ -118,7 +118,8 @@ export default {
                         label: {
                             show: true,
                             position: 'right',
-                            fontSize: 20
+                            fontSize: 20,
+                            color: 'white'
                         }
                     }
                 ]
