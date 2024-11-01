@@ -117,17 +117,17 @@ export default {
                                 color: {
                                     type: 'linear',
                                     x: 0,
-                                    y: 1,
+                                    y: 0,
                                     x2: 0,
-                                    y2: 0,
+                                    y2: 1,
                                     colorStops: [
                                         {
                                             offset: 0,
-                                            color: 'rgba(3,255,198,0)'
+                                            color: 'rgba(3,255,198,1)'
                                         },
                                         {
                                             offset: 1,
-                                            color: 'rgba(3,255,198,1)'
+                                            color: 'rgba(3,255,198,0)'
                                         }
                                     ]
                                 }
@@ -150,17 +150,17 @@ export default {
                                 color: {
                                     type: 'linear',
                                     x: 0,
-                                    y: 1,
+                                    y: 0,
                                     x2: 0,
-                                    y2: 0,
+                                    y2: 1,
                                     colorStops: [
                                         {
                                             offset: 0,
-                                            color: 'rgba(247,181,0,0)'
+                                            color: 'rgba(247,181,0,1)'
                                         },
                                         {
                                             offset: 1,
-                                            color: 'rgba(247,181,0,1)'
+                                            color: 'rgba(247,181,0,0)'
                                         }
                                     ]
                                 }
