@@ -145,8 +145,15 @@ export default {
                     {
                         name: '反馈数',
                         type: 'line',
+                        symbolSize: 12,
                         itemStyle: {
-                            color: '#32C5FF'
+                            borderColor: '#fff',
+                            color: '#32C5FF',
+                            borderWidth: 2
+                        },
+                        lineStyle: {
+                            color: '#32C5FF',
+                            width: 4
                         },
                         tooltip: {
                             valueFormatter: function (value) {
