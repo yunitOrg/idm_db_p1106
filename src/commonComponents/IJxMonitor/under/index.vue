@@ -5,7 +5,6 @@
 </template>
 <script>
 import Chart from '../chart.vue'
-import * as echarts from 'echarts'
 import Section from '../section/index.vue'
 export default {
     components: {
@@ -24,7 +23,21 @@ export default {
                     trigger: 'axis'
                 },
                 legend: {
-                    data: ['任务数', '办结数', '反馈数'],
+                    data: [
+                        {
+                            name: '任务数',
+                            itemStyle: {
+                                color: 'rgba(3,255,198,1)'
+                            }
+                        },
+                        {
+                            name: '办结数',
+                            itemStyle: {
+                                color: 'rgba(247,181,0,1)'
+                            }
+                        },
+                        '反馈数'
+                    ],
                     top: '3%',
                     textStyle: {
                         color: '#ffffff',
@@ -51,10 +64,9 @@ export default {
                     },
                     axisLabel: {
                         textStyle: {
-                            color: '#AFE8FF',
+                            color: 'rgba(175,232,255,1)',
                             fontSize: 14
                         },
-                        hideOverlap: false,
                         width: 100,
                         overflow: 'break',
                         interval: 0
@@ -85,7 +97,7 @@ export default {
                     },
                     name: '单位（个）',
                     nameTextStyle: {
-                        color: '#AFE8FF',
+                        color: 'rgba(175,232,255,1)',
                         fontSize: 14
                     }
                 },
@@ -102,16 +114,23 @@ export default {
                         itemStyle: {
                             normal: {
                                 borBorderRadius: [5, 5, 0, 0],
-                                color: new echarts.graphic.LinearGradient(0, 1, 0, 0, [
-                                    {
-                                        offset: 0,
-                                        color: '#016E65'
-                                    },
-                                    {
-                                        offset: 1,
-                                        color: '#03FFC6'
-                                    }
-                                ])
+                                color: {
+                                    type: 'linear',
+                                    x: 0,
+                                    y: 1,
+                                    x2: 0,
+                                    y2: 0,
+                                    colorStops: [
+                                        {
+                                            offset: 0,
+                                            color: 'rgba(3,255,198,0)'
+                                        },
+                                        {
+                                            offset: 1,
+                                            color: 'rgba(3,255,198,1)'
+                                        }
+                                    ]
+                                }
                             }
                         },
                         data: this.data.map((n) => n.noticeTotal)
@@ -128,16 +147,23 @@ export default {
                         itemStyle: {
                             normal: {
                                 borBorderRadius: [5, 5, 0, 0],
-                                color: new echarts.graphic.LinearGradient(0, 1, 0, 0, [
-                                    {
-                                        offset: 0,
-                                        color: '#454F37'
-                                    },
-                                    {
-                                        offset: 1,
-                                        color: '#F7B500'
-                                    }
-                                ])
+                                color: {
+                                    type: 'linear',
+                                    x: 0,
+                                    y: 1,
+                                    x2: 0,
+                                    y2: 0,
+                                    colorStops: [
+                                        {
+                                            offset: 0,
+                                            color: 'rgba(247,181,0,0)'
+                                        },
+                                        {
+                                            offset: 1,
+                                            color: 'rgba(247,181,0,1)'
+                                        }
+                                    ]
+                                }
                             }
                         },
                         data: this.data.map((n) => n.noticeFinishTotal)
@@ -148,11 +174,11 @@ export default {
                         symbolSize: 12,
                         itemStyle: {
                             borderColor: '#fff',
-                            color: '#32C5FF',
+                            color: 'rgba(50,197,255,1)',
                             borderWidth: 2
                         },
                         lineStyle: {
-                            color: '#32C5FF',
+                            color: 'rgba(50,197,255,1)',
                             width: 4
                         },
                         tooltip: {
