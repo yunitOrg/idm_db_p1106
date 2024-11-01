@@ -73,13 +73,20 @@ export default {
                         }
                     },
                     axisTick: {
-                        show: false
+                        show: true
                     },
                     splitLine: {
                         show: false
                     },
                     axisLabel: {
-                        show: false
+                        show: true,
+                        color: '#AFE8FF',
+                        fontSize: 14
+                    },
+                    name: '单位（个）',
+                    nameTextStyle: {
+                        color: '#AFE8FF',
+                        fontSize: 14
                     }
                 },
                 series: [

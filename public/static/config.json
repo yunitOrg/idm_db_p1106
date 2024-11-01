@@ -80,6 +80,20 @@
         "className": "IJxMonitor",
         "comType": "common",
         "comLangue": "vue"
+    },
+    {
+        "classId": "idm.componet.db.ISwiper",
+        "comName": "轮播",
+        "className": "ISwiper",
+        "comType": "common",
+        "comLangue": "vue"
+    },
+    {
+        "classId": "idm.componet.db.IOrgStatCube",
+        "comName": "组织统计",
+        "className": "IOrgStatCube",
+        "comType": "common",
+        "comLangue": "vue"
     }
   ]
 }

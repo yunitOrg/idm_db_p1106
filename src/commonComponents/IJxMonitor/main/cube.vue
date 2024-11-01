@@ -61,13 +61,13 @@ export default {
         left: 50%;
         top: 50%;
         transform: translate(-50%, -400%);
-        font-size: 30px;
+        font-size: 2.5em;
         z-index: 1;
         color: white;
     }
     .data-list {
         position: relative;
-        background: url('./images/data_bg.png') no-repeat center center;
+        background: url('./images/data_bg.png') no-repeat center center/100% auto;
         color: white;
     }
     .data-item {
@@ -76,42 +76,42 @@ export default {
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        width: 300px;
+        width: 50%;
         &-title {
-            font-size: 25px;
+            font-size: 1.7em;
             color: white;
         }
         &-value {
             padding: 16px 0;
             background: url('./images/data_value_bg.png') no-repeat center bottom;
             .text {
-                font-size: 20px;
+                font-size: 1.5em;
                 color: #ffe000;
                 text-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
             }
         }
         &:nth-child(1) {
-            left: 13%;
+            left: -9%;
             top: 8%;
         }
         &:nth-child(2) {
-            left: 9.5%;
+            left: -14.5%;
             top: 29%;
         }
         &:nth-child(3) {
-            left: 13%;
+            left: -9%;
             top: 51%;
         }
         &:nth-child(4) {
-            right: 13%;
+            right: -9%;
             top: 8%;
         }
         &:nth-child(5) {
-            right: 9.5%;
+            right: -14.5%;
             top: 29%;
         }
         &:nth-child(6) {
-            right: 13%;
+            right: -9%;
             top: 51%;
         }
     }
