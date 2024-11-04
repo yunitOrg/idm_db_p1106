@@ -8,7 +8,7 @@
                         <span
                             :class="{
                                 'subtask-yellow': item.dbStatus == '1' || item.dbStatus == '4',
-                                'subtask-blue': item.dbStatus == '2' || item.dbStatus=='3',
+                                'subtask-blue': item.dbStatus == '2' || item.dbStatus == '3',
                                 'subtask-green': item.dbStatus == '6' || item.dbStatus == '5',
                                 'subtask-red': item.dbStatus == '7'
                             }"
@@ -20,11 +20,13 @@
                     <div class="subtask-popleft">
                         <div>
                             <img src="../assets/home.png" alt="" class="taskinfo-title-icon" />
-                            <span style="margin-right: 10px">{{ item.handlerUnitText }}</span>
-                            <span style="font-size: 14px">({{ item.startDate }} ~ {{ item.endDate }}) &nbsp;{{ item.feedbackPeriodText }}</span>
-                            <!-- <span>{{ item.hostHandlerText }}</span> -->
+                            <span>{{ item.handlerUnitText }} &nbsp;{{ item.feedbackPeriodText }}</span>
                         </div>
-                        <div style="margin-top: 15px" v-if="item.handlerText">
+                        <div v-if="item.startDate">
+                            <img src="../assets/time1.png" alt="" class="taskinfo-title-icon" />
+                            <span>{{ item.startDate }} ~ {{ item.endDate }}</span>
+                        </div>
+                        <div v-if="item.handlerText">
                             <img src="../assets/phone.png" alt="" class="taskinfo-title-icon" />
                             <span style="margin-right: 5px">{{ item.handlerText }}</span>
                             <span v-if="item.handlerTel">({{ item.handlerTel }})</span>
@@ -354,6 +356,10 @@ export default {
         // width: 283px;
         width: 350px;
         font-size: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        padding-right: 15px;
     }
     .right-time {
         width: 82px;
