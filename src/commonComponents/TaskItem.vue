@@ -146,6 +146,8 @@ export default {
     .task-li-flex {
         display: flex;
         align-items: center;
+        flex-wrap: wrap;
+        gap: 5px;
     }
     .task-ban {
         margin-top: 5px;
@@ -153,13 +155,12 @@ export default {
     .task-ban-img {
         width: 16px;
         height: 16px;
-        margin-right: 7px;
     }
     .task-ban-span {
         padding: 2px 6px;
         border-radius: 3px;
-        margin-right: 5px;
         font-size: 14px;
+        white-space: nowrap;
     }
     .task-ban-gray {
         color: #666666;
