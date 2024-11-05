@@ -1,6 +1,6 @@
 <template>
     <Section title="承办情况">
-        <Chart class="h-full" :option="config"></Chart>
+        <Chart class="h-full" :option="config" @click="clickHandle"></Chart>
     </Section>
 </template>
 <script>
@@ -225,6 +225,11 @@ export default {
                 .then((res) => {
                     this.data = res.data.data
                 })
+        },
+        clickHandle(params) {
+            if (params.type == 'click' && params.componentType == 'series' && params.componentSubType == 'bar') {
+                this.$emit('navigate', this.data[params.dataIndex])
+            }
         }
     }
 }

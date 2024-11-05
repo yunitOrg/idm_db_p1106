@@ -13,9 +13,9 @@
                 <div class="text">{{ tab.label }}</div>
             </div>
         </div>
-        <Stat v-model="statIndex" :year="year" :data="options" :stats="stats" />
-        <Map v-if="activeTab == 1" :data="mapData" class="flex-1 h-0"></Map>
-        <Cube v-else class="flex-1 h-0" :title="tabs[activeTab - 1].label" :data="data" :key="activeTab" />
+        <Stat v-model="statIndex" :year="year" :data="options" :stats="stats" @navigate="(e) => navigateHandle('stat', e)" />
+        <Map v-if="activeTab == 1" :data="mapData" @navigate="(e) => navigateHandle('map', e)" class="flex-1 h-0"></Map>
+        <Cube v-else class="flex-1 h-0" :title="tabs[activeTab - 1].label" :data="data" :key="activeTab" @navigate="(e) => navigateHandle('cube', e)" />
     </div>
 </template>
 <script>
@@ -138,6 +138,12 @@ export default {
         fetchData() {
             window.IDM.http.get('ctrl/dbLargeScreen/map', this.filter).then((res) => {
                 this.data = res.data.data
+            })
+        },
+        navigateHandle(type, data) {
+            this.$emit('navigate', {
+                type,
+                data
             })
         }
     }

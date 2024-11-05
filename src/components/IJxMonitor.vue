@@ -21,17 +21,18 @@
                     gap: propData.gap
                 }"
             >
-                <Trend :year="year" class="flex-1 w-0" />
-                <Dash :year="year" class="flex-1 w-0" />
+                <Trend :year="year" class="flex-1 w-0" @navigate="(v) => navigateHandle('trend', v)" />
+                <Dash :year="year" class="flex-1 w-0" @navigate="(v) => navigateHandle('dash', v)" />
             </div>
             <Under
                 :year="year"
+                @navigate="(v) => navigateHandle('under', v)"
                 :style="{
                     flex: 2
                 }"
             />
         </div>
-        <Main :year="year" class="flex-1 w-0 flex flex-col" />
+        <Main :year="year" class="flex-1 w-0 flex flex-col" @navigate="(v) => navigateHandle('main', v)" />
         <div
             class="flex-1 w-0 flex flex-col"
             :style="{
@@ -45,14 +46,15 @@
                     gap: propData.gap
                 }"
             >
-                <Focus :year="year" class="flex-1 w-0" />
-                <Times :year="year" class="flex-1 w-0" />
+                <Focus :year="year" class="flex-1 w-0" @navigate="(v) => navigateHandle('focus', v)" />
+                <Times :year="year" class="flex-1 w-0" @navigate="(v) => navigateHandle('times', v)" />
             </div>
             <Oversee
                 :year="year"
                 :style="{
                     flex: 2
                 }"
+                @navigate="(v) => navigateHandle('oversee', v)"
             />
         </div>
     </div>
@@ -66,7 +68,13 @@ import Oversee from '../commonComponents/IJxMonitor/oversee/index.vue'
 import Focus from '../commonComponents/IJxMonitor/focus/index.vue'
 import Main from '../commonComponents/IJxMonitor/main/index.vue'
 import Under from '../commonComponents/IJxMonitor/under/index.vue'
+import bindProp from '../mixins/bindProp'
 export default {
+    mixins: [
+        bindProp({
+            gap: '30px'
+        })
+    ],
     components: {
         Trend,
         Times,
@@ -78,10 +86,29 @@ export default {
     },
     data() {
         return {
-            year: dayjs().year(),
-            propData: {
-                gap: '30px'
-            }
+            year: dayjs().year()
+        }
+    },
+    methods: {
+        navigateHandle(section, value) {
+            this.propData.linkageClick
+                ?.filter((n) => n.linkageType == section)
+                .forEach((n) => {
+                    switch (n.resType) {
+                        case 'customFun':
+                            n.resFunction?.length &&
+                                window.IDM.invokeCustomFunctions.call(this, n.resFunction, {
+                                    moduleObject: this.moduleObject,
+                                    messageObject: {
+                                        params: {
+                                            year: this.year
+                                        },
+                                        value
+                                    }
+                                })
+                            break
+                    }
+                })
         }
     }
 }

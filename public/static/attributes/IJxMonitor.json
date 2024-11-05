@@ -13,6 +13,80 @@
             "disabled": true,
             "default": "@[packageid]",
             "desc": ""
+        },
+        {
+            "type": "table",
+            "text": "点击事件",
+            "bindKey": "linkageClick",
+            "tabText": "事件[index]",
+            "desc": "",
+            "children": [
+                {
+                    "type": "select",
+                    "layoutType": "inline",
+                    "text": "事件类型",
+                    "bindKey": "linkageType",
+                    "desc": "联动到需求则指定数据结果将用作于控件的选项等数据，通过选择标识来过滤其他组件发送过来的消息",
+                    "dictionary": [
+                        {
+                            "label": "督办趋势",
+                            "value": "trend"
+                        },
+                        {
+                            "label": "督办总览",
+                            "value": "dash"
+                        },
+                        {
+                            "label": "重难点事项",
+                            "value": "focus"
+                        },
+                        {
+                            "label": "办理用时",
+                            "value": "times"
+                        },
+                        {
+                            "label": "承办情况",
+                            "value": "under"
+                        },
+                        {
+                            "label": "督办事项",
+                            "value": "oversee"
+                        },
+                        {
+                            "label": "数据视图",
+                            "value": "main"
+                        }
+                    ],
+                    "default": ""
+                },
+                {
+                    "type": "select",
+                    "layoutType": "inline",
+                    "text": "响应动作",
+                    "bindKey": "resType",
+                    "desc": "选择接收其他组件传值后要执行的后续动作，也就是选择接收到的值的作用是什么",
+                    "dictionary": [
+                        {
+                            "label": "无",
+                            "value": "none"
+                        },
+                        {
+                            "label": "自定义函数",
+                            "value": "customFun"
+                        }
+                    ],
+                    "default": "none"
+                },
+                {
+                    "type": "actionSelect",
+                    "layoutType": "block",
+                    "text": "自定义函数",
+                    "bindKey": "resFunction",
+                    "desc": "其他组件传值后会把值传递到此方法并且调用，然后自定义函数返回结果，接收参数{messageObject：联动的消息,moduleObject:组件对象}",
+                    "display": "@[resType=='customFun']"
+                }
+            ],
+            "default": []
         }
     ]
 }

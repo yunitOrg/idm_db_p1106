@@ -7,7 +7,7 @@
             class="h-full"
         >
             <SwiperSlide v-for="(group, groupIndex) in groups" :key="groupIndex" class="data-list">
-                <div v-for="item in group" :key="item.orgId" class="data-item">
+                <div v-for="item in group" :key="item.orgId" @click="clickHandle(item)" class="data-item">
                     <div class="data-item-value">
                         <div class="text">在办：{{ item.process }} / 已办结：{{ item.finish }}</div>
                     </div>
@@ -44,6 +44,11 @@ export default {
     computed: {
         groups() {
             return this.data.map((n, i) => this.data.slice(i * 6, i * 6 + 6)).filter((n) => n.length > 0)
+        }
+    },
+    methods: {
+        clickHandle(item) {
+            this.$emit('navigate', item)
         }
     }
 }

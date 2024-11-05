@@ -2,7 +2,17 @@
     <Section title="重难点事项">
         <div class="h-full flex flex-col justify-center stat-wrap">
             <div class="flex justify-between stat-list-wrap">
-                <div v-for="stat in stats" :key="stat.key" class="flex-1 w-0 flex flex-col stat-item" :class="[`stat-item-type-${stat.type}`]">
+                <div
+                    v-for="stat in stats"
+                    :key="stat.key"
+                    @click="
+                        navigateHandle({
+                            type: stat.key
+                        })
+                    "
+                    class="flex-1 w-0 flex flex-col stat-item"
+                    :class="[`stat-item-type-${stat.type}`]"
+                >
                     <div class="flex-1 h-0 stat-item-value">
                         <template v-if="stat.type == 1 || stat.type == 2">
                             {{ stat.value }}
@@ -13,8 +23,30 @@
                 </div>
             </div>
             <div class="flex-1 h-0 flex items-stretch stat-table-wrap">
-                <dv-scroll-board :config="urgeConfig" class="flex-1 w-0 stat-table" />
-                <dv-scroll-board :config="timeoutConfig" class="flex-1 w-0 stat-table" />
+                <dv-scroll-board
+                    :config="urgeConfig"
+                    @click="
+                        (e) =>
+                            navigateHandle({
+                                type: 'urge',
+                                ...e,
+                                data: data.urgeData[e.rowIndex]
+                            })
+                    "
+                    class="flex-1 w-0 stat-table"
+                />
+                <dv-scroll-board
+                    :config="timeoutConfig"
+                    @click="
+                        (e) =>
+                            navigateHandle({
+                                type: 'timeout',
+                                ...e,
+                                data: data.timeoutData[e.rowIndex]
+                            })
+                    "
+                    class="flex-1 w-0 stat-table"
+                />
             </div>
         </div>
     </Section>
@@ -42,25 +74,25 @@ export default {
         stats() {
             return [
                 {
-                    key: '1',
+                    key: 'noticeTimesUrgeTotal',
                     title: '催办数',
                     value: this.data.noticeTimesUrgeTotal || 0,
                     type: 1
                 },
                 {
-                    key: '2',
+                    key: 'noticeUrgePercentage',
                     title: '催办率',
                     value: this.data.noticeUrgePercentage || '0%',
                     type: 3
                 },
                 {
-                    key: '3',
+                    key: 'noticeTimeoutTotal',
                     title: '超期数',
                     value: this.data.noticeTimeoutTotal || 0,
                     type: 2
                 },
                 {
-                    key: '4',
+                    key: 'noticeTimeoutPercentage',
                     title: '超期率',
                     value: this.data.noticeTimeoutPercentage || '0%',
                     type: 3
@@ -200,6 +232,9 @@ export default {
                     }
                 ]
             }
+        },
+        navigateHandle(item) {
+            this.$emit('navigate', item)
         }
     }
 }

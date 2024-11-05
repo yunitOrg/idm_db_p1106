@@ -21,28 +21,56 @@
                 />
             </div>
             <div class="flex flex-wrap trend-wrap">
-                <div class="trend-item">
+                <div
+                    @click="
+                        navigateHandle({
+                            taskType: 'taskTotal'
+                        })
+                    "
+                    class="trend-item"
+                >
                     <div class="trend-item-title">立项</div>
                     <div class="flex justify-center items-center trend-item-value">
                         <div class="text">{{ data.taskTotal }}</div>
                         <div v-if="data.incrTaskTotal" class="up">{{ data.incrTaskTotal }}</div>
                     </div>
                 </div>
-                <div class="trend-item">
+                <div
+                    @click="
+                        navigateHandle({
+                            taskType: 'taskProcessDoneTotal'
+                        })
+                    "
+                    class="trend-item"
+                >
                     <div class="trend-item-title">反馈</div>
                     <div class="flex justify-center items-center trend-item-value">
                         <div class="text">{{ data.taskProcessDoneTotal }}</div>
                         <div v-if="data.incrTaskProcessDoneTotal" class="up">{{ data.incrTaskProcessDoneTotal }}</div>
                     </div>
                 </div>
-                <div class="trend-item">
+                <div
+                    @click="
+                        navigateHandle({
+                            taskType: 'taskFinishTotal'
+                        })
+                    "
+                    class="trend-item"
+                >
                     <div class="trend-item-title">办结</div>
                     <div class="flex justify-center items-center trend-item-value">
                         <div class="text">{{ data.taskFinishTotal }}</div>
                         <div v-if="data.incrTaskFinishTotal" class="up">{{ data.incrTaskFinishTotal }}</div>
                     </div>
                 </div>
-                <div class="trend-item">
+                <div
+                    @click="
+                        navigateHandle({
+                            taskType: 'taskTimeoutTotal'
+                        })
+                    "
+                    class="trend-item"
+                >
                     <div class="trend-item-title">超期</div>
                     <div class="flex justify-center items-center trend-item-value">
                         <div class="text">{{ data.taskTimeoutTotal }}</div>
@@ -103,6 +131,12 @@ export default {
                 .then((res) => {
                     this.data = res.data.data
                 })
+        },
+        navigateHandle(item) {
+            this.$emit('navigate', {
+                ...item,
+                dateType: this.activeTab
+            })
         }
     }
 }
@@ -112,7 +146,7 @@ export default {
     padding: 40px 0;
     .trend-item {
         width: 50%;
-        height:106px;
+        height: 106px;
         padding-left: 148px;
         background: url('./images/lx.png') no-repeat left center;
         &-title {

@@ -15,7 +15,7 @@
             <div class="flex-1 w-0"></div>
         </div>
         <div class="flex flex-wrap stat-list">
-            <div v-for="stat in stats" :key="stat.key" class="flex items-center stat-item">
+            <div v-for="stat in stats" :key="stat.key" @click="clickHandle(stat)" class="flex items-center stat-item">
                 <div class="stat-item-label">{{ stat.label }}</div>
                 <div class="stat-item-value">
                     <div class="text">{{ stat.value }}</div>
@@ -63,6 +63,12 @@ export default {
                 return
             }
             this.$emit('input', 0)
+        },
+        clickHandle(item) {
+            this.$emit('navigate', {
+                type: item.id,
+                ...this.current
+            })
         }
     }
 }

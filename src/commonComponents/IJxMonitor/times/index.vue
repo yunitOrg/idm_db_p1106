@@ -1,6 +1,6 @@
 <template>
     <Section title="办理用时">
-        <Chart :option="config" class="h-full" />
+        <Chart :option="config" @click="navigateHandle" class="h-full" />
         <template #extra>
             <Tabs
                 v-model="activeTab"
@@ -139,6 +139,11 @@ export default {
             window.IDM.http.get('ctrl/dbStatistics/processTimeStatistics', this.filter).then((res) => {
                 this.data = res.data.data
             })
+        },
+        navigateHandle(params) {
+            if (params.type == 'click' && params.componentType == 'series' && params.componentSubType == 'bar') {
+                this.$emit('navigate', this.data[params.dataIndex])
+            }
         }
     }
 }

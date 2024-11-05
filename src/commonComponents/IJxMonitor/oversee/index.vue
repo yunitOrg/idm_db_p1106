@@ -5,7 +5,29 @@
                 <div class="flex justify-center items-center stat-item-icon"></div>
                 <div class="flex-1 w-0 flex flex-col items-center justify-center stat-item-info">
                     <div class="stat-item-title">{{ stat.approvalTypeText }}</div>
-                    <div class="stat-item-value">{{ stat.countNum }} / {{ stat.taskFinishTotal }}</div>
+                    <div class="flex items-center justify-content stat-item-value">
+                        <div
+                            @click="
+                                navigateHandle({
+                                    type: stat.approvalType,
+                                    taskType: 'total'
+                                })
+                            "
+                        >
+                            {{ stat.countNum }}
+                        </div>
+                        <div>/</div>
+                        <div
+                            @click="
+                                navigateHandle({
+                                    type: stat.approvalType,
+                                    taskType: 'finish'
+                                })
+                            "
+                        >
+                            {{ stat.taskFinishTotal }}
+                        </div>
+                    </div>
                     <div class="flex stat-item-label">
                         <div>总数</div>
                         <div>已办结</div>
@@ -57,6 +79,9 @@ export default {
                 .then((res) => {
                     this.stats = res.data.data
                 })
+        },
+        navigateHandle(item) {
+            this.$emit('navigate', item)
         }
     }
 }

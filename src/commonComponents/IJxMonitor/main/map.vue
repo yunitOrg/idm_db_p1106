@@ -1,5 +1,5 @@
 <template>
-    <Chart :option="config" />
+    <Chart :option="config" @click="clickHandle" />
 </template>
 <script>
 import * as echarts from 'echarts'
@@ -202,6 +202,12 @@ export default {
             }
         }
     },
-    mounted() {}
+    methods: {
+        clickHandle(params) {
+            if (params.type == 'click' && params.componentType == 'series' && params.componentSubType == 'map') {
+                this.$emit('navigate', this.data[params.dataIndex])
+            }
+        }
+    }
 }
 </script>

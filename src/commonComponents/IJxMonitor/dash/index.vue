@@ -2,13 +2,22 @@
     <Section title="督办总览">
         <div class="h-full flex flex-col justify-center dash-wrap">
             <div class="flex justify-between stat-wrap">
-                <div v-for="stat in stats" :key="stat.key" class="flex flex-col justify-around stat-item">
+                <div
+                    v-for="stat in stats"
+                    :key="stat.key"
+                    @click="
+                        navigateHandle({
+                            taskStatusType: stat.key
+                        })
+                    "
+                    class="flex flex-col justify-around stat-item"
+                >
                     <div class="stat-item-value">{{ stat.value }}</div>
                     <div class="stat-item-title">{{ stat.title }}</div>
                 </div>
             </div>
             <div class="flex-1 h-0 flex items-stretch">
-                <Chart class="flex-1 w-0" :option="config"></Chart>
+                <Chart class="flex-1 w-0" :option="config" @click="navigateHandle"></Chart>
             </div>
         </div>
     </Section>
@@ -39,22 +48,22 @@ export default {
         stats() {
             return [
                 {
-                    key: '1',
+                    key: 'taskTotal',
                     title: '立项数',
                     value: this.data.taskTotal
                 },
                 {
-                    key: '2',
+                    key: 'taskInProcessTotal',
                     title: '在办数',
                     value: this.data.taskInProcessTotal
                 },
                 {
-                    key: '3',
+                    key: 'taskFinishTotal',
                     title: '办结数',
                     value: this.data.taskFinishTotal
                 },
                 {
-                    key: '4',
+                    key: 'taskProcessDoneTotal',
                     title: '反馈数',
                     value: this.data.taskProcessDoneTotal
                 }
@@ -302,6 +311,9 @@ export default {
                 },
                 option
             )
+        },
+        navigateHandle(item) {
+            this.$emit('navigate', item)
         }
     }
 }
