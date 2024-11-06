@@ -1,6 +1,6 @@
 <template>
     <div idm-ctrl="idm_module" :id="moduleObject.id" :idm-ctrl-id="moduleObject.id">
-        <Cube :data="data" :title="propData.title" :class="[className.wrap]" />
+        <Cube :data="data" :title="propData.title" @navigate="navigateHandle" :class="[className.wrap]" />
     </div>
 </template>
 <script>
@@ -61,6 +61,9 @@ export default {
                 .finally(() => {
                     this.loading = false
                 })
+        },
+        navigateHandle(e) {
+            window.IDM.invokeCustomFunctions.call(this, this.propData.clickFunction, e)
         }
     }
 }

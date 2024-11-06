@@ -283,8 +283,7 @@
                     "text": "背景色",
                     "bindKey": "bgColor",
                     "placeholder": "请选择颜色",
-                    "default": {
-                    }
+                    "default": {}
                 },
                 {
                     "type": "input",
@@ -378,6 +377,22 @@
                 }
             ],
             "default": []
+        },
+        {
+            "type": "group",
+            "text": "高级",
+            "desc": "点击？查看样式设置用法指南",
+            "helpUrl": "",
+            "children": [
+                {
+                    "type": "actionSelect",
+                    "layoutType": "block",
+                    "text": "单元格点击事件",
+                    "bindKey": "clickFunction",
+                    "desc": "",
+                    "multiple": false
+                }
+            ]
         }
     ]
 }
