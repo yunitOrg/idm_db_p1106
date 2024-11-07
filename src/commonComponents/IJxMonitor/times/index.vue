@@ -119,7 +119,8 @@ export default {
                             show: true,
                             position: 'right',
                             fontSize: 20,
-                            color: 'white'
+                            color: 'white',
+                            formatter: '{c} 天'
                         }
                     }
                 ]

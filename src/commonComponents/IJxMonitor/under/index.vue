@@ -194,7 +194,9 @@ export default {
                         type: 'slider',
                         xAxisIndex: 0,
                         startValue: 0,
-                        endValue: 8
+                        endValue: 8,
+                        height: 0,
+                        showDetail: false
                     }
                 ]
             }

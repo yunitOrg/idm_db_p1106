@@ -1,6 +1,6 @@
 <template>
     <div idm-ctrl="idm_module" :id="moduleObject.id" :idm-ctrl-id="moduleObject.id">
-        <Cube :data="data" :title="propData.title" @navigate="navigateHandle" :class="[className.wrap]" />
+        <Cube :data="data" :title="propData.title" @navigate="navigateHandle" :class="['wrap', className.wrap]" />
     </div>
 </template>
 <script>
@@ -11,8 +11,8 @@ import dataUtil from '../utils/dataUtil'
 export default {
     mixins: [
         bindProp({
-            width: '100%',
-            height: '100%'
+            width: '',
+            height: ''
         }),
         bindStyle({
             wrap() {
@@ -68,3 +68,8 @@ export default {
     }
 }
 </script>
+<style lang="scss" scoped>
+.wrap {
+    aspect-ratio: 1/0.8;
+}
+</style>

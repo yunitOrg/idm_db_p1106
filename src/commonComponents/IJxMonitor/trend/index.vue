@@ -27,7 +27,7 @@
                             taskType: 'taskTotal'
                         })
                     "
-                    class="trend-item"
+                    class="pointer trend-item"
                 >
                     <div class="trend-item-title">立项</div>
                     <div class="flex justify-center items-center trend-item-value">
@@ -41,7 +41,7 @@
                             taskType: 'taskProcessDoneTotal'
                         })
                     "
-                    class="trend-item"
+                    class="pointer trend-item"
                 >
                     <div class="trend-item-title">反馈</div>
                     <div class="flex justify-center items-center trend-item-value">
@@ -55,7 +55,7 @@
                             taskType: 'taskFinishTotal'
                         })
                     "
-                    class="trend-item"
+                    class="pointer trend-item"
                 >
                     <div class="trend-item-title">办结</div>
                     <div class="flex justify-center items-center trend-item-value">
@@ -69,7 +69,7 @@
                             taskType: 'taskTimeoutTotal'
                         })
                     "
-                    class="trend-item"
+                    class="pointer trend-item"
                 >
                     <div class="trend-item-title">超期</div>
                     <div class="flex justify-center items-center trend-item-value">

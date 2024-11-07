@@ -156,4 +156,7 @@ export default {
 .h-0 {
     height: 0;
 }
+.pointer {
+    cursor: pointer;
+}
 </style>

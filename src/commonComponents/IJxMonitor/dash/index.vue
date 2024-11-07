@@ -10,7 +10,7 @@
                             taskStatusType: stat.key
                         })
                     "
-                    class="flex flex-col justify-around stat-item"
+                    class="flex flex-col justify-around pointer stat-item"
                 >
                     <div class="stat-item-value">{{ stat.value }}</div>
                     <div class="stat-item-title">{{ stat.title }}</div>
@@ -153,7 +153,7 @@ export default {
                             offsetCenter: [0, '30%'],
                             valueAnimation: true,
                             formatter: function (value) {
-                                return '{label|办结率}{value|' + value.toFixed(0) + '%}'
+                                return '{label|反馈率}{value|' + value.toFixed(0) + '%}'
                             },
                             rich: {
                                 value: {

@@ -13,6 +13,7 @@
                                     taskType: 'total'
                                 })
                             "
+                            class="pointer"
                         >
                             {{ stat.countNum }}
                         </div>
@@ -24,6 +25,7 @@
                                     taskType: 'finish'
                                 })
                             "
+                            class="pointer"
                         >
                             {{ stat.taskFinishTotal }}
                         </div>

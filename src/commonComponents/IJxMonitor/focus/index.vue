@@ -10,7 +10,7 @@
                             type: stat.key
                         })
                     "
-                    class="flex-1 w-0 flex flex-col stat-item"
+                    class="flex-1 w-0 flex flex-col pointer stat-item"
                     :class="[`stat-item-type-${stat.type}`]"
                 >
                     <div class="flex-1 h-0 stat-item-value">
@@ -287,6 +287,7 @@ export default {
     :deep(.rows) {
         .row-item {
             overflow: hidden;
+            cursor: pointer;
         }
         .ceil {
             overflow: visible;

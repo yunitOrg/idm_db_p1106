@@ -7,7 +7,7 @@
             class="h-full"
         >
             <SwiperSlide v-for="(group, groupIndex) in groups" :key="groupIndex" class="data-list">
-                <div v-for="item in group" :key="item.orgId" @click="clickHandle(item)" class="data-item">
+                <div v-for="item in group" :key="item.orgId" @click="clickHandle(item)" class="pointer data-item">
                     <div class="data-item-value">
                         <div class="text">在办：{{ item.process }} / 已办结：{{ item.finish }}</div>
                     </div>
