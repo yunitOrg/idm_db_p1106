@@ -1,32 +1,16 @@
 <template>
     <Section title="督办事项">
         <div class="h-full stat-wrap">
-            <div v-for="stat in stats" :key="stat.approvalType" class="flex items-stretch stat-item">
+            <div v-for="stat in stats" :key="stat.approvalType" @click="navigateHandle(stat)" class="flex items-stretch pointer stat-item">
                 <div class="flex justify-center items-center stat-item-icon"></div>
                 <div class="flex-1 w-0 flex flex-col items-center justify-center stat-item-info">
                     <div class="stat-item-title">{{ stat.approvalTypeText }}</div>
                     <div class="flex items-center justify-content stat-item-value">
-                        <div
-                            @click="
-                                navigateHandle({
-                                    type: stat.approvalType,
-                                    taskType: 'total'
-                                })
-                            "
-                            class="pointer"
-                        >
+                        <div>
                             {{ stat.countNum }}
                         </div>
                         <div>/</div>
-                        <div
-                            @click="
-                                navigateHandle({
-                                    type: stat.approvalType,
-                                    taskType: 'finish'
-                                })
-                            "
-                            class="pointer"
-                        >
+                        <div>
                             {{ stat.taskFinishTotal }}
                         </div>
                     </div>

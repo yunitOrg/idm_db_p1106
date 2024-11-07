@@ -15,7 +15,7 @@
         </div>
         <Stat v-model="statIndex" :year="year" :data="options" :stats="stats" @navigate="(e) => navigateHandle('stat', e)" />
         <Map v-if="activeTab == 1" :data="mapData" @navigate="(e) => navigateHandle('map', e)" class="flex-1 h-0"></Map>
-        <Cube v-else class="flex-1 h-0" :title="tabs[activeTab - 1].label" :data="data" :key="activeTab" @navigate="(e) => navigateHandle('cube', e)" />
+        <Cube v-else class="flex-1 h-0" :title="tabs[activeTab - 1].label" :data="data" :key="activeTab" @navigate="(e) => navigateHandle('cube', e)" @check="checkHandle" />
     </div>
 </template>
 <script>
@@ -145,6 +145,9 @@ export default {
                 type,
                 data
             })
+        },
+        checkHandle(data){
+            this.statIndex=this.data.findIndex(n=>n.orgId==data.orgId)
         }
     }
 }

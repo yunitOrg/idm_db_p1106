@@ -7,7 +7,7 @@
             class="h-full"
         >
             <SwiperSlide v-for="(group, groupIndex) in groups" :key="groupIndex" class="data-list">
-                <div v-for="item in group" :key="item.orgId" @click="clickHandle(item)" class="pointer data-item">
+                <div v-for="item in group" :key="item.orgId" @mouseenter="mouseHandle(item)" @click="clickHandle(item)" class="pointer data-item">
                     <div class="data-item-value">
                         <div class="text">在办：{{ item.process }} / 已办结：{{ item.finish }}</div>
                     </div>
@@ -49,6 +49,9 @@ export default {
     methods: {
         clickHandle(item) {
             this.$emit('navigate', item)
+        },
+        mouseHandle(item) {
+            this.$emit('check', item)
         }
     }
 }
