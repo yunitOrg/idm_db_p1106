@@ -91,7 +91,7 @@ export default {
         }
         &-value {
             padding: 16px 0;
-            background: url('./images/data_value_bg.png') no-repeat center bottom;
+            background: url('./images/data_value_bg.png') no-repeat center bottom/100% auto;
             .text {
                 font-size: 1.5em;
                 color: #ffe000;

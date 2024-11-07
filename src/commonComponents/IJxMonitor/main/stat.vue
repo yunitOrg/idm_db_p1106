@@ -14,7 +14,7 @@
             </div>
             <div class="flex-1 w-0"></div>
         </div>
-        <div class="flex flex-wrap stat-list">
+        <div class="flex justify-between stat-list">
             <div v-for="stat in stats" :key="stat.key" @click="clickHandle(stat)" class="flex items-center pointer stat-item">
                 <div class="stat-item-label">{{ stat.label }}</div>
                 <div class="stat-item-value">
@@ -95,6 +95,11 @@ export default {
     gap: 30px;
     .name {
         font-size: 28px;
+        width: 253px;
+        text-align: center;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
     }
     .btn-prev,
     .btn-next {
@@ -109,7 +114,6 @@ export default {
 }
 .stat-list {
     .stat-item {
-        padding: 0 40px 20px 0;
         &-label {
             color: white;
             font-size: 24px;
