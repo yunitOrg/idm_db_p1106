@@ -1,17 +1,24 @@
 <template>
-    <div idm-ctrl="idm_module" :id="moduleObject.id" :idm-ctrl-id="moduleObject.id">
-        <Swiper ref="swiper" :class="[className.wrap]">
-            <SwiperSlide v-for="(slot, slotIndex) in slots" :key="slotIndex"  class="drag_container" idm-ctrl-inner :idm-ctrl-id="moduleObject.id" :idm-container-index="slotIndex">
-                
-            </SwiperSlide>
-        </Swiper>
+    <div idm-ctrl="idm_module" :id="moduleObject.id" :idm-ctrl-id="moduleObject.id" class="idm-db-iswiper" :class="[className.wrap]">
+        <div v-if="moduleObject.env == 'develop'" class="indicator-wrap">
+            <div v-for="(slot, slotIndex) in slots" :key="slotIndex" @click="dataIndex = slotIndex" class="indicator-item">
+                {{ slotIndex + 1 }}
+            </div>
+        </div>
+        <div
+            v-for="(_, slotIndex) in slots"
+            :key="slotIndex"
+            class="drag_container"
+            :class="[dataIndex != slotIndex ? 'hidden' : 'block']"
+            idm-ctrl-inner
+            :idm-ctrl-id="moduleObject.id"
+            :idm-container-index="slotIndex"
+        ></div>
     </div>
 </template>
 <script>
 import bindProp from '../mixins/bindProp'
 import bindStyle from '../mixins/bindStyle'
-import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
-import 'swiper/css/swiper.css'
 export default {
     mixins: [
         bindProp({
@@ -25,12 +32,14 @@ export default {
             }
         })
     ],
-    components: {
-        Swiper,
-        SwiperSlide
-    },
     data() {
-        return {}
+        return {
+            dataIndex: 0,
+            options: {
+                preventClicks: false,
+                preventClicksPropagation: false
+            }
+        }
     },
     computed: {
         slots() {
@@ -66,3 +75,25 @@ export default {
     }
 }
 </script>
+<style lang="scss" scoped>
+.idm-db-iswiper {
+    .hidden {
+        display: none;
+    }
+    .block {
+        display: block;
+    }
+    .indicator {
+        &-wrap {
+            display: flex;
+            gap: 1px;
+            padding: 1px;
+            background-color: white;
+        }
+        &-item {
+            background-color: var(--idmCoreLoadColor);
+            padding: 2px 8px;
+        }
+    }
+}
+</style>
