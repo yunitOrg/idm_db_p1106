@@ -23,6 +23,8 @@ import 'ant-design-vue/lib/menu/style/css'
 import 'ant-design-vue/lib/form/style/css'
 import 'ant-design-vue/lib/form-model/style/css'
 import 'ant-design-vue/lib/space/style/css'
+import 'ant-design-vue/lib/badge/style/css'
+
 import {
     Input,
     Select,
@@ -49,7 +51,8 @@ import {
     Menu,
     FormModel,
     Space,
-    Form
+    Form,
+    Badge
 } from 'ant-design-vue'
 
 Vue.use(Input)
@@ -80,4 +83,5 @@ Vue.use(FormModel.Item)
 Vue.use(Form)
 Vue.use(Form.Item)
 Vue.use(Space)
+Vue.use(Badge)
 Vue.prototype.$message = message

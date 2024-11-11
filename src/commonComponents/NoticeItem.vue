@@ -47,6 +47,9 @@
                             </div>
                         </span>
                         <div class="right-svg" v-if="item.lastFeedbackContent && item.feedbackType != 1">
+                            <a-badge v-if="item.unreadInstruction > 0" :count="unreadInstruction" @click="handleShowUnRead(item)">
+                                <img :src="handleHistoryImg()" alt="" />
+                            </a-badge>
                             <div @click="handleShowDialog(item)">
                                 <img :src="handleHistoryImg()" alt="" />
                             </div>
@@ -185,6 +188,9 @@ export default {
         // 在落实
         handleCuiBell(item) {
             this.$emit('handleCuiBell', item)
+        },
+        handleShowUnRead(item) {
+            this.$emit('handleOptions', item)
         }
     }
 }
