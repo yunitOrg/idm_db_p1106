@@ -37,7 +37,7 @@
                 <div class="subtaskRight">
                     <div class="right-time">{{ item.lastFeedbackDate }}</div>
                     <div class="right-content">
-                        <span class="task-font" @click="handleJump(item)" v-if="item.lastFeedbackContent">
+                        <div class="task-font" @click="handleJump(item)" v-if="item.lastFeedbackContent">
                             {{ item.lastFeedbackContent }}
                             <div class="task-file">
                                 <i v-for="(file, fileIndex) in item.lastFeedbackAttachFiles" :key="fileIndex" @click.stop="handleOpen(file)">
@@ -45,12 +45,12 @@
                                     {{ file.fileName }}
                                 </i>
                             </div>
-                        </span>
-                        <div class="right-svg" v-if="item.lastFeedbackContent && item.feedbackType != 1">
-                            <a-badge v-if="item.unreadInstruction > 0" :count="unreadInstruction" @click="handleShowUnRead(item)">
-                                <img :src="handleHistoryImg()" alt="" />
+                        </div>
+                        <div class="right-svg">
+                            <a-badge v-if="item.unreadInstruction > 0" :count="item.unreadInstruction" @click="handleOptions({ key: 'notice_comments_view', record: item })">
+                                <img :src="hanldeImg('linqi.png')" alt="查看评价" />
                             </a-badge>
-                            <div @click="handleShowDialog(item)">
+                            <div v-if="item.lastFeedbackContent && item.feedbackType != 1" @click="handleShowDialog(item)">
                                 <img :src="handleHistoryImg()" alt="" />
                             </div>
                             <template v-if="btngroup">
@@ -188,9 +188,6 @@ export default {
         // 在落实
         handleCuiBell(item) {
             this.$emit('handleCuiBell', item)
-        },
-        handleShowUnRead(item) {
-            this.$emit('handleOptions', item)
         }
     }
 }
@@ -263,7 +260,6 @@ export default {
 .taskInfo {
     .taskInfo-li {
         display: flex;
-        // justify-content: space-between;
         padding: 14px 0 10px 30px;
     }
     .taskInfo-li + .taskInfo-li {
@@ -271,7 +267,6 @@ export default {
     }
     .subtaskLeft {
         display: flex;
-        // flex: 0 0 auto;
         .taskinfo-title-icon {
             width: 20px;
             height: 20px;
@@ -279,20 +274,17 @@ export default {
         }
     }
     .subtaskRight {
+        flex: 1;
         display: flex;
-        width: calc(100% - 293px - 80px);
         font-size: 16px;
-        // flex: 1;
+        gap: 20px;
         .right-content {
             display: flex;
-            width: calc(100% - 120px);
-            justify-content: space-between;
-            span {
-                width: 80%;
-                display: inline-block;
-                text-align: justify;
-            }
+            flex: 1;
+            gap: 20px;
             .task-font {
+                flex: 1;
+                text-align: justify;
                 cursor: pointer;
             }
             .task-file {
@@ -308,7 +300,6 @@ export default {
     .subtaskMore {
         width: 84px;
         text-align: center;
-        position: absolute;
         cursor: pointer;
         right: 0;
         svg {
@@ -368,22 +359,18 @@ export default {
         padding-right: 15px;
     }
     .right-time {
-        width: 82px;
-        flex: 0 0 auto;
-        margin-right: 20px;
+        width: 100px;
         color: #333333;
     }
     .right-svg {
-        // position: absolute;
-        // right: 120px;
-        width: 20%;
         display: flex;
         cursor: pointer;
+        gap: 10px;
+        padding: 5px;
         svg {
             font-size: 18px;
             width: 18px;
             height: 18px;
-            margin-left: 20px;
         }
         img {
             width: 18px;

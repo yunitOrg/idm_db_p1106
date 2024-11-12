@@ -94,6 +94,13 @@
         "className": "IOrgStatCube",
         "comType": "common",
         "comLangue": "vue"
+    },
+    {
+        "classId": "idm.componet.db.IFlow",
+        "comName": "督办流程",
+        "className": "IFlow",
+        "comType": "common",
+        "comLangue": "vue"
     }
   ]
 }
