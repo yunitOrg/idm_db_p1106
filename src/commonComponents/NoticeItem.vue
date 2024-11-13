@@ -47,8 +47,12 @@
                             </div>
                         </div>
                         <div class="right-svg">
-                            <a-badge v-if="item.unreadInstruction > 0" :count="item.unreadInstruction" @click="handleOptions({ key: 'notice_comments_view', record: item })">
-                                <img :src="hanldeImg('linqi.png')" alt="查看评价" />
+                            <a-badge
+                                v-if="item.unreadInstruction > 0"
+                                :count="item.unreadInstruction"
+                                @click="handleOptions({ key: 'notice_leader_instruction_view', record: item })"
+                            >
+                                <img :src="hanldeImg('linqi.png')" alt="查看指示" />
                             </a-badge>
                             <div v-if="item.lastFeedbackContent && item.feedbackType != 1" @click="handleShowDialog(item)">
                                 <img :src="handleHistoryImg()" alt="" />
@@ -67,15 +71,21 @@
                 <template v-if="porpsList?.length">
                     <div class="subtaskMore">
                         <template v-if="item.buttonList && item.buttonList.length">
-                            <a-popover placement="bottomRight">
-                                <template slot="content">
-                                    <p v-for="(subitem, index) in item.buttonList" :key="index" @click="handleOptions({ key: subitem.value, record: item })">
-                                        <span>{{ subitem.text }}</span>
-                                    </p>
+                            <a-dropdown placement="bottomRight">
+                                <template slot="overlay">
+                                    <a-menu style="text-align: center;">
+                                        <a-menu-item v-for="subitem in item.buttonList" :key="subitem.value" @click="handleOptions({ key: subitem.value, record: item })">
+                                            <a-badge :count="subitem.badge" :offset="[10,0]">
+                                                {{ subitem.text }}
+                                            </a-badge>
+                                        </a-menu-item>
+                                    </a-menu>
                                 </template>
                                 <!-- <svg-icon icon-class="detail" class="rightSvg"></svg-icon> -->
-                                <img src="../assets/more.png" alt="" />
-                            </a-popover>
+                                <a-badge :count="item.buttonList.reduce((carry, current) => carry + current.badge || 0, 0)">
+                                    <img src="../assets/more.png" alt="" />
+                                </a-badge>
+                            </a-dropdown>
                         </template>
                     </div>
                 </template>
@@ -366,15 +376,15 @@ export default {
         display: flex;
         cursor: pointer;
         gap: 10px;
-        padding: 5px;
+        padding: 2px;
         svg {
-            font-size: 18px;
-            width: 18px;
-            height: 18px;
+            font-size: 22px;
+            width: 22px;
+            height: 22px;
         }
         img {
-            width: 18px;
-            height: 18px;
+            width: 22px;
+            height: 22px;
         }
     }
     .rightSvg {

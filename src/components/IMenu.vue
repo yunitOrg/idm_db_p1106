@@ -44,6 +44,7 @@ export default {
                     type: 'linkageDemand',
                     rangeModule: this.propData.linkageDemandPageModule,
                     message: {
+                        current: value.current,
                         data: {
                             total: rows.length,
                             rows
@@ -52,6 +53,15 @@ export default {
                 })
             },
             deep: true
+        },
+        current: {
+            handler(value) {
+                this.IDM.broadcast?.send({
+                    type: 'linkageResult',
+                    rangeModule: this.propData.linkageResultPageModule,
+                    message: value
+                })
+            }
         }
     },
     methods: {

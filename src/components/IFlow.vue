@@ -1,78 +1,337 @@
 <template>
-    <div ref="container" idm-ctrl="idm_module" :id="moduleObject.id" :idm-ctrl-id="moduleObject.id"></div>
+    <div ref="container" idm-ctrl="idm_module" :id="moduleObject.id" :idm-ctrl-id="moduleObject.id" :class="['db-iflow', className.wrap]">
+        <div v-for="(line, lineIndex) in data" :key="lineIndex" class="flex items-center line-item">
+            <div class="caption">
+                <div
+                    @click="clickHandle(line)"
+                    class="flex justify-center items-center text-white bg-default caption-text"
+                    :class="{
+                        'bg-info': line.status == 2
+                    }"
+                >
+                    {{ line.name }}
+                </div>
+            </div>
+            <div class="flex-1">
+                <div v-for="(group, groupIndex) in line.childNodes" :key="groupIndex" class="flex group-item">
+                    <div
+                        @click="clickHandle(group)"
+                        class="rounded-pill text-white text-center bg-default group-title"
+                        :class="{
+                            'bg-info': group.status == 2
+                        }"
+                    >
+                        {{ group.name }}
+                    </div>
+                    <div v-for="(item, itemIndex) in group.childNodes" :key="itemIndex" class="item">
+                        <div
+                            @click="clickHandle(item)"
+                            class="rounded-pill text-white text-center bg-default item-text"
+                            :class="{
+                                'bg-info': item.status == 2,
+                                progress: item.status == 3,
+                                'bg-success': item.status == 4
+                            }"
+                        >
+                            {{ item.name }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 <script>
-import LogicFlow from '@logicflow/core'
 import { bindStyle, bindProp } from '../mixins'
 export default {
     mixins: [bindProp({}), bindStyle()],
     data() {
         return {
-            data: {
-                // 节点
-                nodes: [
-                    {
-                        id: '50',
-                        type: 'circle',
-                        x: 100,
-                        y: 100,
-                        text: '圆形节点',
-                        properties: {
-                            style: {
-                                fill: '#3b91f7'
-                            }
-                        }
-                    },
-                    {
-                        id: '21',
-                        type: 'html',
-                        x: 300,
-                        y: 100,
-                        text: '矩形节点',
-                        properties: {
-                            radius: 100,
-                            style: {
-                                stroke: '#3b91f7'
-                            }
-                        }
-                    }
-                ],
-                // 边
-                edges: [
-                    {
-                        type: 'line',
-                        sourceNodeId: '50',
-                        targetNodeId: '21'
-                    }
-                ]
-            }
+            data: [],
+            filter: {}
         }
     },
     watch: {
-        data: {
-            handler(data) {
-                this.setOptions(data)
+        filter: {
+            handler() {
+                this.fetchData()
             }
         }
     },
-    mounted() {
-        this.setOptions(this.data)
-    },
     methods: {
-        setOptions(data) {
-            // 渲染画布
-            const lf = new LogicFlow({
-                container: this.$refs.container,
-                width: 700,
-                height: 600,
-                isSilentMode: true,
-                stopMoveGraph: true,
-                stopZoomGraph: true,
-                stopScrollGraph: true,
-                disabledTools: ['multipleSelect', 'textEdit']
+        receiveBroadcastMessage(event) {
+            console.log('IFlow event', event)
+            switch (event.type) {
+                case 'linkageDemand':
+                    this.filter = {
+                        taskId: event.message.current[0]
+                    }
+                    break
+            }
+        },
+        fetchData() {
+            if (window.IDM.env_develop_mode) {
+                this.data = [
+                    {
+                        name: '立项',
+                        type: 0,
+                        status: 2,
+                        content: null,
+                        childNodes: [
+                            {
+                                name: '开始',
+                                type: 1,
+                                status: 2,
+                                content: null,
+                                childNodes: [
+                                    {
+                                        name: '审批',
+                                        type: 1,
+                                        status: 2,
+                                        content: null,
+                                        childNodes: null
+                                    },
+                                    {
+                                        name: '交办',
+                                        type: 1,
+                                        status: 3,
+                                        content: null,
+                                        childNodes: null
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        name: '通知',
+                        type: 0,
+                        status: 2,
+                        content: null,
+                        childNodes: [
+                            {
+                                name: '市政府办公厅',
+                                type: 1,
+                                status: 2,
+                                content: null,
+                                childNodes: [
+                                    {
+                                        name: '待签收',
+                                        type: 1,
+                                        status: 1,
+                                        content: null,
+                                        childNodes: null
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        name: '反馈',
+                        type: 0,
+                        status: 1,
+                        content: null,
+                        childNodes: [
+                            {
+                                name: '市政府办公厅',
+                                type: 1,
+                                status: 1,
+                                content: null,
+                                childNodes: null
+                            }
+                        ]
+                    },
+                    {
+                        name: '办结',
+                        type: 0,
+                        status: 1,
+                        content: null,
+                        childNodes: [
+                            {
+                                name: '发起办结',
+                                type: 1,
+                                status: 1,
+                                content: null,
+                                childNodes: null
+                            },
+                            {
+                                name: '审批',
+                                type: 1,
+                                status: 1,
+                                content: null,
+                                childNodes: null
+                            },
+                            {
+                                name: '办结',
+                                type: 1,
+                                status: 1,
+                                content: null,
+                                childNodes: null
+                            }
+                        ]
+                    }
+                ]
+                return
+            }
+            window.IDM.http.get('ctrl/dbTask/getProgress', this.filter).then((res) => {
+                this.data = res.data.data
             })
-            lf.render(data)
+        },
+        clickHandle(record) {
+            if (this.propData.clickFunctions?.length > 0) {
+                window.IDM.invokeCustomFunctions.call(this, this.propData.clickFunctions, {
+                    record
+                })
+            }
         }
     }
 }
 </script>
+<style lang="scss" scoped>
+.flex {
+    display: flex;
+}
+.flex-1 {
+    flex: 1;
+}
+.justify-center {
+    justify-content: center;
+}
+.items-center {
+    align-items: center;
+}
+.bg-default {
+    background-color: #dadada;
+}
+.bg-info {
+    background-color: var(--primary);
+}
+.bg-success {
+    background-color: #47ca6a;
+}
+.text-white {
+    color: white;
+}
+.text-center {
+    text-align: center;
+}
+.rounded-pill {
+    border-radius: 50em;
+}
+.db-iflow {
+    --primary: #0091ff;
+    --line-color: #979797;
+    .line-item {
+        .caption {
+            padding: 60px;
+            position: relative;
+            &-text {
+                width: 120px;
+                height: 120px;
+                border-radius: 50em;
+                font-size: 30px;
+            }
+            &:before,
+            &:after {
+                position: absolute;
+                content: '';
+                display: block;
+                width: 100%;
+                height: calc(50% - 70px);
+                left: 0;
+            }
+            &:before {
+                top: -10px;
+                background: url('../assets/flow/line_arrow.png') no-repeat bottom center,
+                    linear-gradient(to bottom, transparent 50%, var(--primary) 50%) repeat-y bottom 20px center/3px 10px;
+            }
+            &:after {
+                bottom: -10px;
+                background: url('../assets/flow/line_dot.png') no-repeat top center,
+                    linear-gradient(to bottom, transparent 50%, var(--primary) 50%) repeat-y top 10px center/3px 10px;
+            }
+        }
+        &:first-child {
+            .caption {
+                &::before {
+                    display: none;
+                }
+            }
+        }
+        &:last-child {
+            .caption {
+                &::after {
+                    display: none;
+                }
+            }
+        }
+    }
+    .group {
+        &-item {
+            padding: 10px 60px;
+            gap: 120px;
+            position: relative;
+            &:before {
+                position: absolute;
+                content: '';
+                display: block;
+                background: linear-gradient(to bottom, transparent 50%, var(--line-color) 50%) repeat-y left / 2px 10px,
+                    linear-gradient(to right, transparent 50%, var(--line-color) 50%) repeat-x left center / 10px 2px;
+                width: 38px;
+                left: 0;
+                top: 0;
+                bottom: 0;
+            }
+            &:first-child {
+                &:before {
+                    top: calc(50% - 1px);
+                    background: linear-gradient(to bottom, transparent 50%, var(--line-color) 50%) repeat-y left / 2px 10px,
+                        linear-gradient(to right, transparent 50%, var(--line-color) 50%) repeat-x left top / 10px 2px;
+                }
+            }
+            &:last-child {
+                &:before {
+                    bottom: calc(50% - 1px);
+                    background: linear-gradient(to bottom, transparent 50%, var(--line-color) 50%) repeat-y left / 2px 10px,
+                        linear-gradient(to right, transparent 50%, var(--line-color) 50%) repeat-x left bottom / 10px 2px;
+                }
+            }
+            &:only-child {
+                &:before {
+                    left: -30px;
+                    width: 70px;
+                    background: linear-gradient(to right, transparent 50%, var(--line-color) 50%) repeat-x left bottom / 10px 2px;
+                }
+            }
+        }
+        &-title {
+            width: 260px;
+            padding: 17px;
+            font-size: 24px;
+        }
+    }
+    .item {
+        position: relative;
+        &:before {
+            position: absolute;
+            content: '';
+            display: block;
+            width: 58px;
+            height: 52px;
+            left: 0;
+            top: 50%;
+            transform: translate(-150%, -50%);
+            background: url('../assets/flow/next_active.png') no-repeat center/ 100% 100%;
+        }
+        &-text {
+            width: 260px;
+            padding: 17px;
+            font-size: 24px;
+        }
+        &.progress {
+            border: 3px solid var(--primary);
+            background: none;
+            color: black;
+        }
+    }
+}
+</style>
