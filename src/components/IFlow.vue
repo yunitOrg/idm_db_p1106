@@ -1,40 +1,47 @@
 <template>
     <div ref="container" idm-ctrl="idm_module" :id="moduleObject.id" :idm-ctrl-id="moduleObject.id" :class="['db-iflow', className.wrap]">
-        <div v-for="(line, lineIndex) in data" :key="lineIndex" class="flex items-center line-item">
-            <div class="caption">
+        <div v-for="(line, lineIndex) in data" :key="lineIndex" class="flex items-stretch line-item">
+            <div class="flex justify-center items-center caption">
                 <div
                     @click="clickHandle(line)"
                     class="flex justify-center items-center text-white bg-default caption-text"
                     :class="{
-                        'bg-info': line.status == 2
+                        'bg-info': line.status == 2,
+                        progress: line.status == 3,
+                        'bg-success': line.status == 4
                     }"
                 >
                     {{ line.name }}
                 </div>
             </div>
-            <div class="flex-1">
-                <div v-for="(group, groupIndex) in line.childNodes" :key="groupIndex" class="flex group-item">
+            <div class="self-center flex-1">
+                <div v-for="(group, groupIndex) in line.childNodes" :key="groupIndex" class="flex items-center group-item">
                     <div
                         @click="clickHandle(group)"
                         class="rounded-pill text-white text-center bg-default group-title"
                         :class="{
-                            'bg-info': group.status == 2
+                            'bg-info': group.status == 2,
+                            progress: group.status == 3,
+                            'bg-success': group.status == 4
                         }"
                     >
                         {{ group.name }}
                     </div>
-                    <div v-for="(item, itemIndex) in group.childNodes" :key="itemIndex" class="item">
-                        <div
-                            @click="clickHandle(item)"
-                            class="rounded-pill text-white text-center bg-default item-text"
-                            :class="{
-                                'bg-info': item.status == 2,
-                                progress: item.status == 3,
-                                'bg-success': item.status == 4
-                            }"
-                        >
-                            {{ item.name }}
+                    <div
+                        v-for="(item, itemIndex) in group.childNodes"
+                        :key="itemIndex"
+                        @click="clickHandle(item)"
+                        class="rounded-pill text-white text-center bg-default item"
+                        :class="{
+                            'bg-info': item.status == 2,
+                            progress: item.status == 3,
+                            'bg-success': item.status == 4
+                        }"
+                    >
+                        <div class="item-text">
+                            <div>{{ item.name }}</div>
                         </div>
+                        <div v-if="item.content" class="item-content">{{ item.content }}</div>
                     </div>
                 </div>
             </div>
@@ -170,7 +177,6 @@ export default {
                         ]
                     }
                 ]
-                return
             }
             window.IDM.http.get('ctrl/dbTask/getProgress', this.filter).then((res) => {
                 this.data = res.data.data
@@ -198,6 +204,12 @@ export default {
 }
 .items-center {
     align-items: center;
+}
+.items-stretch {
+    align-items: stretch;
+}
+.self-center {
+    align-self: center;
 }
 .bg-default {
     background-color: #dadada;
@@ -240,14 +252,13 @@ export default {
                 left: 0;
             }
             &:before {
-                top: -10px;
+                top: 0;
                 background: url('../assets/flow/line_arrow.png') no-repeat bottom center,
-                    linear-gradient(to bottom, transparent 50%, var(--primary) 50%) repeat-y bottom 20px center/3px 10px;
+                    linear-gradient(to bottom, var(--primary) 50%, transparent 50%) repeat-y bottom center/3px 10px;
             }
             &:after {
-                bottom: -10px;
-                background: url('../assets/flow/line_dot.png') no-repeat top center,
-                    linear-gradient(to bottom, transparent 50%, var(--primary) 50%) repeat-y top 10px center/3px 10px;
+                bottom: 0;
+                background: url('../assets/flow/line_dot.png') no-repeat top center, linear-gradient(to bottom, var(--primary) 50%, transparent 50%) repeat-y top center/3px 10px;
             }
         }
         &:first-child {
@@ -311,6 +322,10 @@ export default {
     }
     .item {
         position: relative;
+        width: 260px;
+        padding: 17px;
+        font-size: 24px;
+        line-height: 150%;
         &:before {
             position: absolute;
             content: '';
@@ -322,16 +337,22 @@ export default {
             transform: translate(-150%, -50%);
             background: url('../assets/flow/next_active.png') no-repeat center/ 100% 100%;
         }
-        &-text {
-            width: 260px;
-            padding: 17px;
-            font-size: 24px;
+        &:has(.item-content) {
+            .item-content {
+                display: none;
+            }
+            &:hover {
+                font-size: 18px;
+                .item-content {
+                    display: block;
+                }
+            }
         }
-        &.progress {
-            border: 3px solid var(--primary);
-            background: none;
-            color: black;
-        }
+    }
+    .progress {
+        border: 3px solid var(--primary);
+        background: none;
+        color: black;
     }
 }
 </style>
