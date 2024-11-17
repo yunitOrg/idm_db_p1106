@@ -3,8 +3,8 @@ export default function bindProp(defaultPropData) {
         data() {
             return {
                 moduleObject: this.$root.moduleObject,
-                propData: this.$root.propData.compositeAttr || defaultPropData,
+                propData: Object.assign({}, defaultPropData, this.$root.propData.compositeAttr)
             }
-        },
+        }
     }
 }
