@@ -43,7 +43,7 @@ export default {
     },
     computed: {
         groups() {
-            return this.data.map((n, i) => this.data.slice(i * 6, i * 6 + 6)).filter((n) => n.length > 0)
+            return this.data.map((_, i) => this.data.slice(i * 6, i * 6 + 6)).filter((n) => n.length > 0)
         }
     },
     methods: {
@@ -77,6 +77,7 @@ export default {
         position: relative;
         background: url('./images/data_bg.png') no-repeat center center/100% auto;
         color: white;
+        overflow: hidden;
     }
     .data-item {
         position: absolute;
