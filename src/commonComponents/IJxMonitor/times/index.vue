@@ -1,6 +1,22 @@
 <template>
-    <Section title="办理用时">
-        <Chart :option="config" @click="navigateHandle" class="h-full" />
+    <Section title="办理质效">
+        <div class="flex flex-col h-full">
+            <div class="flex items-center tab-wrap">
+                <div
+                    v-for="tab in queryTab.data"
+                    :key="tab.value"
+                    @click="queryTab.current=tab.value"
+                    class="pointer tab-item"
+                    :class="{
+                        active: tab.value == queryTab.current
+                    }"
+                >
+                    {{ tab.label }}
+                </div>
+            </div>
+            <Chart :option="config" @click="navigateHandle" class="flex-1 h-0" />
+        </div>
+
         <template #extra>
             <Tabs
                 v-model="activeTab"
@@ -41,7 +57,24 @@ export default {
     data() {
         return {
             data: [],
-            activeTab: 1
+            activeTab: 1,
+            queryTab: {
+                data: [
+                    {
+                        label: '按时签收率',
+                        value: 1
+                    },
+                    {
+                        label: '按时反馈率',
+                        value: 2
+                    },
+                    {
+                        label: '退回率',
+                        value: 3
+                    }
+                ],
+                current: 1
+            }
         }
     },
     computed: {
@@ -49,6 +82,7 @@ export default {
             return {
                 year: this.year,
                 searchType: this.activeTab,
+                queryType: this.queryTab.current,
                 asc: 'asc'
             }
         },
@@ -149,3 +183,19 @@ export default {
     }
 }
 </script>
+<style lang="scss" scoped>
+.tab {
+    &-wrap {
+        padding: 10px 20px;
+        gap: 20px;
+        font-size: 20px;
+    }
+    &-item {
+        color: #3effff;
+        &.active {
+            color: #e4d077;
+            font-size: 1.1em;
+        }
+    }
+}
+</style>
