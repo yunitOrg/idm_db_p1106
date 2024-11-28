@@ -5,7 +5,7 @@
                 <div
                     v-for="tab in queryTab.data"
                     :key="tab.value"
-                    @click="queryTab.current=tab.value"
+                    @click="queryTab.current = tab.value"
                     class="pointer tab-item"
                     :class="{
                         active: tab.value == queryTab.current
@@ -81,15 +81,15 @@ export default {
         filter() {
             return {
                 year: this.year,
-                searchType: this.activeTab,
-                queryType: this.queryTab.current,
+                statisticsType: this.queryTab.current,
+                queryType: this.activeTab,
                 asc: 'asc'
             }
         },
         config() {
             return {
                 grid: {
-                    top: 20,
+                    top: 0,
                     bottom: 20,
                     left: 20,
                     right: 60,
@@ -125,7 +125,7 @@ export default {
                 },
                 series: [
                     {
-                        data: this.data.map((n) => Math.floor(n.processTime * 10) / 10),
+                        data: this.data.map((n) => Math.floor(n.percentageNum * 10) / 10),
                         type: 'bar',
                         showBackground: true,
                         backgroundStyle: {
@@ -154,7 +154,7 @@ export default {
                             position: 'right',
                             fontSize: 20,
                             color: 'white',
-                            formatter: '{c} 天'
+                            formatter: '{c} %'
                         }
                     }
                 ]
@@ -171,9 +171,15 @@ export default {
     },
     methods: {
         fetchData() {
-            window.IDM.http.get('ctrl/dbStatistics/processTimeStatistics', this.filter).then((res) => {
-                this.data = res.data.data
-            })
+            window.IDM.http
+                .post('ctrl/dbWorkbench/largeSizePercentageStatistics', this.filter, {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then((res) => {
+                    this.data = res.data.data
+                })
         },
         navigateHandle(params) {
             if (params.type == 'click' && params.componentType == 'series' && params.componentSubType == 'bar') {
