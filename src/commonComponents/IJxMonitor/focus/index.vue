@@ -1,5 +1,5 @@
 <template>
-    <Section title="重难点事项">
+    <Section title="难点事项">
         <div class="h-full flex flex-col justify-center stat-wrap">
             <div class="flex justify-between stat-list-wrap">
                 <div
