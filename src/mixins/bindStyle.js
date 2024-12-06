@@ -3,7 +3,7 @@ export default function bindStyle(
     list = {
         wrap() {
             return this.propData
-        },
+        }
     }
 ) {
     return {
@@ -12,7 +12,7 @@ export default function bindStyle(
                 className: Object.keys(list).reduce((carry, current) => {
                     carry[current] = `${current}-${window.IDM.uuid()}`
                     return carry
-                }, {}),
+                }, {})
             }
         },
         watch: {
@@ -21,8 +21,8 @@ export default function bindStyle(
                     this._bindTheme()
                     this._bindStyle()
                 },
-                immediate: true,
-            },
+                immediate: true
+            }
         },
         methods: {
             /**
@@ -33,20 +33,11 @@ export default function bindStyle(
                 if (!_.isArray(themeList) || themeList.length == 0) {
                     return
                 }
-                const themeNamePrefix =
-                    window.IDM?.setting?.applications?.themeNamePrefix ||
-                    'idm-theme-'
-                themeList.forEach(item => {
-                    IDM.setStyleToPageHead(
-                        `.${themeNamePrefix}${item.key} #${
-                            this.moduleObject.id || 'module_demo'
-                        } .${this.className.wrap}`,
-                        {
-                            '--theme-color': window.IDM?.hex8ToRgbaString(
-                                item.mainColor.hex8
-                            ),
-                        }
-                    )
+                const themeNamePrefix = window.IDM?.setting?.applications?.themeNamePrefix || 'idm-theme-'
+                themeList.forEach((item) => {
+                    IDM.setStyleToPageHead(`.${themeNamePrefix}${item.key} #${this.moduleObject.id || 'module_demo'} .${this.className.wrap}`, {
+                        '--theme-color': window.IDM?.hex8ToRgbaString(item.mainColor.hex8)
+                    })
                 })
             },
             /**
@@ -54,12 +45,9 @@ export default function bindStyle(
              */
             _bindStyle() {
                 _.entries(this.className).forEach(([key, className]) => {
-                    window.IDM.setStyleToPageHead(
-                        `${this.moduleObject.id} .${className}`,
-                        propToStyle(list[key].call(this))
-                    )
+                    window.IDM.setStyleToPageHead(`${this.moduleObject.id} ${key == '_root' ? '' : `.${className}`}`, propToStyle(list[key].call(this)))
                 })
-            },
-        },
+            }
+        }
     }
 }

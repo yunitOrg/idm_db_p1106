@@ -1,5 +1,5 @@
 <template>
-    <div idm-ctrl="idm_module" :id="moduleObject.id" :idm-ctrl-id="moduleObject.id" class="idm-db-iswiper" :class="[className.wrap]">
+    <div idm-ctrl="idm_module" :id="moduleObject.id" :idm-ctrl-id="moduleObject.id" class="idm-db-iswiper">
         <div v-if="moduleObject.env == 'develop'" class="indicator-wrap">
             <div v-for="(slot, slotIndex) in slots" :key="slotIndex" @click="dataIndex = slotIndex" class="indicator-item">
                 {{ slotIndex + 1 }}
@@ -8,7 +8,7 @@
         <div
             v-for="(_, slotIndex) in slots"
             :key="slotIndex"
-            class="drag_container"
+            class="drag_container swiper-item"
             :class="[dataIndex != slotIndex ? 'hidden' : 'block']"
             idm-ctrl-inner
             :idm-ctrl-id="moduleObject.id"
@@ -27,7 +27,7 @@ export default {
             height: '100%'
         }),
         bindStyle({
-            wrap() {
+            _root() {
                 return this.propData
             }
         })
@@ -77,6 +77,9 @@ export default {
 </script>
 <style lang="scss" scoped>
 .idm-db-iswiper {
+    .swiper-item {
+        height: 100%;
+    }
     .hidden {
         display: none;
     }
