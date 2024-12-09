@@ -114,49 +114,5 @@ export default {
 }
 </script>
 <style lang="scss">
-.flex {
-    display: flex;
-}
-.flex-col {
-    flex-direction: column;
-}
-.flex-1 {
-    flex: 1;
-}
-.flex-wrap {
-    flex-wrap: wrap;
-}
-.justify-center {
-    justify-content: center;
-}
-.justify-between {
-    justify-content: space-between;
-}
-.justify-around {
-    justify-content: space-around;
-}
-.items-center {
-    align-items: center;
-}
-.items-stretch {
-    align-items: stretch;
-}
-.items-end {
-    align-items: flex-end;
-}
-.h-full {
-    height: 100%;
-}
-.w-full {
-    width: 100%;
-}
-.w-0 {
-    width: 0;
-}
-.h-0 {
-    height: 0;
-}
-.pointer {
-    cursor: pointer;
-}
+@import '../style/common.scss';
 </style>

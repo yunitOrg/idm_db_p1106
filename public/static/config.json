@@ -101,6 +101,13 @@
         "className": "IFlow",
         "comType": "common",
         "comLangue": "vue"
+    },
+    {
+        "classId": "idm.componet.db.IJxLeaderDashboard",
+        "comName": "江西领导工作台",
+        "className": "IJxLeaderDashboard",
+        "comType": "common",
+        "comLangue": "vue"
     }
   ]
 }
