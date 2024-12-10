@@ -108,6 +108,13 @@
         "className": "IJxLeaderItem",
         "comType": "common",
         "comLangue": "vue"
+    },
+    {
+      "classId": "idm.componet.db.IPadTab",
+      "comName": "督办领导tab",
+      "className": "IPadTab",
+      "comType": "common",
+      "comLangue": "vue"
     }
   ]
 }

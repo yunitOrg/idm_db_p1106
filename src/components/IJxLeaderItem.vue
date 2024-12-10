@@ -14,7 +14,7 @@
                     <div class="text-success value"></div>
                 </div>
                 <div class="flex">
-                    <div class="label">超　期：</div>
+                    <div class="label">超&nbsp;&nbsp;期：</div>
                     <div class="text-danger value"></div>
                 </div>
             </div>
