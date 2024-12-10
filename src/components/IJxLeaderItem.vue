@@ -1,21 +1,21 @@
 <template>
     <div idm-ctrl="idm_module" :id="moduleObject.id" :idm-ctrl-id="moduleObject.id" @click="clickHandle"
         class="flex items-stretch idm-db-IJxLeaderItem" :class="className.wrap">
-        <img :src="data.thumb" class="thumb" />
+        <img :src="data.photoUrl" class="thumb" />
         <div class="flex-1 w-0 flex flex-col">
             <div class="name">{{ data.name }}</div>
             <div class="flex-1 h-0 flex flex-col justify-between infos">
                 <div class="flex">
                     <div class="label">任务数：</div>
-                    <div class="text-info value"></div>
+                    <div class="text-info value">{{ data.taskTotal }}</div>
                 </div>
                 <div class="flex">
                     <div class="label">已办结：</div>
-                    <div class="text-success value"></div>
+                    <div class="text-success value">{{ data.taskFinishTotal }}</div>
                 </div>
                 <div class="flex">
                     <div class="label">超　期：</div>
-                    <div class="text-danger value"></div>
+                    <div class="text-danger value">{{ data.taskTimeoutTotal }}</div>
                 </div>
             </div>
         </div>
@@ -57,6 +57,7 @@ export default {
 
 .thumb {
     width: 80px;
+    object-fit: cover;
 }
 
 .name {
