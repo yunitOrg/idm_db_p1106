@@ -103,9 +103,9 @@
         "comLangue": "vue"
     },
     {
-        "classId": "idm.componet.db.IJxLeaderDashboard",
-        "comName": "江西领导工作台",
-        "className": "IJxLeaderDashboard",
+        "classId": "idm.componet.db.IJxLeaderItem",
+        "comName": "江西领导单项",
+        "className": "IJxLeaderItem",
         "comType": "common",
         "comLangue": "vue"
     }
