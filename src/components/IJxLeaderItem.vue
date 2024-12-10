@@ -3,7 +3,7 @@
         class="flex items-stretch idm-db-IJxLeaderItem" :class="className.wrap">
         <img :src="data.photoUrl" class="thumb" />
         <div class="flex-1 w-0 flex flex-col">
-            <div class="name">{{ data.name }}</div>
+            <div class="name">{{ data.userName }}</div>
             <div class="flex-1 h-0 flex flex-col justify-between infos">
                 <div class="flex">
                     <div class="label">任务数：</div>
