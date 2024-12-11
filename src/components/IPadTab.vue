@@ -13,7 +13,7 @@
         <div
          :key="item.key"
           class="drag_container"
-          v-if="item.opened"
+          v-show="item.opened"
           :class="`idm-tab-inner-${item.key}`"
           idm-ctrl-inner
           :idm-ctrl-id="moduleObject.id"
