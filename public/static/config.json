@@ -115,6 +115,13 @@
       "className": "IPadTab",
       "comType": "common",
       "comLangue": "vue"
+    },
+    {
+      "classId": "idm.componet.db.IJxLeaderPad",
+      "comName": "江西领导工作台PAD",
+      "className": "IJxLeaderPad",
+      "comType": "common",
+      "comLangue": "vue"
     }
   ]
 }

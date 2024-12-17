@@ -24,7 +24,7 @@ import 'ant-design-vue/lib/form/style/css'
 import 'ant-design-vue/lib/form-model/style/css'
 import 'ant-design-vue/lib/space/style/css'
 import 'ant-design-vue/lib/badge/style/css'
-
+import 'ant-design-vue/lib/tabs/style/css'
 import {
     Input,
     Select,
@@ -52,7 +52,8 @@ import {
     FormModel,
     Space,
     Form,
-    Badge
+    Badge,
+    Tabs
 } from 'ant-design-vue'
 
 Vue.use(Input)

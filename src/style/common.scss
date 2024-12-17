@@ -13,6 +13,9 @@
 .justify-center {
     justify-content: center;
 }
+.justify-end {
+    justify-content: flex-end;
+}
 .justify-between {
     justify-content: space-between;
 }
@@ -33,6 +36,9 @@
 }
 .w-full {
     width: 100%;
+}
+.h-screen {
+    height: 100vh;
 }
 .w-0 {
     width: 0;
