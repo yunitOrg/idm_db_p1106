@@ -158,6 +158,7 @@ export default {
                 this.loading = false
             } else {
                 this.loading = false
+                data.message && top.layuiError(data.message)
             }
         },
         // 上传
@@ -208,6 +209,8 @@ export default {
                     top.layer.msg('提交成功',{icon:1})
                     this.handleClose()
                     this.btnloading = false
+                }else{
+                    res.message && top.layuiError(res.message)
                 }
             })
         },
