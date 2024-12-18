@@ -30,22 +30,25 @@
                 <div
                     v-for="item in rankData"
                     :key="item.value"
-                    @click="dept.current = dept.data.find((n) => n.unitId == item.deptId)"
+                    @click="dept.current = item.deptId"
                     class="pointer bar-item"
                     :class="{
-                        active: dept.current?.unitId == item.deptId
+                        active: dept.current == item.deptId
                     }"
                 >
                     <div class="flex items-center info">
                         <div class="flex-1 w-0 turncate name">{{ item.deptName }}</div>
                         <div class="value">{{ item._value }}%</div>
                     </div>
-                    <div class="progressBar" :data-precent="`${item._value}%`"></div>
+                    <div class="progressBar" :data-percent="`${item._value}%`"></div>
                 </div>
             </div>
             <div class="flex flex-col pannel">
                 <div class="flex items-center justify-center pointer dropdown">
-                    <div class="flex items-center name">{{ dept.current?.unitName }}</div>
+                    <div class="flex items-center name">{{ dept.data.find((n) => n.unitId == dept.current)?.unitName }}</div>
+                    <select v-model="dept.current">
+                        <option v-for="item in dept.data" :key="item.unitId" :value="item.unitId">{{ item.unitName }}</option>
+                    </select>
                 </div>
                 <div class="flex-1 h-0 data-wrap">
                     <div v-for="(group, groupIndex) in dataGroup" :key="groupIndex" class="data-list">
@@ -91,7 +94,16 @@ export default {
                 current: 1
             },
             dept: {
-                data: [],
+                data: [
+                    {
+                        unitId: '240605111401g1o0QttSs1ruJ5Eftmr',
+                        unitName: '省政府办公厅'
+                    },
+                    {
+                        unitId: '240605111547UkW9ZVY3Xn9xROiRyGv',
+                        unitName: '督查处'
+                    }
+                ],
                 current: null
             },
             data: []
@@ -99,7 +111,7 @@ export default {
     },
     computed: {
         dataGroup() {
-            const data = this.data.find((n) => n.deptId == this.dept.current?.unitId)
+            const data = this.data.find((n) => n.deptId == this.dept.current)
             return [
                 [
                     {
@@ -199,7 +211,7 @@ export default {
                 .then(({ data }) => {
                     this.dept = {
                         data: data.data,
-                        current: data.data[0]
+                        current: data.data[0]?.unitId
                     }
                 })
             window.IDM.http
@@ -322,6 +334,12 @@ export default {
             background-size: 100% 100%;
         }
     }
+    > select {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        z-index: 1;
+    }
 }
 .data-wrap {
     overflow-y: auto;
@@ -348,6 +366,7 @@ export default {
             font-size: 2.38rem;
             color: var(--accent-color);
             text-align: center;
+            padding: 0 1rem;
         }
         .value-wrap {
             padding: 2rem;
@@ -397,9 +416,10 @@ export default {
             background: #e5f4ff;
             border-radius: 0rem 6.25rem 6.25rem 0rem;
             &:after {
+                position: absolute;
                 display: block;
                 content: '';
-                width: attr(data-precent);
+                width: attr(data-percent);
                 top: 0;
                 bottom: 0;
                 left: 0;
