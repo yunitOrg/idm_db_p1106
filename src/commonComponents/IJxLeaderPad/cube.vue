@@ -38,9 +38,9 @@
                 >
                     <div class="flex items-center info">
                         <div class="flex-1 w-0 turncate name">{{ item.deptName }}</div>
-                        <div class="value">{{ item.onTimeSignedRate }}%</div>
+                        <div class="value">{{ item._value }}%</div>
                     </div>
-                    <div class="progressBar"></div>
+                    <div class="progressBar" :data-precent="`${item._value}%`"></div>
                 </div>
             </div>
             <div class="flex flex-col pannel">
@@ -157,25 +157,25 @@ export default {
                     if (this.cate.current == 2) {
                         return {
                             ...n,
-                            _sort: n.onTimeSignedRate
+                            _value: n.onTimeSignedRate
                         }
                     }
                     if (this.cate.current == 3) {
                         return {
                             ...n,
-                            _sort: n.sendBackRate
+                            _value: n.sendBackRate
                         }
                     }
                     return {
                         ...n,
-                        _sort: n.onTimeFeedbackRate
+                        _value: n.onTimeFeedbackRate
                     }
                 })
                 .sort((prev, current) => {
-                    if (prev._sort > current._sort) {
+                    if (prev._value > current._value) {
                         return 1
                     }
-                    if (prev._sort < current._sort) {
+                    if (prev._value < current._value) {
                         return -1
                     }
                     return 0
@@ -392,9 +392,20 @@ export default {
             color: black;
         }
         .progressBar {
+            position: relative;
             height: 1.88rem;
             background: #e5f4ff;
             border-radius: 0rem 6.25rem 6.25rem 0rem;
+            &:after {
+                display: block;
+                content: '';
+                width: attr(data-precent);
+                top: 0;
+                bottom: 0;
+                left: 0;
+                background: #4096ff;
+                border-radius: 0rem 6.25rem 6.25rem 0rem;
+            }
         }
         &.active {
             .name {
