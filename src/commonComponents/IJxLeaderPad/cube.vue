@@ -13,7 +13,7 @@
                         v-for="item in cate.data"
                         :key="item.value"
                         @click="cate.current = item.value"
-                        class="cate-item"
+                        class="pointer cate-item"
                         :class="{
                             active: item.value == cate.current
                         }"
@@ -27,25 +27,33 @@
                 </div>
             </div>
             <div class="flex-1 w-0 flex flex-col justify-around bar-wrap">
-                <div v-for="item in dept.data" :key="item.value" class="bar-item">
-                    <div class="flex items-center">
-                        <div class="flex-1 w-0 turncate name">{{ item.label }}</div>
-                        <div class="value">100%</div>
+                <div
+                    v-for="item in rankData"
+                    :key="item.value"
+                    @click="dept.current = dept.data.find((n) => n.unitId == item.deptId)"
+                    class="pointer bar-item"
+                    :class="{
+                        active: dept.current?.unitId == item.deptId
+                    }"
+                >
+                    <div class="flex items-center info">
+                        <div class="flex-1 w-0 turncate name">{{ item.deptName }}</div>
+                        <div class="value">{{ item.onTimeSignedRate }}%</div>
                     </div>
                     <div class="progressBar"></div>
                 </div>
             </div>
             <div class="flex flex-col pannel">
                 <div class="flex items-center justify-center pointer dropdown">
-                    <div class="flex items-center name">{{ dept.current?.label }}</div>
+                    <div class="flex items-center name">{{ dept.current?.unitName }}</div>
                 </div>
                 <div class="flex-1 h-0 data-wrap">
                     <div v-for="(group, groupIndex) in dataGroup" :key="groupIndex" class="data-list">
                         <div v-for="(item, itemIndex) in group" :key="itemIndex" class="data-item" :data-suffix="item.suffix != null">
                             <div class="name">{{ item.label }}</div>
-                            <div class="value-wrap">
+                            <div class="flex justify-center value-wrap">
                                 <div class="flex items-center values">
-                                    <div v-for="(char, charIndex) in item.value.toString()" :key="charIndex" class="value">{{ char }}</div>
+                                    <div v-for="(char, charIndex) in item.value?.toString()" :key="charIndex" class="value">{{ char }}</div>
                                     <div v-if="item.suffix" class="suffix">{{ item.suffix }}</div>
                                 </div>
                             </div>
@@ -58,6 +66,11 @@
 </template>
 <script>
 export default {
+    props: {
+        params: {
+            type: Object
+        }
+    },
     data() {
         return {
             cate: {
@@ -78,88 +91,139 @@ export default {
                 current: 1
             },
             dept: {
-                data: [
-                    {
-                        label: '省发改委',
-                        value: 1
-                    },
-                    {
-                        label: '省财政厅',
-                        value: 2
-                    },
-                    {
-                        label: '省应急管理厅',
-                        value: 3
-                    },
-                    {
-                        label: '省地方金融管理厅',
-                        value: 4
-                    },
-                    {
-                        label: '省统计局',
-                        value: 5
-                    },
-                    {
-                        label: '省国动办',
-                        value: 6
-                    },
-                    {
-                        label: '省管理局',
-                        value: 7
-                    }
-                ],
-                current: {
-                    label: '省发改委',
-                    value: 1
-                }
+                data: [],
+                current: null
             },
-            dataGroup: [
+            data: []
+        }
+    },
+    computed: {
+        dataGroup() {
+            const data = this.data.find((n) => n.deptId == this.dept.current?.unitId)
+            return [
                 [
                     {
                         label: '事项数',
-                        value: 100
+                        value: data?.total || '-'
                     },
                     {
-                        label: '事项数',
-                        value: 100
+                        label: '已签收',
+                        value: data?.signedTotal || '-'
                     },
                     {
-                        label: '事项数',
-                        value: 100
+                        label: '已反馈',
+                        value: data?.feedback || '-'
                     },
                     {
-                        label: '事项数',
-                        value: 100,
-                        suffix: '%'
+                        label: '已办结',
+                        value: data?.finish || '-'
+                    },
+                    {
+                        label: '退回数',
+                        value: data?.sendBack || '-'
+                    },
+                    {
+                        label: '超期数',
+                        value: data?.overdue || '-'
                     }
                 ],
                 [
                     {
-                        label: '事项数',
-                        value: 100
+                        label: '签收率',
+                        value: data?.signedRate || '-',
+                        suffix: '%'
                     },
                     {
-                        label: '事项数',
-                        value: 100
+                        label: '反馈率',
+                        value: data?.feedbackRate || '-',
+                        suffix: '%'
                     },
                     {
-                        label: '事项数',
-                        value: 100
+                        label: '办结率',
+                        value: data?.finishRate || '-',
+                        suffix: '%'
                     },
                     {
-                        label: '事项数',
-                        value: 100,
+                        label: '退回率',
+                        value: data?.sendBackRate || '-',
                         suffix: '%'
                     }
                 ]
             ]
+        },
+        rankData() {
+            return this.data
+                .map((n) => {
+                    if (this.cate.current == 2) {
+                        return {
+                            ...n,
+                            _sort: n.onTimeSignedRate
+                        }
+                    }
+                    if (this.cate.current == 3) {
+                        return {
+                            ...n,
+                            _sort: n.sendBackRate
+                        }
+                    }
+                    return {
+                        ...n,
+                        _sort: n.onTimeFeedbackRate
+                    }
+                })
+                .sort((prev, current) => {
+                    if (prev._sort > current._sort) {
+                        return 1
+                    }
+                    if (prev._sort < current._sort) {
+                        return -1
+                    }
+                    return 0
+                })
+        }
+    },
+    watch: {
+        params: {
+            handler() {
+                this.fetchData()
+            },
+            immediate: true
+        }
+    },
+    methods: {
+        fetchData() {
+            window.IDM.http
+                .get('ctrl/dbWorkbench/getPadLeaderUnit', {
+                    ...this.params
+                })
+                .then(({ data }) => {
+                    this.dept = {
+                        data: data.data,
+                        current: data.data[0]
+                    }
+                })
+            window.IDM.http
+                .post(
+                    'ctrl/dbWorkbench/padLeaderPercentageStatistics',
+                    {
+                        ...this.params
+                    },
+                    {
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    }
+                )
+                .then(({ data }) => {
+                    this.data = data.data
+                })
         }
     }
 }
 </script>
 <style lang="scss" scoped>
 .cube-wrap {
-    background: url('./images/底部bg.png') white no-repeat bottom;
+    background: url('./images/cube_bg.png') white no-repeat bottom;
     background-size: 100% auto;
     padding: 1.5rem 3.75rem 5rem;
     border-radius: 1.25rem;
@@ -189,7 +253,7 @@ export default {
 .cate-list {
     gap: 4.56rem;
     .cate-item {
-        background: url('./images/默认bg.png') no-repeat bottom;
+        background: url('./images/cate_item.png') no-repeat bottom;
         background-size: 100%;
         width: 17.27rem;
         text-align: center;
@@ -197,7 +261,7 @@ export default {
         font-size: 2.38rem;
         padding-bottom: 1.94rem;
         &.active {
-            background-image: url('./images/选中bg.png');
+            background-image: url('./images/cate_item_active.png');
         }
     }
 }
@@ -241,16 +305,8 @@ export default {
     width: 30.5rem;
     height: 5.38rem;
     align-self: center;
-    &:after {
-        position: absolute;
-        content: '';
-        display: block;
-        inset: 0;
-        background: #e2f0fe;
-        box-shadow: inset 0rem 0rem 1.38rem 0rem rgba(161, 202, 255, 0.21);
-        border-radius: 0 0 0.63rem 0.63rem;
-        transform: perspective(20px) rotateX(-2deg);
-    }
+    background: url('./images/cube_dorpdown.png') no-repeat;
+    background-size: 100% 100%;
     .name {
         position: relative;
         z-index: 1;
@@ -262,7 +318,7 @@ export default {
             display: block;
             width: 1.5rem;
             height: 0.95rem;
-            background: url('./images/三角形2.png') no-repeat;
+            background: url('./images/icon_arrow_down.png') no-repeat;
             background-size: 100% 100%;
         }
     }
@@ -283,9 +339,9 @@ export default {
         border-bottom: none;
     }
     .data-item {
-        background: url('./images/元素bg1.png') repeat-x;
+        background: url('./images/cube_data_item.png') repeat-x;
         background-size: auto 100%;
-        background-position: left 2.9rem;
+        background-position: left 2rem;
         padding-top: 1rem;
         --accent-color: #096efe;
         .name {
@@ -298,7 +354,7 @@ export default {
             .values {
                 position: relative;
                 .value {
-                    background: url('./images/数字bg.png') repeat-x;
+                    background: url('./images/number_bg.png') repeat-x;
                     background-size: 100% 100%;
                     font-size: 2.75rem;
                     color: var(--accent-color);
@@ -317,7 +373,7 @@ export default {
             }
         }
         &[data-suffix] {
-            background-image: url('./images/编组 21.png');
+            background-image: url('./images/cube_data_item2.png');
             --accent-color: #27a661;
         }
     }
@@ -328,6 +384,9 @@ export default {
             font-size: 2.38rem;
             color: #333;
         }
+        .info {
+            position: relative;
+        }
         .value {
             font-size: 2.5rem;
             color: black;
@@ -337,6 +396,31 @@ export default {
             background: #e5f4ff;
             border-radius: 0rem 6.25rem 6.25rem 0rem;
         }
+        &.active {
+            .name {
+                color: #096efe;
+            }
+            .info {
+                &:before {
+                    position: absolute;
+                    left: -1rem;
+                    top: 50%;
+                    display: block;
+                    content: '';
+                    width: 1.31rem;
+                    height: 2rem;
+                    background: url('./images/icon_arrow_right.png') no-repeat;
+                    background-size: 100% 100%;
+                    transform: translate(-100%, -50%);
+                }
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 1900px) {
+    .data-list {
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 </style>

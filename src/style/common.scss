@@ -49,3 +49,11 @@
 .pointer {
     cursor: pointer;
 }
+.turncate {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.overflow-auto {
+    overflow: auto;
+}

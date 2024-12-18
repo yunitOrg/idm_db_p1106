@@ -24,38 +24,13 @@ export default {
             tabs: [
                 {
                     value: '1',
-                    label: '省发改委',
+                    label: '已关注',
                     count: 10
                 },
                 {
                     value: '2',
-                    label: '省财政厅 ',
+                    label: '已催办 ',
                     count: 20
-                },
-                {
-                    value: '3',
-                    label: '省应急管理厅',
-                    count: 10
-                },
-                {
-                    value: '4',
-                    label: '省地方金融管理局',
-                    count: 12
-                },
-                {
-                    value: '5',
-                    label: '省统计局',
-                    count: 12
-                },
-                {
-                    value: '6',
-                    label: '省国动办',
-                    count: 12
-                },
-                {
-                    value: '7',
-                    label: '省管局',
-                    count: 12
                 }
             ],
             current: '1',
@@ -147,10 +122,16 @@ export default {
                     align: 'center'
                 }
             ]
+        },
+        query() {
+            return {
+                ...this.params,
+                padNoticeQueryType: this.current
+            }
         }
     },
     watch: {
-        params: {
+        query: {
             handler() {
                 this.fetchData()
             },
@@ -163,7 +144,7 @@ export default {
                 .post(
                     'ctrl/dbWorkbench/getLeaderPadNoticeList',
                     {
-                        ...this.params,
+                        ...this.query,
                         pageSize: 9999
                     },
                     {
@@ -175,9 +156,6 @@ export default {
                 .then(({ data }) => {
                     this.data = data.data.data
                 })
-        },
-        urgeHandle(row) {
-            this.$emit('urge', row)
         }
     }
 }

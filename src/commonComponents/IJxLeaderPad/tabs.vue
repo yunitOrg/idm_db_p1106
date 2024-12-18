@@ -110,7 +110,7 @@ export default {
                 left: 0;
                 width: auto;
                 z-index: 0;
-                transform: perspective(20px) rotateX(5deg);
+                transform: perspective(20px) scale(1.05, 1) rotateX(3deg);
             }
             &:after {
                 position: absolute;

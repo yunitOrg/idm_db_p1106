@@ -19,13 +19,13 @@ export default {
     computed: {
         label() {
             switch (this.value) {
-                case 1:
-                    return '超期'
-                case 2:
-                    return '临期'
-                case 3:
-                    return '预警'
                 case 4:
+                    return '超期'
+                case 3:
+                    return '临期'
+                case 2:
+                    return '预警'
+                case 1:
                     return '正常'
             }
             return ''
@@ -45,16 +45,16 @@ export default {
         font-size: 2.38rem;
         color: #333333;
     }
-    &[data-value='1'] .icon {
+    &[data-value='4'] .icon {
         background-image: radial-gradient(circle at 50% 50%, #ff8d8d 0%, #ca0000 50%);
     }
-    &[data-value='2'] .icon {
+    &[data-value='3'] .icon {
         background-image: radial-gradient(circle at 50% 50%, #f3ab23 0%, #e56403 50%);
     }
-    &[data-value='3'] .icon {
+    &[data-value='2'] .icon {
         background-image: radial-gradient(circle at 50% 51%, #fff497 0%, #ffd837 49%);
     }
-    &[data-value='4'] .icon {
+    &[data-value='1'] .icon {
         background-image: radial-gradient(circle at 50% 50%, #c8ff8d 0%, #1eca00 50%);
     }
 }

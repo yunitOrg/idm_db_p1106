@@ -39,7 +39,7 @@ export default {
     padding: 2.5rem;
     gap: 7.77rem;
     .nav-item {
-        background: url('./images/默认按钮.png') no-repeat;
+        background: url('./images/nav_item.png') no-repeat;
         background-size: 100% 100%;
         width: 18.75rem;
         height: 7.19rem;
@@ -48,7 +48,7 @@ export default {
         text-align: center;
         line-height: 5.5rem;
         &.active {
-            background-image: url('./images/选中按钮.png');
+            background-image: url('./images/nav_item_active.png');
             color: #096efe;
         }
     }
