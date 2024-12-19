@@ -121,5 +121,8 @@ html {
         font-size: 1rem;
         width: 3rem;
     }
+    .ant-empty {
+        font-size: 2.38rem;
+    }
 }
 </style>

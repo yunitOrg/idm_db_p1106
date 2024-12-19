@@ -201,9 +201,17 @@ export default {
     methods: {
         fetchData() {
             window.IDM.http
-                .get('ctrl/dbWorkbench/getPadLeaderUnit', {
-                    ...this.params
-                })
+                .post(
+                    'ctrl/dbWorkbench/getPadLeaderUnit',
+                    {
+                        ...this.params
+                    },
+                    {
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    }
+                )
                 .then(({ data }) => {
                     this.dept = {
                         data: data.data,
