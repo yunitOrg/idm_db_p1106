@@ -7,15 +7,15 @@
             <div class="flex-1 h-0 flex flex-col justify-between infos">
                 <div class="flex">
                     <div class="label">任务数：</div>
-                    <div class="text-info value">{{ data.taskTotal }}</div>
+                    <div class="text-info value">{{ data.noticeTotal }}</div>
                 </div>
                 <div class="flex">
                     <div class="label">已办结：</div>
-                    <div class="text-success value">{{ data.taskFinishTotal }}</div>
+                    <div class="text-success value">{{ data.noticeFinishTotal }}</div>
                 </div>
                 <div class="flex">
                     <div class="label">超　期：</div>
-                    <div class="text-danger value">{{ data.taskTimeoutTotal }}</div>
+                    <div class="text-danger value">{{ data.noticeTimeoutTotal }}</div>
                 </div>
             </div>
         </div>

@@ -112,48 +112,48 @@ export default {
                 [
                     {
                         label: '事项数',
-                        value: data?.total || '-'
+                        value: data?.total || 0
                     },
                     {
                         label: '已签收',
-                        value: data?.signedTotal || '-'
+                        value: data?.signedTotal || 0
                     },
                     {
                         label: '已反馈',
-                        value: data?.feedback || '-'
+                        value: data?.feedback || 0
                     },
                     {
                         label: '已办结',
-                        value: data?.finish || '-'
+                        value: data?.finish || 0
                     },
                     {
                         label: '退回数',
-                        value: data?.sendBack || '-'
+                        value: data?.sendBack || 0
                     },
                     {
                         label: '超期数',
-                        value: data?.overdue || '-'
+                        value: data?.overdue || 0
                     }
                 ],
                 [
                     {
                         label: '签收率',
-                        value: data?.signedRate || '-',
+                        value: data?.signedRate || 0,
                         suffix: '%'
                     },
                     {
                         label: '反馈率',
-                        value: data?.feedbackRate || '-',
+                        value: data?.feedbackRate || 0,
                         suffix: '%'
                     },
                     {
                         label: '办结率',
-                        value: data?.finishRate || '-',
+                        value: data?.finishRate || 0,
                         suffix: '%'
                     },
                     {
                         label: '退回率',
-                        value: data?.sendBackRate || '-',
+                        value: data?.sendBackRate || 0,
                         suffix: '%'
                     }
                 ]

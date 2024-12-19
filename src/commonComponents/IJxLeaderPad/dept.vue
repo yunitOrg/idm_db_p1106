@@ -55,7 +55,7 @@ export default {
             return this.dept.data.map((n) => ({
                 label: n.unitName,
                 value: n.unitId,
-                count: 0
+                count: n.count
             }))
         },
         columns() {
@@ -166,16 +166,23 @@ export default {
         query: {
             handler() {
                 this.fetchData()
-            },
-            immediate: true
+            }
         }
     },
     methods: {
         fetchDepts() {
             window.IDM.http
-                .get('ctrl/dbWorkbench/getPadLeaderUnit', {
-                    ...this.params
-                })
+                .post(
+                    'ctrl/dbWorkbench/getPadLeaderUnit',
+                    {
+                        ...this.params
+                    },
+                    {
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    }
+                )
                 .then(({ data }) => {
                     this.dept = {
                         data: data.data,

@@ -37,7 +37,7 @@
                 <table class="urge-table">
                     <tr>
                         <th>通知时间</th>
-                        <td></td>
+                        <td>{{ time.format('YYYY-MM-DD HH:mm') }}</td>
                     </tr>
                     <tr>
                         <th>通知范围</th>
@@ -62,6 +62,7 @@
     </div>
 </template>
 <script>
+import dayjs from 'dayjs'
 export default {
     props: {
         params: {
@@ -73,7 +74,18 @@ export default {
     },
     data() {
         return {
-            saving: false
+            saving: false,
+            time: dayjs()
+        }
+    },
+    watch: {
+        time: {
+            handler() {
+                setTimeout(() => {
+                    this.time = dayjs()
+                }, 1000)
+            },
+            immediate: true
         }
     },
     methods: {

@@ -1,5 +1,5 @@
 <template>
-    <Tabs :items="tabs" v-model="tab.current" class="h-full">
+    <Tabs :items="tabs" v-model="current" class="h-full">
         <div class="h-full flex flex-col">
             <div class="flex justify-end" style="padding: 2rem 0; gap: 2.5rem">
                 <Status v-for="i in [4, 3, 2, 1]" :key="i" :value="i" :showLabel="true" />
@@ -43,27 +43,28 @@ export default {
     },
     data() {
         return {
-            tab: {
-                data: [
-                    {
-                        value: '1',
-                        label: '已关注',
-                        count: 10
-                    },
-                    {
-                        value: '2',
-                        label: '已催办 ',
-                        count: 20
-                    }
-                ],
-                current: '1'
+            stat: {
+                urgeCount: 0,
+                attentionCount: 0
             },
+            current: '1',
             data: []
         }
     },
     computed: {
         tabs() {
-            return this.tab.data
+            return [
+                {
+                    value: '1',
+                    label: '已关注',
+                    count: this.stat.attentionCount
+                },
+                {
+                    value: '2',
+                    label: '已催办 ',
+                    count: this.stat.urgeCount
+                }
+            ]
         },
         columns() {
             return [
@@ -159,14 +160,14 @@ export default {
         query() {
             return {
                 ...this.params,
-                padNoticeQueryType: this.tab.current
+                padNoticeQueryType: this.current
             }
         }
     },
     watch: {
         params: {
             handler() {
-                this.fetchDepts()
+                this.fetchStat()
             },
             immediate: true
         },
@@ -178,16 +179,21 @@ export default {
         }
     },
     methods: {
-        fetchDepts() {
+        fetchStat() {
             window.IDM.http
-                .get('ctrl/dbWorkbench/getPadLeaderUnit', {
-                    ...this.params
-                })
-                .then(({ data }) => {
-                    this.dept = {
-                        data: data.data,
-                        current: data.data[0]?.unitId
+                .post(
+                    'ctrl/dbWorkbench/getPadAttentionUrgeCount',
+                    {
+                        ...this.params
+                    },
+                    {
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
                     }
+                )
+                .then(({ data }) => {
+                    this.stat = data.data
                 })
         },
         fetchData() {
