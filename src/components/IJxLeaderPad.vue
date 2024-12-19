@@ -1,14 +1,14 @@
 <template>
-    <div idm-ctrl="idm_module" :id="moduleObject.id" :idm-ctrl-id="moduleObject.id" @click="clickHandle" class="idm-db-IJxLeaderPad" :class="className.wrap">
+    <div idm-ctrl="idm_module" :id="moduleObject.id" :idm-ctrl-id="moduleObject.id" class="idm-db-IJxLeaderPad" :class="className.wrap">
         <a-config-provider :locale="locale">
             <div class="h-screen flex flex-col idm-db-IJxLeaderPad-container">
                 <TopBar :params="params" />
                 <NavBar v-model="current" :items="navs"></NavBar>
                 <div class="flex-1 h-0 main-container">
-                    <Urge v-if="urge" :data="urge" @close="urge = null" />
-                    <Dept v-else-if="current == 1" :params="params" @urge="(v) => (urge = v)" />
+                    <Urge v-if="urgeData" :params="params" :data="urgeData" @close="urgeData = null" />
+                    <Dept v-else-if="current == 1" :params="params" @urge="showUrge" />
                     <Cube v-else-if="current == 2" :params="params" />
-                    <Follow v-else-if="current == 3" :params="params" @urge="(v) => (urge = v)" />
+                    <Follow v-else-if="current == 3" :params="params" @urge="showUrge" />
                 </div>
             </div>
         </a-config-provider>
@@ -52,7 +52,7 @@ export default {
                 }
             ],
             current: window.IDM?.url.queryObject().type || '1',
-            urge: null
+            urgeData: null
         }
     },
     computed: {
@@ -60,22 +60,38 @@ export default {
             return window.IDM.url.queryObject()
         }
     },
-    methods: {}
+    watch: {
+        current() {
+            this.urgeData = null
+        }
+    },
+    methods: {
+        showUrge(value) {
+            window.IDM.http
+                .get('ctrl/dbWorkbench/getLeaderPadNoticeInfo', {
+                    ...this.params,
+                    noticeId: value.id
+                })
+                .then(({ data }) => {
+                    this.urgeData = data.data
+                })
+        }
+    }
 }
 </script>
 <style lang="scss">
 @use '../style/common.scss';
 html {
-    font-size: 16px;
+    font-size: 14px;
 }
 @media only screen and (max-width: 2540px) {
     html {
-        font-size: 14px;
+        font-size: 12px;
     }
 }
 @media only screen and (max-width: 1900px) {
     html {
-        font-size: 10px;
+        font-size: 8px;
     }
 }
 </style>

@@ -42,7 +42,7 @@
                     <tr>
                         <th>通知范围</th>
                         <td>
-                            <a-checkbox v-for="item in data.urgeUserList" :key="item.value" :value="item.value">
+                            <a-checkbox v-for="item in data.urgeUserList" :key="item.value" :checked="true" :value="item.value">
                                 {{ item.text }}
                             </a-checkbox>
                         </td>
@@ -50,14 +50,14 @@
                     <tr>
                         <th>通知方式</th>
                         <td>
-                            <a-checkbox>短信</a-checkbox>
+                            <a-checkbox :checked="true">短信</a-checkbox>
                         </td>
                     </tr>
                 </table>
             </div>
         </div>
         <div class="flex justify-center dock">
-            <a-button @click="saveHandle" type="primary" size="large">一键催办</a-button>
+            <a-button @click="saveHandle" :disabled="saving" :loading="saving" type="primary" size="large">一键催办</a-button>
         </div>
     </div>
 </template>
@@ -71,8 +71,14 @@ export default {
             type: Object
         }
     },
+    data() {
+        return {
+            saving: false
+        }
+    },
     methods: {
         saveHandle() {
+            this.saving = true
             window.IDM.http
                 .post(
                     'ctrl/dbWorkbench/padNoticeUrge',
@@ -87,7 +93,12 @@ export default {
                         }
                     }
                 )
-                .then(({ data }) => {})
+                .then(({ data }) => {
+                    this.closeHandle()
+                })
+                .finally(() => {
+                    this.saving = false
+                })
         },
         closeHandle() {
             this.$emit('close')
@@ -98,8 +109,8 @@ export default {
 <style lang="scss" scoped>
 .urge-warp {
     background-color: white;
-    padding: 1.5rem;
-    border-radius: 0rem 0rem 1.25rem 1.25rem;
+    padding: 1.5rem 2rem;
+    border-radius: 1.25rem;
     .header {
         position: relative;
         .caption {

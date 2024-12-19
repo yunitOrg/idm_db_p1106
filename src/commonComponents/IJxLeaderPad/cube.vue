@@ -40,7 +40,12 @@
                         <div class="flex-1 w-0 turncate name">{{ item.deptName }}</div>
                         <div class="value">{{ item._value }}%</div>
                     </div>
-                    <div class="progressBar" :data-percent="`${item._value}%`"></div>
+                    <div
+                        class="progressBar"
+                        :style="{
+                            '--percent': `${item._value}%`
+                        }"
+                    ></div>
                 </div>
             </div>
             <div class="flex flex-col pannel">
@@ -94,16 +99,7 @@ export default {
                 current: 1
             },
             dept: {
-                data: [
-                    {
-                        unitId: '240605111401g1o0QttSs1ruJ5Eftmr',
-                        unitName: '省政府办公厅'
-                    },
-                    {
-                        unitId: '240605111547UkW9ZVY3Xn9xROiRyGv',
-                        unitName: '督查处'
-                    }
-                ],
+                data: [],
                 current: null
             },
             data: []
@@ -185,10 +181,10 @@ export default {
                 })
                 .sort((prev, current) => {
                     if (prev._value > current._value) {
-                        return 1
+                        return -1
                     }
                     if (prev._value < current._value) {
-                        return -1
+                        return 1
                     }
                     return 0
                 })
@@ -419,12 +415,12 @@ export default {
                 position: absolute;
                 display: block;
                 content: '';
-                width: attr(data-percent);
+                width: var(--percent);
                 top: 0;
                 bottom: 0;
                 left: 0;
-                background: #4096ff;
                 border-radius: 0rem 6.25rem 6.25rem 0rem;
+                background: linear-gradient(180deg, #c0e4fe, #002b72) fixed;
             }
         }
         &.active {
@@ -449,7 +445,7 @@ export default {
     }
 }
 
-@media only screen and (max-width: 1900px) {
+@media only screen and (max-width: 1000px) {
     .data-list {
         grid-template-columns: repeat(2, 1fr);
     }

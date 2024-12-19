@@ -65,7 +65,7 @@ export default {
         cursor: pointer;
         .label {
             font-size: 2.75rem;
-            padding: 0.8rem 0;
+            padding: 1.2rem 0;
             white-space: nowrap;
             position: relative;
         }
