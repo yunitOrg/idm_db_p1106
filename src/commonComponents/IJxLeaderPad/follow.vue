@@ -31,7 +31,7 @@
                                     <img v-if="record.attentionstatus == 1" src="./images/icon_follow_active.png" />
                                     <img v-else src="./images/icon_follow.png" />
                                 </div>
-                                <div @click="urgeHandle(record)" class="pointer btn-operation">
+                                <div v-if="record.dbStatus < 6" @click="urgeHandle(record)" class="pointer btn-operation">
                                     <img v-if="record.urgeStatus == 1" src="./images/icon_urge_active.png" />
                                     <img v-else src="./images/icon_urge.png" />
                                 </div>
