@@ -3,10 +3,10 @@
         <div
             v-for="nav in items"
             :key="nav.value"
-            @click="changeHandle(nav)"
+            @click="nav.on.click"
             class="pointer nav-item"
             :class="{
-                active: value == nav.value
+                active: nav.active
             }"
         >
             {{ nav.label }}
@@ -16,27 +16,17 @@
 <script>
 export default {
     props: {
-        value: {
-            type: [Number, String],
-            required: true
-        },
         items: {
             type: Array,
             default() {
                 return []
             }
         }
-    },
-    methods: {
-        changeHandle(tab) {
-            this.$emit('input', tab.value)
-        }
     }
 }
 </script>
 <style lang="scss" scoped>
 .nav-wrap {
-    padding: 2.5rem;
     gap: 7.77rem;
     .nav-item {
         background: url('./images/nav_item.png') no-repeat;

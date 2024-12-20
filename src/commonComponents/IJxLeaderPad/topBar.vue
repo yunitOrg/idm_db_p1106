@@ -1,7 +1,7 @@
 <template>
     <div class="flex items-center top-bar">
         <div class="logo"></div>
-        <div class="flex-1 w-0 truncate name">领导工作台：{{ decodeURIComponent(params.userName) }}</div>
+        <div class="flex-1 w-0 truncate name">领导工作台：{{ leaderInfo.name }}</div>
         <div @click="exitHandle" class="pointer exit"></div>
     </div>
 </template>
@@ -10,7 +10,10 @@ export default {
     props: {
         params: {
             type: Object
-        }
+        },
+        leaderInfo: {
+            type: Object
+        },
     },
     methods: {
         exitHandle() {

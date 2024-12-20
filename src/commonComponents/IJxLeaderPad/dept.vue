@@ -1,48 +1,66 @@
 <template>
-    <Tabs :items="tabs" v-model="dept.current" class="h-full">
+    <Tabs :items="tabs" v-model="dept.value" class="h-full">
         <div class="h-full flex flex-col">
             <div class="flex justify-end" style="padding: 2rem 0; gap: 2.5rem">
                 <Status v-for="i in [4, 3, 2, 1]" :key="i" :value="i" :showLabel="true" />
             </div>
             <div class="flex-1 h-0 overflow-auto">
-                <a-table :columns="columns" :dataSource="data" :bordered="true" :pagination="false">
-                    <template slot="status" slot-scope="text">
-                        <div class="flex justify-center">
-                            <Status :value="text" />
-                        </div>
-                    </template>
-                    <template slot="important" slot-scope="text, record">
-                        <div
-                            class="flex justify-center"
-                            :style="{
-                                color: record.approvalImportant == 2 ? 'red' : '#333'
-                            }"
-                        >
-                            {{ record.approvalImportantText }}
-                        </div>
-                    </template>
-                    <template slot="operation" slot-scope="text, record">
-                        <div class="flex items-center justify-center">
-                            <div @click="followHandle(record)" class="pointer btn-operation">
-                                <img v-if="record.attentionstatus == 1" src="./images/icon_follow_active.png" />
-                                <img v-else src="./images/icon_follow.png" />
+                <a-config-provider :locale="locale">
+                    <a-table :columns="columns" :dataSource="data" :loading="loading" :bordered="true" :pagination="false">
+                        <template slot="status" slot-scope="text">
+                            <div class="flex justify-center">
+                                <Status :value="text" />
                             </div>
-                            <div @click="urgeHandle(record)" class="pointer btn-operation">
-                                <img v-if="record.urgeStatus == 1" src="./images/icon_urge_active.png" />
-                                <img v-else src="./images/icon_urge.png" />
+                        </template>
+                        <template slot="important" slot-scope="text, record">
+                            <div
+                                class="flex justify-center"
+                                :style="{
+                                    color: record.approvalImportant == 2 ? 'red' : '#333'
+                                }"
+                            >
+                                {{ record.approvalImportantText }}
                             </div>
+                        </template>
+                        <template slot="approvalBt" slot-scope="text, record">
+                            <div @click="detailHandle(record)" class="pointer text-start">{{ text }}</div>
+                        </template>
+                        <template slot="operation" slot-scope="text, record">
+                            <div class="flex items-center justify-center">
+                                <div @click="followHandle(record)" class="pointer btn-operation">
+                                    <img v-if="record.attentionstatus == 1" src="./images/icon_follow_active.png" />
+                                    <img v-else src="./images/icon_follow.png" />
+                                </div>
+                                <div @click="urgeHandle(record)" class="pointer btn-operation">
+                                    <img v-if="record.urgeStatus == 1" src="./images/icon_urge_active.png" />
+                                    <img v-else src="./images/icon_urge.png" />
+                                </div>
+                            </div>
+                        </template>
+                    </a-table>
+                    <template #renderEmpty>
+                        <div class="flex flex-col items-center empty">
+                            <img src="./images/s.gif" class="icon" />
+                            <div class="text">暂无数据</div>
                         </div>
                     </template>
-                </a-table>
+                </a-config-provider>
             </div>
         </div>
+        <template #extra>
+            <slot name="extra"></slot>
+        </template>
     </Tabs>
 </template>
 <script>
+import locale from 'ant-design-vue/es/locale/zh_CN'
 import Tabs from './tabs.vue'
 import Status from './status.vue'
 export default {
     props: {
+        dept: {
+            type: Object
+        },
         params: {
             type: Object
         }
@@ -53,20 +71,20 @@ export default {
     },
     data() {
         return {
-            dept: {
-                data: [],
-                current: null
-            },
-            data: []
+            locale,
+            data: [],
+            loading: false
         }
     },
     computed: {
         tabs() {
-            return this.dept.data.map((n) => ({
-                label: n.unitName,
-                value: n.unitId,
-                count: n.count
-            }))
+            return [
+                {
+                    label: this.dept.label,
+                    value: this.dept.value,
+                    count: this.data.length
+                }
+            ]
         },
         columns() {
             return [
@@ -141,14 +159,9 @@ export default {
                     title: '标题',
                     dataIndex: 'approvalBt',
                     align: 'center',
-                    customHeaderCell: () => ({
-                        style: {}
-                    }),
-                    customCell: () => ({
-                        style: {
-                            textAlign: 'left'
-                        }
-                    })
+                    scopedSlots: {
+                        customRender: 'approvalBt'
+                    }
                 },
                 {
                     title: '办结期限',
@@ -170,45 +183,21 @@ export default {
         query() {
             return {
                 ...this.params,
-                orgId: this.dept.current
+                orgId: this.dept.value != '0' ? this.dept.value : null
             }
         }
     },
     watch: {
-        params: {
-            handler() {
-                this.fetchDepts()
-            },
-            immediate: true
-        },
         query: {
             handler() {
                 this.fetchData()
-            }
+            },
+            immediate: true
         }
     },
     methods: {
-        fetchDepts() {
-            window.IDM.http
-                .post(
-                    'ctrl/dbWorkbench/getPadLeaderUnit',
-                    {
-                        ...this.params
-                    },
-                    {
-                        headers: {
-                            'Content-Type': 'application/json'
-                        }
-                    }
-                )
-                .then(({ data }) => {
-                    this.dept = {
-                        data: data.data,
-                        current: data.data[0]?.unitId
-                    }
-                })
-        },
         fetchData() {
+            this.loading = true
             window.IDM.http
                 .post(
                     'ctrl/dbWorkbench/getLeaderPadNoticeList',
@@ -226,6 +215,9 @@ export default {
                 .then(({ data }) => {
                     this.data = data.data
                 })
+                .finally(() => {
+                    this.loading = false
+                })
         },
         followHandle(record) {
             window.IDM.http
@@ -241,13 +233,31 @@ export default {
                 record.attentionstatus = 1
             }
         },
-        urgeHandle(row) {
-            this.$emit('urge', row)
+        detailHandle(record) {
+            this.$emit('detail', record)
+        },
+        urgeHandle(record) {
+            this.$emit('urge', record)
         }
     }
 }
 </script>
 <style lang="scss" scoped>
+.empty {
+    gap: 1.8rem;
+    padding: 5rem 0;
+    .icon {
+        width: 18.69rem;
+        height: 15.56rem;
+        transform: translateX(1.3rem);
+        background: url('./images/icon_empty.png') no-repeat;
+        background-size: cover;
+    }
+    .text {
+        font-size: 3rem;
+        color: #666;
+    }
+}
 .btn-operation {
     width: 7rem;
     padding: 0 2rem;
