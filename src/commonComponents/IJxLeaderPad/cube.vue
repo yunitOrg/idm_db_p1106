@@ -165,7 +165,7 @@ export default {
                     if (this.cate.current == 2) {
                         return {
                             ...n,
-                            _value: n.onTimeSignedRate
+                            _value: n.onTimeFeedbackRate
                         }
                     }
                     if (this.cate.current == 3) {
@@ -176,7 +176,7 @@ export default {
                     }
                     return {
                         ...n,
-                        _value: n.onTimeFeedbackRate
+                        _value: n.onTimeSignedRate
                     }
                 })
                 .sort((prev, current) => {
@@ -356,7 +356,7 @@ export default {
     justify-content: space-between;
     grid-column-gap: 2.25rem;
     border-bottom: 1px dashed #979797;
-    padding: 1.86rem 0;
+    padding: 1rem 0;
     &:last-child {
         border-bottom: none;
     }

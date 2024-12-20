@@ -84,12 +84,12 @@ export default {
 html {
     font-size: 14px;
 }
-@media only screen and (max-width: 2540px) {
+@media only screen and (max-width: 2560px) {
     html {
         font-size: 12px;
     }
 }
-@media only screen and (max-width: 1900px) {
+@media only screen and (max-width: 1920px) {
     html {
         font-size: 8px;
     }

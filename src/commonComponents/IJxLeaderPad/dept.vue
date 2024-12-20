@@ -11,6 +11,16 @@
                             <Status :value="text" />
                         </div>
                     </template>
+                    <template slot="important" slot-scope="text, record">
+                        <div
+                            class="flex justify-center"
+                            :style="{
+                                color: record.approvalImportant == 2 ? 'red' : '#333'
+                            }"
+                        >
+                            {{ record.approvalImportantText }}
+                        </div>
+                    </template>
                     <template slot="operation" slot-scope="text, record">
                         <div class="flex items-center justify-center">
                             <div @click="followHandle(record)" class="pointer btn-operation">
@@ -88,30 +98,38 @@ export default {
                             value: '1'
                         }
                     ],
-                    onFilter: (value, record) => record.padLight == value,
-                    width: '16rem',
+                    onFilter: (value, record) => value == record.padLight,
+                    width: '19rem',
                     align: 'center',
                     scopedSlots: {
                         customRender: 'status'
-                    }
+                    },
+                    sorter: (prev, current) => current.padLight > prev.padLight
                 },
                 {
                     title: '重要程度',
-                    dataIndex: 'approvalImportantText',
+                    dataIndex: 'approvalImportant',
                     filters: [
                         {
                             text: '重要',
-                            value: '2'
+                            value: 2
                         },
                         {
                             text: '普通',
-                            value: '1'
+                            value: 1
+                        },
+                        {
+                            text: '空',
+                            value: 0
                         }
                     ],
-                    onFilter: (value, record) => record.approvalImportant == value,
-                    width: '15.75rem',
+                    onFilter: (value, record) => value == record.approvalImportant,
+                    width: '19rem',
                     align: 'center',
-                    customRender: (text, record) => (text == '2' ? '重要' : '普通')
+                    scopedSlots: {
+                        customRender: 'important'
+                    },
+                    sorter: (prev, current) => current.approvalImportant > prev.approvalImportant
                 },
                 {
                     title: '承办部门',

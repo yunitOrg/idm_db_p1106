@@ -121,7 +121,7 @@ export default {
 <style lang="scss" scoped>
 .urge-warp {
     background-color: white;
-    padding: 1.5rem 2rem;
+    padding: 1.5rem 2rem 4rem;
     border-radius: 1.25rem;
     .header {
         position: relative;
