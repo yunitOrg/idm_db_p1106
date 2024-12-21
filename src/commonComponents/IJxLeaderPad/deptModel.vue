@@ -55,7 +55,7 @@ export default {
     .data-list {
         display: grid;
         grid-template-columns: repeat(auto-fill, 20.25rem);
-        grid-template-rows: repeat(auto-fill, 5.88rem);
+        grid-auto-rows: 5.88rem;
         align-items: start;
         justify-content: space-between;
         grid-column-gap: 2.55rem;

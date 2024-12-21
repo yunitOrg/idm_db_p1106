@@ -2,7 +2,7 @@
     <Tabs :items="tabs" v-model="dept.value" class="h-full">
         <div class="h-full flex flex-col">
             <div class="flex justify-end" style="padding: 2rem 0; gap: 2.5rem">
-                <Status v-for="i in [4, 3, 2, 1]" :key="i" :value="i" :showLabel="true" />
+                <Status v-for="i in [4, 2, 1]" :key="i" :value="i" :showLabel="true" />
             </div>
             <div class="flex-1 h-0 overflow-auto">
                 <a-config-provider :locale="locale">
@@ -102,10 +102,6 @@ export default {
                         {
                             text: '超期',
                             value: '4'
-                        },
-                        {
-                            text: '临期',
-                            value: '3'
                         },
                         {
                             text: '预警',
