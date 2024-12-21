@@ -11,7 +11,7 @@
                     <tr>
                         <th>标题</th>
                         <td>{{ data.approvalBt }}</td>
-                        <th>落实情况</th>
+                        <th>落实状态</th>
                         <td>{{ data.extImplementationStatusText }}</td>
                     </tr>
                     <tr>
@@ -116,6 +116,7 @@ export default {
         font-size: 2.38rem;
         border-collapse: separate;
         border-spacing: 2px;
+        table-layout: fixed;
         tr {
             th,
             td {
@@ -127,7 +128,6 @@ export default {
                 background-color: #e8f4ff;
             }
             td {
-                min-width: 25%;
                 background-color: white;
             }
         }

@@ -173,6 +173,7 @@ export default {
         font-size: 2.38rem;
         border-collapse: separate;
         border-spacing: 2px;
+        table-layout: fixed;
         tr {
             th,
             td {
@@ -184,7 +185,6 @@ export default {
                 background-color: #e8f4ff;
             }
             td {
-                min-width: 25%;
                 background-color: white;
             }
         }

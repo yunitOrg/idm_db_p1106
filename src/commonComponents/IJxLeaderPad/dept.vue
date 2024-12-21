@@ -150,7 +150,7 @@ export default {
                     sorter: (prev, current) => current.approvalImportant > prev.approvalImportant
                 },
                 {
-                    title: '承办部门',
+                    title: '承办单位',
                     dataIndex: 'handlerUnitText',
                     width: '21.38rem',
                     align: 'center'
