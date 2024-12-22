@@ -57,7 +57,7 @@
             </div>
         </div>
         <div class="flex justify-center dock">
-            <a-button @click="saveHandle" :disabled="saving" :loading="saving" type="primary" size="large">一键催办</a-button>
+            <a-button @click="saveHandle" :disabled="saving" :loading="saving" type="primary" size="large">发送</a-button>
         </div>
     </div>
 </template>
@@ -131,19 +131,18 @@ export default {
         }
         .btn-back {
             position: absolute;
-            left: 0;
+            right: 0;
             top: 50%;
             transform: translateY(-50%);
             display: flex;
             gap: 1rem;
             align-items: center;
-            font-size: 2.38rem;
             color: #0b7eed;
             &:before {
                 display: block;
                 content: '';
-                width: 2.75rem;
-                height: 2.75rem;
+                width: 3.75rem;
+                height: 3.75rem;
                 background: url('./images/icon_back.png') no-repeat;
                 background-size: 100% 100%;
             }
@@ -205,9 +204,10 @@ export default {
         background: #ffffff;
         box-shadow: 0rem 0.19rem 0.81rem 0rem rgba(0, 0, 0, 0.4);
         :deep(.ant-btn-lg) {
-            padding: 1rem 2.7rem;
+            padding: 2rem 7rem;
             font-size: 2.38rem;
             height: auto;
+            border-radius: 1rem;
         }
     }
 }
