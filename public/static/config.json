@@ -122,6 +122,13 @@
       "className": "IJxLeaderPad",
       "comType": "common",
       "comLangue": "vue"
+    },
+    {
+      "classId": "idm.componet.db.IStatCard",
+      "comName": "承办工作台统计",
+      "className": "IStatCard",
+      "comType": "common",
+      "comLangue": "vue"
     }
   ]
 }

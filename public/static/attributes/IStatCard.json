@@ -1,0 +1,148 @@
+{
+    "classId": "idm.componet.db.IStatCard",
+    "comName": "承办工作台统计",
+    "className": "IStatCard",
+    "comType": "common",
+    "comLangue": "vue",
+    "compositeAttr": [
+        {
+            "type": "input",
+            "layoutType": "inline",
+            "text": "唯一标识",
+            "bindKey": "ctrlId",
+            "disabled": true,
+            "default": "@[packageid]",
+            "desc": ""
+        },
+        {
+            "type": "dataSourceSelect",
+            "layoutType": "inline",
+            "text": "数据源",
+            "bindKey": "dataSource",
+            "default": ""
+        },
+        {
+            "type": "group",
+            "text": "外层样式",
+            "desc": "点击？查看样式设置用法指南",
+            "helpUrl": "",
+            "children": [
+                {
+                    "type": "inlineGroup",
+                    "text": "宽高",
+                    "children": [
+                        {
+                            "type": "input",
+                            "layoutType": "block",
+                            "text": "宽",
+                            "desc": "填写auto则为自适应，或者使用px、%、vw等单位，比如100%、100px、100vw等等",
+                            "bindKey": "width",
+                            "width": "60px",
+                            "default": "100%"
+                        },
+                        {
+                            "type": "input",
+                            "layoutType": "block",
+                            "text": "高",
+                            "desc": "填写auto则为自适应，或者使用px、%、vh等单位，比如100%、100px、100vh等等",
+                            "bindKey": "height",
+                            "width": "60px",
+                            "default": "100%"
+                        }
+                    ]
+                },
+                {
+                    "type": "box",
+                    "layoutType": "block",
+                    "text": "内外边距",
+                    "bindKey": "ulbox"
+                },
+                {
+                    "type": "colorPicker",
+                    "layoutType": "inline",
+                    "text": "背景色",
+                    "bindKey": "bgColor",
+                    "placeholder": "请选择颜色",
+                    "default": {
+                        "hex": "#ffffff",
+                        "hex8": "#ffffff"
+                    }
+                },
+                {
+                    "type": "input",
+                    "layoutType": "inline",
+                    "text": "容器阴影",
+                    "bindKey": "boxShadow",
+                    "default": ""
+                },
+                {
+                    "type": "border",
+                    "layoutType": "block",
+                    "text": "边框",
+                    "bindKey": "boxborder"
+                }
+            ]
+        },
+        {
+            "type": "table",
+            "text": "列配置",
+            "bindKey": "columns",
+            "tabText": "列[index]",
+            "children": [
+                {
+                    "type": "input",
+                    "text": "key",
+                    "bindKey": "key",
+                    "layoutType": "inline"
+                },
+                {
+                    "type": "input",
+                    "text": "标题",
+                    "bindKey": "title",
+                    "layoutType": "inline"
+                },
+                {
+                    "type": "uploadImage",
+                    "layoutType": "inline",
+                    "text": "图标",
+                    "bindKey": "iconUrl",
+                    "placeholder": "可输入图片地址或直接上传"
+                },
+                {
+                    "type": "colorPicker",
+                    "bindKey": "bgColor",
+                    "text": "背景色",
+                    "layoutType": "inline"
+                },
+                {
+                    "type": "colorPicker",
+                    "bindKey": "borderColor",
+                    "text": "边框色",
+                    "layoutType": "inline"
+                },
+                {
+                    "type": "colorPicker",
+                    "bindKey": "accentColor",
+                    "text": "值文本色",
+                    "layoutType": "inline"
+                }
+            ]
+        },
+        {
+            "type": "group",
+            "text": "高级",
+            "desc": "点击？查看样式设置用法指南",
+            "helpUrl": "",
+            "children": [
+                {
+                    "type": "actionSelect",
+                    "layoutType": "block",
+                    "text": "点击函数",
+                    "bindKey": "clickFunc",
+                    "desc": "接口参数：自定义函数参数：{item: 行数据}",
+                    "multiple": false
+                }
+            ]
+        }
+    ]
+}

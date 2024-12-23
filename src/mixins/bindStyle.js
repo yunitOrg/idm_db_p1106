@@ -10,7 +10,11 @@ export default function bindStyle(
         data() {
             return {
                 className: Object.keys(list).reduce((carry, current) => {
-                    carry[current] = `${current}-${window.IDM.uuid()}`
+                    if (['_root'].includes(current)) {
+                        carry[current] = current
+                    } else {
+                        carry[current] = `${current}-${window.IDM.uuid()}`
+                    }
                     return carry
                 }, {})
             }
