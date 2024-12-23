@@ -2,7 +2,7 @@
     <div class="h-full flex flex-col urge-warp">
         <div class="flex justify-center header">
             <div @click="closeHandle" class="pointer btn-back"></div>
-            <div class="caption">催办通知</div>
+            <div class="caption">执行情况</div>
         </div>
         <div class="flex-1 h-0 overflow-auto">
             <div class="group-wrap">
@@ -11,8 +11,8 @@
                     <tr>
                         <th>标题</th>
                         <td>{{ data.approvalBt }}</td>
-                        <th>编号</th>
-                        <td>{{ data.approvalWh }}</td>
+                        <th>落实状态</th>
+                        <td>{{ data.extImplementationStatusText }}</td>
                     </tr>
                     <tr>
                         <th>督办类型</th>
@@ -21,48 +21,24 @@
                         <td>{{ data.approvalImportantText }}</td>
                     </tr>
                     <tr>
-                        <th>督办依据</th>
-                        <td colspan="3">{{ data.approvalGist }}</td>
+                        <th>反馈人</th>
+                        <td>{{ data.feedbackPersonText }}</td>
+                        <th>反馈时间</th>
+                        <td>{{ data.feedbackTime }}</td>
                     </tr>
                     <tr>
-                        <th>主办部门</th>
-                        <td>{{ data.handlerUnitText }}</td>
-                        <th>办理方式</th>
-                        <td>{{ data.assignTypeText }}</td>
-                    </tr>
-                </table>
-            </div>
-            <div class="group-wrap">
-                <div class="group-title">催办信息</div>
-                <table class="urge-table">
-                    <tr>
-                        <th>通知时间</th>
-                        <td>{{ time.format('YYYY-MM-DD HH:mm') }}</td>
-                    </tr>
-                    <tr>
-                        <th>通知范围</th>
-                        <td>
-                            <a-checkbox v-for="item in data.urgeUserList" :key="item.value" :checked="true" :value="item.value">
-                                {{ item.text }}
-                            </a-checkbox>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>通知方式</th>
-                        <td>
-                            <a-checkbox :checked="true">短信</a-checkbox>
-                        </td>
+                        <th>执行情况</th>
+                        <td colspan="3" v-html="data.showFeedbackContent"></td>
                     </tr>
                 </table>
             </div>
         </div>
-        <div class="flex justify-center dock">
-            <a-button @click="saveHandle" :disabled="saving" :loading="saving" type="primary" size="large">发送</a-button>
+        <div v-if="data.noticeStatus < 6" class="flex justify-center dock">
+            <a-button @click="ugreHandle" :disabled="saving" :loading="saving" type="primary" size="large">一键催办</a-button>
         </div>
     </div>
 </template>
 <script>
-import dayjs from 'dayjs'
 export default {
     props: {
         params: {
@@ -73,44 +49,11 @@ export default {
         }
     },
     data() {
-        return {
-            saving: false,
-            time: dayjs()
-        }
-    },
-    watch: {
-        time: {
-            handler() {
-                setTimeout(() => {
-                    this.time = dayjs()
-                }, 1000)
-            },
-            immediate: true
-        }
+        return {}
     },
     methods: {
-        saveHandle() {
-            this.saving = true
-            window.IDM.http
-                .post(
-                    'ctrl/dbWorkbench/padNoticeUrge',
-                    {
-                        ...this.params,
-                        noticeId: this.data.id,
-                        urgeUserIds: this.data.urgeUserList.map((n) => n.value)
-                    },
-                    {
-                        headers: {
-                            'Content-Type': 'application/json'
-                        }
-                    }
-                )
-                .then(({ data }) => {
-                    this.closeHandle()
-                })
-                .finally(() => {
-                    this.saving = false
-                })
+        ugreHandle() {
+            this.$emit('urge', this.data)
         },
         closeHandle() {
             this.$emit('close')

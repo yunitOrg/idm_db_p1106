@@ -21,8 +21,6 @@ export default {
             switch (this.value) {
                 case 4:
                     return '超期'
-                case 3:
-                    return '临期'
                 case 2:
                     return '预警'
                 case 1:

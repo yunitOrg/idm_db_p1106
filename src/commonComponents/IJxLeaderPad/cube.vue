@@ -2,7 +2,7 @@
     <div class="h-full flex flex-col cube-wrap" style="gap: 2.5rem">
         <div class="flex items-center justify-between">
             <div class="caption">办理效能分析</div>
-            <div class="seg-warp">
+            <div class="seg-warp hidden">
                 <div class="seg-item">省政府各部门</div>
             </div>
         </div>

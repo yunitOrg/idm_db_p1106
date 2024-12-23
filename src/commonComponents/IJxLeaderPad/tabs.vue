@@ -1,7 +1,7 @@
 <template>
     <div class="flex flex-col">
-        <div class="tabs-wrap">
-            <div class="flex items-end tab-scroll">
+        <div class="flex items-center tabs-wrap">
+            <div class="flex-1 w-0 flex items-end tab-scroll">
                 <div
                     v-for="tab in items"
                     :key="tab.value"
@@ -15,6 +15,7 @@
                     <div class="badge">{{ tab.count }}</div>
                 </div>
             </div>
+            <slot name="extra"></slot>
         </div>
         <div class="flex-1 h-0 content">
             <slot></slot>
@@ -45,7 +46,7 @@ export default {
 <style lang="scss" scoped>
 .tabs-wrap {
     position: relative;
-    &:before {
+    &:after {
         position: absolute;
         content: '';
         inset: 0;
@@ -57,6 +58,8 @@ export default {
         overflow-x: auto;
         overflow-y: hidden;
         width: 100%;
+        position: relative;
+        z-index: 1;
     }
     .tab-item {
         color: white;
@@ -84,6 +87,11 @@ export default {
             display: block;
             width: 0.13rem;
             background: rgba(255, 255, 255, 0.3);
+        }
+        &:last-child {
+            &:before {
+                display: none;
+            }
         }
         &.active {
             gap: 0.63rem;
@@ -121,11 +129,6 @@ export default {
                 height: 0;
                 border: 0.44rem solid #0b7eed;
                 border-color: transparent transparent #0b7eed transparent;
-            }
-        }
-        &:last-child {
-            &:after {
-                display: none;
             }
         }
     }
