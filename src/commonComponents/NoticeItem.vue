@@ -6,12 +6,7 @@
                 <div class="subtaskLeft">
                     <div class="subtask-label">
                         <span
-                            :class="{
-                                'subtask-yellow': item.dbStatus == '1' || item.dbStatus == '4',
-                                'subtask-blue': item.dbStatus == '2' || item.dbStatus == '3',
-                                'subtask-green': item.dbStatus == '6' || item.dbStatus == '5',
-                                'subtask-red': item.dbStatus == '7'
-                            }"
+                            :class="statusClass(item)"
                             v-if="item.dbStatusText"
                             >{{ item.dbStatusText }}</span
                         >
@@ -198,6 +193,14 @@ export default {
         // 在落实
         handleCuiBell(item) {
             this.$emit('handleCuiBell', item)
+        },
+        // 状态class
+        statusClass(item){
+            if(item.dbStatus == '1' || item.dbStatus == '4') return 'subtask-yellow'
+            if(item.dbStatus == '2' || item.dbStatus == '3') return 'subtask-blue'
+            if(item.dbStatus == '6' || item.dbStatus == '5') return 'subtask-green'
+            if(item.dbStatus == '7' || item.dbStatus == '4') return 'subtask-red'
+            return 'subtask-blue'
         }
     }
 }
