@@ -5,6 +5,7 @@
             <div class="seg-warp hidden">
                 <div class="seg-item">省政府各部门</div>
             </div>
+            <div @click="homeHandle" class="pointer btn-back">返回首页</div>
         </div>
         <div class="flex-1 h-0 flex items-stretch" style="gap: 6rem">
             <div class="flex flex-col">
@@ -233,6 +234,9 @@ export default {
                 .then(({ data }) => {
                     this.data = data.data
                 })
+        },
+        homeHandle() {
+            this.$emit('home')
         }
     }
 }
@@ -259,6 +263,11 @@ export default {
         font-size: 2.13rem;
         padding: 0.3rem 0.75rem;
     }
+}
+.btn-back {
+    font-size: 2.75rem;
+    padding: 0.5rem 0;
+    color: #333;
 }
 .pannel {
     background: #ffffff;

@@ -6,8 +6,12 @@
             <div class="flex-1 h-0 main-container">
                 <Urge v-if="urgeData" :params="params" :data="urgeData" @close="urgeData = null" />
                 <Detail v-else-if="detailData" :params="params" :data="detailData" @urge="() => showUrge(detailData.noticeInfo)" @close="detailData = null" />
-                <Cube v-else-if="current == '2'" :params="params" />
-                <Follow v-else-if="current == '3'" :params="params" @detail="showDetail" @urge="showUrge" />
+                <Cube v-else-if="current == '2'" :params="params" @home="homeHandle"></Cube>
+                <Follow v-else-if="current == '3'" :params="params" @detail="showDetail" @urge="showUrge">
+                    <template #extra>
+                        <div @click="homeHandle" class="pointer btn-back">返回首页</div>
+                    </template>
+                </Follow>
                 <Dept v-else :dept="dept" :params="params" @detail="showDetail" @urge="showUrge">
                     <template #extra>
                         <div v-if="dept.value != '0'" @click="homeHandle" class="pointer btn-back">返回首页</div>
@@ -250,6 +254,7 @@ export default {
         },
         homeHandle() {
             this.dept = homeData()
+            this.current = '1'
         },
         deptChangeHandle(dept) {
             this.detailData = null

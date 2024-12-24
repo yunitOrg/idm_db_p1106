@@ -47,6 +47,9 @@
                 </a-config-provider>
             </div>
         </div>
+        <template #extra>
+            <slot name="extra"></slot>
+        </template>
     </Tabs>
 </template>
 <script>
