@@ -68,17 +68,17 @@ export default {
 <style lang="scss" scoped>
 @use '../style/common.scss';
 .idm-db-iStatCard {
-    gap: 14px;
     .item {
+        margin: 0 7px;
         padding: 20px 30px;
         border: 1px solid var(--border-color);
         background-color: var(--bg-color);
         border-radius: 8px;
-        gap: 14px;
         line-height: 200%;
         .icon {
             width: 50px;
             height: 50px;
+            margin-right: 14px;
         }
         .label {
             font-size: 16px;
