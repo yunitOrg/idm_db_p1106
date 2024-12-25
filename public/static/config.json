@@ -129,6 +129,13 @@
       "className": "IStatCard",
       "comType": "common",
       "comLangue": "vue"
+    },
+    {
+      "classId": "idm.componet.db.INoticeList",
+      "comName": "通知列表",
+      "className": "INoticeList",
+      "comType": "common",
+      "comLangue": "vue"
     }
   ]
 }

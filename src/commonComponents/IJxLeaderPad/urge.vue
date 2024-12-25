@@ -42,9 +42,11 @@
                     <tr>
                         <th>通知范围</th>
                         <td>
-                            <a-checkbox v-for="item in data.urgeUserList" :key="item.value" :checked="true" :value="item.value">
-                                {{ item.text }}
-                            </a-checkbox>
+                            <a-checkbox-group v-model="urgeUserList">
+                                <a-checkbox v-for="item in data.urgeUserList" :key="item.value" :checked="true" :value="item.value">
+                                    {{ item.text }}
+                                </a-checkbox>
+                            </a-checkbox-group>
                         </td>
                     </tr>
                     <tr>
@@ -57,7 +59,7 @@
             </div>
         </div>
         <div class="flex justify-center dock">
-            <a-button @click="saveHandle" :disabled="saving" :loading="saving" type="primary" size="large">发送</a-button>
+            <a-button @click="saveHandle" :disabled="submitDisabled" :loading="saving" type="primary" size="large">发送</a-button>
         </div>
     </div>
 </template>
@@ -74,8 +76,16 @@ export default {
     },
     data() {
         return {
+            urgeUserList: [],
             saving: false,
             time: dayjs()
+        }
+    },
+    computed: {
+        submitDisabled() {
+            if (this.urgeUserList.length == 0) return true
+            if (this.saving) return true
+            return false
         }
     },
     watch: {
@@ -84,6 +94,12 @@ export default {
                 setTimeout(() => {
                     this.time = dayjs()
                 }, 1000)
+            },
+            immediate: true
+        },
+        data: {
+            handler() {
+                this.urgeUserList = this.data.urgeUserList.map((n) => n.value)
             },
             immediate: true
         }
@@ -97,7 +113,7 @@ export default {
                     {
                         ...this.params,
                         noticeId: this.data.id,
-                        urgeUserIds: this.data.urgeUserList.map((n) => n.value)
+                        urgeUserIds: this.urgeUserList
                     },
                     {
                         headers: {

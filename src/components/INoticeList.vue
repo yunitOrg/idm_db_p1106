@@ -1,7 +1,7 @@
 <template>
-    <div>
-        <div class="taskInfo">
-            <div class="taskInfo-li" v-for="(item, index) in porpsList" :key="index">
+    <div idm-ctrl="idm_module" :id="moduleObject.id" :idm-ctrl-id="moduleObject.id" class="idm-db-INoticeList" :class="className.wrap">
+        <div class="taskInfo" ref="container">
+            <div class="taskInfo-li" v-for="(item, index) in dataSource" :key="index">
                 <!--左侧-->
                 <div class="subtaskLeft">
                     <div class="subtask-label">
@@ -25,16 +25,21 @@
                     </div>
                 </div>
                 <!--右侧-->
-                <div class="subtaskRight">
-                    <div class="right-time">{{ item.lastFeedbackDate }}</div>
+                <div class="flex-1 w-0 flex items-start subtaskRight">
+                    <div v-if="item.lastFeedbackDate" class="flex items-center right-time">
+                        <svg-icon icon-class="time"></svg-icon>
+                        {{ item.lastFeedbackDate }}
+                    </div>
                     <div class="right-content">
                         <div class="task-font" @click="handleJump(item)" v-if="item.lastFeedbackContent">
                             <div v-html="item.lastFeedbackContent"></div>
                             <div class="task-file">
-                                <i v-for="(file, fileIndex) in item.lastFeedbackAttachFiles" :key="fileIndex" @click.stop="handleOpen(file)">
-                                    <svg-icon icon-class="file"></svg-icon>
-                                    {{ file.fileName }}
-                                </i>
+                                <div v-for="(file, fileIndex) in item.lastFeedbackAttachFiles" :key="fileIndex" @click.stop="handleOpen(file)" class="flex items-center file-item">
+                                    <i>
+                                        <svg-icon icon-class="file"></svg-icon>
+                                    </i>
+                                    <div class="name">{{ file.fileName }}</div>
+                                </div>
                             </div>
                         </div>
                         <div class="right-svg">
@@ -59,27 +64,22 @@
                         </div>
                     </div>
                 </div>
-                <template v-if="porpsList?.length">
-                    <div class="subtaskMore">
-                        <template v-if="item.buttonList && item.buttonList.length">
-                            <a-dropdown placement="bottomRight">
-                                <template slot="overlay">
-                                    <a-menu style="text-align: center">
-                                        <a-menu-item v-for="subitem in item.buttonList" :key="subitem.value" @click="handleOptions({ key: subitem.value, record: item })">
-                                            <a-badge :count="subitem.badge" :offset="[10, 0]">
-                                                {{ subitem.text }}
-                                            </a-badge>
-                                        </a-menu-item>
-                                    </a-menu>
-                                </template>
-                                <!-- <svg-icon icon-class="detail" class="rightSvg"></svg-icon> -->
-                                <a-badge :count="item.buttonList.reduce((carry, current) => carry + current.badge || 0, 0)">
-                                    <img src="../assets/more.png" alt="" />
-                                </a-badge>
-                            </a-dropdown>
+                <div v-if="item.buttonList && item.buttonList.length > 0" class="subtaskMore">
+                    <a-dropdown placement="bottomRight">
+                        <template slot="overlay">
+                            <a-menu style="text-align: center">
+                                <a-menu-item v-for="subitem in item.buttonList" :key="subitem.value" @click="handleOptions({ key: subitem.value, record: item })">
+                                    <a-badge :count="subitem.badge" :offset="[10, 0]">
+                                        {{ subitem.text }}
+                                    </a-badge>
+                                </a-menu-item>
+                            </a-menu>
                         </template>
-                    </div>
-                </template>
+                        <a-badge :count="item.buttonList.reduce((carry, current) => carry + current.badge || 0, 0)">
+                            <img src="../assets/more.png" alt="" />
+                        </a-badge>
+                    </a-dropdown>
+                </div>
             </div>
         </div>
         <!--历史弹框-->
@@ -94,9 +94,15 @@
                         <div class="right-content">
                             <span class="task-font" @click="handleJump(item)" v-html="item.feedbackContent"></span>
                             <div class="right-file">
-                                <div v-for="(subitem, subindex) in item.feedbackAttachFiles" :key="subindex" :title="subitem.fileName" @click.stop="handleOpen(subitem)">
+                                <div
+                                    v-for="(subitem, subindex) in item.feedbackAttachFiles"
+                                    :key="subindex"
+                                    :title="subitem.fileName"
+                                    @click.stop="handleOpen(subitem)"
+                                    class="flex items-center file-item"
+                                >
                                     <svg-icon icon-class="file"></svg-icon>
-                                    {{ subitem.fileName }}
+                                    <div class="name">{{ subitem.fileName }}</div>
                                 </div>
                             </div>
                         </div>
@@ -106,31 +112,17 @@
         </a-modal>
     </div>
 </template>
-
 <script>
-import API from '../api/index'
 import { getSubTaskList } from '../utils/mock'
+import API from '../api/index'
+import bindStyle from '../mixins/bindStyle'
+import bindProp from '../mixins/bindProp'
 export default {
-    props: {
-        propData: {
-            type: Object,
-            required: true
-        },
-        porpsList: {
-            type: Array,
-            default: () => {
-                return getSubTaskList()
-            }
-        },
-        themeList: {
-            type: Array
-        },
-        btngroup: {
-            type: Boolean
-        }
-    },
+    mixins: [bindProp(), bindStyle()],
     data() {
         return {
+            record: null,
+            dataSource: [],
             activeKey: [],
             list: [],
             historyDialog: [],
@@ -141,10 +133,66 @@ export default {
             }
         }
     },
-    mounted() {
-        this.moduleObject = this.$root.moduleObject
+    watch: {
+        record: {
+            handler() {
+                this.initData()
+            },
+            immediate: true
+        }
+    },
+    updated() {
+        top.updateSingleTaskIframeHeight?.call(this, this.$refs.container.offsetHeight + 30)
     },
     methods: {
+        propDataWatchHandle(propData) {
+            this.propData = propData.compositeAttr || {}
+        },
+        receiveBroadcastMessage(event) {
+            switch (event.type) {
+                case 'linkageResult':
+                    if (event.messageKey == 'dynamicRenderModule') {
+                        this.record = event.message.record
+                    }
+                    break
+            }
+        },
+        initData() {
+            if (this.moduleObject.env !== 'production') {
+                this.dataSource = getSubTaskList()
+                return
+            }
+            if (_.isArray(this.propData.handleRequestFunc) && this.propData.handleRequestFunc.length > 0) {
+                return Promise.all(
+                    window.IDM.invokeCustomFunctions.call(this, this.propData.handleRequestFunc, {
+                        record: this.record
+                    })
+                )
+                    .then((...result) => {
+                        return _.flatten(...result)
+                    })
+                    .then((data) => {
+                        if (_.isArray(this.propData.hanldeInterfaceFunc) && this.propData.hanldeInterfaceFunc.length > 0) {
+                            return _.flatten(
+                                window.IDM.invokeCustomFunctions(this.propData.hanldeInterfaceFunc, {
+                                    record: this.record,
+                                    data
+                                })
+                            )
+                        }
+                        return data
+                    })
+                    .then((data) => {
+                        this.dataSource = data
+                    })
+            }
+        },
+        handleJiaImg() {
+            return IDM.url.getModuleAssetsWebPath(require('../assets/jia.png'), this.moduleObject)
+        },
+        handleJianImg() {
+            return IDM.url.getModuleAssetsWebPath(require('../assets/jian.png'), this.moduleObject)
+        },
         handleHistoryImg() {
             return IDM.url.getModuleAssetsWebPath(require('../assets/history.png'), this.moduleObject)
         },
@@ -152,14 +200,37 @@ export default {
             return IDM.url.getModuleAssetsWebPath(require(`../assets/${img}`), this.moduleObject)
         },
         handleJump(item) {
-            this.$emit('handleContentJump', item)
+            if (this.propData.handleChildFunc && this.propData.handleChildFunc.length > 0) {
+                const name = this.propData.handleChildFunc[0].name
+                window[name] &&
+                    window[name].call(this, {
+                        _this: this,
+                        item: item
+                    })
+            } else {
+                window.open(window.IDM.url.getWebPath(item.lastFeedbackUrl))
+            }
         },
         // 预览文件
         handleOpen(item) {
-            this.$emit('handleFileOpen', item)
+            if (this.propData.handleFileFunc && this.propData.handleFileFunc.length > 0) {
+                let name = this.propData.handleFileFunc[0].name
+                window[name] &&
+                    window[name].call(this, {
+                        _this: this,
+                        item: item
+                    })
+            } else {
+                if (top.Public) {
+                    // 使用public.js调用方法
+                    top.Public.officeLook(item.fileName, item.id, '', true, { officeModuleId: 'skyDrive' })
+                }
+            }
         },
         handleOptions(item) {
-            this.$emit('handleOptions', item)
+            if (_.isArray(this.propData.handleActionFunc) && this.propData.handleActionFunc.length > 0) {
+                window.IDM.invokeCustomFunctions(this.propData.handleActionFunc, item)
+            }
         },
         handleDialogOk() {
             this.dialogObj.show = false
@@ -172,13 +243,11 @@ export default {
                 })
                 return
             }
-            if (this.porpsList) {
-                let res = await API.ApiGetHistoryFeed({ noticeId: item.id })
-                if (res.code == '200') {
-                    this.historyDialog = res.data
-                    if (this.historyDialog && this.historyDialog.length > 0) {
-                        this.dialogObj.show = true
-                    }
+            const res = await API.ApiGetHistoryFeed({ noticeId: item.id })
+            if (res.code == '200') {
+                this.historyDialog = res.data
+                if (this.historyDialog && this.historyDialog.length > 0) {
+                    this.dialogObj.show = true
                 }
             }
         },
@@ -201,8 +270,15 @@ export default {
     }
 }
 </script>
-
 <style lang="scss" scoped>
+@use '../style/common.scss';
+.idm-db-INoticeList {
+    .placeholder {
+        border: 1px dotted #999;
+        padding: 20px 0;
+        text-align: center;
+    }
+}
 .taskInfo {
     .taskInfo-li {
         display: flex;
@@ -220,25 +296,28 @@ export default {
         }
     }
     .subtaskRight {
-        flex: 1;
-        display: flex;
         font-size: 16px;
         gap: 20px;
         .right-content {
             display: flex;
             flex: 1;
             gap: 20px;
+            font-size: 16px;
             .task-font {
                 flex: 1;
                 text-align: justify;
                 cursor: pointer;
             }
             .task-file {
-                cursor: pointer;
-                i {
-                    display: block;
-                    font-style: normal;
+                .file-item {
+                    cursor: pointer;
                     margin-top: 5px;
+                    color: #0086d9;
+                    fill: #0086d9;
+                    gap: 5px;
+                    .name {
+                        text-decoration: underline;
+                    }
                 }
             }
         }
@@ -305,8 +384,10 @@ export default {
         padding-right: 15px;
     }
     .right-time {
-        width: 100px;
+        width: 115px;
         color: #333333;
+        fill: #333;
+        gap: 5px;
     }
     .right-svg {
         display: flex;
@@ -327,7 +408,6 @@ export default {
         cursor: pointer;
     }
 }
-// 弹框
 .task-dialog {
     padding: 10px 30px;
     .right-time {
@@ -335,36 +415,40 @@ export default {
         margin-right: 20px;
         font-size: 16px;
     }
-    .ant-timeline-item-tail {
+    :deep(.ant-timeline-item-tail) {
         border-left-style: dotted;
     }
-    .ant-timeline-item-last {
+    :deep(.ant-timeline-item-last) {
         padding: 0 !important;
         .ant-timeline-item-content {
             display: flex;
             min-height: unset;
         }
     }
-    .right-content {
-        cursor: pointer;
-    }
-    .ant-timeline-item-content {
+    :deep(.ant-timeline-item-content) {
         display: flex;
         margin-left: 20px;
-        .right-content {
-            font-size: 16px;
-            color: #333333;
-            flex: 1;
-            span {
-                display: inline-block;
-                text-align: justify;
-                display: inline-block;
-            }
+    }
+    .right-content {
+        cursor: pointer;
+        font-size: 16px;
+        color: #333333;
+        flex: 1;
+        span {
+            display: inline-block;
+            text-align: justify;
+            display: inline-block;
         }
-        .right-file {
+    }
+    .right-file {
+        .file-item {
             cursor: pointer;
-            div {
-                padding-top: 5px;
+            margin-top: 5px;
+            color: #0086d9;
+            fill: #0086d9;
+            gap: 5px;
+            .name {
+                text-decoration: underline;
             }
         }
     }

@@ -43,6 +43,9 @@ export default {
         this.initData()
     },
     methods: {
+        propDataWatchHandle(propData) {
+            this.propData = propData.compositeAttr
+        },
         initData() {
             console.log('iStatCard', this.propData)
             dataUtil

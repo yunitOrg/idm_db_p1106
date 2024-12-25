@@ -22,6 +22,9 @@
 .justify-around {
     justify-content: space-around;
 }
+.items-start {
+    align-items: flex-start;
+}
 .items-center {
     align-items: center;
 }
@@ -60,6 +63,6 @@
 .text-start {
     text-align: start;
 }
-.hidden{
+.hidden {
     display: none;
 }
