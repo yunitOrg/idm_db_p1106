@@ -385,15 +385,14 @@ export default {
     }
     .right-time {
         width: 115px;
-        color: #333333;
-        fill: #333;
+        color: #0086d9;
+        fill: #0086d9;
         gap: 5px;
     }
     .right-svg {
         display: flex;
         cursor: pointer;
         gap: 10px;
-        padding: 2px;
         svg {
             font-size: 22px;
             width: 22px;
@@ -411,7 +410,7 @@ export default {
 .task-dialog {
     padding: 10px 30px;
     .right-time {
-        color: #333333;
+        color: #0086d9;
         margin-right: 20px;
         font-size: 16px;
     }
