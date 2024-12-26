@@ -15,16 +15,17 @@
                         </template>
                         <div class="right-time">{{ item[propData.timeField || 'feedbackTime'] }}</div>
                         <div class="right-content">
-                            <span @click="handleJump(item)" class="subtask-span">{{ item[propData.contentFiled || 'feedbackContent'] }}</span>
+                            <span @click="handleJump(item)" class="subtask-span" v-html="item[propData.contentFiled || 'feedbackContent']"></span>
                             <div class="right-file">
                                 <div
                                     v-for="(subitem, subindex) in item[propData.fileGroupField || 'feedbackAttachFiles']"
                                     :key="subindex"
                                     :title="subitem.fileName"
                                     @click.stop="handleOpen(subitem)"
+                                    class="flex items-center file-item"
                                 >
                                     <svg-icon icon-class="file"></svg-icon>
-                                    {{ subitem[propData.fileNameField || 'fileName'] }}
+                                    <div class="name">{{ subitem[propData.fileNameField || 'fileName'] }}</div>
                                 </div>
                             </div>
                         </div>
@@ -274,6 +275,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@use '../style/common.scss';
 .subtaskdialog {
     overflow: auto;
     :deep(.ant-timeline) {
@@ -293,6 +295,7 @@ export default {
     }
     .right-content {
         flex: 1;
+        font-size: 16px;
         span {
             text-align: justify;
             display: inline-block;
@@ -302,9 +305,13 @@ export default {
         cursor: pointer;
     }
     .right-file {
-        cursor: pointer;
-        div {
+        .file-item {
+            cursor: pointer;
             padding-top: 5px;
+            color: #0086d9;
+            .name {
+                text-decoration: underline;
+            }
         }
     }
     .subtaskdot {

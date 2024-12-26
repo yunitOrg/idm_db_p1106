@@ -38,10 +38,14 @@
                             'bg-success': item.status == 4
                         }"
                     >
-                        <div class="item-text">
-                            <div>{{ item.name }}</div>
-                        </div>
-                        <div v-if="item.content" class="item-content">{{ item.content }}</div>
+                        <a-popover :title="item.name">
+                            <template #content>
+                                <div v-if="item.content" class="popover-content item-content" v-html="item.content"></div>
+                            </template>
+                            <div class="item-text">
+                                <div>{{ item.name }}</div>
+                            </div>
+                        </a-popover>
                     </div>
                 </div>
             </div>
@@ -70,9 +74,7 @@ export default {
             console.log('IFlow event', event)
             switch (event.type) {
                 case 'linkageDemand':
-                    this.filter = {
-                        taskId: event.message.current[0]
-                    }
+                    this.filter = event.message.current[0]
                     break
             }
         },
@@ -354,5 +356,10 @@ export default {
         background: none;
         color: black;
     }
+}
+.popover-content {
+    font-size: 16px;
+    width: 300px;
+    padding: 10px;
 }
 </style>

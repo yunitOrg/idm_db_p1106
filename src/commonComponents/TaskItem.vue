@@ -16,7 +16,7 @@
                                 >{{ data.dbStatusText }}</span
                             >
                         </span>
-                        <span class="task-center">{{ data['taskDesc'] }}</span>
+                        <span class="task-center">{{ data.taskDesc }}</span>
                     </div>
                     <div class="task-subtitle">
                         <div class="task-subtitle-left">

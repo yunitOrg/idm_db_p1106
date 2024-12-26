@@ -9,15 +9,15 @@
                         <span class="subtask-red" v-if="item.timeoutStatusText && item.timeoutStatus != 0">{{ item.timeoutStatusText }}</span>
                     </div>
                     <div class="subtask-popleft">
-                        <div>
+                        <div class="flex items-center">
                             <img src="../assets/home.png" alt="" class="taskinfo-title-icon" />
                             <span>{{ item.handlerUnitText }} &nbsp;{{ item.feedbackPeriodText }}</span>
                         </div>
-                        <div v-if="item.startDate">
+                        <div v-if="item.startDate" class="flex items-center">
                             <img src="../assets/time1.png" alt="" class="taskinfo-title-icon" />
                             <span>{{ item.startDate }} ~ {{ item.endDate }}</span>
                         </div>
-                        <div v-if="item.handlerText">
+                        <div v-if="item.handlerText" class="flex items-center">
                             <img src="../assets/phone.png" alt="" class="taskinfo-title-icon" />
                             <span style="margin-right: 5px">{{ item.handlerText }}</span>
                             <span v-if="item.handlerTel">({{ item.handlerTel }})</span>
@@ -335,7 +335,6 @@ export default {
         min-width: 73px;
         display: flex;
         flex-wrap: wrap;
-        margin-top: 3px;
         span {
             padding: 0px 5px;
             margin-right: 5px;
