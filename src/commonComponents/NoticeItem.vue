@@ -5,11 +5,7 @@
                 <!--左侧-->
                 <div class="subtaskLeft">
                     <div class="subtask-label">
-                        <span
-                            :class="statusClass(item)"
-                            v-if="item.dbStatusText"
-                            >{{ item.dbStatusText }}</span
-                        >
+                        <span :class="statusClass(item)" v-if="item.dbStatusText">{{ item.dbStatusText }}</span>
                         <span class="subtask-red" v-if="item.timeoutStatusText && item.timeoutStatus != 0">{{ item.timeoutStatusText }}</span>
                     </div>
                     <div class="subtask-popleft">
@@ -43,7 +39,7 @@
                         </div>
                         <div class="right-svg">
                             <a-badge
-                                v-if="item.unreadInstruction > 0"
+                                v-if="item.unreadInstruction != null"
                                 :count="item.unreadInstruction"
                                 @click="handleOptions({ key: 'notice_leader_instruction_view', record: item })"
                             >
@@ -68,9 +64,9 @@
                         <template v-if="item.buttonList && item.buttonList.length">
                             <a-dropdown placement="bottomRight">
                                 <template slot="overlay">
-                                    <a-menu style="text-align: center;">
+                                    <a-menu style="text-align: center">
                                         <a-menu-item v-for="subitem in item.buttonList" :key="subitem.value" @click="handleOptions({ key: subitem.value, record: item })">
-                                            <a-badge :count="subitem.badge" :offset="[10,0]">
+                                            <a-badge :count="subitem.badge" :offset="[10, 0]">
                                                 {{ subitem.text }}
                                             </a-badge>
                                         </a-menu-item>
@@ -195,11 +191,11 @@ export default {
             this.$emit('handleCuiBell', item)
         },
         // 状态class
-        statusClass(item){
-            if(item.dbStatus == '1' || item.dbStatus == '4') return 'subtask-yellow'
-            if(item.dbStatus == '2' || item.dbStatus == '3') return 'subtask-blue'
-            if(item.dbStatus == '6' || item.dbStatus == '5') return 'subtask-green'
-            if(item.dbStatus == '7' || item.dbStatus == '4') return 'subtask-red'
+        statusClass(item) {
+            if (item.dbStatus == '1' || item.dbStatus == '4') return 'subtask-yellow'
+            if (item.dbStatus == '2' || item.dbStatus == '3') return 'subtask-blue'
+            if (item.dbStatus == '6' || item.dbStatus == '5') return 'subtask-green'
+            if (item.dbStatus == '7' || item.dbStatus == '4') return 'subtask-red'
             return 'subtask-blue'
         }
     }
