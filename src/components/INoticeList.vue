@@ -312,10 +312,12 @@ export default {
                 .file-item {
                     cursor: pointer;
                     margin-top: 5px;
-                    color: #0086d9;
-                    fill: #0086d9;
                     gap: 5px;
+                    i {
+                        color: red;
+                    }
                     .name {
+                        color: #0086d9;
                         text-decoration: underline;
                     }
                 }
