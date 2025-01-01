@@ -35,9 +35,7 @@
                             <div v-html="item.lastFeedbackContent"></div>
                             <div class="task-file">
                                 <div v-for="(file, fileIndex) in item.lastFeedbackAttachFiles" :key="fileIndex" @click.stop="handleOpen(file)" class="flex items-center file-item">
-                                    <i>
-                                        <svg-icon icon-class="file"></svg-icon>
-                                    </i>
+                                    <svg-icon icon-class="file"></svg-icon>
                                     <div class="name">{{ file.fileName }}</div>
                                 </div>
                             </div>
@@ -313,7 +311,7 @@ export default {
                     cursor: pointer;
                     margin-top: 5px;
                     gap: 5px;
-                    i {
+                    svg {
                         color: red;
                     }
                     .name {
@@ -444,10 +442,12 @@ export default {
         .file-item {
             cursor: pointer;
             margin-top: 5px;
-            color: #0086d9;
-            fill: #0086d9;
             gap: 5px;
+            svg {
+                color: red;
+            }
             .name {
+                color: #0086d9;
                 text-decoration: underline;
             }
         }

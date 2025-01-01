@@ -308,8 +308,11 @@ export default {
         .file-item {
             cursor: pointer;
             padding-top: 5px;
-            color: #0086d9;
+            svg {
+                color: red;
+            }
             .name {
+                color: #0086d9;
                 text-decoration: underline;
             }
         }
