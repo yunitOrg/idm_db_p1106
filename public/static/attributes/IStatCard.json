@@ -141,6 +141,20 @@
                     "bindKey": "clickFunc",
                     "desc": "接口参数：自定义函数参数：{item: 行数据}",
                     "multiple": false
+                },
+                {
+                    "type": "select",
+                    "layoutType": "inline",
+                    "text": "刷新KEY",
+                    "bindKey": "messageRefreshKey",
+                    "desc": "根据组件接收到的消息KEY来刷新数据，可选择多个",
+                    "default": [],
+                    "placeholder": "请选择刷新KEY",
+                    "multiple": true,
+                    "ctrlAttrObject": {
+                        "mode": "tags"
+                    },
+                    "dictionary": []
                 }
             ]
         }

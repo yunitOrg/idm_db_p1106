@@ -46,6 +46,15 @@ export default {
         propDataWatchHandle(propData) {
             this.propData = propData.compositeAttr
         },
+        receiveBroadcastMessage(data) {
+            if (this.propData.messageRefreshKey && this.propData.messageRefreshKey.length && data.type === 'websocket' && data.message) {
+                const messageData = (typeof data.message === 'string' && JSON.parse(data.message)) || data.message
+                const arr = this.propData.messageRefreshKey || []
+                if (messageData.badgeType && arr.includes(messageData.badgeType)) {
+                    this.initData()
+                }
+            }
+        },
         initData() {
             console.log('iStatCard', this.propData)
             dataUtil
