@@ -3,10 +3,10 @@ import Vue from 'vue'
 import Main from './Main.vue'
 import { VueRegister } from '@idm-modules/core/regModule/vue'
 import config from '../public/static/config.json'
-import dataV from '@jiaminghi/data-view'
+// import dataV from '@jiaminghi/data-view'
 //引入图标
 import '@/icons' // icon
-Vue.use(dataV)
+// Vue.use(dataV)
 new VueRegister(config)
 const requireComponent = require.context(
     // 其组件目录的相对路径
