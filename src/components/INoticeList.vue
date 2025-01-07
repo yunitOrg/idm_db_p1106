@@ -221,7 +221,7 @@ export default {
             } else {
                 if (top.Public) {
                     // 使用public.js调用方法
-                    top.Public.officeLook(item.fileName, item.id, '', true, { officeModuleId: 'skyDrive' })
+                    top.Public.officeLook(item.fileName, item.id, '', true)
                 }
             }
         },
