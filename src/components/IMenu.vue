@@ -2,7 +2,11 @@
     <div idm-ctrl="idm_module" :id="moduleObject.id" :idm-ctrl-id="moduleObject.id">
         <div :class="className.wrap">
             <a-menu v-model="current" :mode="mode" :selectable="true">
-                <a-menu-item v-for="item in items" :key="item.value">{{ item.label }}</a-menu-item>
+                <a-menu-item v-for="item in items" :key="item.value">
+                    <a-badge :count="item.data?.length" :offset="[10,0]">
+                        {{ item.label }}
+                    </a-badge>
+                </a-menu-item>
             </a-menu>
         </div>
     </div>
