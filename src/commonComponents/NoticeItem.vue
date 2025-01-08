@@ -43,17 +43,17 @@
                                 :count="item.unreadInstruction"
                                 @click="handleOptions({ key: 'notice_leader_instruction_view', record: item })"
                             >
-                                <img :src="hanldeImg('linqi.png')" alt="查看指示" />
+                                <img src="../assets/linqi.png" alt="查看指示" />
                             </a-badge>
                             <div v-if="item.lastFeedbackContent && item.feedbackType != 1" @click="handleShowDialog(item)">
                                 <svg-icon icon-class="history"></svg-icon>
                             </div>
                             <template v-if="btngroup">
                                 <div style="margin-left: 5px" @click="handleCuiCata(item)">
-                                    <img :src="hanldeImg('bell.png')" alt="" />
+                                    <img src="../assets/bell.png" alt="" />
                                 </div>
                                 <div style="margin-left: 5px" @click="handleCuiBell(item)">
-                                    <img :src="hanldeImg('able.png')" alt="" />
+                                    <img src="../assets/able.png" alt="" />
                                 </div>
                             </template>
                         </div>
