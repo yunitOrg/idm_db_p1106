@@ -10,9 +10,7 @@
                     </div>
                     <div class="subtask-popleft">
                         <div>
-                            <img v-if="item.handlerType == 1" src="../assets/250106174803uPnjA6NTo3NuG37lXdA.png" alt="" class="taskinfo-title-icon" />
-                            <img v-else-if="item.handlerType == 2" src="../assets/250106174812lBxOtl8eBdDzderYvYO.png" alt="" class="taskinfo-title-icon" />
-                            <img v-else src="../assets/home.png" alt="" class="taskinfo-title-icon" />
+                            <svg-icon :icon-class="homeIcon(item)" class="taskinfo-title-icon"></svg-icon>
                             <span>{{ item.handlerUnitText }} &nbsp;{{ item.feedbackPeriodText }}</span>
                         </div>
                         <div v-if="item.startDate">
@@ -48,7 +46,7 @@
                                 <img :src="hanldeImg('linqi.png')" alt="查看指示" />
                             </a-badge>
                             <div v-if="item.lastFeedbackContent && item.feedbackType != 1" @click="handleShowDialog(item)">
-                                <img :src="handleHistoryImg()" alt="" />
+                                <svg-icon icon-class="history"></svg-icon>
                             </div>
                             <template v-if="btngroup">
                                 <div style="margin-left: 5px" @click="handleCuiCata(item)">
@@ -147,8 +145,14 @@ export default {
         this.moduleObject = this.$root.moduleObject
     },
     methods: {
-        handleHistoryImg() {
-            return IDM.url.getModuleAssetsWebPath(require('../assets/history.png'), this.moduleObject)
+        homeIcon(item) {
+            if (item.handlerType == 1) {
+                return 'zhuban'
+            }
+            if (item.handlerType == 2) {
+                return 'xieban'
+            }
+            return 'home'
         },
         hanldeImg(img) {
             return IDM.url.getModuleAssetsWebPath(require(`../assets/${img}`), this.moduleObject)
