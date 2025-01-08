@@ -20,7 +20,9 @@
                     </div>
                     <div class="subtask-popleft">
                         <div>
-                            <img src="../assets/home.png" alt="" class="taskinfo-title-icon" />
+                            <img v-if="item.handlerType == 1" src="../assets/250106174803uPnjA6NTo3NuG37lXdA.png" alt="" class="taskinfo-title-icon" />
+                            <img v-else-if="item.handlerType == 2" src="../assets/250106174812lBxOtl8eBdDzderYvYO.png" alt="" class="taskinfo-title-icon" />
+                            <img v-else src="../assets/home.png" alt="" class="taskinfo-title-icon" />
                             <span style="margin-right: 10px">{{ item.handlerUnitText }}</span>
                             <template v-if="isMoOpen">
                                 <span>{{ item.feedbackPeriodText }}</span>
