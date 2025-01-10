@@ -154,7 +154,9 @@ import { CaretUpFill, CaretDownFill } from '../plugins/antdicons'
 export default {
     name: 'ItasklistDetail',
     components: {
-        taskInfo
+        taskInfo,
+        CaretUpFill,
+        CaretDownFill
     },
     data() {
         return {
