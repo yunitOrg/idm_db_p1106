@@ -13,6 +13,7 @@
         "@achrinza/node-ipc": "^10.1.11",
         "@idm-modules/core": "^1.0.72",
         "@jiaminghi/data-view": "^2.10.0",
+        "@ant-design/icons": "2.1.1",
         "ant-design-vue": "^1.7.8",
         "core-js": "^3.6.5",
         "dayjs": "^1.11.3",
