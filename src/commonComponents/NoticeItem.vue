@@ -8,7 +8,7 @@
                         <span :class="statusClass(item)" v-if="item.dbStatusText">{{ item.dbStatusText }}</span>
                         <span class="subtask-red" v-if="item.timeoutStatusText && item.timeoutStatus != 0">{{ item.timeoutStatusText }}</span>
                         <svg-icon v-if="item.feedbackMissNum > 0" icon-class="timeout_unfeedback" class="subtask-red"></svg-icon>
-                        <svg-icon v-if="item.feedbackOverdueNum > 0" icon-class="timeout_feedback" class="subtask-red"></svg-icon>
+                        <svg-icon v-else-if="item.feedbackOverdueNum > 0" icon-class="timeout_feedback" class="subtask-red"></svg-icon>
                     </div>
                     <div class="subtask-popleft">
                         <div>
