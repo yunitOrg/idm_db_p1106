@@ -7,8 +7,12 @@
                     <div class="subtask-label">
                         <span :class="statusClass(item)" v-if="item.dbStatusText">{{ item.dbStatusText }}</span>
                         <span class="subtask-red" v-if="item.timeoutStatusText && item.timeoutStatus != 0">{{ item.timeoutStatusText }}</span>
-                        <svg-icon v-if="item.feedbackMissNum > 0" icon-class="timeout_unfeedback" class="subtask-red"></svg-icon>
-                        <svg-icon v-else-if="item.feedbackOverdueNum > 0" icon-class="timeout_feedback" class="subtask-red"></svg-icon>
+                        <a-tooltip v-if="item.feedbackMissNum > 0" title="超期未反馈">
+                            <svg-icon icon-class="timeout_unfeedback" class="subtask-red"></svg-icon>
+                        </a-tooltip>
+                        <a-tooltip v-else-if="item.feedbackOverdueNum > 0" title="超期已反馈">
+                            <svg-icon icon-class="timeout_feedback" class="subtask-red"></svg-icon>
+                        </a-tooltip>
                     </div>
                     <div class="subtask-popleft">
                         <div class="flex items-center">
@@ -281,6 +285,7 @@ export default {
             height: 27px;
             border-width: 0;
             background: none !important;
+            outline: none;
         }
         .subtask-yellow {
             background-color: rgb(250 100 0 / 10%);
