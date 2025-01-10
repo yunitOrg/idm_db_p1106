@@ -514,12 +514,14 @@ export default {
         sortHandle(item, index, type) {
             let index1, index2
             if (type == 'up') {
+                if (index == 0) return
                 index1 = index
                 index2 = index - 1
             }
             if (type == 'down') {
                 index1 = index + 1
                 index2 = index
+                if (index1 >= this.list.length) return
             }
             [this.list[index1], this.list[index2]] = [this.list[index2], this.list[index1]]
             this.$forceUpdate()
