@@ -11,15 +11,15 @@
                         <svg-icon v-else-if="item.feedbackOverdueNum > 0" icon-class="timeout_feedback" class="subtask-red"></svg-icon>
                     </div>
                     <div class="subtask-popleft">
-                        <div>
+                        <div class="flex items-center">
                             <svg-icon :icon-class="homeIcon(item)" class="taskinfo-title-icon"></svg-icon>
                             <span>{{ item.handlerUnitText }} &nbsp;{{ item.feedbackPeriodText }}</span>
                         </div>
-                        <div v-if="item.startDate">
+                        <div v-if="item.startDate" class="flex items-center">
                             <img src="../assets/time1.png" alt="" class="taskinfo-title-icon" />
                             <span>{{ item.startDate }} ~ {{ item.endDate }}</span>
                         </div>
-                        <div v-if="item.handlerText">
+                        <div v-if="item.handlerText" class="flex items-center">
                             <img src="../assets/phone.png" alt="" class="taskinfo-title-icon" />
                             <span style="margin-right: 5px">{{ item.handlerText }}</span>
                             <span v-if="item.handlerTel">({{ item.handlerTel }})</span>
@@ -211,6 +211,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@use '../style/common.scss';
 .taskInfo {
     .taskInfo-li {
         display: flex;
@@ -265,53 +266,61 @@ export default {
         display: flex;
         flex-direction: column;
         align-items: center;
-        margin-top: 3px;
+        gap: 15px;
         span {
             padding: 0px 5px;
             margin-right: 5px;
             border-radius: 3px;
             height: 27px;
             line-height: 26px;
+            border-width: 1px;
+            border-style: solid;
+        }
+        svg {
+            width: 20px;
+            height: 27px;
+            border-width: 0;
+            background: none !important;
         }
         .subtask-yellow {
             background-color: rgb(250 100 0 / 10%);
             color: #fa6400;
-            border: 1px solid #fa6400;
+            border-color: #fa6400;
         }
         .subtask-blue {
             background-color: rgb(0 134 217 / 10%);
             color: #0086d9;
-            border: 1px solid #0086d9;
+            border-color: #0086d9;
         }
         .subtask-gray {
             background-color: rgb(204 204 204 / 10%);
             color: #cccccc;
-            border: 1px solid #cccccc;
+            border-color: #cccccc;
         }
         .subtask-red {
             background-color: rgb(227 0 0 / 10%);
             color: #e30000;
-            border: 1px solid #e30000;
+            border-color: #e30000;
         }
         .subtask-green {
             background-color: rgb(87 189 106 / 10%);
             color: #57bd6a;
-            border: 1px solid #57bd6a;
+            border-color: #57bd6a;
         }
         .subtask-cheng {
             background-color: #ffffff;
             color: #ffba00;
-            border: 1px solid #ffba00;
+            border-color: #ffba00;
         }
     }
     .subtask-popleft {
-        // width: 283px;
         width: 350px;
         font-size: 16px;
         display: flex;
         flex-direction: column;
         gap: 15px;
         padding-right: 15px;
+        line-height: 27px;
     }
     .right-time {
         width: 100px;
