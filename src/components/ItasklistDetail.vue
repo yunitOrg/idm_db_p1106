@@ -91,11 +91,25 @@
                                             </div>
                                             <template v-if="judgeComState">
                                                 <div style="display: flex">
-                                                    <div class="task-groupbtn" v-if="propData.cuibanBtn" style="margin-right: 5px" @click="handleCuiCata(item)">
-                                                        <CaretUpFill />
+                                                    <div
+                                                        class="task-groupbtn"
+                                                        :class="{
+                                                            disabled: index == 0
+                                                        }"
+                                                        style="margin-right: 5px"
+                                                        @click="sortHandle(item, index, 'up')"
+                                                    >
+                                                        <a-icon type="arrow-up" />
                                                     </div>
-                                                    <div class="task-groupbtn" v-if="propData.cuibanBtn" style="margin-right: 5px" @click="handleCuiCata(item)">
-                                                        <CaretDownFill />
+                                                    <div
+                                                        class="task-groupbtn"
+                                                        :class="{
+                                                            disabled: index + 1 == list.length
+                                                        }"
+                                                        style="margin-right: 5px"
+                                                        @click="sortHandle(item, index, 'down')"
+                                                    >
+                                                        <a-icon type="arrow-down" />
                                                     </div>
                                                     <div class="task-groupbtn" v-if="propData.cuibanBtn" style="margin-right: 5px" @click="handleCuiCata(item)">
                                                         <img :src="hanldeImg('bell.png')" alt="" />
@@ -150,13 +164,10 @@
 import ItasklistDetail from '../mixins/ItasklistDetail.js'
 import taskInfo from '../commonComponents/taskInfo.vue' // 单任务
 import API from '../api/index'
-import { CaretUpFill, CaretDownFill } from '../plugins/antdicons'
 export default {
     name: 'ItasklistDetail',
     components: {
-        taskInfo,
-        CaretUpFill,
-        CaretDownFill
+        taskInfo
     },
     data() {
         return {
@@ -499,6 +510,31 @@ export default {
             this.handleStyle()
             this.convertThemeListAttrToStyleObject()
             this.initData()
+        },
+        sortHandle(item, index, type) {
+            let index1, index2
+            if (type == 'up') {
+                index1 = index
+                index2 = index - 1
+            }
+            if (type == 'down') {
+                index1 = index + 1
+                index2 = index
+            }
+            [this.list[index1], this.list[index2]] = [this.list[index2], this.list[index1]]
+            this.$forceUpdate()
+            window.IDM.http.post(
+                'ctrl/superviseTaskExt/exchangeOrder',
+                {
+                    src: this.list[index2],
+                    dist: this.list[index1]
+                },
+                {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+            )
         }
     }
 }
@@ -541,6 +577,9 @@ export default {
         img {
             width: 20px;
             height: 20px;
+        }
+        &.disabled {
+            color: #ccc;
         }
     }
     .task-span {
