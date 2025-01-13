@@ -136,6 +136,13 @@
       "className": "INoticeList",
       "comType": "common",
       "comLangue": "vue"
+    },
+    {
+      "classId": "idm.componet.db.IFlowTable",
+      "comName": "督办流程",
+      "className": "IFlowTable",
+      "comType": "common",
+      "comLangue": "vue"
     }
   ]
 }
