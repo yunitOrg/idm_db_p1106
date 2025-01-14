@@ -89,10 +89,9 @@
                                                     </span>
                                                 </span>
                                             </div>
-                                            <template v-if="judgeComState">
-                                                <div style="display: flex">
+                                            <div style="display: flex">
+                                                <template v-if="judgeUser">
                                                     <div
-                                                        v-if="judgeUser"
                                                         class="task-groupbtn"
                                                         :class="{
                                                             disabled: index == 0
@@ -103,7 +102,6 @@
                                                         <a-icon type="arrow-up" />
                                                     </div>
                                                     <div
-                                                        v-if="judgeUser"
                                                         class="task-groupbtn"
                                                         :class="{
                                                             disabled: index + 1 == list.length
@@ -113,6 +111,8 @@
                                                     >
                                                         <a-icon type="arrow-down" />
                                                     </div>
+                                                </template>
+                                                <template v-if="judgeComState">
                                                     <div class="task-groupbtn" v-if="propData.cuibanBtn" style="margin-right: 5px" @click="handleCuiCata(item)">
                                                         <img :src="hanldeImg('bell.png')" alt="" />
                                                     </div>
@@ -122,8 +122,8 @@
                                                     <div @click.stop="handleShowDetail(item)">
                                                         <svg-icon :icon-class="item.isShow ? 'hide-box' : 'show-box'" class="task-icon"></svg-icon>
                                                     </div>
-                                                </div>
-                                            </template>
+                                                </template>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
