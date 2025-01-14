@@ -78,18 +78,21 @@ export default {
                 },
                 {
                     title: '秘书一处',
-                    badge: {
-                        value: 2,
-                        type: 'info'
-                    },
-                    status: {
-                        text: '未反馈',
-                        type: 'info'
-                    },
                     tags: [
                         {
+                            text: 2,
+                            type: 'info',
+                            tag: 'badge'
+                        },
+                        {
+                            text: '未反馈',
+                            type: 'info',
+                            tag: 'status'
+                        },
+                        {
                             text: '缺失反馈',
-                            type: 'danger'
+                            type: 'danger',
+                            tag: 'tag'
                         }
                     ],
                     innerPadding: 20,
@@ -97,10 +100,13 @@ export default {
                     children: [
                         {
                             title: '秘书一处',
-                            badge: {
-                                value: 2,
-                                type: 'info'
-                            },
+                            tags: [
+                                {
+                                    text: 2,
+                                    type: 'info',
+                                    tag: 'badge'
+                                }
+                            ],
                             expanded: true,
                             children: [
                                 {
@@ -127,10 +133,13 @@ export default {
                         },
                         {
                             title: '秘书一处',
-                            badge: {
-                                value: 2,
-                                type: 'info'
-                            },
+                            tags: [
+                                {
+                                    text: 2,
+                                    type: 'info',
+                                    tag: 'badge'
+                                }
+                            ],
                             expanded: true,
                             children: [
                                 {
@@ -159,24 +168,29 @@ export default {
                 },
                 {
                     title: '秘书一处',
-                    badge: {
-                        value: 2,
-                        type: 'info'
-                    },
                     tags: [
                         {
+                            text: 2,
+                            type: 'info',
+                            tag: 'badge'
+                        },
+                        {
                             text: '缺失反馈',
-                            type: 'danger'
+                            type: 'danger',
+                            tag: 'tag'
                         }
                     ],
                     innerPadding: 20,
                     children: [
                         {
                             title: '秘书一处',
-                            badge: {
-                                value: 2,
-                                type: 'info'
-                            },
+                            tags: [
+                                {
+                                    text: 2,
+                                    type: 'info',
+                                    tag: 'badge'
+                                }
+                            ],
                             children: [
                                 {
                                     type: 'table',

@@ -26,9 +26,7 @@
             <svg-icon :icon-class="expanded ? 'expand' : 'collaspe'"></svg-icon>
             <svg-icon icon-class="zhuban" class="handlerIcon"></svg-icon>
             <div class="title">{{ data.title }}</div>
-            <div v-if="data.badge" :class="['badge', `badge-${data.badge.type}`]">{{ data.badge.value }}</div>
-            <div v-if="data.status" :class="['status', `status-${data.status.type}`]">{{ data.status.text }}</div>
-            <div v-for="(tag, index) in data.tags" :key="index" :class="['tag', `tag-${tag.type}`]">{{ tag.text }}</div>
+            <div v-for="(tag, index) in data.tags" :key="index" :class="['tag', `tag-${tag.tag}`, `tag-${tag.type}`]">{{ tag.text }}</div>
         </div>
         <div
             v-if="expanded"
@@ -94,52 +92,37 @@ export default {
         .title {
             font-weight: bold;
         }
-        .status {
-            color: white;
-            border-radius: 4px;
-            padding: 2px 10px;
-            font-size: 12px;
-            &-info {
-                background: var(--info);
-            }
-            &-success {
-                background: var(--success);
-            }
-            &-danger {
-                background: var(--danger);
-            }
-        }
-        .badge {
-            color: white;
-            border-radius: 50em;
-            padding: 0 10px;
-            &-info {
-                background: var(--info);
-            }
-            &-success {
-                background: var(--success);
-            }
-            &-danger {
-                background: var(--danger);
-            }
-        }
         .tag {
             color: white;
-            border-radius: 4px;
-            padding: 0 5px;
-            color: var(--tag-color);
-            border: 1px solid var(--tag-border);
-            position: relative;
-            overflow: hidden;
-            &:before {
-                content: '';
-                position: absolute;
-                left: 0;
-                top: 0;
-                right: 0;
-                bottom: 0;
-                background: var(--tag-border);
-                opacity: 0.1;
+            &-badge {
+                color: white;
+                border-radius: 50em;
+                padding: 0 10px;
+                background: var(--tag-color);
+            }
+            &-status {
+                border-radius: 4px;
+                padding: 2px 10px;
+                font-size: 12px;
+                background: var(--tag-color);
+            }
+            &-tag {
+                border-radius: 4px;
+                padding: 0 5px;
+                color: var(--tag-color);
+                border: 1px solid var(--tag-border);
+                position: relative;
+                overflow: hidden;
+                &:before {
+                    content: '';
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                    right: 0;
+                    bottom: 0;
+                    background: var(--tag-border);
+                    opacity: 0.1;
+                }
             }
             &-info {
                 --tag-color: var(--info);
