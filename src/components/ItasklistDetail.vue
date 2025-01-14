@@ -89,46 +89,42 @@
                                                     </span>
                                                 </span>
                                             </div>
-                                            <div style="display: flex">
-                                                <template v-if="judgeUser">
-                                                    <div
-                                                        class="task-groupbtn"
-                                                        :class="{
-                                                            disabled: index == 0
-                                                        }"
-                                                        style="margin-right: 5px"
-                                                        @click="sortHandle(item, index, 'up')"
-                                                    >
-                                                        <a-icon type="arrow-up" />
-                                                    </div>
-                                                    <div
-                                                        class="task-groupbtn"
-                                                        :class="{
-                                                            disabled: index + 1 == list.length
-                                                        }"
-                                                        style="margin-right: 5px"
-                                                        @click="sortHandle(item, index, 'down')"
-                                                    >
-                                                        <a-icon type="arrow-down" />
-                                                    </div>
-                                                </template>
-                                                <template v-if="judgeComState">
-                                                    <div class="task-groupbtn" v-if="propData.cuibanBtn" style="margin-right: 5px" @click="handleCuiCata(item)">
-                                                        <img :src="hanldeImg('bell.png')" alt="" />
-                                                    </div>
-                                                    <div class="task-groupbtn" v-if="propData.btngroup" style="margin-right: 5px" @click="handleCuiBell(item)">
-                                                        <img :src="hanldeImg('able.png')" alt="" />
-                                                    </div>
-                                                    <div @click.stop="handleShowDetail(item)">
-                                                        <svg-icon :icon-class="item.isShow ? 'hide-box' : 'show-box'" class="task-icon"></svg-icon>
-                                                    </div>
-                                                </template>
+                                            <div v-if="judgeComState" style="display: flex">
+                                                <div class="task-groupbtn" v-if="propData.cuibanBtn" style="margin-right: 5px" @click="handleCuiCata(item)">
+                                                    <img :src="hanldeImg('bell.png')" alt="" />
+                                                </div>
+                                                <div class="task-groupbtn" v-if="propData.btngroup" style="margin-right: 5px" @click="handleCuiBell(item)">
+                                                    <img :src="hanldeImg('able.png')" alt="" />
+                                                </div>
+                                                <div @click.stop="handleShowDetail(item)">
+                                                    <svg-icon :icon-class="item.isShow ? 'hide-box' : 'show-box'" class="task-icon"></svg-icon>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <!--右侧按钮组-->
                                 <div class="task-nameicon" v-if="judgeUser">
+                                    <div
+                                        class="taskbtn"
+                                        :class="{
+                                            disabled: index == 0
+                                        }"
+                                        style="margin-right: 5px"
+                                        @click="sortHandle(item, index, 'up')"
+                                    >
+                                        <a-icon type="arrow-up" />
+                                    </div>
+                                    <div
+                                        class="taskbtn"
+                                        :class="{
+                                            disabled: index + 1 == list.length
+                                        }"
+                                        style="margin-right: 5px"
+                                        @click="sortHandle(item, index, 'down')"
+                                    >
+                                        <a-icon type="arrow-down" />
+                                    </div>
                                     <div class="taskbtn" @click="handleBtn('edit', item)">
                                         <svg-icon icon-class="edit" style="fill: #369fe1; font-size: 18px"></svg-icon>
                                         <span>修改</span>
@@ -582,9 +578,6 @@ export default {
             width: 20px;
             height: 20px;
         }
-        &.disabled {
-            color: #ccc;
-        }
     }
     .task-span {
         color: #7da3e4;
@@ -635,8 +628,7 @@ export default {
             align-items: center;
             justify-content: space-between;
             .task-li-title {
-                width: 100%;
-                display: inline-block;
+                flex: 1;
             }
             .task-li-titleTop {
                 text-align: justify;
@@ -664,7 +656,6 @@ export default {
             }
         }
         .task-nameicon {
-            min-width: 100px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -673,6 +664,9 @@ export default {
                 flex-direction: column;
                 align-items: center;
                 color: #666;
+                &.disabled {
+                    color: #ccc;
+                }
             }
             .taskbtn + .taskbtn {
                 margin-left: 20px;
