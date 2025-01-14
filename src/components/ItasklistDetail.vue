@@ -92,6 +92,7 @@
                                             <template v-if="judgeComState">
                                                 <div style="display: flex">
                                                     <div
+                                                        v-if="judgeUser"
                                                         class="task-groupbtn"
                                                         :class="{
                                                             disabled: index == 0
@@ -102,6 +103,7 @@
                                                         <a-icon type="arrow-up" />
                                                     </div>
                                                     <div
+                                                        v-if="judgeUser"
                                                         class="task-groupbtn"
                                                         :class="{
                                                             disabled: index + 1 == list.length
@@ -523,7 +525,7 @@ export default {
                 index2 = index
                 if (index1 >= this.list.length) return
             }
-            [this.list[index1], this.list[index2]] = [this.list[index2], this.list[index1]]
+            ;[this.list[index1], this.list[index2]] = [this.list[index2], this.list[index1]]
             this.$forceUpdate()
             window.IDM.http.post(
                 'ctrl/superviseTaskExt/exchangeOrder',
