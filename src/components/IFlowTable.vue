@@ -12,11 +12,12 @@
                     active: item.tabId == progress.current
                 }"
             >
+                <svg-icon v-if="item.tabStatus == 2" icon-class="check" class="i-checked"></svg-icon>
                 {{ item.tabName }}
             </div>
         </div>
         <div class="flex flex-col progress-content">
-            <IFlowTableSection v-for="(item, index) in sections" :key="index" :type="item.type" :data="item" :children="item.infos" />
+            <IFlowTableSection v-for="(item, index) in sections" :key="index" :moduleObject="moduleObject" :data="item" />
         </div>
     </div>
 </template>
@@ -31,308 +32,236 @@ export default {
     data() {
         return {
             progress: {
-                data: [
-                    {
-                        tabId: 0,
-                        tabName: '立项审核',
-                        tabStatus: 2
-                    },
-                    {
-                        tabId: 1,
-                        tabName: '督查通知',
-                        tabStatus: 2
-                    },
-                    {
-                        tabId: 2,
-                        tabName: '日常反馈',
-                        tabStatus: 1
-                    },
-                    {
-                        tabId: 3,
-                        tabName: '办结反馈',
-                        tabStatus: 0
-                    }
-                ],
-                current: 2
+                data: [],
+                current: null
             },
-            sections: [
-                {
-                    type: 'table',
-                    columns: [
-                        {
-                            title: '状态',
-                            key: 'status',
-                            type: 'status'
-                        },
-                        {
-                            title: '办理环节',
-                            key: 'a'
-                        }
-                    ],
-                    data: [
-                        {
-                            status: 1,
-                            a: '办理环节'
-                        }
-                    ]
-                },
-                {
-                    title: '秘书一处',
-                    tags: [
-                        {
-                            text: 2,
-                            type: 'info',
-                            tag: 'badge'
-                        },
-                        {
-                            text: '未反馈',
-                            type: 'info',
-                            tag: 'status'
-                        },
-                        {
-                            text: '缺失反馈',
-                            type: 'danger',
-                            tag: 'tag'
-                        }
-                    ],
-                    innerPadding: 20,
-                    expanded: true,
-                    children: [
-                        {
-                            title: '秘书一处',
-                            tags: [
-                                {
-                                    text: 2,
-                                    type: 'info',
-                                    tag: 'badge'
-                                }
-                            ],
-                            expanded: true,
-                            children: [
-                                {
-                                    type: 'table',
-                                    columns: [
-                                        {
-                                            title: '状态',
-                                            key: 'status',
-                                            type: 'status'
-                                        },
-                                        {
-                                            title: '办理环节',
-                                            key: 'a'
-                                        }
-                                    ],
-                                    data: [
-                                        {
-                                            status: 1,
-                                            a: '办理环节'
-                                        }
-                                    ]
-                                }
-                            ]
-                        },
-                        {
-                            title: '秘书一处',
-                            tags: [
-                                {
-                                    text: 2,
-                                    type: 'info',
-                                    tag: 'badge'
-                                }
-                            ],
-                            expanded: true,
-                            children: [
-                                {
-                                    type: 'table',
-                                    columns: [
-                                        {
-                                            title: '状态',
-                                            key: 'status',
-                                            type: 'status'
-                                        },
-                                        {
-                                            title: '办理环节',
-                                            key: 'a'
-                                        }
-                                    ],
-                                    data: [
-                                        {
-                                            status: 1,
-                                            a: '办理环节'
-                                        }
-                                    ]
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    title: '秘书一处',
-                    tags: [
-                        {
-                            text: 2,
-                            type: 'info',
-                            tag: 'badge'
-                        },
-                        {
-                            text: '缺失反馈',
-                            type: 'danger',
-                            tag: 'tag'
-                        }
-                    ],
-                    innerPadding: 20,
-                    children: [
-                        {
-                            title: '秘书一处',
-                            tags: [
-                                {
-                                    text: 2,
-                                    type: 'info',
-                                    tag: 'badge'
-                                }
-                            ],
-                            children: [
-                                {
-                                    type: 'table',
-                                    columns: [
-                                        {
-                                            title: '状态',
-                                            key: 'status',
-                                            type: 'status'
-                                        },
-                                        {
-                                            title: '办理环节',
-                                            key: 'a'
-                                        }
-                                    ],
-                                    data: [
-                                        {
-                                            status: 1,
-                                            a: '办理环节'
-                                        }
-                                    ]
-                                }
-                            ]
-                        }
-                    ]
-                }
-            ]
+            sections: []
         }
     },
     watch: {
-        filter: {
-            handler() {
-                this.fetchData()
+        'progress.current': {
+            handler(value) {
+                this.fetchData(value)
             }
         }
     },
+    mounted() {
+        this.fetchTabs()
+    },
     methods: {
         receiveBroadcastMessage(event) {},
-        fetchData() {
+        fetchTabs() {
             if (window.IDM.env_develop_mode) {
-                this.data = [
+                this.progress = {
+                    data: [
+                        {
+                            tabId: '0',
+                            tabName: '立项审核',
+                            tabStatus: '2',
+                            selected: false
+                        },
+                        {
+                            tabId: '1',
+                            tabName: '督查通知',
+                            tabStatus: '2',
+                            selected: false
+                        },
+                        {
+                            tabId: '2',
+                            tabName: '日常反馈',
+                            tabStatus: '2',
+                            selected: false
+                        },
+                        {
+                            tabId: '3',
+                            tabName: '办结反馈',
+                            tabStatus: '2',
+                            selected: true
+                        }
+                    ],
+                    current: '3'
+                }
+            }
+            window.IDM.http.get('ctrl/dbOverview/flow/tab', window.IDM.url.queryObject()).then((res) => {
+                this.progress = {
+                    data: res.data.data,
+                    current: res.data.data.find((n) => n.selected).tabId
+                }
+            })
+        },
+        fetchData(tabId) {
+            if (window.IDM.env_develop_mode) {
+                this.sections = [
                     {
-                        name: '立项',
-                        type: 0,
-                        status: 2,
-                        content: null,
-                        childNodes: [
+                        type: 'table',
+                        columns: [
                             {
-                                name: '开始',
-                                type: 1,
-                                status: 2,
-                                content: null,
-                                childNodes: [
+                                title: '状态',
+                                key: 'status',
+                                type: 'status'
+                            },
+                            {
+                                title: '办理环节',
+                                key: 'a'
+                            }
+                        ],
+                        data: [
+                            {
+                                status: 1,
+                                a: '办理环节'
+                            }
+                        ]
+                    },
+                    {
+                        title: '秘书一处',
+                        tags: [
+                            {
+                                text: 2,
+                                type: 'info',
+                                tag: 'badge'
+                            },
+                            {
+                                text: '未反馈',
+                                type: 'info',
+                                tag: 'status'
+                            },
+                            {
+                                text: '缺失反馈',
+                                type: 'danger',
+                                tag: 'tag'
+                            }
+                        ],
+                        innerPadding: 20,
+                        expanded: true,
+                        children: [
+                            {
+                                title: '秘书一处',
+                                tags: [
                                     {
-                                        name: '审批',
-                                        type: 1,
-                                        status: 2,
-                                        content: null,
-                                        childNodes: null
-                                    },
+                                        text: 2,
+                                        type: 'info',
+                                        tag: 'badge'
+                                    }
+                                ],
+                                expanded: true,
+                                children: [
                                     {
-                                        name: '交办',
-                                        type: 1,
-                                        status: 3,
-                                        content: null,
-                                        childNodes: null
+                                        type: 'table',
+                                        columns: [
+                                            {
+                                                title: '状态',
+                                                key: 'status',
+                                                type: 'status'
+                                            },
+                                            {
+                                                title: '办理环节',
+                                                key: 'a'
+                                            }
+                                        ],
+                                        data: [
+                                            {
+                                                status: 1,
+                                                a: '办理环节'
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                title: '秘书一处',
+                                tags: [
+                                    {
+                                        text: 2,
+                                        type: 'info',
+                                        tag: 'badge'
+                                    }
+                                ],
+                                expanded: true,
+                                children: [
+                                    {
+                                        type: 'table',
+                                        columns: [
+                                            {
+                                                title: '状态',
+                                                key: 'status',
+                                                type: 'status'
+                                            },
+                                            {
+                                                title: '办理环节',
+                                                key: 'a'
+                                            }
+                                        ],
+                                        data: [
+                                            {
+                                                status: 1,
+                                                a: '办理环节'
+                                            }
+                                        ]
                                     }
                                 ]
                             }
                         ]
                     },
                     {
-                        name: '通知',
-                        type: 0,
-                        status: 2,
-                        content: null,
-                        childNodes: [
+                        title: '秘书一处',
+                        tags: [
                             {
-                                name: '市政府办公厅',
-                                type: 1,
-                                status: 2,
-                                content: null,
-                                childNodes: [
+                                text: 2,
+                                type: 'info',
+                                tag: 'badge'
+                            },
+                            {
+                                text: '缺失反馈',
+                                type: 'danger',
+                                tag: 'tag'
+                            }
+                        ],
+                        innerPadding: 20,
+                        children: [
+                            {
+                                title: '秘书一处',
+                                tags: [
                                     {
-                                        name: '待签收',
-                                        type: 1,
-                                        status: 1,
-                                        content: null,
-                                        childNodes: null
+                                        text: 2,
+                                        type: 'info',
+                                        tag: 'badge'
+                                    }
+                                ],
+                                children: [
+                                    {
+                                        type: 'table',
+                                        columns: [
+                                            {
+                                                title: '状态',
+                                                key: 'status',
+                                                type: 'status'
+                                            },
+                                            {
+                                                title: '办理环节',
+                                                key: 'a'
+                                            }
+                                        ],
+                                        data: [
+                                            {
+                                                status: 1,
+                                                a: '办理环节'
+                                            }
+                                        ]
                                     }
                                 ]
-                            }
-                        ]
-                    },
-                    {
-                        name: '反馈',
-                        type: 0,
-                        status: 1,
-                        content: null,
-                        childNodes: [
-                            {
-                                name: '市政府办公厅',
-                                type: 1,
-                                status: 1,
-                                content: null,
-                                childNodes: null
-                            }
-                        ]
-                    },
-                    {
-                        name: '办结',
-                        type: 0,
-                        status: 1,
-                        content: null,
-                        childNodes: [
-                            {
-                                name: '发起办结',
-                                type: 1,
-                                status: 1,
-                                content: null,
-                                childNodes: null
-                            },
-                            {
-                                name: '审批',
-                                type: 1,
-                                status: 1,
-                                content: null,
-                                childNodes: null
-                            },
-                            {
-                                name: '办结',
-                                type: 1,
-                                status: 1,
-                                content: null,
-                                childNodes: null
                             }
                         ]
                     }
                 ]
             }
-            window.IDM.http.get('ctrl/dbTask/getProgress', this.filter).then((res) => {
-                this.data = res.data.data
-            })
+            window.IDM.http
+                .get('ctrl/dbOverview/flow/tab/info', {
+                    ...window.IDM.url.queryObject(),
+                    tabId
+                })
+                .then((res) => {
+                    this.sections = res.data.data
+                })
         },
         clickHandle(record) {
             if (this.propData.clickFunctions?.length > 0) {
@@ -358,6 +287,7 @@ export default {
         color: #666;
         background: #eee;
         clip-path: polygon(0% 0%, 95% 0%, 100% 50%, 95% 100%, 50% 200%, 0% 100%, 5% 50%);
+        gap: 8px;
         &:first-child {
             clip-path: polygon(0% 0%, 95% 0%, 100% 50%, 95% 100%, 50% 200%, 0% 100%, 0% 0%);
         }
@@ -391,5 +321,10 @@ export default {
         gap: 20px;
         padding: 20px;
     }
+}
+.i-checked {
+    width: 24px;
+    height: 24px;
+    fill: white;
 }
 </style>

@@ -2,15 +2,20 @@
     <table v-if="data.type == 'table'" class="w-full table">
         <thead>
             <tr>
-                <th v-for="column in data.columns" :key="column.key">
-                    {{ column.title }}
+                <th v-for="column in data.headers" :key="column.key">
+                    {{ column.text }}
                 </th>
             </tr>
         </thead>
         <tbody>
             <tr v-for="(item, index) in data.data" :key="index">
-                <td v-for="column in data.columns" :key="column.key">
-                    {{ item[column.key] }}
+                <td v-for="column in data.headers" :key="column.key">
+                    <template v-if="column.type == 'status'">
+                        <img :src="status[item[column.key]]" :alt="item.alt" />
+                    </template>
+                    <template v-else>
+                        {{ item[column.key] }}
+                    </template>
                 </td>
             </tr>
         </tbody>
@@ -23,9 +28,9 @@
         }"
     >
         <div @click="toggleExpand" class="flex items-center section-caption">
-            <svg-icon :icon-class="expanded ? 'expand' : 'collaspe'"></svg-icon>
-            <svg-icon icon-class="zhuban" class="handlerIcon"></svg-icon>
-            <div class="title">{{ data.title }}</div>
+            <svg-icon v-if="data.collapseable" :icon-class="expanded ? 'expand' : 'collaspe'"></svg-icon>
+            <svg-icon v-if="data.icon" :icon-class="data.icon" class="handlerIcon"></svg-icon>
+            <div v-if="data.title" class="title">{{ data.title }}</div>
             <div v-for="(tag, index) in data.tags" :key="index" :class="['tag', `tag-${tag.tag}`, `tag-${tag.type}`]">{{ tag.text }}</div>
         </div>
         <div
@@ -35,7 +40,7 @@
                 border: data.innerPadding > 0
             }"
         >
-            <IFlowTableSection v-for="(item, index) in data.children" :key="index" :data="item" />
+            <IFlowTableSection v-for="(item, index) in data.children" :key="index" :moduleObject="moduleObject" :data="item" />
         </div>
     </div>
 </template>
@@ -43,18 +48,30 @@
 export default {
     name: 'IFlowTableSection',
     props: {
+        moduleObject: {
+            type: Object
+        },
         data: {
             type: Object
         }
     },
     data() {
         return {
-            expanded: this.data.expanded
+            expanded: this.data.expanded,
+            status: ['flow_backsend.png', 'flow_processed.png', 'flow_read.png', 'flow_send.png', 'flow_unread.png'].reduce((carry, current) => {
+                carry[current] = this.getAssetUrl(current)
+                return carry
+            }, {})
         }
     },
     methods: {
         toggleExpand() {
-            this.expanded = !this.expanded
+            if (this.data.collapseable) {
+                this.expanded = !this.expanded
+            }
+        },
+        getAssetUrl(path) {
+            return window.IDM.url.getModuleAssetsWebPath(require(`../../assets/flowTable/${path}`), this.moduleObject)
         }
     }
 }
