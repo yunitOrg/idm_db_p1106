@@ -29,9 +29,9 @@ import TopBar from '../commonComponents/IJxLeaderPad/topBar.vue'
 import NavBar from '../commonComponents/IJxLeaderPad/navBar.vue'
 import Dept from '../commonComponents/IJxLeaderPad/dept.vue'
 import Cube from '../commonComponents/IJxLeaderPad/cube.vue'
-import Follow from '../commonComponents/IJxLeaderPad/follow.vue'
+import Follow from '../commonComponents/IJxLeaderPad/follow.vue' //特别关注的列表项
 import Urge from '../commonComponents/IJxLeaderPad/urge.vue'
-import Detail from '../commonComponents/IJxLeaderPad/detail.vue'
+import Detail from '../commonComponents/IJxLeaderPad/detail.vue' //首页的列表项
 import DeptModel from '../commonComponents/IJxLeaderPad/deptModel.vue'
 import dayjs from 'dayjs'
 const homeData = () => ({
@@ -72,6 +72,7 @@ export default {
                     userId: user.userid,
                     userName: user.username,
                     year: date.format('YYYY'),
+                    // year:2024,
                     month: 12
                 },
                 window.IDM.url.queryObject()
@@ -233,12 +234,12 @@ export default {
             window.IDM.http
                 .get('ctrl/dbWorkbench/getLastfeedbackInfo', {
                     ...this.params,
-                    noticeId: value.id
+                    noticeId: value.id,
                 })
                 .then(({ data }) => {
                     this.detailData = {
                         ...data.data,
-                        noticeInfo: value
+                        noticeInfo: value,
                     }
                 })
         },
@@ -289,6 +290,7 @@ html {
 <style lang="scss" scoped>
 .idm-db-IJxLeaderPad-container {
     gap: 2.5rem;
+    background: #8fc7ff;
     .main-container {
         padding: 0 3.75rem 3.75rem;
     }

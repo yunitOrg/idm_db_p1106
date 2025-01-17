@@ -33,8 +33,10 @@
                 </table>
             </div>
         </div>
-        <div v-if="data.noticeStatus < 6" class="flex justify-center dock">
+        <div v-if="data.noticeStatus < 6 && data.noticeInfo.isSms==1" class="flex justify-center dock">
             <a-button @click="ugreHandle" :disabled="saving" :loading="saving" type="primary" size="large">一键催办</a-button>
+        </div>
+        <div v-if="data.auditStatus!=0" :class="['auditStatus',data.auditStatus==1?'auditStatus1':data.auditStatus==-1?'auditStatus2':'']">
         </div>
     </div>
 </template>
@@ -58,6 +60,10 @@ export default {
         closeHandle() {
             this.$emit('close')
         }
+    },
+    mounted() {
+        console.log(this.data);
+        console.log(this.data.noticeInfo);
     }
 }
 </script>
@@ -66,6 +72,7 @@ export default {
     background-color: white;
     padding: 1.5rem 2rem 4rem;
     border-radius: 1.25rem;
+    position: relative;
     .header {
         position: relative;
         .caption {
@@ -90,6 +97,22 @@ export default {
                 background-size: 100% 100%;
             }
         }
+    }
+      
+   .auditStatus{
+        position: absolute;
+        right: 2rem;
+        top: 6rem;
+        width:20rem;
+        height: 16rem;
+    }
+    .auditStatus1{
+        background: url(./images/auditStatus1.png) no-repeat;
+        background-size: 100% 100%;
+    }
+    .auditStatus2{
+        background: url(./images/auditStatus2.png) no-repeat;
+        background-size: 100% 100%;
     }
     .group-wrap {
         .group-title {

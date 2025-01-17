@@ -1,7 +1,20 @@
 <template>
     <Tabs :items="tabs" v-model="dept.value" class="h-full">
         <div class="h-full flex flex-col">
-            <div class="flex justify-end" style="padding: 2rem 0; gap: 2.5rem">
+            <div class="flex justify-end " style="padding: 2rem 0; gap: 2.5rem">
+                <div class="bt">
+                    <span>标题：</span>
+                    <a-input  v-model="bt" placeholder="" />
+                </div>
+                <div class="dateArray">
+                    <span>办结期限：</span>
+                    <a-config-provider :locale="locale">
+                        <a-range-picker valueFormat="YYYY-MM-DD" :placeholder="['开始时间', '结束时间']" mode="['month', 'month']" v-model="times" @change="getTimes()"/>
+                    </a-config-provider>
+                </div>
+                <div class="btn" @click="fetchData()">
+                    检索
+                </div>
                 <Status v-for="i in [4, 2, 1]" :key="i" :value="i" :showLabel="true" />
             </div>
             <div class="flex-1 h-0 overflow-auto">
@@ -31,7 +44,7 @@
                                     <img v-if="record.attentionstatus == 1" src="./images/icon_follow_active.png" />
                                     <img v-else src="./images/icon_follow.png" />
                                 </div>
-                                <div v-if="record.dbStatus < 6" @click="urgeHandle(record)" class="pointer btn-operation">
+                                <div v-if="record.dbStatus < 6 && record.isSms==1" @click="urgeHandle(record)" class="pointer btn-operation">
                                     <img v-if="record.urgeStatus == 1" src="./images/icon_urge_active.png" />
                                     <img v-else src="./images/icon_urge.png" />
                                 </div>
@@ -71,6 +84,8 @@ export default {
     },
     data() {
         return {
+            bt:"",
+            times:[],
             locale,
             data: [],
             loading: false
@@ -192,6 +207,11 @@ export default {
         }
     },
     methods: {
+        //获取日期时间
+        getTimes(times){
+            console.log(11111);
+            console.log(this.times);
+        },
         fetchData() {
             this.loading = true
             window.IDM.http
@@ -200,7 +220,10 @@ export default {
                     {
                         ...this.query,
                         pageNo: 1,
-                        pageSize: 9999
+                        pageSize: 9999,
+                        bt:this.bt,
+                        startTime:this.times[0]?this.times[0]:"",
+                        endTime:this.times[1]?this.times[1]:""
                     },
                     {
                         headers: {
@@ -276,5 +299,44 @@ export default {
             display: none;
         }
     }
+}
+.bt{
+    display: flex;
+    align-items: center;
+    font-size: 2.38rem;
+        color: #333333;
+    &>span{
+        white-space: nowrap;
+    }
+    .ant-input{
+        width:12em;
+        // font-size: 2.38rem;
+        // color: #333333;
+    }
+}
+.dateArray{
+    display: flex;
+    align-items: center;
+    font-size: 2.38rem;
+    color: #333333;
+    .ant-calendar-picker{
+        width:18em;
+        
+    }
+    .ant-calendar-picker-input{
+        font-size: 2.38rem;
+        color: #333333;
+    }
+}
+.btn{
+    width: 80px;
+    height: 32px;
+    font-size: 16px;
+    text-align: center;
+    line-height: 32px;
+    background: #8fc7ff;
+    color: #fff;
+    justify-content: space-between;
+    cursor: default;
 }
 </style>
