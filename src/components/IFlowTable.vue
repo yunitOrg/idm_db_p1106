@@ -4,7 +4,7 @@
             <div
                 v-for="item in progress.data"
                 :key="item.tabId"
-                @click="progress.current = item.tabId"
+                @click="processChangeHandle(item)"
                 class="flex-1 w-0 flex justify-center items-center pointer progress-item"
                 :class="{
                     info: item.tabStatus == 1,
@@ -262,6 +262,10 @@ export default {
                 .then((res) => {
                     this.sections = res.data.data
                 })
+        },
+        processChangeHandle(item) {
+            if (item.tabStatus == 0) return
+            this.progress.current = item.tabId
         },
         clickHandle(record) {
             if (this.propData.clickFunctions?.length > 0) {

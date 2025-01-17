@@ -11,7 +11,7 @@
             <tr v-for="(item, index) in data.data" :key="index">
                 <td v-for="column in data.headers" :key="column.key">
                     <template v-if="column.type == 'status'">
-                        <img :src="status[item[column.key]]" :alt="item.alt" />
+                        <img :src="status[item[column.key]]" :alt="item.alt" :title="item.alt" />
                     </template>
                     <template v-else>
                         {{ item[column.key] }}
