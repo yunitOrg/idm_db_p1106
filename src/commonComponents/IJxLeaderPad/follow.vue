@@ -1,19 +1,21 @@
 <template>
     <Tabs :items="tabs" v-model="current" class="h-full">
         <div class="h-full flex flex-col">
-            <div class="flex justify-end" style="padding: 2rem 0; gap: 2.5rem">
-                <div class="bt">
-                    <span>标题：</span>
-                    <a-input  v-model="bt" placeholder="" />
-                </div>
-                <div class="dateArray">
-                    <span>办结期限：</span>
-                    <a-config-provider :locale="locale">
-                        <a-range-picker valueFormat="YYYY-MM-DD" :placeholder="['开始时间', '结束时间']" mode="['month', 'month']" v-model="times" @change="getTimes()"/>
-                    </a-config-provider>
-                </div>
-                <div class="btn" @click="fetchData()">
-                    检索
+            <div class="flex justify-end" style="padding: 2rem 0; gap: 2.5rem;align-items: center;position: relative;">
+                <div class="searchBox">
+                    <div class="bt">
+                        <span>标题：</span>
+                        <a-input  v-model="bt" placeholder="" />
+                    </div>
+                    <div class="dateArray">
+                        <span>办结期限：</span>
+                        <a-config-provider :locale="locale">
+                            <a-range-picker valueFormat="YYYY-MM-DD" :placeholder="['开始时间', '结束时间']" mode="['month', 'month']" v-model="times" @change="getTimes()"/>
+                        </a-config-provider>
+                    </div>
+                    <div class="btn" @click="fetchData()">
+                        检索
+                    </div>
                 </div>
                 <Status v-for="i in [4, 2, 1]" :key="i" :value="i" :showLabel="true" />
             </div>
@@ -325,42 +327,57 @@ export default {
         }
     }
 }
-.bt{
+.searchBox{
     display: flex;
     align-items: center;
-    font-size: 2.38rem;
-        color: #333333;
-    &>span{
-        white-space: nowrap;
+    position: absolute;
+    left: 0;
+    &>div{
+        margin-right: 2em;
     }
-    .ant-input{
-        // font-size: 2.38rem;
-        // color: #333333;
+    .bt{
+        display: flex;
+        align-items: center;
+        font-size: 2.38rem;
+            color: #333333;
+        &>span{
+            white-space: nowrap;
+        }
+        ::v-deep .ant-input{
+            width:17em;
+            height: 2.1em;
+            font-size: 2rem;
+            // color: #333333;
+        }
     }
-}
-.dateArray{
-    display: flex;
-    align-items: center;
-    font-size: 2.38rem;
-    color: #333333;
-    .ant-calendar-picker{
-        width:18em;
-        
-    }
-    .ant-calendar-picker-input{
+    .dateArray{
+        display: flex;
+        align-items: center;
         font-size: 2.38rem;
         color: #333333;
+        ::v-deep .ant-calendar-picker{
+            width:18em;
+            height: 2.5em;
+            .ant-calendar-picker-input{
+                height: 2.5em;
+                .ant-calendar-range-picker-input{
+                    font-size: 2rem !important;
+                    color: #333333;
+                }
+            }
+        }
+        
     }
-}
-.btn{
-    width: 80px;
-    height: 32px;
-    font-size: 16px;
-    text-align: center;
-    line-height: 32px;
-    background: #8fc7ff;
-    color: #fff;
-    justify-content: space-between;
-    cursor: default;
+    .btn{
+        width: 4em;
+        height: 1.7em;
+        font-size: 2.38rem;
+        text-align: center;
+        line-height: 4rem;
+        background: #2477c9;
+        color: #fff;
+        justify-content: space-between;
+        cursor: default;
+    }
 }
 </style>
