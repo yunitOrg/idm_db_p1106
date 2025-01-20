@@ -8,9 +8,6 @@ importers:
 
   .:
     dependencies:
-      '@achrinza/node-ipc':
-        specifier: ^10.1.11
-        version: 10.1.11
       '@idm-modules/core':
         specifier: ^1.0.72
         version: 1.0.73
@@ -87,25 +84,9 @@ importers:
 
 packages:
 
-  '@achrinza/event-pubsub@5.0.11':
-    resolution: {integrity: sha512-H/bswjSh/wMIgtizHIdeQQuquzBsia0uqf0IaadMKhS7jv5wX0iMqkVbYDZhUhbjJqXnfX4jjzgclt24aizdHA==}
-    engines: {node: 13 || 14 || 16 || 17 || 18 || 19 || 20 || 21 || 22}
-
-  '@achrinza/node-ipc@10.1.11':
-    resolution: {integrity: sha512-3z2yix2G8KP8gW6dWgRPj61Mu2nleqbWqTuS5vluZiXe2VDFkimqaeb4fnuS6JV2nhJz4gX+PR5PQjRKsuXm8w==}
-    engines: {node: 14 || 16 || 17 || 18 || 19 || 20 || 22}
-
   '@achrinza/node-ipc@9.2.2':
     resolution: {integrity: sha512-b90U39dx0cU6emsOvy5hxU4ApNXnE3+Tuo8XQZfiKTGelDwpMwBVgBP7QX6dGTcJgu/miyJuNJ/2naFBliNWEw==}
     engines: {node: 8 || 10 || 12 || 14 || 16 || 17}
-
-  '@achrinza/strong-type@0.1.14':
-    resolution: {integrity: sha512-Se5kMdqRxrjBfpUnVS819OUqW6XUj2ryOHNkZizQ44FGQMfr5X+RXyi4Y8DZn5+lsx2sdnIylpmK6N7TGMpDrw==}
-    engines: {node: 12 || 13 || 14 || 15 || 16 || 17 || 18 || 19 || 20 || 21 || 22}
-
-  '@achrinza/strong-type@1.1.20':
-    resolution: {integrity: sha512-7+A0aC1C6tt1j69phZocl13RZ4vzz6W6jFhSUty9KNgKyoUH48oeZlSQdj2VONlT+sbdkfO7VJJbWiKBqNwebA==}
-    engines: {node: ^12.21.0 || 14 || 15 || 16 || 17 || 18 || 19 || 20 || 21 || 22}
 
   '@ampproject/remapping@2.3.0':
     resolution: {integrity: sha512-30iZtAPgz+LTIYoeivqYo853f02jBYSd5uGnGpkFV0M3xOt9aN73erkgYAmZU43x4VfqcnLxW9Kpg3R5LC4YYw==}
@@ -5769,26 +5750,11 @@ packages:
 
 snapshots:
 
-  '@achrinza/event-pubsub@5.0.11':
-    dependencies:
-      '@achrinza/strong-type': 0.1.14
-
-  '@achrinza/node-ipc@10.1.11':
-    dependencies:
-      '@achrinza/event-pubsub': 5.0.11
-      '@achrinza/strong-type': 1.1.20
-      '@node-ipc/js-queue': 2.0.3
-      js-message: 1.0.7
-
   '@achrinza/node-ipc@9.2.2':
     dependencies:
       '@node-ipc/js-queue': 2.0.3
       event-pubsub: 4.3.0
       js-message: 1.0.7
-
-  '@achrinza/strong-type@0.1.14': {}
-
-  '@achrinza/strong-type@1.1.20': {}
 
   '@ampproject/remapping@2.3.0':
     dependencies:
