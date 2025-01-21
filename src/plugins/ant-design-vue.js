@@ -24,7 +24,7 @@ import 'ant-design-vue/lib/form/style/css'
 import 'ant-design-vue/lib/form-model/style/css'
 import 'ant-design-vue/lib/space/style/css'
 import 'ant-design-vue/lib/badge/style/css'
-import 'ant-design-vue/lib/tabs/style/css'
+import 'ant-design-vue/lib/cascader/style/css'
 import {
     Input,
     Select,
@@ -53,7 +53,7 @@ import {
     Space,
     Form,
     Badge,
-    Tabs
+    Cascader
 } from 'ant-design-vue'
 
 Vue.use(Input)
@@ -85,4 +85,5 @@ Vue.use(Form)
 Vue.use(Form.Item)
 Vue.use(Space)
 Vue.use(Badge)
+Vue.use(Cascader)
 Vue.prototype.$message = message

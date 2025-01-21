@@ -17,7 +17,9 @@ export default {
     },
     methods: {
         exitHandle() {
-            window.close()
+            // window.close()
+            const url = IDM.url.getWebPath('/ctrl/logout?loginFrom=ctrl/login');
+            window.open(url,"_self")
         }
     }
 }
