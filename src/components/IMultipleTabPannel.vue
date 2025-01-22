@@ -98,7 +98,8 @@ export default {
             border-bottom: 1px solid #ddd;
         }
         &-list {
-            gap: 10px;
+            flex-wrap: nowrap;
+            overflow: auto;
         }
         &-item {
             padding: 0 32px;
