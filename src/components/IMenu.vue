@@ -3,7 +3,7 @@
         <div :class="className.wrap">
             <a-menu v-model="current" :mode="mode" :selectable="true">
                 <a-menu-item v-for="item in items" :key="item.value">
-                    <a-badge :count="item.data?.length" :offset="[10,0]">
+                    <a-badge :count="item.data?.length" :offset="[10, 0]">
                         {{ item.label }}
                     </a-badge>
                 </a-menu-item>
@@ -25,7 +25,16 @@ export default {
             items: [],
             propData: this.$root.propData.compositeAttr || {
                 sourceType: 'static',
-                items: []
+                items: [
+                    {
+                        value: 1,
+                        label: '菜单1'
+                    },
+                    {
+                        value: 2,
+                        label: '菜单2'
+                    }
+                ]
             }
         }
     },
@@ -108,9 +117,22 @@ export default {
 </script>
 <style lang="scss" scoped>
 :deep(.ant-menu) {
+    &.ant-menu-horizontal {
+        line-height: 1;
+    }
     .ant-menu-item {
         font-size: 16px;
         font-weight: 500;
+        background: #f8f8f8;
+        border-radius: 6px 6px 0px 0px;
+        border: 1px solid #cccccc;
+        margin-right: 10px;
+        padding: 10px 30px;
+        &.ant-menu-item-selected {
+            border-color: #3489df;
+            border-bottom-color: white;
+            background: none;
+        }
     }
 }
 </style>
