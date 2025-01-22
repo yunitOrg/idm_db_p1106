@@ -119,19 +119,23 @@ export default {
 :deep(.ant-menu) {
     &.ant-menu-horizontal {
         line-height: 1;
-    }
-    .ant-menu-item {
-        font-size: 16px;
-        font-weight: 500;
-        background: #f8f8f8;
-        border-radius: 6px 6px 0px 0px;
-        border: 1px solid #cccccc;
-        margin-right: 10px;
-        padding: 10px 30px;
-        &.ant-menu-item-selected {
-            border-color: #3489df;
-            border-bottom-color: white;
-            background: none;
+        border-bottom-color: #ccc;
+        .ant-menu-item {
+            font-size: 16px;
+            font-weight: 500;
+            background: #f8f8f8;
+            border-radius: 6px 6px 0px 0px;
+            border: 1px solid #cccccc;
+            margin-right: 10px;
+            padding: 10px 30px;
+            &-active {
+                border-bottom-width: 1px;
+            }
+            &-selected {
+                border-color: #3489df;
+                border-bottom-color: white;
+                background: none;
+            }
         }
     }
 }
