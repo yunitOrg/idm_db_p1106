@@ -34,8 +34,8 @@
                 <div class="subtaskRight">
                     <div class="right-time">{{ item.lastFeedbackDate }}</div>
                     <div class="right-content">
-                        <div class="task-font" @click="handleJump(item)" v-if="item.lastFeedbackContent">
-                            <div v-html="item.lastFeedbackContent"></div>
+                        <div class="task-font">
+                            <div @click="handleJump(item)" v-if="item.lastFeedbackContent" v-html="item.lastFeedbackContent"></div>
                             <div class="task-file">
                                 <i v-for="(file, fileIndex) in item.lastFeedbackAttachFiles" :key="fileIndex" @click.stop="handleOpen(file)">
                                     <svg-icon icon-class="file"></svg-icon>
