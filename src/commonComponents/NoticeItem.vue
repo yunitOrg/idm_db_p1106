@@ -49,7 +49,7 @@
                                 :count="item.unreadInstruction"
                                 @click="handleOptions({ key: 'notice_leader_instruction_view', record: item })"
                             >
-                                <img src="../assets/linqi.png" alt="查看指示" />
+                                <img src="../assets/linqi.png" alt="查看批示" />
                             </a-badge>
                             <div v-if="item.lastFeedbackContent && item.feedbackType != 1" @click="handleShowDialog(item)">
                                 <svg-icon icon-class="history"></svg-icon>
