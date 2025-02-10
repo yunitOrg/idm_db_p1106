@@ -17,7 +17,7 @@
             </div>
         </div>
         <div class="flex flex-col progress-content">
-            <IFlowTableSection v-for="(item, index) in sections" :key="index" :moduleObject="moduleObject" :data="item" />
+            <IFlowTableSection v-for="item in sections" :key="item.key" :moduleObject="moduleObject" :data="item" />
         </div>
     </div>
 </template>
@@ -35,7 +35,8 @@ export default {
                 data: [],
                 current: null
             },
-            sections: []
+            sections: [],
+            key: ''
         }
     },
     watch: {
@@ -260,7 +261,10 @@ export default {
                     tabId
                 })
                 .then((res) => {
-                    this.sections = res.data.data
+                    this.sections = res.data.data.map((n) => ({
+                        ...n,
+                        key: n.id + res.data.serverTime
+                    }))
                 })
         },
         processChangeHandle(item) {

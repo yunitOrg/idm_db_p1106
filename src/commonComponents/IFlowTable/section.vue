@@ -40,7 +40,7 @@
                 border: data.innerPadding > 0
             }"
         >
-            <IFlowTableSection v-for="(item, index) in data.children" :key="index" :moduleObject="moduleObject" :data="item" />
+            <IFlowTableSection v-for="item in data.children" :key="item.id" :moduleObject="moduleObject" :data="item" />
         </div>
     </div>
 </template>

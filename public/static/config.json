@@ -1,155 +1,162 @@
 {
-  "version": "1.0.1",
-  "lasttime": "2024-04-17 09:38:08",
-  "author": "申龙",
-  "className": "db",
-  "module": [
-    {
-      "classId": "idm.componet.db.itasklistDetail",
-      "comName": "任务明细",
-      "className": "ItasklistDetail",
-      "comType": "common",
-      "comLangue": "vue"
-    },
-    {
-      "classId": "idm.componet.db.isubTaskInfo",
-      "comName": "子任务信息",
-      "className": "ISubTaskInfo",
-      "comType": "common",
-      "comLangue": "vue"
-    },
-    {
-      "classId": "idm.componet.db.itaskDialog",
-      "comName": "任务弹框",
-      "className": "ItaskDialog",
-      "comType": "common",
-      "comLangue": "vue"
-    },
-    {
-      "classId": "idm.componet.db.isupervisebook",
-      "comName": "督办台账",
-      "className": "ISuperviseBook",
-      "comType": "common",
-      "comLangue": "vue"
-    },
-    {
-      "classId": "idm.componet.db.Isuperviseprojectstat",
-      "comName": "督办立项统计",
-      "className": "ISuperviseProjectStat",
-      "comType": "common",
-      "comLangue": "vue"
-    },
-    {
-      "classId": "idm.componet.db.Isupervisestat",
-      "comName": "督办统计",
-      "className": "ISuperviseStat",
-      "comType": "common",
-      "comLangue": "vue"
-    },
-    {
-      "classId": "idm.componet.db.Isupertail",
-      "comName": "下发跟踪",
-      "className": "ISuperTail",
-      "comType": "common",
-      "comLangue": "vue"
-    },
-    {
-      "classId": "idm.componet.db.IMenu",
-      "comName": "表格菜单",
-      "className": "IMenu",
-      "comType": "common",
-      "comLangue": "vue"
-    },
-    {
-      "classId": "idm.componet.db.ISuperTaskInfo",
-      "comName": "任务信息",
-      "className": "ISuperTaskInfo",
-      "comType": "common",
-      "comLangue": "vue"
-    },
-    {
-      "classId": "idm.componet.db.Ideaback",
-      "comName": "意见反馈",
-      "className": "IdeaBack",
-      "comType": "common",
-      "comLangue": "vue"
-    },
-    {
-        "classId": "idm.componet.db.IJxMonitor",
-        "comName": "江西大屏",
-        "className": "IJxMonitor",
-        "comType": "common",
-        "comLangue": "vue"
-    },
-    {
-        "classId": "idm.componet.db.ISwiper",
-        "comName": "轮播",
-        "className": "ISwiper",
-        "comType": "common",
-        "comLangue": "vue"
-    },
-    {
-        "classId": "idm.componet.db.IOrgStatCube",
-        "comName": "组织统计",
-        "className": "IOrgStatCube",
-        "comType": "common",
-        "comLangue": "vue"
-    },
-    {
-        "classId": "idm.componet.db.IFlow",
-        "comName": "督办流程",
-        "className": "IFlow",
-        "comType": "common",
-        "comLangue": "vue"
-    },
-    {
-        "classId": "idm.componet.db.IJxLeaderItem",
-        "comName": "江西领导单项",
-        "className": "IJxLeaderItem",
-        "comType": "common",
-        "comLangue": "vue"
-    },
-    {
-      "classId": "idm.componet.db.IPadTab",
-      "comName": "督办领导tab",
-      "className": "IPadTab",
-      "comType": "common",
-      "comLangue": "vue"
-    },
-    {
-      "classId": "idm.componet.db.IJxLeaderPad",
-      "comName": "江西领导工作台PAD",
-      "className": "IJxLeaderPad",
-      "comType": "common",
-      "comLangue": "vue"
-    },
-    {
-      "classId": "idm.componet.db.IStatCard",
-      "comName": "承办工作台统计",
-      "className": "IStatCard",
-      "comType": "common",
-      "comLangue": "vue"
-    },
-    {
-      "classId": "idm.componet.db.INoticeList",
-      "comName": "通知列表",
-      "className": "INoticeList",
-      "comType": "common",
-      "comLangue": "vue"
-    },
-    {
-      "classId": "idm.componet.db.IFlowTable",
-      "comName": "督办流程",
-      "className": "IFlowTable",
-      "comType": "common",
-      "comLangue": "vue"
-    },
-    {
-      "classId": "idm.componet.db.IMultipleTabPannel",
-      "comName": "多页签面板",
-      "className": "IMultipleTabPannel",
-      "comType": "common",
-      "comLangue": "vue"
-    }
-  ]
+    "version": "1.0.1",
+    "lasttime": "2024-04-17 09:38:08",
+    "author": "申龙",
+    "className": "db",
+    "module": [
+        {
+            "classId": "idm.componet.db.itasklistDetail",
+            "comName": "任务明细",
+            "className": "ItasklistDetail",
+            "comType": "common",
+            "comLangue": "vue"
+        },
+        {
+            "classId": "idm.componet.db.isubTaskInfo",
+            "comName": "子任务信息",
+            "className": "ISubTaskInfo",
+            "comType": "common",
+            "comLangue": "vue"
+        },
+        {
+            "classId": "idm.componet.db.itaskDialog",
+            "comName": "任务弹框",
+            "className": "ItaskDialog",
+            "comType": "common",
+            "comLangue": "vue"
+        },
+        {
+            "classId": "idm.componet.db.isupervisebook",
+            "comName": "督办台账",
+            "className": "ISuperviseBook",
+            "comType": "common",
+            "comLangue": "vue"
+        },
+        {
+            "classId": "idm.componet.db.Isuperviseprojectstat",
+            "comName": "督办立项统计",
+            "className": "ISuperviseProjectStat",
+            "comType": "common",
+            "comLangue": "vue"
+        },
+        {
+            "classId": "idm.componet.db.Isupervisestat",
+            "comName": "督办统计",
+            "className": "ISuperviseStat",
+            "comType": "common",
+            "comLangue": "vue"
+        },
+        {
+            "classId": "idm.componet.db.Isupertail",
+            "comName": "下发跟踪",
+            "className": "ISuperTail",
+            "comType": "common",
+            "comLangue": "vue"
+        },
+        {
+            "classId": "idm.componet.db.IMenu",
+            "comName": "表格菜单",
+            "className": "IMenu",
+            "comType": "common",
+            "comLangue": "vue"
+        },
+        {
+            "classId": "idm.componet.db.ISuperTaskInfo",
+            "comName": "任务信息",
+            "className": "ISuperTaskInfo",
+            "comType": "common",
+            "comLangue": "vue"
+        },
+        {
+            "classId": "idm.componet.db.Ideaback",
+            "comName": "意见反馈",
+            "className": "IdeaBack",
+            "comType": "common",
+            "comLangue": "vue"
+        },
+        {
+            "classId": "idm.componet.db.IJxMonitor",
+            "comName": "江西大屏",
+            "className": "IJxMonitor",
+            "comType": "common",
+            "comLangue": "vue"
+        },
+        {
+            "classId": "idm.componet.db.ISwiper",
+            "comName": "轮播",
+            "className": "ISwiper",
+            "comType": "common",
+            "comLangue": "vue"
+        },
+        {
+            "classId": "idm.componet.db.IOrgStatCube",
+            "comName": "组织统计",
+            "className": "IOrgStatCube",
+            "comType": "common",
+            "comLangue": "vue"
+        },
+        {
+            "classId": "idm.componet.db.IFlow",
+            "comName": "督办流程",
+            "className": "IFlow",
+            "comType": "common",
+            "comLangue": "vue"
+        },
+        {
+            "classId": "idm.componet.db.IJxLeaderItem",
+            "comName": "江西领导单项",
+            "className": "IJxLeaderItem",
+            "comType": "common",
+            "comLangue": "vue"
+        },
+        {
+            "classId": "idm.componet.db.IPadTab",
+            "comName": "督办领导tab",
+            "className": "IPadTab",
+            "comType": "common",
+            "comLangue": "vue"
+        },
+        {
+            "classId": "idm.componet.db.IJxLeaderPad",
+            "comName": "江西领导工作台PAD",
+            "className": "IJxLeaderPad",
+            "comType": "common",
+            "comLangue": "vue"
+        },
+        {
+            "classId": "idm.componet.db.IStatCard",
+            "comName": "承办工作台统计",
+            "className": "IStatCard",
+            "comType": "common",
+            "comLangue": "vue"
+        },
+        {
+            "classId": "idm.componet.db.INoticeList",
+            "comName": "通知列表",
+            "className": "INoticeList",
+            "comType": "common",
+            "comLangue": "vue"
+        },
+        {
+            "classId": "idm.componet.db.IFlowTable",
+            "comName": "督办流程",
+            "className": "IFlowTable",
+            "comType": "common",
+            "comLangue": "vue"
+        },
+        {
+            "classId": "idm.componet.db.IMultipleTabPannel",
+            "comName": "多页签面板",
+            "className": "IMultipleTabPannel",
+            "comType": "common",
+            "comLangue": "vue"
+        },
+        {
+            "classId": "idm.componet.db.ILeaderComment",
+            "comName": "领导批示",
+            "className": "ILeaderComment",
+            "comType": "common",
+            "comLangue": "vue"
+        }
+    ]
 }

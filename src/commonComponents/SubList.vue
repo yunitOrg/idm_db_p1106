@@ -85,24 +85,9 @@ export default {
     watch: {
         record: {
             handler(record) {
-                this.initData(record)
-                    .then((data) => {
-                        if (_.isArray(this.propData.hanldeInterfaceFunc) && this.propData.hanldeInterfaceFunc.length > 0) {
-                            return _.flatten(
-                                window.IDM.invokeCustomFunctions(this.propData.hanldeInterfaceFunc, {
-                                    record,
-                                    data
-                                })
-                            )
-                        }
-                        return data
-                    })
-                    .then((data) => {
-                        this.dataSource = data
-                        if (record.assignType && record.assignType != 1 && this.dataSource.length == 0) {
-                            window.IDM.message.info('督办任务分解立项流程尚未流转完毕')
-                        }
-                    })
+                this.initData(record).catch((e) => {
+                    window.IDM.message.info(e.message)
+                })
             },
             deep: true,
             immediate: true
@@ -147,13 +132,33 @@ export default {
         // 操作项
         handleOptions(obj) {
             if (_.isArray(this.propData.handleActionFunc) && this.propData.handleActionFunc.length > 0) {
-                window.IDM.invokeCustomFunctions(this.propData.handleActionFunc, obj)
+                window.IDM.invokeCustomFunctions.call(this, this.propData.handleActionFunc, obj)
             }
         },
         propDataWatchHandle(propData) {
             this.propData = propData.compositeAttr || {}
         },
         initData(record) {
+            return this.fetchData(record)
+                .then((data) => {
+                    if (_.isArray(this.propData.hanldeInterfaceFunc) && this.propData.hanldeInterfaceFunc.length > 0) {
+                        return _.flatten(
+                            window.IDM.invokeCustomFunctions(this.propData.hanldeInterfaceFunc, {
+                                record,
+                                data
+                            })
+                        )
+                    }
+                    return data
+                })
+                .then((data) => {
+                    this.dataSource = data
+                    if (record.assignType && record.assignType != 1 && this.dataSource.length == 0) {
+                        return Promise.reject({ message: '督办任务分解立项流程尚未流转完毕' })
+                    }
+                })
+        },
+        fetchData(record) {
             if (_.isArray(this.propData.handleRequestFunc) && this.propData.handleRequestFunc.length > 0) {
                 return Promise.all(
                     window.IDM.invokeCustomFunctions(this.propData.handleRequestFunc, {
