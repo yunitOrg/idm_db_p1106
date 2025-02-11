@@ -2,58 +2,80 @@
     <div idm-ctrl="idm_module" :id="moduleObject.id" :idm-ctrl-id="moduleObject.id">
         <div class="flex flex-col gap-2">
             <a-card title="领导批示">
-                <div>
-                    <div class="flex">
-                        <div class="flex-1 w-0">批示内容</div>
-                        <a-button>
-                            <a-icon type="edit" />
-                        </a-button>
+                <a-spin :spinning="comment.loading">
+                    <div>
+                        <div v-for="item in comment.data" :key="item.id">
+                            <div class="flex">
+                                <div class="flex-1 w-0">{{ item.content }}</div>
+                                <a-button @click="comment.current = clone(item)" icon="edit"> </a-button>
+                            </div>
+                            <div class="flex justify-end gap-2">
+                                <div>{{ item.leaderName }}</div>
+                                <div>{{ item.createTime }}</div>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                </a-spin>
             </a-card>
             <a-card title="评价">
-                <div>
-                    <div class="flex">
-                        <div class="flex-1 w-0">评价</div>
-                        <a-button>
-                            <a-icon type="edit" />
-                        </a-button>
+                <a-spin :spinning="rate.loading">
+                    <div>
+                        <div v-for="item in rate.data" :key="item.id">
+                            <div class="flex">
+                                <div class="flex-1 w-0 flex items-center">
+                                    <div>{{ item.leaderName }}：</div>
+                                    <a-rate :value="item.score" disabled></a-rate>
+                                </div>
+                                <a-button @click="rate.current = clone(item)" icon="edit"> </a-button>
+                            </div>
+                            <div>{{ item.content }}</div>
+                        </div>
                     </div>
-                </div>
+                </a-spin>
             </a-card>
-            <a-form v-if="comment" layout="vertical">
-                <a-form-item label="批示内容">
-                    <a-textarea v-model="comment.content"></a-textarea>
-                </a-form-item>
-                <a-form-item label="">
-                    <div class="flex justify-center gap-2">
-                        <a-button @click="saveComment" type="primary">保存</a-button>
-                        <a-button v-if="comment.id" type="danger">删除</a-button>
-                        <a-button @click="comment = null">取消</a-button>
-                    </div>
-                </a-form-item>
-            </a-form>
-            <a-form v-else-if="rate" layout="horizontal">
-                <a-form-item label="评分">
-                    <a-rate v-model="rate.value" />
-                </a-form-item>
-                <a-form-item label="评语">
-                    <a-textarea v-model="rate.content"></a-textarea>
-                </a-form-item>
-                <a-form-item label="">
-                    <div class="flex justify-center gap-2">
-                        <a-button @click="saveRate" type="primary">保存</a-button>
-                        <a-button v-if="rate.id" type="danger">删除</a-button>
-                        <a-button @click="rate = null">取消</a-button>
-                    </div>
-                </a-form-item>
-            </a-form>
+            <a-card v-if="comment.current" :title="comment.current.id ? '修改批示' : '新增批示'">
+                <a-form layout="vertical">
+                    <a-form-item label="批示模板">
+                        <a-select v-model="comment.tpl.current">
+                            <a-select-option v-for="item in comment.tpl.data" :key="item.value" :value="item.value">{{ item.text }}</a-select-option>
+                        </a-select>
+                    </a-form-item>
+                    <a-form-item label="批示内容">
+                        <a-textarea v-model="comment.current.content"></a-textarea>
+                    </a-form-item>
+                    <a-form-item label="">
+                        <div class="flex justify-center gap-2">
+                            <a-button @click="saveComment" :loading="comment.submitting" type="primary">保存</a-button>
+                            <a-button v-if="comment.current.id" @click="deleteComment(comment.current.id)" :loading="comment.deletting" type="danger">删除</a-button>
+                            <a-button @click="comment.current = null">取消</a-button>
+                        </div>
+                    </a-form-item>
+                </a-form>
+            </a-card>
+            <a-card v-else-if="rate.current" :title="rate.current.id ? '修改评价' : '新增评价'">
+                <a-form layout="horizontal">
+                    <a-form-item label="评分">
+                        <a-rate v-model="rate.current.score" />
+                    </a-form-item>
+                    <a-form-item label="评语">
+                        <a-textarea v-model="rate.current.content"></a-textarea>
+                    </a-form-item>
+                    <a-form-item label="">
+                        <div class="flex justify-center gap-2">
+                            <a-button @click="saveRate" :loading="rate.submitting" type="primary">保存</a-button>
+                            <a-button v-if="rate.current.id" @click="deleteRate(rate.current.id)" :loading="rate.deletting" type="danger">删除</a-button>
+                            <a-button @click="rate.current = null">取消</a-button>
+                        </div>
+                    </a-form-item>
+                </a-form>
+            </a-card>
             <div v-else class="flex justify-center gap-2">
                 <a-button @click="editCommentHandle({})">批示</a-button>
                 <a-button
+                    v-if="canRate"
                     @click="
                         editRateHandle({
-                            value: 5
+                            score: 5
                         })
                     "
                     >评价</a-button
@@ -64,24 +86,161 @@
 </template>
 <script>
 import bindProp from '../mixins/bindProp'
+import bindStyles from '../mixins/bindStyles'
 export default {
-    mixins: [bindProp()],
+    mixins: [bindProp(), bindStyles()],
     data() {
         return {
-            comment: null,
-            rate: null
+            id: window.IDM.url.queryObject().id,
+            comment: {
+                data: [],
+                current: null,
+                tpl: {
+                    data: [],
+                    current: null
+                },
+                submitting: false,
+                deletting: false,
+                loading: true
+            },
+            rate: {
+                data: [],
+                current: null,
+                submitting: false,
+                deletting: false,
+                loading: true
+            }
         }
     },
+    watch: {
+        'comment.tpl.current'(value) {
+            this.comment.current.content = this.comment.tpl.data.find((n) => n.value == value).text
+        }
+    },
+    computed: {
+        canRate() {
+            if (this.rate.loading) return false
+            if (this.rate.data.some((n) => n.leaderId == window.IDM.user.getCurrentUserInfo().userid)) return false
+            return true
+        }
+    },
+    mounted() {
+        this.initData()
+    },
     methods: {
-        initData() {},
+        clone: _.clone,
+        initData() {
+            this.fetchCommentTpls()
+            this.fetchComments(this.id)
+            this.fetchRates(this.id)
+        },
         editCommentHandle(comment) {
-            this.comment = comment
+            this.comment.current = comment
         },
-        saveComment() {},
+        saveComment() {
+            this.comment.submitting = true
+            window.IDM.http
+                .post(this.comment.current.id ? 'ctrl/dbInstruction/update' : 'ctrl/dbInstruction/add', {
+                    noticeId: this.id,
+                    ...this.comment.current
+                })
+                .then(({ data }) => {
+                    this.fetchComments(this.id)
+                    window.IDM.layer.msg(data.message)
+                    if (data.code == '200') {
+                        this.comment.current = null
+                    }
+                })
+                .finally(() => {
+                    this.comment.submitting = false
+                })
+        },
+        deleteComment(id) {
+            this.comment.deletting = true
+            window.IDM.http
+                .post('ctrl/dbInstruction/delete', {
+                    id
+                })
+                .then(({ data }) => {
+                    this.fetchComments(this.id)
+                    window.IDM.layer.msg(data.message)
+                    if (data.code == '200') {
+                        this.comment.current = null
+                    }
+                })
+                .finally(() => {
+                    this.comment.deletting = false
+                })
+        },
         editRateHandle(rate) {
-            this.rate = rate
+            this.rate.current = rate
         },
-        saveRate() {}
+        saveRate() {
+            this.rate.submitting = true
+            window.IDM.http
+                .post(this.rate.current.id ? 'ctrl/dbAppraise/update' : 'ctrl/dbAppraise/add', {
+                    noticeId: this.id,
+                    ...this.rate.current
+                })
+                .then(({ data }) => {
+                    this.fetchRates(this.id)
+                    window.IDM.layer.msg(data.message)
+                    if (data.code == '200') {
+                        this.rate.current = null
+                    }
+                })
+                .finally(() => {
+                    this.rate.submitting = false
+                })
+        },
+        deleteRate(id) {
+            this.rate.deletting = true
+            window.IDM.http
+                .post('ctrl/dbAppraise/delete', {
+                    id
+                })
+                .then(({ data }) => {
+                    this.fetchRates(this.id)
+                    window.IDM.layer.msg(data.message)
+                    if (data.code == '200') {
+                        this.rate.current = null
+                    }
+                })
+                .finally(() => {
+                    this.rate.deletting = false
+                })
+        },
+        fetchCommentTpls() {
+            window.IDM.http.get('ctrl/dbInstruction/getDbInstructionTemplateSelect').then(({ data }) => {
+                this.comment.tpl.data = data.data
+            })
+        },
+        fetchComments(id) {
+            this.comment.loading = true
+            window.IDM.http
+                .get('ctrl/dbInstruction/query', {
+                    id
+                })
+                .then(({ data }) => {
+                    this.comment.data = data.data
+                })
+                .finally(() => {
+                    this.comment.loading = false
+                })
+        },
+        fetchRates(noticeId) {
+            this.rate.loading = true
+            window.IDM.http
+                .get('ctrl/dbAppraise/queryAppraise', {
+                    noticeId
+                })
+                .then(({ data }) => {
+                    this.rate.data = data.data
+                })
+                .finally(() => {
+                    this.rate.loading = false
+                })
+        }
     }
 }
 </script>
