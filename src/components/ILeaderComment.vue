@@ -120,7 +120,7 @@ export default {
             return true
         },
         canCreate() {
-            return true
+            return window.IDM.user.userObject.roleIds?.split(',').some((n) => n == '180622194442OrvtuD1M4OjnOF15lOq')
         }
     },
     mounted() {
