@@ -295,6 +295,14 @@
                     "bindKey": "handleLuoshi",
                     "desc": "接口参数：自定义函数参数：{_this: this, item: item}",
                     "multiple": false
+                },
+                {
+                    "type": "actionSelect",
+                    "layoutType": "block",
+                    "text": "操作项函数",
+                    "bindKey": "handleActionFunc",
+                    "desc": "接口参数：自定义函数参数：{_this: this, option: option}",
+                    "multiple": false
                 }
             ]
         }

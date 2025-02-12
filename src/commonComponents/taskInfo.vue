@@ -59,7 +59,7 @@
                         </span>
                         <div class="right-svg" v-if="item.lastFeedbackContent && item.feedbackType != 1">
                             <div @click="handleShowDialog(item)">
-                                <img :src="handleHistoryImg()" alt="" />
+                                <svg-icon icon-class="history"></svg-icon>
                             </div>
                             <template v-if="btngroup">
                                 <div style="margin-left: 5px" @click="handleCuiCata(item)">
@@ -74,18 +74,16 @@
                     </div>
                 </div>
                 <template v-if="porpsList?.length">
-                    <div class="subtaskMore" v-if="!origin">
-                        <template v-if="item.buttonList && item.buttonList.length">
-                            <a-popover placement="bottomRight">
-                                <template slot="content">
-                                    <p v-for="(subitem, index) in item.buttonList" :key="index" @click="handleOptions(subitem, item)">
-                                        <span>{{ subitem.text }}</span>
-                                    </p>
-                                </template>
-                                <!-- <svg-icon icon-class="detail" class="rightSvg"></svg-icon> -->
-                                <img src="../assets/more.png" alt="" />
-                            </a-popover>
-                        </template>
+                    <div v-if="item.buttonList && item.buttonList.length" class="subtaskMore">
+                        <a-popover placement="bottomRight">
+                            <template slot="content">
+                                <p v-for="(subitem, index) in item.buttonList" :key="index" @click="handleOptions(subitem, item)">
+                                    <span>{{ subitem.text }}</span>
+                                </p>
+                            </template>
+                            <!-- <svg-icon icon-class="detail" class="rightSvg"></svg-icon> -->
+                            <img src="../assets/more.png" alt="" />
+                        </a-popover>
                     </div>
                 </template>
             </div>
@@ -291,13 +289,12 @@ export default {
             display: flex;
             justify-content: space-between;
             span {
-                width: 80%;
                 display: inline-block;
                 text-align: justify;
             }
             .task-font {
-                margin-right: 2px;
                 cursor: pointer;
+                padding-right: 10px;
             }
             .task-file {
                 cursor: pointer;
@@ -375,20 +372,16 @@ export default {
         color: #333333;
     }
     .right-svg {
-        // position: absolute;
-        // right: 120px;
-        width: 20%;
         display: flex;
         cursor: pointer;
         svg {
-            font-size: 18px;
-            width: 18px;
-            height: 18px;
-            margin-left: 20px;
+            font-size: 22px;
+            width: 22px;
+            height: 22px;
         }
         img {
-            width: 18px;
-            height: 18px;
+            width: 22px;
+            height: 22px;
         }
     }
     .rightSvg {

@@ -17,6 +17,7 @@
                     @handleFileOpen="handleFileOpen"
                     @handleCuiCata="handleCuiCata"
                     @handleCuiBell="handleCuiBell"
+                    @handleOptions="handleOptions"
                 ></taskInfo>
             </template>
             <template v-else>
@@ -169,22 +170,29 @@ export default {
                 return
             }
             if (this.taskId) {
-                let res = await API.ApiGetMsgApproval({ taskId: this.taskId })
-                if (res.code == '200') {
-                    if (Array.isArray(this.propData.hanldeInterfaceFunc) && this.propData.hanldeInterfaceFunc.length > 0) {
-                        this.singMoreShowData = window.IDM.invokeCustomFunctions(this.propData.hanldeInterfaceFunc, {
-                            data: res.data
-                        }).flat()
-                    } else {
-                        this.singMoreShowData = res.data
+                window.IDM.http.get('ctrl/dbAppraise/getNoticeByTaskId', { taskId: this.taskId }).then(({data}) => {
+                    if (data.code == '200') {
+                        if (Array.isArray(this.propData.hanldeInterfaceFunc) && this.propData.hanldeInterfaceFunc.length > 0) {
+                            this.singMoreShowData = window.IDM.invokeCustomFunctions(this.propData.hanldeInterfaceFunc, {
+                                data: data.data
+                            }).flat()
+                        } else {
+                            this.singMoreShowData = data.data
+                        }
+                        this.sendHeight()
                     }
-                    this.sendHeight()
-                }
+                })
             }
         },
         init() {
             this.handleStyle()
             this.initData()
+        },
+        // 操作项
+        handleOptions(obj) {
+            if (_.isArray(this.propData.handleActionFunc) && this.propData.handleActionFunc.length > 0) {
+                window.IDM.invokeCustomFunctions.call(this, this.propData.handleActionFunc, obj)
+            }
         }
     }
 }

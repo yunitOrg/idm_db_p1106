@@ -148,6 +148,7 @@ export default {
                     window.IDM.layer.msg(data.message)
                     if (data.code == '200') {
                         this.comment.current = null
+                        this.commentChange()
                     }
                 })
                 .finally(() => {
@@ -165,6 +166,7 @@ export default {
                     window.IDM.layer.msg(data.message)
                     if (data.code == '200') {
                         this.comment.current = null
+                        this.commentChange()
                     }
                 })
                 .finally(() => {
@@ -239,6 +241,9 @@ export default {
                 .finally(() => {
                     this.rate.loading = false
                 })
+        },
+        commentChange() {
+            top.document.querySelector('#vkbLOc0HEn2SV9Ct iframe')?.contentWindow.location.reload()
         }
     }
 }
