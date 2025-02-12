@@ -33,7 +33,7 @@
                     </div>
                 </a-spin>
             </a-card>
-            <a-card v-if="comment.current" :title="comment.current.id ? '修改批示' : '新增批示'">
+            <a-modal v-if="comment.current" :visible="true" :title="comment.current.id ? '修改批示' : '新增批示'" @cancel="comment.current = null" width="90vw">
                 <a-form layout="vertical">
                     <a-form-item label="批示模板">
                         <a-select v-model="comment.tpl.current">
@@ -41,35 +41,31 @@
                         </a-select>
                     </a-form-item>
                     <a-form-item label="批示内容">
-                        <a-textarea v-model="comment.current.content"></a-textarea>
-                    </a-form-item>
-                    <a-form-item label="">
-                        <div class="flex justify-center gap-2">
-                            <a-button @click="saveComment" :loading="comment.submitting" type="primary">保存</a-button>
-                            <a-button v-if="comment.current.id" @click="deleteComment(comment.current.id)" :loading="comment.deletting" type="danger">删除</a-button>
-                            <a-button @click="comment.current = null">取消</a-button>
-                        </div>
+                        <a-textarea v-model="comment.current.content" :rows="4"></a-textarea>
                     </a-form-item>
                 </a-form>
-            </a-card>
-            <a-card v-else-if="rate.current" :title="rate.current.id ? '修改评价' : '新增评价'">
+                <template #footer>
+                    <a-button @click="saveComment" :loading="comment.submitting" type="primary">保存</a-button>
+                    <a-button v-if="comment.current.id" @click="deleteComment(comment.current.id)" :loading="comment.deletting" type="danger">删除</a-button>
+                    <a-button @click="comment.current = null">取消</a-button>
+                </template>
+            </a-modal>
+            <a-modal v-if="rate.current" :visible="true" :title="rate.current.id ? '修改评价' : '新增评价'" @cancel="rate.current = null" width="90vw">
                 <a-form layout="horizontal">
                     <a-form-item label="评分">
                         <a-rate v-model="rate.current.score" />
                     </a-form-item>
                     <a-form-item label="评语">
-                        <a-textarea v-model="rate.current.content"></a-textarea>
-                    </a-form-item>
-                    <a-form-item label="">
-                        <div class="flex justify-center gap-2">
-                            <a-button @click="saveRate" :loading="rate.submitting" type="primary">保存</a-button>
-                            <a-button v-if="rate.current.id" @click="deleteRate(rate.current.id)" :loading="rate.deletting" type="danger">删除</a-button>
-                            <a-button @click="rate.current = null">取消</a-button>
-                        </div>
+                        <a-textarea v-model="rate.current.content" :rows="4"></a-textarea>
                     </a-form-item>
                 </a-form>
-            </a-card>
-            <div v-else class="flex justify-center gap-2">
+                <template #footer>
+                    <a-button @click="saveRate" :loading="rate.submitting" type="primary">保存</a-button>
+                    <a-button v-if="rate.current.id" @click="deleteRate(rate.current.id)" :loading="rate.deletting" type="danger">删除</a-button>
+                    <a-button @click="rate.current = null">取消</a-button>
+                </template>
+            </a-modal>
+            <div v-if="canCreate" class="flex justify-center gap-2">
                 <a-button @click="editCommentHandle({})">批示</a-button>
                 <a-button
                     v-if="canRate"
@@ -121,6 +117,9 @@ export default {
         canRate() {
             if (this.rate.loading) return false
             if (this.rate.data.some((n) => n.leaderId == window.IDM.user.getCurrentUserInfo().userid)) return false
+            return true
+        },
+        canCreate() {
             return true
         }
     },
