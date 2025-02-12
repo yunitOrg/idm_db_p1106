@@ -170,7 +170,7 @@ export default {
                 return
             }
             if (this.taskId) {
-                window.IDM.http.get('ctrl/dbAppraise/getNoticeByTaskId', { taskId: this.taskId }).then(({data}) => {
+                window.IDM.http.get('ctrl/dbAppraise/getNoticeByTaskId', { taskId: this.taskId }).then(({ data }) => {
                     if (data.code == '200') {
                         if (Array.isArray(this.propData.hanldeInterfaceFunc) && this.propData.hanldeInterfaceFunc.length > 0) {
                             this.singMoreShowData = window.IDM.invokeCustomFunctions(this.propData.hanldeInterfaceFunc, {
@@ -191,7 +191,10 @@ export default {
         // 操作项
         handleOptions(obj) {
             if (_.isArray(this.propData.handleActionFunc) && this.propData.handleActionFunc.length > 0) {
-                window.IDM.invokeCustomFunctions.call(this, this.propData.handleActionFunc, obj)
+                window.IDM.invokeCustomFunctions.call(this, this.propData.handleActionFunc, {
+                    key: obj.item.value,
+                    record: obj.fatherItem
+                })
             }
         }
     }
