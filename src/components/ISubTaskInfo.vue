@@ -28,26 +28,28 @@
 </template>
 
 <script>
-import API from '../api/index'
 import { getSubTaskList } from '../utils/mock'
 import taskInfo from '../commonComponents/taskInfo.vue' // 子任务
+import bindProp from '../mixins/bindProp'
+import dataUtil from '../utils/dataUtil'
 export default {
     name: 'ISubTaskInfo',
+    mixins: [
+        bindProp({
+            btngroup: false,
+            interfaceUrl: 'ctrl/dbAppraise/getNoticeByTaskId'
+        })
+    ],
     components: {
         taskInfo
     },
     data() {
         return {
             singMoreShowData: [],
-            moduleObject: {},
-            taskId: '',
-            propData: this.$root.propData.compositeAttr || {
-                btngroup: false
-            }
+            taskId: ''
         }
     },
     mounted() {
-        this.moduleObject = this.$root.moduleObject
         this.init()
     },
     methods: {
@@ -147,8 +149,8 @@ export default {
         },
         getTaskId() {
             try {
-                let { id } = top.getTaskParam() // 调用dsf方法初始化
-                this.taskId = id
+                const { id } = top.getTaskParam() // 调用dsf方法初始化
+                return id
             } catch (e) {
                 console.log('ISubTaskInfo: 获取任务id失败', e)
             }
@@ -164,25 +166,25 @@ export default {
             })
         },
         async initData() {
-            this.getTaskId()
             if (this.moduleObject.env !== 'production') {
                 this.getMockData()
                 return
             }
-            if (this.taskId) {
-                window.IDM.http.get('ctrl/dbAppraise/getNoticeByTaskId', { taskId: this.taskId }).then(({ data }) => {
-                    if (data.code == '200') {
-                        if (Array.isArray(this.propData.hanldeInterfaceFunc) && this.propData.hanldeInterfaceFunc.length > 0) {
-                            this.singMoreShowData = window.IDM.invokeCustomFunctions(this.propData.hanldeInterfaceFunc, {
-                                data: data.data
-                            }).flat()
-                        } else {
-                            this.singMoreShowData = data.data
-                        }
-                        this.sendHeight()
+            dataUtil
+                .fetchData({
+                    dataSourceType: 'customInterface',
+                    customInterface: {
+                        url: this.propData.interfaceUrl,
+                        requestParamFun: this.propData.interfaceParamsFunc,
+                        responseDataFun: this.propData.hanldeInterfaceFunc
                     }
                 })
-            }
+                .then((data) => {
+                    this.singMoreShowData = data.data
+                    this.$nextTick(() => {
+                        this.sendHeight()
+                    })
+                })
         },
         init() {
             this.handleStyle()

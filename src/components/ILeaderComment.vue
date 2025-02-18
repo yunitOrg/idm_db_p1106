@@ -7,7 +7,7 @@
                         <div v-for="item in comment.data" :key="item.id">
                             <div class="flex">
                                 <div class="flex-1 w-0">{{ item.content }}</div>
-                                <a-button @click="comment.current = clone(item)" icon="edit"> </a-button>
+                                <a-button v-if="canEdit(item.leaderId)" @click="comment.current = clone(item)" icon="edit"> </a-button>
                             </div>
                             <div class="flex justify-end gap-2">
                                 <div>{{ item.leaderName }}</div>
@@ -26,7 +26,7 @@
                                     <div>{{ item.leaderName }}：</div>
                                     <a-rate :value="item.score" disabled></a-rate>
                                 </div>
-                                <a-button @click="rate.current = clone(item)" icon="edit"> </a-button>
+                                <a-button v-if="canEdit(item.leaderId)" @click="rate.current = clone(item)" icon="edit"> </a-button>
                             </div>
                             <div>{{ item.content }}</div>
                         </div>
@@ -244,6 +244,9 @@ export default {
         },
         commentChange() {
             top.document.querySelector('#vkbLOc0HEn2SV9Ct iframe')?.contentWindow.location.reload()
+        },
+        canEdit(leaderId) {
+            return window.IDM.user.userObject.userid == leaderId
         }
     }
 }

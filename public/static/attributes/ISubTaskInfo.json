@@ -257,6 +257,22 @@
             "helpUrl": "",
             "children": [
                 {
+                    "type": "input",
+                    "layoutType": "inline",
+                    "text": "接口地址",
+                    "bindKey": "interfaceUrl",
+                    "desc": "",
+                    "default": "ctrl/dbAppraise/getNoticeByTaskId"
+                },
+                {
+                    "type": "actionSelect",
+                    "layoutType": "block",
+                    "text": "自定义接口参数",
+                    "bindKey": "interfaceParamsFunc",
+                    "desc": "",
+                    "multiple": false
+                },
+                {
                     "type": "actionSelect",
                     "layoutType": "block",
                     "text": "接口返回数据处理函数",
