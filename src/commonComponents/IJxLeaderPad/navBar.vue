@@ -9,7 +9,7 @@
                 active: nav.active
             }"
         >
-            {{ nav.label }}
+            {{ nav.label }} <span v-if="nav.num || nav.num==0">{{nav.num}}</span>
         </div>
     </div>
 </template>

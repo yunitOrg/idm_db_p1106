@@ -13,6 +13,7 @@
                     :themeList="propData.themeList"
                     :btngroup="propData.btngroup"
                     :porpsList="singMoreShowData"
+                    :isMoOpen="true"
                     @handleContentJump="handleContentJump"
                     @handleFileOpen="handleFileOpen"
                     @handleCuiCata="handleCuiCata"
@@ -171,14 +172,21 @@ export default {
                 return
             }
             dataUtil
-                .fetchData({
-                    dataSourceType: 'customInterface',
-                    customInterface: {
-                        url: this.propData.interfaceUrl,
-                        requestParamFun: this.propData.interfaceParamsFunc,
-                        responseDataFun: this.propData.hanldeInterfaceFunc
+                .fetchData(
+                    {
+                        dataSourceType: 'customInterface',
+                        customInterface: {
+                            url: this.propData.interfaceUrl,
+                            requestParamFun: this.propData.interfaceParamsFunc,
+                            responseDataFun: this.propData.hanldeInterfaceFunc
+                        }
+                    },
+                    {
+                        params: {
+                            taskId: this.getTaskId()
+                        }
                     }
-                })
+                )
                 .then((data) => {
                     this.singMoreShowData = data.data
                     this.$nextTick(() => {

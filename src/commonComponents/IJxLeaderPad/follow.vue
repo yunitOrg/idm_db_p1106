@@ -71,10 +71,14 @@
 import locale from 'ant-design-vue/es/locale/zh_CN'
 import Tabs from './tabs.vue'
 import Status from './status.vue'
+import { EventBus } from '../../mixins/eventBus.js';
 export default {
     props: {
         params: {
             type: Object
+        },
+        dept:{
+            type:Object
         }
     },
     components: {
@@ -92,7 +96,9 @@ export default {
             },
             current: '1',
             data: [],
-            loading: false
+            loading: false,
+            attentionReason:"",
+            a:""
         }
     },
     computed: {
@@ -107,6 +113,11 @@ export default {
                     value: '2',
                     label: '已催办 ',
                     count: this.stat.urgeCount
+                },
+                {
+                    value: '3',
+                    label: '省政府工作报告 ',
+                    count: this.stat.reportCount
                 }
             ]
         },
@@ -203,7 +214,8 @@ export default {
         query() {
             return {
                 ...this.params,
-                padNoticeQueryType: this.current
+                padNoticeQueryType: this.current,
+                attentionReasonType:this.dept.value
             }
         }
     },
@@ -211,23 +223,36 @@ export default {
         params: {
             handler() {
                 this.fetchStat()
+                this.fetchStat()
             },
             immediate: true
         },
         query: {
             handler() {
+                this.fetchStat()
                 this.fetchData()
             },
             immediate: true
         }
     },
+    created() {
+        EventBus.$on('getCollect', (message) => {
+            this.attentionReason = message;
+            this.collectHandle(this.record)
+        });
+        EventBus.$on('deleteCollect', (message) => {
+            this.attentionReason = "";
+            this.$emit("closeCollect")
+        });
+    },
     methods: {
         fetchStat() {
             window.IDM.http
                 .post(
-                    'ctrl/dbWorkbench/getPadAttentionUrgeCount',
+                    this.a+'ctrl/dbWorkbench/getPadAttentionUrgeCount',
                     {
-                        ...this.params
+                        ...this.params,
+                        attentionReasonType:this.dept.value
                     },
                     {
                         headers: {
@@ -243,7 +268,7 @@ export default {
             this.loading = true
             window.IDM.http
                 .post(
-                    'ctrl/dbWorkbench/getLeaderPadNoticeList',
+                    this.a+'ctrl/dbWorkbench/getLeaderPadNoticeList',
                     {
                         ...this.query,
                         pageNo: 1,
@@ -266,18 +291,30 @@ export default {
                 })
         },
         followHandle(record) {
+            if(record.attentionstatus==0){
+                this.record=record
+                this.$emit('ishowCollect')
+            }else{
+                this.attentionReason=''
+                this.collectHandle(record)
+            }
+        },
+         //确定收藏后调用此方法
+         collectHandle(record) {
             window.IDM.http
-                .post('ctrl/dbNotice/attention', {
+                .post(this.a+'ctrl/dbNotice/attention', {
                     ...this.params,
                     noticeId: record.id,
-                    opType: record.attentionstatus == 1 ? 0 : 1
+                    opType: this.attentionReason.length<=0 ? 0 : 1,
+                    attentionReason:this.attentionReason
                 })
                 .then(({ data }) => {})
-            if (record.attentionstatus == 1) {
+            if (record.attentionstatus==1) {
                 record.attentionstatus = 0
             } else {
                 record.attentionstatus = 1
             }
+            this.$emit("closeCollect")
         },
         detailHandle(record) {
             this.$emit('detail', record)

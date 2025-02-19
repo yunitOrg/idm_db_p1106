@@ -66,11 +66,13 @@
             <slot name="extra"></slot>
         </template>
     </Tabs>
+    
 </template>
 <script>
 import locale from 'ant-design-vue/es/locale/zh_CN'
 import Tabs from './tabs.vue'
 import Status from './status.vue'
+import { EventBus } from '../../mixins/eventBus.js';
 export default {
     props: {
         dept: {
@@ -90,7 +92,10 @@ export default {
             times:[],
             locale,
             data: [],
-            loading: false
+            loading: false,
+            record:{},//当前点击的收藏
+            attentionReason:"",//点击收藏从收藏弹窗得到的值
+            a:""
         }
     },
     computed: {
@@ -196,7 +201,8 @@ export default {
         query() {
             return {
                 ...this.params,
-                orgId: this.dept.value != '0' ? this.dept.value : null
+                orgId: this.dept.value != '0' ? this.dept.value : null,
+                approvalTypeParam:this.dept.approvalTypeParam? this.dept.approvalTypeParam:null
             }
         }
     },
@@ -208,17 +214,28 @@ export default {
             immediate: true
         }
     },
+    created() {
+        EventBus.$on('getCollect', (message) => {
+            console.log(1111,message);
+            this.attentionReason = message;
+            this.collectHandle(this.record)
+        });
+        EventBus.$on('deleteCollect', (message) => {
+            console.log(2222);
+            this.attentionReason = "";
+            this.$emit("closeCollect")
+        });
+    },
     methods: {
         //获取日期时间
         getTimes(times){
-            console.log(11111);
             console.log(this.times);
         },
         fetchData() {
             this.loading = true
             window.IDM.http
                 .post(
-                    'ctrl/dbWorkbench/getLeaderPadNoticeList',
+                    this.a+'ctrl/dbWorkbench/getLeaderPadNoticeList',
                     {
                         ...this.query,
                         pageNo: 1,
@@ -240,19 +257,32 @@ export default {
                     this.loading = false
                 })
         },
+        //判断是否已经收藏过，如果已经收藏过，则提示已经收藏过，否则提示收藏成功
         followHandle(record) {
+            if(record.attentionstatus==0){
+                this.record=record
+                this.$emit('ishowCollect')
+            }else{
+                this.attentionReason=''
+                this.collectHandle(record)
+            }
+        },
+        //确定收藏后调用此方法
+        collectHandle(record) {
             window.IDM.http
-                .post('ctrl/dbNotice/attention', {
+                .post(this.a+'ctrl/dbNotice/attention', {
                     ...this.params,
                     noticeId: record.id,
-                    opType: record.attentionstatus == 1 ? 0 : 1
+                    opType: this.attentionReason.length<=0 ? 0 : 1,
+                    attentionReason:this.attentionReason
                 })
                 .then(({ data }) => {})
-            if (record.attentionstatus == 1) {
+            if (record.attentionstatus==1) {
                 record.attentionstatus = 0
             } else {
                 record.attentionstatus = 1
             }
+            this.$emit("closeCollect")
         },
         detailHandle(record) {
             this.$emit('detail', record)
@@ -260,6 +290,9 @@ export default {
         urgeHandle(record) {
             this.$emit('urge', record)
         }
+    },
+    beforeDestroy() {
+        EventBus.$off('getCollect');
     }
 }
 </script>
