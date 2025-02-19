@@ -82,6 +82,139 @@ export default {
                     ],
                     current: '3'
                 }
+                this.sections = [
+                    {
+                        id: '2502181612174Kbc8H3mAmtRfKyzBFT',
+                        type: 'pannel',
+                        title: '秘书处',
+                        collapseable: false,
+                        expanded: true,
+                        innerPadding: 0,
+                        icon: 'host',
+                        tags: null,
+                        headers: null,
+                        data: null,
+                        children: [
+                            {
+                                id: '2502181612174Kbc8H3mAmtRfKyzBFT',
+                                type: 'table',
+                                title: null,
+                                collapseable: false,
+                                expanded: true,
+                                innerPadding: null,
+                                icon: null,
+                                tags: null,
+                                headers: [
+                                    {
+                                        text: '状态',
+                                        key: 'status',
+                                        tag: null,
+                                        type: 'status'
+                                    },
+                                    {
+                                        text: '办理环节',
+                                        key: 'actName',
+                                        tag: null,
+                                        type: ''
+                                    },
+                                    {
+                                        text: '办理部门',
+                                        key: 'deptName',
+                                        tag: null,
+                                        type: ''
+                                    },
+                                    {
+                                        text: '办理人',
+                                        key: 'handleUName',
+                                        tag: null,
+                                        type: ''
+                                    },
+                                    {
+                                        text: '接收时间',
+                                        key: 'rDate',
+                                        tag: null,
+                                        type: ''
+                                    },
+                                    {
+                                        text: '阅读时间',
+                                        key: 'pDate',
+                                        tag: null,
+                                        type: ''
+                                    },
+                                    {
+                                        text: '办理时间',
+                                        key: 'eDate',
+                                        tag: null,
+                                        type: ''
+                                    },
+                                    {
+                                        text: '办理用时',
+                                        key: 'handleTime',
+                                        tag: null,
+                                        type: ''
+                                    }
+                                ],
+                                data: [
+                                    {
+                                        deptName: '办公厅/督查室',
+                                        handleTime: '',
+                                        pDate: '2025-02-18 16:12',
+                                        rDate: '2025-02-18 16:12',
+                                        overDesc: '',
+                                        alt: '已处理',
+                                        isOver: false,
+                                        eDate: '2025-02-18 16:12:18',
+                                        actName: '开始',
+                                        handleUName: '张亨叶',
+                                        status: 'flow_processed.png'
+                                    },
+                                    {
+                                        deptName: '秘书处',
+                                        handleTime: '1分10秒',
+                                        pDate: '2025-02-18 16:12',
+                                        rDate: '2025-02-18 16:12',
+                                        overDesc: '',
+                                        alt: '已处理',
+                                        isOver: false,
+                                        eDate: '2025-02-18 16:13:28',
+                                        actName: '承办司局督查联络员接收督办通知',
+                                        handleUName: '周航',
+                                        status: 'flow_processed.png'
+                                    },
+                                    {
+                                        deptName: '秘书处',
+                                        handleTime: '31秒',
+                                        pDate: '2025-02-18 16:13',
+                                        rDate: '2025-02-18 16:13',
+                                        overDesc: '',
+                                        alt: '已处理',
+                                        isOver: false,
+                                        eDate: '2025-02-18 16:13:59',
+                                        actName: '承办司局主要负责人批示',
+                                        handleUName: '周航',
+                                        status: 'flow_processed.png'
+                                    },
+                                    {
+                                        deptName: '秘书处',
+                                        handleTime: '23时36分18秒',
+                                        pDate: '',
+                                        rDate: '2025-02-18 16:13',
+                                        overDesc: '',
+                                        alt: '未读',
+                                        isOver: false,
+                                        eDate: '',
+                                        actName: '承办司局分管负责人批示',
+                                        handleUName: '周东升',
+                                        status: 'flow_unread.png',
+                                        colspan:3
+                                    }
+                                ],
+                                children: null
+                            }
+                        ]
+                    }
+                ]
+                return
             }
             window.IDM.http.get('ctrl/dbOverview/flow/tab', window.IDM.url.queryObject()).then((res) => {
                 this.progress = {

@@ -1,25 +1,18 @@
 <template>
-    <table v-if="data.type == 'table'" class="w-full table">
-        <thead>
-            <tr>
-                <th v-for="column in data.headers" :key="column.key">
-                    {{ column.text }}
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr v-for="(item, index) in data.data" :key="index">
-                <td v-for="column in data.headers" :key="column.key" :colspan="column.colspan">
-                    <template v-if="column.type == 'status'">
-                        <img :src="status[item[column.key]]" :alt="item.alt" :title="item.alt" />
-                    </template>
-                    <template v-else>
-                        {{ item[column.key] }}
-                    </template>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <div v-if="data.type == 'table'">
+        <a-table
+            :columns="renderHeader(data.headers)"
+            :data-source="data.data"
+            :bordered="true"
+            :pagination="false"
+            :rowClassName="(_, i) => (i % 2 ? 'even' : 'odd')"
+            class="a-table"
+        >
+            <template #status="text, row">
+                <img :src="status[text]" :alt="row.alt" :title="row.alt" />
+            </template>
+        </a-table>
+    </div>
     <div
         v-else
         class="section-wrap"
@@ -72,23 +65,52 @@ export default {
         },
         getAssetUrl(path) {
             return window.IDM.url.getModuleAssetsWebPath(require(`../../assets/flowTable/${path}`), this.moduleObject)
+        },
+        renderHeader(headers) {
+            return headers.map((column, columnIndex) => {
+                const option = {
+                    title: column.text,
+                    dataIndex: column.key,
+                    align: 'center'
+                }
+                if (column.key == 'status') {
+                    option.scopedSlots = {
+                        customRender: 'status'
+                    }
+                } else {
+                    option.customRender = (text, row, rowIndex) => {
+                        if (row.colSpan) {
+                            return {
+                                children: text,
+                                attrs: {
+                                    colSpan: row.colSpan[columnIndex]
+                                }
+                            }
+                        }
+                        return text
+                    }
+                }
+                return option
+            })
         }
     }
 }
 </script>
 <style lang="scss" scoped>
-.table {
-    background: #e6e6e6;
-    border-collapse: separate;
-    border-spacing: 1px;
-    thead tr th,
-    tbody tr td {
-        background: white;
-        padding: 12px;
-        text-align: center;
+.a-table {
+    :deep(table) {
+        font-size: 16px;
+        border-radius: 0;
     }
-    thead tr th,
-    tbody tr:nth-child(even) td {
+    :deep(.ant-table-thead) {
+        tr th {
+            background: #f9fcfe;
+            &:last-child {
+                border-top-right-radius: 0;
+            }
+        }
+    }
+    :deep(.even) {
         background: #f9fcfe;
     }
 }
@@ -162,7 +184,7 @@ export default {
             border: 1px solid #e6e6e6;
             border-top: none;
         }
-        .table {
+        .a-table {
             margin-top: -1px;
         }
     }

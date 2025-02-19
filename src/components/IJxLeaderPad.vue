@@ -101,8 +101,7 @@ export default {
             )
         },
         navs() {
-            if (this.homeType.type == "事项分类") {
-                this.isShouye = false
+            if (this.homeType.type == "事项分类") {         
                 let navs = [
                     {
                         label: '重点批示',
@@ -202,8 +201,6 @@ export default {
                 return navs
             }
             if (this.homeType.type == "特别关注") {
-                this.isShouye = false
-                this.current = "3"
                 let nav=[
                     {
                         label: '亮点',
@@ -431,6 +428,7 @@ export default {
         onHomeType(obj) {
             this.homeType = obj
             if (this.homeType.type == "事项分类") {
+                this.isShouye = false
                 switch (this.homeType.value) {
                     case 1:
                         this.dept.label = "重点批示"
@@ -465,6 +463,8 @@ export default {
                 }
             }
             if (this.homeType.type == "特别关注") {
+                this.isShouye = false
+                this.current = "3"
                 switch (this.homeType.value) {
                     case 1:
                         this.dept.label = "亮点"

@@ -71,10 +71,11 @@ export default {
     },
     methods: {
         receiveBroadcastMessage(event) {
-            console.log('IFlow event', event)
             switch (event.type) {
                 case 'linkageDemand':
-                    this.filter = event.message.current[0]
+                    this.filter = {
+                        taskId: event.message.current[0]
+                    }
                     break
             }
         },
