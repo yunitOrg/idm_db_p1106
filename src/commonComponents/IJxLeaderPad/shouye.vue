@@ -31,7 +31,7 @@
                     <div v-for="(el,index) in tbgzData" :key="index">
                         <div class="icon">{{el.text}}</div>
                         <div>
-                            <div class="num">{{el.num}}</div>
+                            <div class="num" @click="onHomeType('特别关注',index+1,tbgzData)">{{el.num}}</div>
                             <div class="text" @click="onHomeType('特别关注',index+1,tbgzData)">点击查看></div>
                         </div>
                     </div>
@@ -102,7 +102,7 @@ export default {
                 //     num:"8",
                 // }
            ],
-           a:""
+           a: ""
         }
     },
     computed: {
@@ -469,6 +469,7 @@ export default {
                             text-align: center;
                             line-height: 5rem;
                             font-weight: 700;
+                            cursor: pointer;
                         }
                         .text{
                             font-family: PingFangSC-Regular;

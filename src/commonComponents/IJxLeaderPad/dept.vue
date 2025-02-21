@@ -95,7 +95,7 @@ export default {
             loading: false,
             record:{},//当前点击的收藏
             attentionReason:"",//点击收藏从收藏弹窗得到的值
-            a:""
+            a: ""
         }
     },
     computed: {

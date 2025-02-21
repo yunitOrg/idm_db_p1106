@@ -94,30 +94,30 @@ export default {
                 urgeCount: 0,
                 attentionCount: 0
             },
-            current: '1',
+            current: '3',
             data: [],
             loading: false,
             attentionReason:"",
-            a:""
+            a: ""
         }
     },
     computed: {
         tabs() {
             return [
                 {
+                    value: '3',
+                    label: '省政府工作报告 ',
+                    count: this.stat.reportCount
+                },
+                {
                     value: '1',
-                    label: '已关注',
+                    label: '手动关注',
                     count: this.stat.attentionCount
                 },
                 {
                     value: '2',
                     label: '已催办 ',
                     count: this.stat.urgeCount
-                },
-                {
-                    value: '3',
-                    label: '省政府工作报告 ',
-                    count: this.stat.reportCount
                 }
             ]
         },
