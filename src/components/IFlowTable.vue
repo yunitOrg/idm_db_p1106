@@ -460,7 +460,6 @@ export default {
     }
     &-content {
         gap: 20px;
-        padding: 20px;
     }
 }
 .i-checked {
