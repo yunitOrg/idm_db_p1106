@@ -73,3 +73,24 @@ export const propToStyle = (props) => {
         {}
     )
 }
+
+const PINYIN_INITIAL_CONSONANT_LETTERS = 'ABCDEFGHJKLMNOPQRSTWXYZ'.split('')
+// 拼音声母对应的边界中文
+const PINYIN_BOUNDARY_CHAR = '驁簿錯鵽樲鰒餜靃攟鬠纙鞪黁漚曝裠鶸蜶籜鶩鑂韻糳'.split('')
+export const getChinesePinyinAbbreviation = (str) => {
+    // 空字符串直接返回
+    if (!str) {
+        return ''
+    }
+    if (str.length > 1) {
+        return str.split('').map(getChinesePinyinAbbreviation).join('')
+    }
+    // 判断字符是否为中文,不是中文返回原字符
+    if (/[^\u4e00-\u9fa5]/.test(str)) {
+        return str
+    }
+    const index = PINYIN_BOUNDARY_CHAR.findIndex((char) => {
+        return char.localeCompare(str, 'zh-CN-u-co-pinyin') >= 0
+    })
+    return PINYIN_INITIAL_CONSONANT_LETTERS[index]
+}

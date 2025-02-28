@@ -104,13 +104,13 @@ export default {
             if (this.homeType.type == "事项分类") {         
                 let navs = [
                     {
-                        label: '重点批示',
+                        label: '重要批示',
                         value: '1',
                         active: this.dept.approvalTypeParam == 1,
                         on: {
                             click: () => {
                                 this.dept = {
-                                    label: '重点批示',
+                                    label: '重要批示',
                                     value: "",
                                     approvalTypeParam:1
                                 }
@@ -431,7 +431,7 @@ export default {
                 this.isShouye = false
                 switch (this.homeType.value) {
                     case 1:
-                        this.dept.label = "重点批示"
+                        this.dept.label = "重要批示"
                         this.dept.value = ""
                         this.dept.approvalTypeParam=this.homeType.value
                         break;

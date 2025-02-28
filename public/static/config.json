@@ -157,6 +157,13 @@
             "className": "ILeaderComment",
             "comType": "common",
             "comLangue": "vue"
+        },
+        {
+            "classId": "idm.componet.db.ICheckList",
+            "comName": "分组多选",
+            "className": "ICheckList",
+            "comType": "common",
+            "comLangue": "vue"
         }
     ]
 }

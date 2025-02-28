@@ -1,0 +1,32 @@
+{
+    "classId": "idm.componet.db.ICheckList",
+    "comName": "分组多选",
+    "className": "ICheckList",
+    "comType": "common",
+    "comLangue": "vue",
+    "compositeAttr": [
+        {
+            "type": "input",
+            "layoutType": "inline",
+            "text": "唯一标识",
+            "bindKey": "ctrlId",
+            "disabled": true,
+            "default": "@[packageid]",
+            "desc": ""
+        },
+        {
+            "type": "group",
+            "text": "高级",
+            "desc": "",
+            "children": [
+                {
+                    "type": "actionSelect",
+                    "layoutType": "block",
+                    "text": "点击事件",
+                    "bindKey": "clickFunctions",
+                    "desc": ""
+                }
+            ]
+        }
+    ]
+}
