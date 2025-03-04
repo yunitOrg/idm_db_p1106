@@ -100,7 +100,7 @@ export default {
                             text: '是否持续推进'
                         },
                         {
-                            text: '持续推荐立项号'
+                            text: '持续推进立项号'
                         }
                     ]
                 },
