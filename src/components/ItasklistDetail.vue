@@ -90,9 +90,7 @@
                                                 </span>
                                             </div>
                                             <div v-if="judgeComState" style="display: flex">
-                                                <div class="task-groupbtn" v-if="propData.cuibanBtn" style="margin-right: 5px" @click="handleCuiCata(item)">
-                                                    <img :src="hanldeImg('bell.png')" alt="" />
-                                                </div>
+                                                <div class="task-groupbtn" v-if="propData.cuibanBtn" style="margin-right: 5px" @click="handleCuiCata(item)">催办</div>
                                                 <div class="task-groupbtn" v-if="propData.btngroup" style="margin-right: 5px" @click="handleCuiBell(item)">
                                                     <img :src="hanldeImg('able.png')" alt="" />
                                                 </div>
@@ -110,7 +108,6 @@
                                         :class="{
                                             disabled: index == 0
                                         }"
-                                        style="margin-right: 5px"
                                         @click="sortHandle(item, index, 'up')"
                                     >
                                         <a-icon type="arrow-up" />
@@ -120,7 +117,6 @@
                                         :class="{
                                             disabled: index + 1 == list.length
                                         }"
-                                        style="margin-right: 5px"
                                         @click="sortHandle(item, index, 'down')"
                                     >
                                         <a-icon type="arrow-down" />
@@ -574,6 +570,9 @@ export default {
         justify-content: space-between;
     }
     .task-groupbtn {
+        font-size: 14px;
+        color: #7da3e4;
+        text-decoration: underline;
         img {
             width: 20px;
             height: 20px;
@@ -669,7 +668,7 @@ export default {
                 }
             }
             .taskbtn + .taskbtn {
-                margin-left: 20px;
+                margin-left: 10px;
             }
             span {
                 margin-top: 4px;

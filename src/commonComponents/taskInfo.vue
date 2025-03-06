@@ -298,6 +298,8 @@ export default {
             .task-font {
                 margin-right: 2px;
                 cursor: pointer;
+                color: #7da3e4;
+                text-decoration: underline;
             }
             .task-file {
                 cursor: pointer;
