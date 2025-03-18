@@ -180,13 +180,13 @@ export default {
                         }
                     },
                     {
-                        label: '提案建议',
+                        label: '建议提案',
                         value: '6',
                         active: this.dept.approvalTypeParam == 6,
                         on: {
                             click: () => {
                                 this.dept = {
-                                    label: '提案建议',
+                                    label: '建议提案',
                                     value: "",
                                     approvalTypeParam:6
                                 }
@@ -456,7 +456,7 @@ export default {
                         this.dept.approvalTypeParam=this.homeType.value
                         break;
                     case 6:
-                        this.dept.label = "提案建议"
+                        this.dept.label = "建议提案"
                         this.dept.value =  ""
                         this.dept.approvalTypeParam=this.homeType.value
                         break;

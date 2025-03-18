@@ -51,7 +51,7 @@
                             >
                                 <img src="../assets/linqi.png" alt="查看批示" />
                             </a-badge>
-                            <div v-if="item.lastFeedbackContent && item.feedbackType != 1" @click="handleShowDialog(item)">
+                            <div v-if="item.lastFeedbackContent" @click="handleShowDialog(item)">
                                 <svg-icon icon-class="history"></svg-icon>
                             </div>
                             <template v-if="btngroup">

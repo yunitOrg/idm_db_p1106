@@ -57,7 +57,7 @@
                                 </i>
                             </div>
                         </span>
-                        <div class="right-svg" v-if="item.lastFeedbackContent && item.feedbackType != 1">
+                        <div class="right-svg" v-if="item.lastFeedbackContent">
                             <div @click="handleShowDialog(item)">
                                 <svg-icon icon-class="history"></svg-icon>
                             </div>
