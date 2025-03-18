@@ -179,7 +179,6 @@
                                                         <div class="task-ban">
                                                             <div class="task-li-flex">
                                                                 <span class="task-li-flex task-typeicon setflex" v-if="item.hostList && item.hostList.length">
-                                                                    <img src="../assets/zhuban.png" alt="" class="task-ban-img" />
                                                                     <span
                                                                         v-for="(subitem, subindex) in item.hostList"
                                                                         :key="subindex"
@@ -194,7 +193,6 @@
                                                                     class="task-typeicon"
                                                                     v-if="item.assistList && item.assistList.length"
                                                                 >
-                                                                    <img src="../assets/xieban.png" alt="" class="task-ban-img" />
                                                                     <span
                                                                         v-for="(subitem, subindex) in item.assistList"
                                                                         :key="subindex"
