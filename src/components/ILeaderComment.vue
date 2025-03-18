@@ -6,9 +6,9 @@
                     <div>
                         <div v-for="item in comment.data" :key="item.id" class="flex gap-1 comment-item">
                             <div class="flex-1 w-0">{{ item.content }}</div>
-                            <div class="text-gray">{{ item.leaderName }} {{ item.createTime }}</div>
-                            <div v-if="canEdit(item.leaderId)" @click="editCommentHandle(item)" class="text-primary">修改</div>
-                            <div v-if="canEdit(item.leaderId)" @click="deleteComment(item)" class="text-danger">删除</div>
+                            <div class="text-gray">{{ item.leaderText }} {{ item.createTime }}</div>
+                            <div v-if="canEdit(item.leader)" @click="editCommentHandle(item)" class="text-primary">修改</div>
+                            <div v-if="canEdit(item.leader)" @click="deleteComment(item)" class="text-danger">删除</div>
                         </div>
                     </div>
                 </a-spin>
@@ -21,9 +21,9 @@
                                 <div class="flex-1 w-0">
                                     <a-rate :value="item.score" disabled></a-rate>
                                 </div>
-                                <div class="text-gray">{{ item.leaderName }} {{ item.createTime }}</div>
-                                <div v-if="canEdit(item.leaderId)" @click="editRateHandle(rate)" class="text-primary">修改</div>
-                                <div v-if="canEdit(item.leaderId)" @click="deleteRate(rate)" class="text-danger">删除</div>
+                                <div class="text-gray">{{ item.leaderText }} {{ item.createTime }}</div>
+                                <div v-if="canEdit(item.leader)" @click="editRateHandle(rate)" class="text-primary">修改</div>
+                                <div v-if="canEdit(item.leader)" @click="deleteRate(rate)" class="text-danger">删除</div>
                             </div>
                             <div>{{ item.content }}</div>
                         </div>
@@ -82,7 +82,7 @@ export default {
     computed: {
         canRate() {
             if (this.rate.loading) return false
-            if (this.rate.data.some((n) => n.leaderId == window.IDM.user.getCurrentUserInfo().userid)) return false
+            if (this.rate.data.some((n) => n.leader == window.IDM.user.getCurrentUserInfo().userid)) return false
             return true
         },
         canCreate() {
@@ -99,7 +99,23 @@ export default {
             this.fetchRates(this.id)
         },
         editCommentHandle(comment) {
-            this.comment.current = comment
+            var formId = window.proFormExt.getProductFormId('2411061059356d9kjpjSqA8jnpff2Iw')
+            let url =
+                window.DSF.getURLRoot() + 'ctrl/formControl/sysForm?moduleId=241106105632rl3E9KmAMO4jU5Fdzmg&formId=' + formId + '&nodeId=0&validateByList=1&listId=DbNoValidate'
+            url += '&fid=' + this.id
+            if (comment.id) {
+                url += '&pk=' + comment.id
+            }
+
+            top.openWinView(this, {
+                title: [comment.id ? '修改批示' : '新增批示', 'font-size: 18px;'],
+                area: '1200,800',
+                url: url,
+                reloadGrid: false,
+                callback: () => {
+                    this.fetchComments()
+                }
+            })
         },
         deleteComment(item) {
             item.deletting = true
@@ -119,7 +135,30 @@ export default {
                 })
         },
         editRateHandle(rate) {
-            this.rate.current = rate
+            // 如果当前用户对当前通知评价过就打开已有的表单，更新。
+            // 如果没有则新建表单保存。
+            var formId = window.proFormExt.getProductFormId('241105110648KhVlGWSR2kx1icU9e1K')
+            let url = window.DSF.getURLRoot() + 'ctrl/formControl/sysForm?moduleId=241105110441rwsLO5APwBWEQbz9Jzm&formId=' + formId + '&validateByList=1&listId=DbNoValidate'
+
+            window.DSF.Utils.ajaxRequest('ctrl/dbComments/getOwnCommentsByNoticeId', { noticeId: this.id }, (result) => {
+                if ('success' == result.type) {
+                    if (result.data) {
+                        url += '&nodeId=-2&pk=' + result.data.id
+                    } else {
+                        url += '&nodeId=0&fid=' + this.id
+                    }
+
+                    top.openWinView(this, {
+                        title: rate.id ? '修改评价' : '新增评价',
+                        area: '1200,800',
+                        url: url,
+                        reloadGrid: false,
+                        callback: () => {
+                            this.fetchRates()
+                        }
+                    })
+                }
+            })
         },
         deleteRate(item) {
             item.deletting = true
@@ -166,8 +205,8 @@ export default {
         commentChange() {
             top.document.querySelector('#vkbLOc0HEn2SV9Ct iframe')?.contentWindow.location.reload()
         },
-        canEdit(leaderId) {
-            return window.IDM.user.userObject.userid == leaderId
+        canEdit(leader) {
+            return window.IDM.user.userObject.userid == leader
         }
     }
 }
