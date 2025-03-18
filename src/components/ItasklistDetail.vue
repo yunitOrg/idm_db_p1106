@@ -67,7 +67,6 @@
                                         <div class="task-li-list">
                                             <div class="flex-1 w-0 task-li-flex">
                                                 <span class="task-li-flex setflex" v-if="item.hostList && item.hostList.length">
-                                                    <img src="../assets/dept_ico.png" alt="" style="width: 16px; height: 16px; margin-right: 7px" />
                                                     <span
                                                         v-for="(subitem, subindex) in item.hostList"
                                                         :key="subindex"
@@ -78,7 +77,6 @@
                                                     </span>
                                                 </span>
                                                 <span style="display: flex; align-items: center; margin-left: 30px" v-if="item.assistList && item.assistList.length">
-                                                    <img src="../assets/dept_ico.png" alt="" style="width: 16px; height: 16px; margin-right: 7px" />
                                                     <span
                                                         v-for="(subitem, subindex) in item.assistList"
                                                         :key="subindex"

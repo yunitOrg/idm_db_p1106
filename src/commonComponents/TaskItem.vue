@@ -31,7 +31,6 @@
                     <div class="task-ban">
                         <div class="task-li-flex">
                             <span class="task-li-flex task-typeicon" v-if="data.hostList && data.hostList.length">
-                                <img src="../assets/zhuban.png" alt="" class="task-ban-img" />
                                 <span
                                     v-for="(subitem, subindex) in data.hostList"
                                     :key="subindex"
@@ -42,7 +41,6 @@
                                 </span>
                             </span>
                             <span style="display: flex; align-items: center; padding-left: 30px" class="task-typeicon" v-if="data.assistList && data.assistList.length">
-                                <img src="../assets/xieban.png" alt="" class="task-ban-img" />
                                 <span
                                     v-for="(subitem, subindex) in data.assistList"
                                     :key="subindex"
