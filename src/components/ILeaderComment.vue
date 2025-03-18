@@ -5,7 +5,7 @@
                 <a-spin :spinning="comment.loading">
                     <div>
                         <div v-for="item in comment.data" :key="item.id" class="flex gap-1 comment-item">
-                            <div class="flex-1 w-0">{{ item.content }}</div>
+                            <div class="flex-1 w-0">{{ item.opinionContent }}</div>
                             <div class="text-gray">{{ item.leaderText }} {{ item.createTime }}</div>
                             <div v-if="canEdit(item.leader)" @click="editCommentHandle(item)" class="text-primary">修改</div>
                             <div v-if="canEdit(item.leader)" @click="deleteComment(item)" class="text-danger">删除</div>
@@ -22,10 +22,10 @@
                                     <a-rate :value="item.score" disabled></a-rate>
                                 </div>
                                 <div class="text-gray">{{ item.leaderText }} {{ item.createTime }}</div>
-                                <div v-if="canEdit(item.leader)" @click="editRateHandle(rate)" class="text-primary">修改</div>
-                                <div v-if="canEdit(item.leader)" @click="deleteRate(rate)" class="text-danger">删除</div>
+                                <div v-if="canEdit(item.leader)" @click="editRateHandle(item)" class="text-primary">修改</div>
+                                <div v-if="canEdit(item.leader)" @click="deleteRate(item)" class="text-danger">删除</div>
                             </div>
-                            <div>{{ item.content }}</div>
+                            <div>{{ item.commentContent }}</div>
                         </div>
                     </div>
                 </a-spin>
@@ -99,7 +99,7 @@ export default {
             this.fetchRates(this.id)
         },
         editCommentHandle(comment) {
-            var formId = window.proFormExt.getProductFormId('2411061059356d9kjpjSqA8jnpff2Iw')
+            var formId = proFormExt.getProductFormId('2411061059356d9kjpjSqA8jnpff2Iw')
             let url =
                 window.DSF.getURLRoot() + 'ctrl/formControl/sysForm?moduleId=241106105632rl3E9KmAMO4jU5Fdzmg&formId=' + formId + '&nodeId=0&validateByList=1&listId=DbNoValidate'
             url += '&fid=' + this.id
@@ -113,7 +113,7 @@ export default {
                 url: url,
                 reloadGrid: false,
                 callback: () => {
-                    this.fetchComments()
+                    this.fetchComments(this.id)
                 }
             })
         },
@@ -137,7 +137,7 @@ export default {
         editRateHandle(rate) {
             // 如果当前用户对当前通知评价过就打开已有的表单，更新。
             // 如果没有则新建表单保存。
-            var formId = window.proFormExt.getProductFormId('241105110648KhVlGWSR2kx1icU9e1K')
+            var formId = proFormExt.getProductFormId('241105110648KhVlGWSR2kx1icU9e1K')
             let url = window.DSF.getURLRoot() + 'ctrl/formControl/sysForm?moduleId=241105110441rwsLO5APwBWEQbz9Jzm&formId=' + formId + '&validateByList=1&listId=DbNoValidate'
 
             window.DSF.Utils.ajaxRequest('ctrl/dbComments/getOwnCommentsByNoticeId', { noticeId: this.id }, (result) => {
@@ -154,7 +154,7 @@ export default {
                         url: url,
                         reloadGrid: false,
                         callback: () => {
-                            this.fetchRates()
+                            this.fetchRates(this.id)
                         }
                     })
                 }
@@ -176,11 +176,11 @@ export default {
                     item.deletting = false
                 })
         },
-        fetchComments(noticeId) {
+        fetchComments(id) {
             this.comment.loading = true
             window.IDM.http
-                .get('ctrl/dbInstruction/getInstructionByNoticeId', {
-                    noticeId
+                .get('ctrl/dbInstruction/getInstructionByType', {
+                    id
                 })
                 .then(({ data }) => {
                     this.comment.data = data.data
@@ -246,6 +246,7 @@ export default {
 }
 .comment-item {
     border-bottom: 1px dashed rgba(230, 230, 230, 1);
+    padding:10px 0;
     &:last-child {
         border-bottom: none;
     }
