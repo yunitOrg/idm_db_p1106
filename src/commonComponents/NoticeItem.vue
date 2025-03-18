@@ -12,7 +12,7 @@
                     </div>
                     <div class="subtask-popleft">
                         <div>
-                            <svg-icon :icon-class="homeIcon(item)" class="taskinfo-title-icon"></svg-icon>
+                            <img src="../assets/dept_ico.png" alt="" class="taskinfo-title-icon" />
                             <span>{{ item.handlerUnitText }} &nbsp;{{ item.feedbackPeriodText }}</span>
                         </div>
                         <div v-if="item.startDate">

@@ -65,9 +65,9 @@
                                             </span>
                                         </div>
                                         <div class="task-li-list">
-                                            <div class="task-li-flex">
+                                            <div class="flex-1 w-0 task-li-flex">
                                                 <span class="task-li-flex setflex" v-if="item.hostList && item.hostList.length">
-                                                    <img src="../assets/zhuban.png" alt="" style="width: 16px; height: 16px; margin-right: 7px" />
+                                                    <img src="../assets/dept_ico.png" alt="" style="width: 16px; height: 16px; margin-right: 7px" />
                                                     <span
                                                         v-for="(subitem, subindex) in item.hostList"
                                                         :key="subindex"
@@ -78,7 +78,7 @@
                                                     </span>
                                                 </span>
                                                 <span style="display: flex; align-items: center; margin-left: 30px" v-if="item.assistList && item.assistList.length">
-                                                    <img src="../assets/xieban.png" alt="" style="width: 16px; height: 16px; margin-right: 7px" />
+                                                    <img src="../assets/dept_ico.png" alt="" style="width: 16px; height: 16px; margin-right: 7px" />
                                                     <span
                                                         v-for="(subitem, subindex) in item.assistList"
                                                         :key="subindex"
@@ -537,6 +537,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.flex-1{
+    flex:1;
+}
+.w-0{
+    width: 0;
+}
 .taskdetail {
     .mtl30 {
         margin-left: 30px;
