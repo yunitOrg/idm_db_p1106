@@ -48,13 +48,11 @@
                 <div class="subtaskRight">
                     <div class="right-time">{{ item.lastFeedbackDate }}</div>
                     <div class="right-content">
-                        <span class="task-font" @click="handleJump(item)" v-if="item.lastFeedbackContent">
-                            {{ item.lastFeedbackContent }}
-                            <div class="task-file">
-                                <i v-for="(file, fileIndex) in item.lastFeedbackAttachFiles" :key="fileIndex" @click.stop="handleOpen(file)">
-                                    <svg-icon icon-class="file"></svg-icon>
-                                    {{ file.fileName }}
-                                </i>
+                        <span class="task-font">
+                            <div @click="handleJump(item)" v-if="item.lastFeedbackContent" v-html="item.lastFeedbackContent"></div>
+                            <div v-for="(file, fileIndex) in item.lastFeedbackAttachFiles" :key="fileIndex" @click.stop="handleOpen(file)" class="task-file">
+                                <svg-icon icon-class="file"></svg-icon>
+                                {{ file.fileName }}
                             </div>
                         </span>
                         <div class="right-svg" v-if="item.lastFeedbackContent">
@@ -298,10 +296,10 @@ export default {
             }
             .task-file {
                 cursor: pointer;
-                i {
-                    display: block;
-                    font-style: normal;
-                    margin-top: 5px;
+                color: #0086d9;
+                margin-top: 5px;
+                svg {
+                    fill: red;
                 }
             }
         }

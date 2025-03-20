@@ -36,16 +36,14 @@
                     <div class="right-content">
                         <div class="task-font">
                             <div @click="handleJump(item)" v-if="item.lastFeedbackContent" v-html="item.lastFeedbackContent"></div>
-                            <div class="task-file">
-                                <i v-for="(file, fileIndex) in item.lastFeedbackAttachFiles" :key="fileIndex" @click.stop="handleOpen(file)">
-                                    <svg-icon icon-class="file"></svg-icon>
-                                    {{ file.fileName }}
-                                </i>
+                            <div v-for="(file, fileIndex) in item.lastFeedbackAttachFiles" :key="fileIndex" @click.stop="handleOpen(file)" class="task-file">
+                                <svg-icon icon-class="file"></svg-icon>
+                                {{ file.fileName }}
                             </div>
                         </div>
                         <div class="right-svg">
                             <a-badge
-                                v-if="item.unreadInstruction != null"
+                                v-if="item.unreadInstruction > 0"
                                 :count="item.unreadInstruction"
                                 @click="handleOptions({ key: 'notice_leader_instruction_view', record: item })"
                             >
@@ -248,10 +246,10 @@ export default {
             }
             .task-file {
                 cursor: pointer;
-                i {
-                    display: block;
-                    font-style: normal;
-                    margin-top: 5px;
+                color: #0086d9;
+                margin-top: 5px;
+                svg {
+                    fill: red;
                 }
             }
         }
