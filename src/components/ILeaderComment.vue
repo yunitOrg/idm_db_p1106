@@ -30,8 +30,8 @@
                     </div>
                 </a-spin>
             </a-card>
-            <div v-if="canCreate" class="flex justify-center gap-2 mt-2">
-                <a-button type="primary" @click="editCommentHandle({})" class="btn">批示</a-button>
+            <div class="flex justify-center gap-2 mt-2">
+                <a-button v-if="canComment" type="primary" @click="editCommentHandle({})" class="btn">批示</a-button>
                 <a-button
                     v-if="canRate"
                     @click="
@@ -53,7 +53,8 @@ export default {
     mixins: [bindProp(), bindStyles()],
     data() {
         return {
-            id: window.IDM.url.queryObject().id,
+            id: window.IDM.url.queryObject()?.id,
+            roles: window.IDM.url.queryObject()?.roles?.split(',') || [],
             comment: {
                 data: [],
                 current: null,
@@ -74,19 +75,14 @@ export default {
             }
         }
     },
-    watch: {
-        'comment.tpl.current'(value) {
-            this.comment.current.content = this.comment.tpl.data.find((n) => n.value == value).text
-        }
-    },
     computed: {
         canRate() {
             if (this.rate.loading) return false
             if (this.rate.data.some((n) => n.leader == window.IDM.user.getCurrentUserInfo().userid)) return false
-            return true
+            return this.roles.includes('rate.create')
         },
-        canCreate() {
-            return window.IDM.user.userObject.roleIds?.split(',').some((n) => n == '180622194442OrvtuD1M4OjnOF15lOq')
+        canComment() {
+            return this.roles.includes('comment.create')
         }
     },
     mounted() {
@@ -109,7 +105,7 @@ export default {
 
             top.openWinView(this, {
                 title: [comment.id ? '修改批示' : '新增批示', 'font-size: 18px;'],
-                area: '1200,800',
+                area: '1200,550',
                 url: url,
                 reloadGrid: false,
                 callback: () => {
@@ -150,7 +146,7 @@ export default {
 
                     top.openWinView(this, {
                         title: rate.id ? '修改评价' : '新增评价',
-                        area: '1200,800',
+                        area: '1200,550',
                         url: url,
                         reloadGrid: false,
                         callback: () => {
@@ -246,7 +242,7 @@ export default {
 }
 .comment-item {
     border-bottom: 1px dashed rgba(230, 230, 230, 1);
-    padding:10px 0;
+    padding: 10px 0;
     &:last-child {
         border-bottom: none;
     }

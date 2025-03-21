@@ -43,7 +43,7 @@
                         </div>
                         <div class="right-svg">
                             <a-badge
-                                v-if="item.unreadInstruction > 0"
+                                v-if="item.unreadInstruction!=null"
                                 :count="item.unreadInstruction"
                                 @click="handleOptions({ key: 'notice_leader_instruction_view', record: item })"
                             >
