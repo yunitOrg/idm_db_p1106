@@ -50,7 +50,13 @@
                     <div class="right-content">
                         <span class="task-font">
                             <div @click="handleJump(item)" v-if="item.lastFeedbackContent" v-html="item.lastFeedbackContent"></div>
-                            <div v-for="(file, fileIndex) in item.lastFeedbackAttachFiles" :key="fileIndex" @click.stop="handleOpen(file)" class="task-file">
+                            <div
+                                v-for="(file, fileIndex) in item.lastFeedbackAttachFiles"
+                                :key="fileIndex"
+                                :file-id="file.id"
+                                @click.stop="handleOpen(file)"
+                                class="attachment-row task-file"
+                            >
                                 <svg-icon icon-class="file"></svg-icon>
                                 {{ file.fileName }}
                             </div>
