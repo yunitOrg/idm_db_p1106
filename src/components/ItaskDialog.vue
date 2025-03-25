@@ -22,7 +22,8 @@
                                     :key="subindex"
                                     :title="subitem.fileName"
                                     @click.stop="handleOpen(subitem)"
-                                    class="flex items-center file-item"
+                                    :file-id="file.id"
+                                    class="attachment-row flex items-center file-item"
                                 >
                                     <svg-icon icon-class="file"></svg-icon>
                                     <div class="name">{{ subitem[propData.fileNameField || 'fileName'] }}</div>

@@ -16,7 +16,7 @@
             <a-card title="评价" class="card">
                 <a-spin :spinning="rate.loading">
                     <div>
-                        <div v-for="item in rate.data" :key="item.id">
+                        <div v-for="item in rate.data" :key="item.id" class="rate-item">
                             <div class="flex gap-1">
                                 <div class="flex-1 w-0">
                                     <a-rate :value="item.score" disabled></a-rate>
@@ -243,9 +243,13 @@ export default {
 .comment-item {
     border-bottom: 1px dashed rgba(230, 230, 230, 1);
     padding: 10px 0;
+    font-size: 16px;
     &:last-child {
         border-bottom: none;
     }
+}
+.rate-item {
+    font-size: 16px;
 }
 .btn {
     border-radius: 2px;
