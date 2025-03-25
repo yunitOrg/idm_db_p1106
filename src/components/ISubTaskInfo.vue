@@ -201,10 +201,7 @@ export default {
         // 操作项
         handleOptions(obj) {
             if (_.isArray(this.propData.handleActionFunc) && this.propData.handleActionFunc.length > 0) {
-                window.IDM.invokeCustomFunctions.call(this, this.propData.handleActionFunc, {
-                    key: obj.item.value,
-                    record: obj.fatherItem
-                })
+                window.IDM.invokeCustomFunctions.call(this, this.propData.handleActionFunc, obj)
             }
         }
     }

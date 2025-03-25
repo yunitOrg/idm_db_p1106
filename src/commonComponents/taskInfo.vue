@@ -64,7 +64,10 @@
                     </div>
                 </div>
                 <div class="subtaskMore">
-                    <div class="right-svg" v-if="item.lastFeedbackContent" @click="handleShowDialog(item)">
+                    <a-badge v-if="item.unreadInstruction != null" :count="item.unreadInstruction" @click="handleOptions({ key: 'notice_leader_instruction_view', record: item })">
+                        <img src="../assets/linqi.png" alt="查看批示" />
+                    </a-badge>
+                    <div v-if="item.lastFeedbackContent" @click="handleShowDialog(item)">
                         <svg-icon icon-class="history"></svg-icon>
                     </div>
                     <template v-if="btngroup">
@@ -74,7 +77,7 @@
                     <div v-if="item.furtherImplementation == 1" style="color: red">再落实</div>
                     <a-popover v-if="item.buttonList && item.buttonList.length" placement="bottomRight">
                         <template slot="content">
-                            <p v-for="(subitem, index) in item.buttonList" :key="index" @click="handleOptions(subitem, item)">
+                            <p v-for="(subitem, index) in item.buttonList" :key="index" @click="handleOptions({ key: subitem.value, record: item })">
                                 <span>{{ subitem.text }}</span>
                             </p>
                         </template>
@@ -163,11 +166,8 @@ export default {
         handleOpen(item) {
             this.$emit('handleFileOpen', item)
         },
-        handleOptions(item, fatherItem) {
-            this.$emit('handleOptions', {
-                item: item,
-                fatherItem: fatherItem
-            })
+        handleOptions(item) {
+            this.$emit('handleOptions', item)
         },
         handleDialogOk() {
             this.dialogObj.show = false
@@ -175,9 +175,15 @@ export default {
         // 弹框
         async handleShowDialog(item) {
             if (this.origin == 'ItasklistDetail') {
-                let iframeUrl = `../p1000/idm/index.html#/preview/2404301716248fZmfPNT5BD7RmeytaG?id=${item.id}`
+                const query = {
+                    id: item.id
+                }
+                const roles = []
+                if (item.buttonList.some((n) => n.value == 'notice_leader_instruction')) roles.push('comment.create')
+                if (item.buttonList.some((n) => n.value == 'notice_comments')) roles.push('rate.create')
+                if (roles.length > 0) query.roles = roles.join(',')
                 try {
-                    top.openFeedbackHistory(iframeUrl)
+                    top.openFeedbackHistory(window.IDM.url.getWebPath(`p1000/idm/index.html#/preview/2404301716248fZmfPNT5BD7RmeytaG?${window.IDM.url.stringify(query)}`))
                 } catch (e) {
                     console.log('弹框失败', e)
                 }
@@ -306,8 +312,12 @@ export default {
         text-align: center;
         cursor: pointer;
         gap: 10px;
-        svg {
-            font-size: 18px;
+        svg,
+        img {
+            vertical-align: middle;
+            font-size: 22px;
+            width: 22px;
+            height: 22px;
         }
     }
     .subtask-label {
@@ -366,22 +376,6 @@ export default {
         flex: 0 0 auto;
         margin-right: 20px;
         color: #333333;
-    }
-    .right-svg {
-        display: flex;
-        cursor: pointer;
-        svg {
-            font-size: 22px;
-            width: 22px;
-            height: 22px;
-        }
-        img {
-            width: 22px;
-            height: 22px;
-        }
-    }
-    .rightSvg {
-        cursor: pointer;
     }
 }
 
