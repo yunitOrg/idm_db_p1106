@@ -61,35 +61,27 @@
                                 {{ file.fileName }}
                             </div>
                         </span>
-                        <div class="right-svg" v-if="item.lastFeedbackContent">
-                            <div @click="handleShowDialog(item)">
-                                <svg-icon icon-class="history"></svg-icon>
-                            </div>
-                            <template v-if="btngroup">
-                                <div style="margin-left: 5px" @click="handleCuiCata(item)">
-                                    <img :src="hanldeImg('bell.png')" alt="" />
-                                </div>
-                                <div style="margin-left: 5px" @click="handleCuiBell(item)">
-                                    <img :src="hanldeImg('able.png')" alt="" />
-                                </div>
-                            </template>
-                        </div>
-                        <div v-if="item.furtherImplementation == 1" style="text-align: right; color: red">再落实</div>
                     </div>
                 </div>
-                <template v-if="porpsList?.length">
-                    <div v-if="item.buttonList && item.buttonList.length" class="subtaskMore">
-                        <a-popover placement="bottomRight">
-                            <template slot="content">
-                                <p v-for="(subitem, index) in item.buttonList" :key="index" @click="handleOptions(subitem, item)">
-                                    <span>{{ subitem.text }}</span>
-                                </p>
-                            </template>
-                            <!-- <svg-icon icon-class="detail" class="rightSvg"></svg-icon> -->
-                            <img src="../assets/more.png" alt="" />
-                        </a-popover>
+                <div class="subtaskMore">
+                    <div class="right-svg" v-if="item.lastFeedbackContent" @click="handleShowDialog(item)">
+                        <svg-icon icon-class="history"></svg-icon>
                     </div>
-                </template>
+                    <template v-if="btngroup">
+                        <img @click="handleCuiCata(item)" :src="hanldeImg('bell.png')" alt="" />
+                        <img @click="handleCuiBell(item)" :src="hanldeImg('able.png')" alt="" />
+                    </template>
+                    <div v-if="item.furtherImplementation == 1" style="color: red">再落实</div>
+                    <a-popover v-if="item.buttonList && item.buttonList.length" placement="bottomRight">
+                        <template slot="content">
+                            <p v-for="(subitem, index) in item.buttonList" :key="index" @click="handleOptions(subitem, item)">
+                                <span>{{ subitem.text }}</span>
+                            </p>
+                        </template>
+                        <!-- <svg-icon icon-class="detail" class="rightSvg"></svg-icon> -->
+                        <img src="../assets/more.png" alt="" />
+                    </a-popover>
+                </div>
             </div>
         </div>
         <!--历史弹框-->
@@ -274,9 +266,7 @@ export default {
     }
     .subtaskLeft {
         display: flex;
-        // flex:1;
-        width: 40%;
-        // flex: 0 0 auto;
+        flex: 1;
         .taskinfo-title-icon {
             width: 20px;
             height: 20px;
@@ -284,8 +274,8 @@ export default {
         }
     }
     .subtaskRight {
-        // flex: 1;
-        width: calc(60% - 84px);
+        flex: 1.5;
+        width: 0;
         display: flex;
         font-size: 16px;
         .right-content {
@@ -311,9 +301,11 @@ export default {
         }
     }
     .subtaskMore {
-        width: 84px;
+        display: flex;
+        align-items: center;
         text-align: center;
         cursor: pointer;
+        gap: 10px;
         svg {
             font-size: 18px;
         }
