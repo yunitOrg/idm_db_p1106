@@ -52,7 +52,8 @@ import collectModel from '../commonComponents/IJxLeaderPad/collectModel.vue'
 import dayjs from 'dayjs'
 const homeData = () => ({
     label: '全部',
-    value: '0'
+    value: '0',
+    isFanhui:true
 })
 export default {
     mixins: [bindProp(), bindStyle()],
@@ -70,7 +71,7 @@ export default {
     },
     data() {
         return {
-            isShouye: true,
+            isShouye: window.IDM?.url.queryObject().isShouye=="false"?false:true || true,
             current: window.IDM?.url.queryObject().type || '0',
             dept: homeData(),
             urgeData: null,
@@ -81,7 +82,7 @@ export default {
             leaderInfo: {},
             homeType: {},
             collectModelVisible:false,
-            a: ""
+           a:""
         }
     },
     computed: {
@@ -101,6 +102,85 @@ export default {
             )
         },
         navs() {
+            if (this.params.isShouye == "false" && this.params.type == "0") {
+                let navs = [
+                    {
+                        label: '省政府各部门',
+                        value: '1',
+                        active: this.dept.value != 0 && this.current == '1' && this.dept.queryType == 2,
+                        on: {
+                            click: () => {
+                                window.IDM.http
+                                    .post(
+                                        this.a + 'ctrl/dbWorkbench/getPadLeaderUnit',
+                                        {
+                                            ...this.params,
+                                            queryType: 2
+                                        },
+                                        {
+                                            headers: {
+                                                'Content-Type': 'application/json'
+                                            }
+                                        }
+                                    )
+                                    .then(({ data }) => {
+                                        this.model = {
+                                            queryType: 2,
+                                            title: '省政府各部门',
+                                            data: data.data,
+                                            visible: true
+                                        }
+                                    })
+                            }
+                        }
+                    },
+                    {
+                        label: '各设区市政府',
+                        value: '4',
+                        active: this.current == '1' && this.dept.queryType == 1,
+                        on: {
+                            click: () => {
+                                window.IDM.http
+                                    .post(
+                                        this.a + 'ctrl/dbWorkbench/getPadLeaderUnit',
+                                        {
+                                            ...this.params,
+                                            queryType: 1
+                                        },
+                                        {
+                                            headers: {
+                                                'Content-Type': 'application/json'
+                                            }
+                                        }
+                                    )
+                                    .then(({ data }) => {
+                                        this.model = {
+                                            queryType: 1,
+                                            title: '各设区市政府',
+                                            data: data.data,
+                                            visible: true
+                                        }
+                                    })
+                            }
+                        }
+                    },
+                    {
+                        label: '特别关注',
+                        value: '3',
+                        active: this.current == '3',
+                        on: {
+                            click: () => {
+                                this.dept = {
+                                    label: '特别关注',
+                                    value: 1
+                                }
+                                this.current = "3"
+                            }
+                        }
+                    }
+                ]
+                return navs
+            }
             if (this.homeType.type == "事项分类") {         
                 let navs = [
                     {
@@ -407,22 +487,46 @@ export default {
                 })
         },
         homeHandle() {
-            this.dept = homeData()
-            this.current = ''
-            this.homeType = {}
-            this.isShouye = true
+            if (this.params.isShouye == "false" && this.params.type == "0") {
+                this.homeType = {}
+                this.detailData = null
+                this.urgeData = null
+                this.dept = homeData()
+                this.dept.isFanhui = true
+                this.current = '1'
+                this.isShouye = false
+            }else{
+
+                this.dept = homeData()
+                this.current = ''
+                this.homeType = {}
+                this.isShouye = true
+            }
         },
         deptChangeHandle(dept) {
-            this.isShouye = false
-            this.detailData = null
-            this.urgeData = null
-            this.model.visible = false
-            this.dept = {
-                queryType: this.model.queryType,
-                label: dept.unitName,
-                value: dept.unitId
+            if (this.params.isShouye == "false" && this.params.type == "0") {
+                this.isShouye = false
+                this.detailData = null
+                this.urgeData = null
+                this.model.visible = false
+                this.dept = {
+                    queryType: this.model.queryType,
+                    label: dept.unitName,
+                    value: dept.unitId
+                }
+                this.current = '1'
+            }else{
+                this.isShouye = false
+                this.detailData = null
+                this.urgeData = null
+                this.model.visible = false
+                this.dept = {
+                    queryType: this.model.queryType,
+                    label: dept.unitName,
+                    value: dept.unitId
+                }
+                this.current = '1'
             }
-            this.current = '1'
         },
         //获取点击首页的type类型
         onHomeType(obj) {

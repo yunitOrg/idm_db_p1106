@@ -58,7 +58,8 @@
         "globals": {
             "IDM": true,
             "$": true,
-            "_": true
+            "_": true,
+            "proFormExt": true
         }
     },
     "browserslist": [

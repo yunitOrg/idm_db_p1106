@@ -1,5 +1,5 @@
 <template>
-    <Tabs :items="tabs" v-model="dept.value" class="h-full">
+    <Tabs :items="tabs" v-model="active" class="h-full" @input="changeHandle">
         <div class="h-full flex flex-col">
             <div class="flex justify-end " style="padding: 2rem 0; gap: 2.5rem;align-items: center; position: relative;">
                 <div class="searchBox">
@@ -92,21 +92,69 @@ export default {
             times:[],
             locale,
             data: [],
+            active:this.dept.value,
             loading: false,
             record:{},//当前点击的收藏
             attentionReason:"",//点击收藏从收藏弹窗得到的值
-            a: ""
+            fetchStatData:{
+                allCount:"",
+                overdueCount:"",
+                nearCount:"",
+                inProcessCount:"",
+                haveDoneCount:"",
+            },//全部的时候tab页签对应的值
+           a:""
         }
     },
     computed: {
-        tabs() {
-            return [
-                {
-                    label: this.dept.label,
-                    value: this.dept.value,
-                    count: this.data.length
-                }
-            ]
+        tabs(){
+            console.log(this.dept,"+++");
+            
+            if (this.params.isShouye == "false" && this.params.type == "0" && this.dept.label=="全部") {
+                let a = [
+                    {
+                        label: this.dept.label,
+                        value: this.dept.value,
+                        count: this.fetchStatData.allCount
+                    }
+                ]
+                let arr = [
+                    {
+                        label: "超期",
+                        value: "1",
+                        count: this.fetchStatData.overdueCount
+                    },
+                    {
+                        label: "临期",
+                        value: "2",
+                        count: this.fetchStatData.nearCount
+                    },
+                    {
+                        label: "正常",
+                        value: "3",
+                        count: this.fetchStatData.inProcessCount
+                    },
+                    {
+                        label: "已办",
+                        value: "4",
+                        count: this.fetchStatData.haveDoneCount
+                    }
+                ]
+                arr.forEach((item) => {
+                    a.push(item)
+                })
+                return a 
+            }else{
+                let a = [
+                    {
+                        label: this.dept.label,
+                        value: this.dept.value,
+                        count: this.data.length
+                    }
+                ]
+                return a 
+            }
+           
         },
         columns() {
             return [
@@ -207,9 +255,34 @@ export default {
         }
     },
     watch: {
+        active:{
+            handler(val) {
+                if(val){
+                    console.log(val,"=====");
+                    this.active = val
+                    this.dept.isFanhui=false
+                    this.$nextTick(()=>{
+                        this.fetchData()
+                    })
+                }
+            },
+            immediate: true
+        },
         query: {
             handler() {
-                this.fetchData()
+                console.log(11111111);
+                if(this.dept.label != ("全部"|| "超期"|| "临期" || "正常" || "已办")){
+                    console.log("ssss");
+                    this.active = this.dept.value
+                }
+                if(this.dept?.isFanhui==true){
+                    console.log("yyyyy");
+                    this.active = this.dept.value
+                }
+                console.log(this.active,"++++");
+                this.$nextTick(()=>{
+                    this.fetchData()
+                })
             },
             immediate: true
         }
@@ -226,7 +299,13 @@ export default {
             this.$emit("closeCollect")
         });
     },
+    mounted() {
+    },
     methods: {
+        changeHandle(active){
+            this.active=active
+            console.log(this.active,this.tabs);
+        },
         //获取日期时间
         getTimes(times){
             console.log(this.times);
@@ -242,7 +321,8 @@ export default {
                         pageSize: 9999,
                         bt:this.bt,
                         startTime:this.times[0]?this.times[0]:"",
-                        endTime:this.times[1]?this.times[1]:""
+                        endTime:this.times[1]?this.times[1]:"",
+                        fileStatus:this.active != '0' ? this.active : 0,
                     },
                     {
                         headers: {
@@ -252,10 +332,45 @@ export default {
                 )
                 .then(({ data }) => {
                     this.data = data.data
+                   this.$nextTick(()=>{
+                    if (this.params.isShouye == "false" && this.params.type == "0" && this.dept.label == "全部") {
+
+                        this.fetchStat()
+                    }
+                   })
                 })
                 .finally(() => {
                     this.loading = false
                 })
+            
+        },
+        //获取有全部tab的时候所有tab页签的count
+        fetchStat() {
+           
+                window.IDM.http
+                    .post(
+                        this.a + 'ctrl/dbWorkbench/getPadUndertakeCount',
+                        {
+                            ...this.query,
+                            pageNo: 1,
+                            pageSize: 9999,
+                            bt: this.bt,
+                            startTime: this.times[0] ? this.times[0] : "",
+                            endTime: this.times[1] ? this.times[1] : ""
+                        },
+                        {
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        }
+                    )
+                    .then(({ data }) => {
+                        console.log(data);
+                        this.fetchStatData=data.data
+
+                    })
+                    .finally(() => {
+                    })
         },
         //判断是否已经收藏过，如果已经收藏过，则提示已经收藏过，否则提示收藏成功
         followHandle(record) {

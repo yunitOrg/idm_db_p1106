@@ -98,7 +98,7 @@ export default {
             data: [],
             loading: false,
             attentionReason:"",
-            a: ""
+           a:""
         }
     },
     computed: {

@@ -102,7 +102,7 @@ export default {
                 //     num:"8",
                 // }
            ],
-           a: ""
+          a:""
         }
     },
     computed: {
