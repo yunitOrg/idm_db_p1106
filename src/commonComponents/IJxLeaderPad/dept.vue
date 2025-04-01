@@ -13,6 +13,18 @@
                             <a-range-picker valueFormat="YYYY-MM-DD" :placeholder="['开始时间', '结束时间']" mode="['month', 'month']" v-model="times" @change="getTimes()"/>
                         </a-config-provider>
                     </div>
+                    <div class="bt" v-if="homeType.type=='事项分类' && (dept.label=='重点任务'|| dept.label=='重要批示')">
+                        <span>承办单位：</span>
+                        <a-input  v-model="dwName" placeholder="" />
+                    </div>
+                    <div class="selectBox" v-if="homeType.type=='承办单位'">
+                        <span>督办分类：</span>
+                        <a-select v-model="dbfl" allowClear @change="getSuperType()">
+                            <a-select-option :value="item.value" v-for="(item, index) in superType" :key="index">
+                                {{ item.text }}
+                            </a-select-option>
+                        </a-select>
+                    </div>
                     <div class="btn" @click="fetchData()">
                         检索
                     </div>
@@ -80,6 +92,9 @@ export default {
         },
         params: {
             type: Object
+        },
+        homeType:{
+            type:Object
         }
     },
     components: {
@@ -89,6 +104,8 @@ export default {
     data() {
         return {
             bt:"",
+            dwName:"",
+            dbfl:"",
             times:[],
             locale,
             data: [],
@@ -103,14 +120,22 @@ export default {
                 inProcessCount:"",
                 haveDoneCount:"",
             },//全部的时候tab页签对应的值
-           a:""
+            superType:[
+                {text:"重要批示",value:1},
+                {text:"重要文件",value:2},
+                {text:"重点任务",value:3},
+                {text:"交办事项",value:4},
+                {text:"调查核实",value:5},
+                {text:"建议提案 ",value:6}
+            ],
+            a:"http://localhost:8080/DreamOne/"
         }
     },
     computed: {
         tabs(){
             console.log(this.dept,"+++");
             
-            if (this.params.isShouye == "false" && this.params.type == "0" && this.dept.label=="全部") {
+            if (this.params.isShouye == "false" && this.params.type == "0") {
                 let a = [
                     {
                         label: this.dept.label,
@@ -216,18 +241,18 @@ export default {
                     sorter: (prev, current) => current.approvalImportant > prev.approvalImportant
                 },
                 {
-                    title: '承办单位',
-                    dataIndex: 'handlerUnitText',
-                    width: '21.38rem',
-                    align: 'center'
-                },
-                {
                     title: '标题',
                     dataIndex: 'approvalBt',
                     align: 'center',
                     scopedSlots: {
                         customRender: 'approvalBt'
                     }
+                },
+                {
+                    title: '承办单位',
+                    dataIndex: 'handlerUnitText',
+                    width: '21.38rem',
+                    align: 'center'
                 },
                 {
                     title: '办结期限',
@@ -250,7 +275,6 @@ export default {
             return {
                 ...this.params,
                 orgId: this.dept.value != '0' ? this.dept.value : null,
-                approvalTypeParam:this.dept.approvalTypeParam? this.dept.approvalTypeParam:null
             }
         }
     },
@@ -272,11 +296,9 @@ export default {
             handler() {
                 console.log(11111111);
                 if(this.dept.label != ("全部"|| "超期"|| "临期" || "正常" || "已办")){
-                    console.log("ssss");
                     this.active = this.dept.value
                 }
                 if(this.dept?.isFanhui==true){
-                    console.log("yyyyy");
                     this.active = this.dept.value
                 }
                 console.log(this.active,"++++");
@@ -298,6 +320,8 @@ export default {
             this.attentionReason = "";
             this.$emit("closeCollect")
         });
+        console.log(this.dept);
+        
     },
     mounted() {
     },
@@ -310,6 +334,11 @@ export default {
         getTimes(times){
             console.log(this.times);
         },
+        //获取督办分类
+        getSuperType(){
+            console.log(this.dbfl);
+            this.dept.approvalTypeParam = this.dbfl
+        },
         fetchData() {
             this.loading = true
             window.IDM.http
@@ -317,12 +346,15 @@ export default {
                     this.a+'ctrl/dbWorkbench/getLeaderPadNoticeList',
                     {
                         ...this.query,
+                        approvalTypeParam:this.dbfl && this.dbfl.length>0? this.dbfl :this.dept.approvalTypeParam? this.dept.approvalTypeParam:null,
                         pageNo: 1,
                         pageSize: 9999,
                         bt:this.bt,
+                        dbfl:this.dbfl,
                         startTime:this.times[0]?this.times[0]:"",
                         endTime:this.times[1]?this.times[1]:"",
                         fileStatus:this.active != '0' ? this.active : 0,
+                        dwName:this.dwName && this.dwName.length>0?this.dwName:""
                     },
                     {
                         headers: {
@@ -333,7 +365,7 @@ export default {
                 .then(({ data }) => {
                     this.data = data.data
                    this.$nextTick(()=>{
-                    if (this.params.isShouye == "false" && this.params.type == "0" && this.dept.label == "全部") {
+                    if (this.params.isShouye == "false" && this.params.type == "0") {
 
                         this.fetchStat()
                     }
@@ -400,9 +432,21 @@ export default {
             this.$emit("closeCollect")
         },
         detailHandle(record) {
-            this.$emit('detail', record)
+            this.$emit('detail', record,{
+                        ...this.query,
+                        approvalTypeParam:this.dbfl && this.dbfl.length>0? this.dbfl :this.dept.approvalTypeParam? this.dept.approvalTypeParam:null,
+                        pageNo: 1,
+                        pageSize: 9999,
+                        bt:this.bt,
+                        dbfl:this.dbfl,
+                        startTime:this.times[0]?this.times[0]:"",
+                        endTime:this.times[1]?this.times[1]:"",
+                        fileStatus:this.active != '0' ? this.active : 0,
+                        dwName:this.dwName && this.dwName.length>0?this.dwName:""
+                    })
         },
         urgeHandle(record) {
+            console.log(11);
             this.$emit('urge', record)
         }
     },
@@ -471,6 +515,27 @@ export default {
             height: 2.1em;
             font-size: 2rem;
             // color: #333333;
+        }
+    }
+    .selectBox{
+        display: flex;
+        align-items: center;
+        font-size: 2.38rem;
+        color: #333333;
+        &>span{
+            white-space: nowrap;
+        }
+        ::v-deep .ant-select{
+            width:8em !important;
+            height: 2.1em;
+            font-size: 2rem;
+            // color: #333333;
+            .ant-select-selection--single{
+                height: 2.1em;
+                .ant-select-selection__rendered{
+                    line-height: 2.1em;
+                }
+            }
         }
     }
     .dateArray{

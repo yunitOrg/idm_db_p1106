@@ -15,7 +15,10 @@
                         </template>
                         <div class="right-time">{{ item[propData.timeField || 'feedbackTime'] }}</div>
                         <div class="right-content">
-                            <span @click="handleJump(item)" class="subtask-span" v-html="item[propData.contentFiled || 'feedbackContent']"></span>
+                            <div @click="handleJump(item)" class="subtask-title">
+                                <img v-if="item.extendedFieldNumber == 2" src="../../upload/idmfiles/739e040d-0228-4a35-b5a1-6464c55dad6e.png" class="icon" />
+                                <div v-html="item[propData.contentFiled || 'feedbackContent']" class="flex-1 w-0"></div>
+                            </div>
                             <div class="right-file">
                                 <div
                                     v-for="(subitem, subindex) in item[propData.fileGroupField || 'feedbackAttachFiles']"
@@ -297,9 +300,12 @@ export default {
     .right-content {
         flex: 1;
         font-size: 16px;
-        span {
-            text-align: justify;
-            display: inline-block;
+        .subtask-title {
+            display: flex;
+            .icon {
+                width: 20px;
+                height: 20px;
+            }
         }
     }
     .right-content {

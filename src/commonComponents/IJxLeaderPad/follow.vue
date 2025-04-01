@@ -98,7 +98,7 @@ export default {
             data: [],
             loading: false,
             attentionReason:"",
-           a:""
+            a:"http://localhost:8080/DreamOne/"
         }
     },
     computed: {
@@ -181,18 +181,18 @@ export default {
                     sorter: (prev, current) => current.approvalImportant > prev.approvalImportant
                 },
                 {
-                    title: '承办单位',
-                    dataIndex: 'handlerUnitText',
-                    width: '21.38rem',
-                    align: 'center'
-                },
-                {
                     title: '标题',
                     dataIndex: 'approvalBt',
                     align: 'center',
                     scopedSlots: {
                         customRender: 'approvalBt'
                     }
+                },
+                {
+                    title: '承办单位',
+                    dataIndex: 'handlerUnitText',
+                    width: '21.38rem',
+                    align: 'center'
                 },
                 {
                     title: '办结期限',
@@ -229,6 +229,7 @@ export default {
         },
         query: {
             handler() {
+                console.log(this.query,"----hhhhh");
                 this.fetchStat()
                 this.fetchData()
             },
@@ -266,9 +267,10 @@ export default {
         },
         fetchData() {
             this.loading = true
+            let url = this.current==1?"ctrl/dbWorkbench/getLeaderPadFollowList":"ctrl/dbWorkbench/getLeaderPadNoticeList"
             window.IDM.http
                 .post(
-                    this.a+'ctrl/dbWorkbench/getLeaderPadNoticeList',
+                    this.a+url,
                     {
                         ...this.query,
                         pageNo: 1,
@@ -317,10 +319,26 @@ export default {
             this.$emit("closeCollect")
         },
         detailHandle(record) {
-            this.$emit('detail', record)
+            if(this.current==1 ){
+                if(record.isApproval==1){
+                    this.$emit('detail', record)
+                }else{
+                    this.$emit('urge', record)
+                }
+            }else{
+                this.$emit('detail', record)
+            } 
         },
         urgeHandle(record) {
-            this.$emit('urge', record)
+            if(this.current==1 ){
+                if(record.isApproval==1){
+                    this.$emit('detail', record)
+                }else{
+                    this.$emit('urge', record)
+                }
+            }else{
+                this.$emit('urge', record)
+            }
         }
     }
 }
