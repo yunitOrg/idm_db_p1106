@@ -16,7 +16,7 @@
                         <div class="right-time">{{ item[propData.timeField || 'feedbackTime'] }}</div>
                         <div class="right-content">
                             <div @click="handleJump(item)" class="subtask-title">
-                                <img v-if="item.extendedFieldNumber == 2" src="../../upload/idmfiles/739e040d-0228-4a35-b5a1-6464c55dad6e.png" class="icon" />
+                                <img v-if="item.extendedFieldNumber == 2" src="../assets/zhongyao.png" class="icon" />
                                 <div v-html="item[propData.contentFiled || 'feedbackContent']" class="flex-1 w-0"></div>
                             </div>
                             <div class="right-file">
@@ -302,6 +302,7 @@ export default {
         font-size: 16px;
         .subtask-title {
             display: flex;
+            gap: 5px;
             .icon {
                 width: 20px;
                 height: 20px;
