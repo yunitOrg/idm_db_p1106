@@ -5,16 +5,32 @@
                 <div class="searchBox">
                     <div class="bt">
                         <span>标题：</span>
-                        <a-input  v-model="bt" placeholder="" />
+                        <a-input v-model="bt" placeholder="" />
                     </div>
-                    <div class="dateArray">
+                    <div class="selectBox selectBox2">
+                        <span>年份：</span>
+                        <a-select v-model="year" @change="getYear()">
+                            <a-select-option :value="item.value" v-for="(item, index) in yearOptions" :key="index">
+                                {{ item.text }}
+                            </a-select-option>
+                        </a-select>
+                    </div>
+                    <div class="selectBox">
+                        <span>类型：</span>
+                        <a-cascader v-model="leixing" allowClear placeholder="" :options="options" change-on-select
+                            @change="getLeixing" />
+                    </div>
+                    <!-- <div class="dateArray">
                         <span>办结期限：</span>
                         <a-config-provider :locale="locale">
                             <a-range-picker valueFormat="YYYY-MM-DD" :placeholder="['开始时间', '结束时间']" mode="['month', 'month']" v-model="times" @change="getTimes()"/>
                         </a-config-provider>
-                    </div>
+                    </div> -->
                     <div class="btn" @click="fetchData()">
                         检索
+                    </div>
+                    <div class="btn" @click="reset()">
+                        重置
                     </div>
                 </div>
                 <Status v-for="i in [4, 2, 1]" :key="i" :value="i" :showLabel="true" />
@@ -28,12 +44,9 @@
                             </div>
                         </template>
                         <template slot="important" slot-scope="text, record">
-                            <div
-                                class="flex justify-center"
-                                :style="{
-                                    color: record.approvalImportant == 2 ? 'red' : '#333'
-                                }"
-                            >
+                            <div class="flex justify-center" :style="{
+                                color: record.approvalImportant == 2 ? 'red' : '#333'
+                            }">
                                 {{ record.approvalImportantText }}
                             </div>
                         </template>
@@ -46,7 +59,8 @@
                                     <img v-if="record.attentionstatus == 1" src="./images/icon_follow_active.png" />
                                     <img v-else src="./images/icon_follow.png" />
                                 </div>
-                                <div v-if="record.dbStatus < 6 && record.isSms==1" @click="urgeHandle(record)" class="pointer btn-operation">
+                                <div v-if="record.dbStatus < 6 && record.isSms == 1" @click="urgeHandle(record)"
+                                    class="pointer btn-operation">
                                     <img v-if="record.urgeStatus == 1" src="./images/icon_urge_active.png" />
                                     <img v-else src="./images/icon_urge.png" />
                                 </div>
@@ -77,8 +91,8 @@ export default {
         params: {
             type: Object
         },
-        dept:{
-            type:Object
+        dept: {
+            type: Object
         }
     },
     components: {
@@ -87,8 +101,10 @@ export default {
     },
     data() {
         return {
-            bt:"",
-            times:[],
+            bt: "",
+            year: new Date().getFullYear(),
+            leixing: [],
+            times: [],
             locale,
             stat: {
                 urgeCount: 0,
@@ -97,11 +113,50 @@ export default {
             current: '3',
             data: [],
             loading: false,
-            attentionReason:"",
-           a:""
+            attentionReason: "",
+            options: [
+                {
+                    label: 'zhejiang',
+                    value: '1',
+                    children: [
+                        {
+                            label: 'hangzhou',
+                            value: '2',
+                        }
+                    ],
+                },
+                {
+                    label: 'zhejiang',
+                    value: '1',
+                    children: [
+                        {
+                            label: 'hangzhou',
+                            value: '2',
+                        }
+                    ],
+                }
+            ],
+            a:""
         }
     },
     computed: {
+        yearOptions() {
+            //获取从2024年到当年的年份
+            let year = new Date().getFullYear()
+            let arr = [
+                {
+                    text: "至今",
+                    value: 9999
+                }
+            ]
+            for (let i = 2024; i <= year; i++) {
+                arr.push({
+                    text: i,
+                    value: i
+                })
+            }
+            return arr
+        },
         tabs() {
             return [
                 {
@@ -181,18 +236,18 @@ export default {
                     sorter: (prev, current) => current.approvalImportant > prev.approvalImportant
                 },
                 {
-                    title: '承办单位',
-                    dataIndex: 'handlerUnitText',
-                    width: '21.38rem',
-                    align: 'center'
-                },
-                {
                     title: '标题',
                     dataIndex: 'approvalBt',
                     align: 'center',
                     scopedSlots: {
                         customRender: 'approvalBt'
                     }
+                },
+                {
+                    title: '承办单位',
+                    dataIndex: 'handlerUnitText',
+                    width: '21.38rem',
+                    align: 'center'
                 },
                 {
                     title: '办结期限',
@@ -215,11 +270,18 @@ export default {
             return {
                 ...this.params,
                 padNoticeQueryType: this.current,
-                attentionReasonType:this.dept.value
+                attentionReasonType: this.dept.value
             }
         }
     },
     watch: {
+        dept: {
+            handler(val) {
+                this.year = new Date().getFullYear()
+                this.leixing = []
+            },
+            immediate: true
+        },
         params: {
             handler() {
                 this.fetchStat()
@@ -229,6 +291,7 @@ export default {
         },
         query: {
             handler() {
+                console.log(this.query, "----hhhhh");
                 this.fetchStat()
                 this.fetchData()
             },
@@ -245,14 +308,27 @@ export default {
             this.$emit("closeCollect")
         });
     },
+    mounted() {
+        this.getOptions()
+    },
     methods: {
+        //获取类型下拉数据
+        getOptions() {
+            window.IDM.http.get(this.a + '/ctrl/dbWorkbench/getApprovalTypePull', {
+                approvalTypeParam: this.dept.approvalTypeParam ? this.dept.approvalTypeParam : null
+            })
+                .then(({ data }) => {
+                    this.options = data.data
+                })
+        },
         fetchStat() {
             window.IDM.http
                 .post(
-                    this.a+'ctrl/dbWorkbench/getPadAttentionUrgeCount',
+                    this.a + 'ctrl/dbWorkbench/getPadAttentionUrgeCount',
                     {
                         ...this.params,
-                        attentionReasonType:this.dept.value
+                        attentionReasonType: this.dept.value,
+                        yearParam: this.year
                     },
                     {
                         headers: {
@@ -266,16 +342,20 @@ export default {
         },
         fetchData() {
             this.loading = true
+            let url = this.current == 1 ? "ctrl/dbWorkbench/getLeaderPadFollowList" : "ctrl/dbWorkbench/getLeaderPadNoticeList"
             window.IDM.http
                 .post(
-                    this.a+'ctrl/dbWorkbench/getLeaderPadNoticeList',
+                    this.a + url,
                     {
                         ...this.query,
+                        approvalTypeParam: this.leixing && this.leixing.length > 0 ? this.leixing[0] : null,
+                        dbEjTypeParam: this.leixing && this.leixing.length > 1 ? this.leixing[1] : "",
                         pageNo: 1,
                         pageSize: 9999,
-                        bt:this.bt,
-                        startTime:this.times[0]?this.times[0]:"",
-                        endTime:this.times[1]?this.times[1]:""
+                        bt: this.bt,
+                        startTime: this.times[0] ? this.times[0] : "",
+                        endTime: this.times[1] ? this.times[1] : "",
+                        yearParam: this.year,
                     },
                     {
                         headers: {
@@ -291,25 +371,25 @@ export default {
                 })
         },
         followHandle(record) {
-            if(record.attentionstatus==0){
-                this.record=record
+            if (record.attentionstatus == 0) {
+                this.record = record
                 this.$emit('ishowCollect')
-            }else{
-                this.attentionReason=''
+            } else {
+                this.attentionReason = ''
                 this.collectHandle(record)
             }
         },
-         //确定收藏后调用此方法
-         collectHandle(record) {
+        //确定收藏后调用此方法
+        collectHandle(record) {
             window.IDM.http
-                .post(this.a+'ctrl/dbNotice/attention', {
+                .post(this.a + 'ctrl/dbNotice/attention', {
                     ...this.params,
                     noticeId: record.id,
-                    opType: this.attentionReason.length<=0 ? 0 : 1,
-                    attentionReason:this.attentionReason
+                    opType: this.attentionReason.length <= 0 ? 0 : 1,
+                    attentionReason: this.attentionReason
                 })
-                .then(({ data }) => {})
-            if (record.attentionstatus==1) {
+                .then(({ data }) => { })
+            if (record.attentionstatus == 1) {
                 record.attentionstatus = 0
             } else {
                 record.attentionstatus = 1
@@ -317,18 +397,68 @@ export default {
             this.$emit("closeCollect")
         },
         detailHandle(record) {
-            this.$emit('detail', record)
+            if (record.isApproval == 1) {
+                this.$emit('detail', record, {
+                    ...this.query,
+                    // approvalTypeParam:this.leixing && this.leixing.length>0? this.leixing[0] :null,
+                    dbEjTypeParam: this.leixing && this.leixing.length > 1 ? this.leixing[1] : "",
+                    pageNo: 1,
+                    pageSize: 9999,
+                    bt: this.bt,
+                    startTime: this.times[0] ? this.times[0] : "",
+                    endTime: this.times[1] ? this.times[1] : "",
+                })
+            } else {
+                this.$emit('urge', record)
+            }
         },
         urgeHandle(record) {
-            this.$emit('urge', record)
+
+            if (record.isApproval == 1) {
+                console.log(111111);
+                console.log(record);
+                this.$emit('detail', record, {
+                    ...this.query,
+                    approvalTypeParam: this.leixing && this.leixing.length > 0 ? this.leixing[0] : null,
+                    dbEjTypeParam: this.leixing && this.leixing.length > 1 ? this.leixing[1] : "",
+                    pageNo: 1,
+                    pageSize: 9999,
+                    bt: this.bt,
+                    startTime: this.times[0] ? this.times[0] : "",
+                    endTime: this.times[1] ? this.times[1] : "",
+                })
+            } else {
+                this.$emit('urge', record)
+            }
+        },
+        
+        //重置
+        reset(){
+            this.bt=""
+            this.leixing=[]
+            this.year=new Date().getFullYear()
+            this.$nextTick(()=>{
+                this.fetchStat()
+                this.fetchData()
+            })
         }
     }
 }
 </script>
+<style lang="scss">
+.ant-cascader-menus {
+    font-size: 2rem;
+
+    .ant-cascader-menu-item {
+        line-height: 2.5rem;
+    }
+}
+</style>
 <style lang="scss" scoped>
 .empty {
     gap: 1.8rem;
     padding: 5rem 0;
+
     .icon {
         width: 18.69rem;
         height: 15.56rem;
@@ -336,18 +466,22 @@ export default {
         background: url('./images/icon_empty.png') no-repeat;
         background-size: cover;
     }
+
     .text {
         font-size: 3rem;
         color: #666;
     }
 }
+
 .btn-operation {
     width: 7rem;
     padding: 0 2rem;
     position: relative;
+
     img {
         width: 100%;
     }
+
     &:after {
         position: absolute;
         display: block;
@@ -358,54 +492,106 @@ export default {
         width: 2px;
         background-color: #b8b8b8;
     }
+
     &:last-child {
         &:after {
             display: none;
         }
     }
 }
-.searchBox{
+
+.searchBox {
     display: flex;
     align-items: center;
     position: absolute;
     left: 0;
-    &>div{
+
+    &>div {
         margin-right: 2em;
     }
-    .bt{
+
+    .bt {
         display: flex;
         align-items: center;
         font-size: 2.38rem;
-            color: #333333;
-        &>span{
+        color: #333333;
+
+        &>span {
             white-space: nowrap;
         }
-        ::v-deep .ant-input{
-            width:17em;
+
+        ::v-deep .ant-input {
+            width: 17em;
             height: 2.1em;
             font-size: 2rem;
             // color: #333333;
         }
     }
-    .dateArray{
+
+    .selectBox {
         display: flex;
         align-items: center;
         font-size: 2.38rem;
         color: #333333;
-        ::v-deep .ant-calendar-picker{
-            width:18em;
+
+        &>span {
+            white-space: nowrap;
+        }
+
+        ::v-deep .ant-select {
+            width: 8em !important;
+            height: 2.1em;
+            font-size: 2rem;
+
+            // color: #333333;
+            .ant-select-selection--single {
+                height: 2.1em;
+
+                .ant-select-selection__rendered {
+                    line-height: 2.1em;
+                }
+            }
+        }
+
+        ::v-deep .ant-cascader-picker {
+            height: 2.1em;
+            font-size: 2rem;
+
+            .ant-cascader-input {
+                height: 100%;
+            }
+        }
+    }
+
+    .selectBox2 {
+        ::v-deep .ant-select {
+            width: 5em !important
+        }
+    }
+
+    .dateArray {
+        display: flex;
+        align-items: center;
+        font-size: 2.38rem;
+        color: #333333;
+
+        ::v-deep .ant-calendar-picker {
+            width: 18em;
             height: 2.5em;
-            .ant-calendar-picker-input{
+
+            .ant-calendar-picker-input {
                 height: 2.5em;
-                .ant-calendar-range-picker-input{
+
+                .ant-calendar-range-picker-input {
                     font-size: 2rem !important;
                     color: #333333;
                 }
             }
         }
-        
+
     }
-    .btn{
+
+    .btn {
         width: 4em;
         height: 1.7em;
         font-size: 2.38rem;
@@ -416,5 +602,4 @@ export default {
         justify-content: space-between;
         cursor: default;
     }
-}
-</style>
+}</style>

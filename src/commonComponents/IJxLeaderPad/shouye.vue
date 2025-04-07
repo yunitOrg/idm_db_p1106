@@ -21,7 +21,10 @@
                             <div class="icon"></div>
                             <div class="text">{{el.text}}</div>
                         </div>
-                        <div class="right">{{el.num}}</div>
+                        <div class="right">
+                            <div><span>项目数</span>&nbsp; {{el.num}}</div>
+                            <div><span>单位数</span>&nbsp; {{el.orgNum}}</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -102,7 +105,7 @@ export default {
                 //     num:"8",
                 // }
            ],
-          a:""
+           a:""
         }
     },
     computed: {
@@ -338,10 +341,7 @@ export default {
                 flex-direction: column;
                 justify-content: space-between;
                 .item{
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-between;
-                    padding: 0 3rem;
+                    padding:  3rem;
                     cursor: pointer;
                     .left{
                         display: flex;
@@ -357,18 +357,33 @@ export default {
                         }
                     }
                     .right{
-                        margin-right: 7rem;
+                           display: flex;
+                           margin-top: 5px;
+                            &>div{
+                                flex: 1;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                &>span{
+                                    color: #333333;
+                                    font-size: 3.2rem;
+                                    font-weight: 400;
+                                }
+                            }
+                            &>div:nth-child(1){
+                            border-right: 1px solid #CACBEE;
+                            }
                     }
                 }
                 &>div:nth-child(1){
                     width: 100%;
-                    height: 45%;
+                    height: 47%;
                     background:url(./images/cbdw1.png) no-repeat;
                     background-size: 100% 100%;
                     border-radius: 0.98rem;
                     .icon{
-                        width: 10rem;
-                        height: 10rem;
+                        width: 8rem;
+                        height:8rem;
                         background: url(./images/cbdw-icon1.png) no-repeat;
                         background-size: 100% 100%;
                     }
@@ -377,20 +392,19 @@ export default {
                         font-size: 5rem;
                         color: #2B72EE;
                         letter-spacing: 0;
-                        text-align: right;
                         line-height: 5rem;
                         font-weight: 700;
                     }
                 }
                 &>div:nth-child(2){
                     width: 100%;
-                    height: 45%;
+                     height: 47%;
                     background:url(./images/cbdw2.png) no-repeat;
                     background-size: 100% 100%;
                     border-radius: 0.98rem;
                     .icon{
-                        width: 10rem;
-                        height: 10rem;
+                        width: 8rem;
+                        height: 8rem;
                         background: url(./images/cbdw-icon2.png) no-repeat;
                         background-size: 100% 100%;
                     }

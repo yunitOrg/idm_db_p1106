@@ -8,9 +8,11 @@
                 <!-- 领导工作首页 -->
                 <shouye class="shouye" v-if="isShouye == true" :params="params" @onHomeType="onHomeType">
                 </shouye>
-                <Urge v-if="urgeData && isShouye == false" :params="params" :data="urgeData" @close="urgeData = null" />
-                <Detail v-else-if="detailData && isShouye == false" :params="params" :data="detailData"
+                <Urge v-if="urgeData && isShouye == false" :params="params" :data="urgeData" @close="urgeClose()" />
+                <Detail v-else-if="dept.label!='重要批示' && dept.label!='重点任务' && isApproval!=1 &&detailData && isShouye == false"  :params="params" :data="detailData"
                     @urge="() => showUrge(detailData.noticeInfo)" @close="detailData = null" />
+                <Detail2 v-else-if="detailData && isShouye == false && (dept.label=='重要批示' || dept.label=='重点任务' || isApproval==1)" :params="params" :data="detailData"
+                    @urge="showUrge2" @close="detailData = null" />
                 <Cube v-else-if="current == '2' && isShouye == false" :params="params" @home="homeHandle"></Cube>
                 <Follow v-else-if="current == '3' && isShouye == false" :dept="dept" :params="params" @detail="showDetail"
                     @urge="showUrge"
@@ -20,7 +22,7 @@
                         <div @click="homeHandle" class="pointer btn-back">返回首页</div>
                     </template>
                 </Follow>
-                <Dept v-else-if="(current != '2' || current != '3') && isShouye == false" :dept="dept" :params="params"
+                <Dept v-else-if="(current != '2' || current != '3') && isShouye == false" :homeType="homeType" :dept="dept" :params="params"
                     @detail="showDetail" @urge="showUrge"
                     @ishowCollect="collectModelVisible=true"
                     @closeCollect="collectModelVisible=false">
@@ -42,11 +44,12 @@ import bindProp from '../mixins/bindProp'
 import bindStyle from '../mixins/bindStyle'
 import TopBar from '../commonComponents/IJxLeaderPad/topBar.vue'
 import NavBar from '../commonComponents/IJxLeaderPad/navBar.vue'
-import Dept from '../commonComponents/IJxLeaderPad/dept.vue' //承办单位以及事项分类的列表
+import Dept from '../commonComponents/IJxLeaderPad/dept.vue' //承办单位以及事项分类和事项分类的列表
 import Cube from '../commonComponents/IJxLeaderPad/cube.vue'
 import Follow from '../commonComponents/IJxLeaderPad/follow.vue' //特别关注的列表项
 import Urge from '../commonComponents/IJxLeaderPad/urge.vue'
-import Detail from '../commonComponents/IJxLeaderPad/detail.vue' //首页的列表项
+import Detail from '../commonComponents/IJxLeaderPad/detail.vue' //首页的列表详情项
+import Detail2 from '../commonComponents/IJxLeaderPad/detail2.vue' //首页的重点批示和重点任务列表详情项
 import DeptModel from '../commonComponents/IJxLeaderPad/deptModel.vue'
 import collectModel from '../commonComponents/IJxLeaderPad/collectModel.vue'
 import dayjs from 'dayjs'
@@ -66,6 +69,7 @@ export default {
         Follow,
         Urge,
         Detail,
+        Detail2,
         DeptModel,
         collectModel
     },
@@ -76,13 +80,15 @@ export default {
             dept: homeData(),
             urgeData: null,
             detailData: null,
+            isApproval:0,
             model: {
                 visible: false
             },
             leaderInfo: {},
             homeType: {},
             collectModelVisible:false,
-           a:""
+            urgeTobackDetail:{},
+            a:""
         }
     },
     computed: {
@@ -189,6 +195,9 @@ export default {
                         active: this.dept.approvalTypeParam == 1,
                         on: {
                             click: () => {
+                                this.detailData=null
+                                this.urgeData=null
+                                this.urgeTobackDetail={}
                                 this.dept = {
                                     label: '重要批示',
                                     value: "",
@@ -204,7 +213,9 @@ export default {
                         active: this.dept.approvalTypeParam == 2,
                         on: {
                             click: () => {
-                                console.log(1111);
+                                this.detailData=null
+                                this.urgeData=null
+                                this.urgeTobackDetail={}
                                 this.dept = {
                                     label: '重要文件',
                                     value: "",
@@ -220,6 +231,9 @@ export default {
                         active: this.dept.approvalTypeParam == 3,
                         on: {
                             click: () => {
+                                this.detailData=null
+                                this.urgeData=null
+                                this.urgeTobackDetail={}
                                 this.dept = {
                                     label: '重点任务',
                                     value: "",
@@ -235,6 +249,9 @@ export default {
                         active: this.dept.approvalTypeParam == 4,
                         on: {
                             click: () => {
+                                this.detailData=null
+                                this.urgeData=null
+                                this.urgeTobackDetail={}
                                 this.dept = {
                                     label: '交办事项',
                                     value: "",
@@ -250,6 +267,9 @@ export default {
                         active: this.dept.approvalTypeParam == 5,
                         on: {
                             click: () => {
+                                this.detailData=null
+                                this.urgeData=null
+                                this.urgeTobackDetail={}
                                 this.dept = {
                                     label: '调查核实',
                                     value: "",
@@ -265,6 +285,9 @@ export default {
                         active: this.dept.approvalTypeParam == 6,
                         on: {
                             click: () => {
+                                this.detailData=null
+                                this.urgeData=null
+                                this.urgeTobackDetail={}
                                 this.dept = {
                                     label: '建议提案',
                                     value: "",
@@ -288,6 +311,9 @@ export default {
                         active: this.dept.value == 1,
                         on: {
                             click: () => {
+                                this.detailData=null
+                                this.urgeData=null
+                                this.urgeTobackDetail={}
                                 this.dept = {
                                     label: '亮点',
                                     value: 1
@@ -302,6 +328,9 @@ export default {
                         active: this.dept.value == 2,
                         on: {
                             click: () => {
+                                this.detailData=null
+                                this.urgeData=null
+                                this.urgeTobackDetail={}
                                 this.dept = {
                                     label: '难点',
                                     value: 2
@@ -316,6 +345,9 @@ export default {
                         active: this.dept.value == 3,
                         on: {
                             click: () => {
+                                this.detailData=null
+                                this.urgeData=null
+                                this.urgeTobackDetail={}
                                 this.dept = {
                                     label: '风险点',
                                     value: 3
@@ -463,28 +495,77 @@ export default {
         }
     },
     methods: {
-        showDetail(value) {
-            window.IDM.http
-                .get(this.a+'ctrl/dbWorkbench/getLastfeedbackInfo', {
-                    ...this.params,
-                    noticeId: value.id,
-                })
-                .then(({ data }) => {
-                    this.detailData = {
-                        ...data.data,
-                        noticeInfo: value,
+        showDetail(value,params) {
+            this.isApproval =value.isApproval? value.isApproval:0
+            if(this.dept.label=='重要批示' || this.dept.label=='重点任务' || value.isApproval==1){
+                //去除params中的attentionReasonType和padNoticeQueryType
+                delete params.padNoticeQueryType
+                delete params.attentionReasonType
+                this.urgeTobackDetail={
+                        value,
+                        params
                     }
-                })
+                window.IDM.http
+                    .post(this.a+'ctrl/dbScreen/getLeaderPadlargeSizeFeedbackInfo', {
+                       ...params,
+                       approvalId:value.id
+                    },
+                    {
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    }
+                    )
+                    .then(({ data }) => {
+                        console.log(data);
+                        this.detailData = {
+                            data: data.data,
+                            data2:value,
+                            noticeInfo: value,
+                        }
+                    })
+            }else{
+
+                window.IDM.http
+                    .get(this.a+'ctrl/dbWorkbench/getLastfeedbackInfo', {
+                        ...this.params,
+                        noticeId: value.id,
+                    })
+                    .then(({ data }) => {
+                        this.detailData = {
+                            ...data.data,
+                            noticeInfo: value
+                        }
+                    })
+            }
         },
         showUrge(value) {
             window.IDM.http
                 .get(this.a+'ctrl/dbWorkbench/getLeaderPadNoticeInfo', {
                     ...this.params,
-                    noticeId: value.id
+                    noticeId: value.id,
                 })
                 .then(({ data }) => {
                     this.urgeData = data.data
                 })
+        },
+        //显示从重要批示和重点任务详情页点击过来要打开催办页面
+        showUrge2(el){
+            console.log(el,"========");
+            window.IDM.http
+                .get(this.a+'ctrl/dbWorkbench/getLeaderPadNoticeInfo', {
+                    ...this.params,
+                    noticeId: el.noticeId,
+                })
+                .then(({ data }) => {
+                    this.urgeData = data.data
+                })
+        },
+        urgeClose(){
+            if(this.dept.label=='重要批示' || this.dept.label=='重点任务' || this.isApproval==1){
+                this.showDetail(this.urgeTobackDetail.value,this.urgeTobackDetail.params)
+            }
+            this.urgeData = null
         },
         homeHandle() {
             if (this.params.isShouye == "false" && this.params.type == "0") {
@@ -496,7 +577,8 @@ export default {
                 this.current = '1'
                 this.isShouye = false
             }else{
-
+                this.detailData = null
+                this.urgeData = null
                 this.dept = homeData()
                 this.current = ''
                 this.homeType = {}
@@ -508,6 +590,7 @@ export default {
                 this.isShouye = false
                 this.detailData = null
                 this.urgeData = null
+                this.urgeTobackDetail={}
                 this.model.visible = false
                 this.dept = {
                     queryType: this.model.queryType,
@@ -519,6 +602,7 @@ export default {
                 this.isShouye = false
                 this.detailData = null
                 this.urgeData = null
+                this.urgeTobackDetail={}
                 this.model.visible = false
                 this.dept = {
                     queryType: this.model.queryType,
@@ -654,7 +738,7 @@ export default {
                 }
             }
 
-        }
+        },
     }
 }
 </script>
