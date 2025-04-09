@@ -7,26 +7,41 @@
                         <span>标题：</span>
                         <a-input  v-model="bt" placeholder="" />
                     </div>
-                    <div class="dateArray">
+                    <div class="selectBox selectBox2">
+                        <span>年份：</span>
+                        <a-select v-model="year" @change="getYear()">
+                            <a-select-option :value="item.value" v-for="(item, index) in yearOptions" :key="index">
+                                {{ item.text }}
+                            </a-select-option>
+                        </a-select>
+                    </div>
+                    <div class="selectBox">
+                        <span>类型：</span>
+                        <a-cascader v-model="leixing" allowClear placeholder="" :options="options" change-on-select @change="getLeixing"/>
+                    </div>
+                    <!-- <div class="dateArray">
                         <span>办结期限：</span>
                         <a-config-provider :locale="locale">
                             <a-range-picker valueFormat="YYYY-MM-DD" :placeholder="['开始时间', '结束时间']" mode="['month', 'month']" v-model="times" @change="getTimes()"/>
                         </a-config-provider>
-                    </div>
+                    </div> -->
                     <div class="bt" v-if="homeType.type=='事项分类' && (dept.label=='重点任务'|| dept.label=='重要批示')">
                         <span>承办单位：</span>
                         <a-input  v-model="dwName" placeholder="" />
                     </div>
-                    <div class="selectBox" v-if="homeType.type=='承办单位'">
+                    <!-- <div class="selectBox" v-if="homeType.type=='承办单位'">
                         <span>督办分类：</span>
                         <a-select v-model="dbfl" allowClear @change="getSuperType()">
                             <a-select-option :value="item.value" v-for="(item, index) in superType" :key="index">
                                 {{ item.text }}
                             </a-select-option>
                         </a-select>
-                    </div>
+                    </div> -->
                     <div class="btn" @click="fetchData()">
                         检索
+                    </div>
+                    <div class="btn" @click="reset()">
+                        重置
                     </div>
                 </div>
                 <Status v-for="i in [4, 2, 1]" :key="i" :value="i" :showLabel="true" />
@@ -104,6 +119,8 @@ export default {
     data() {
         return {
             bt:"",
+            year:new Date().getFullYear(),
+            leixing:[],
             dwName:"",
             dbfl:"",
             times:[],
@@ -128,13 +145,50 @@ export default {
                 {text:"调查核实",value:5},
                 {text:"建议提案 ",value:6}
             ],
-            a:"http://localhost:8080/DreamOne/"
+            options:[
+                {
+                    label: 'zhejiang',
+                    value: '1',
+                    children: [
+                        {
+                            label: 'hangzhou',
+                            value: '2',
+                        }
+                    ],
+                },
+                {
+                    label: 'zhejiang',
+                    value: '1',
+                    children: [
+                        {
+                            label: 'hangzhou',
+                            value: '2',
+                        }
+                    ],
+                }
+            ],
+            a:""
         }
     },
     computed: {
+        yearOptions(){
+            //获取从2024年到当年的年份
+            let year = new Date().getFullYear()
+            let arr = [
+                {
+                    text: "至今",
+                    value:9999
+                }
+            ]
+            for (let i = 2024; i <= year; i++) {
+                arr.push({
+                    text: i,
+                    value:i
+                })
+            }
+            return arr
+        },
         tabs(){
-            console.log(this.dept,"+++");
-            
             if (this.params.isShouye == "false" && this.params.type == "0") {
                 let a = [
                     {
@@ -279,6 +333,14 @@ export default {
         }
     },
     watch: {
+        dept: {
+            handler(val) {
+                this.year=new Date().getFullYear()
+                this.leixing=[]
+                this
+            },
+            immediate: true
+        },
         active:{
             handler(val) {
                 if(val){
@@ -303,6 +365,7 @@ export default {
                 }
                 console.log(this.active,"++++");
                 this.$nextTick(()=>{
+                    this.getOptions()
                     this.fetchData()
                 })
             },
@@ -320,24 +383,40 @@ export default {
             this.attentionReason = "";
             this.$emit("closeCollect")
         });
-        console.log(this.dept);
         
     },
     mounted() {
+        this.getOptions()
     },
     methods: {
+        //获取年份
+        getYear(){
+            this.$nextTick(()=>{
+                // this.fetchData()
+            })
+        },
+        //得到类型的值
+        getLeixing(value,selectedOptions){
+            this.$nextTick(()=>{
+                // this.fetchData()
+            })
+        },
         changeHandle(active){
             this.active=active
             console.log(this.active,this.tabs);
         },
+        //获取类型下拉数据
+        getOptions(){
+            window.IDM.http.get(this.a+'/ctrl/dbWorkbench/getApprovalTypePull', {
+                approvalTypeParam:this.dept.approvalTypeParam? this.dept.approvalTypeParam:null
+            })
+            .then(({ data }) => {
+                this.options=data.data
+            })
+        },
         //获取日期时间
         getTimes(times){
             console.log(this.times);
-        },
-        //获取督办分类
-        getSuperType(){
-            console.log(this.dbfl);
-            this.dept.approvalTypeParam = this.dbfl
         },
         fetchData() {
             this.loading = true
@@ -346,15 +425,16 @@ export default {
                     this.a+'ctrl/dbWorkbench/getLeaderPadNoticeList',
                     {
                         ...this.query,
-                        approvalTypeParam:this.dbfl && this.dbfl.length>0? this.dbfl :this.dept.approvalTypeParam? this.dept.approvalTypeParam:null,
+                        approvalTypeParam:this.homeType.type=='事项分类'?this.dept.approvalTypeParam? this.dept.approvalTypeParam:null: this.leixing && this.leixing.length>0? this.leixing[0]:null,
+                        dbEjTypeParam:this.homeType.type=='事项分类'?this.leixing[0] :this.leixing[1] , 
                         pageNo: 1,
                         pageSize: 9999,
                         bt:this.bt,
-                        dbfl:this.dbfl,
                         startTime:this.times[0]?this.times[0]:"",
                         endTime:this.times[1]?this.times[1]:"",
                         fileStatus:this.active != '0' ? this.active : 0,
-                        dwName:this.dwName && this.dwName.length>0?this.dwName:""
+                        dwName:this.dwName && this.dwName.length>0?this.dwName:"",
+                        yearParam: this.year,
                     },
                     {
                         headers: {
@@ -388,7 +468,8 @@ export default {
                             pageSize: 9999,
                             bt: this.bt,
                             startTime: this.times[0] ? this.times[0] : "",
-                            endTime: this.times[1] ? this.times[1] : ""
+                            endTime: this.times[1] ? this.times[1] : "",
+                            yearParam: this.year,
                         },
                         {
                             headers: {
@@ -432,22 +513,35 @@ export default {
             this.$emit("closeCollect")
         },
         detailHandle(record) {
-            this.$emit('detail', record,{
-                        ...this.query,
-                        approvalTypeParam:this.dbfl && this.dbfl.length>0? this.dbfl :this.dept.approvalTypeParam? this.dept.approvalTypeParam:null,
-                        pageNo: 1,
-                        pageSize: 9999,
-                        bt:this.bt,
-                        dbfl:this.dbfl,
-                        startTime:this.times[0]?this.times[0]:"",
-                        endTime:this.times[1]?this.times[1]:"",
-                        fileStatus:this.active != '0' ? this.active : 0,
-                        dwName:this.dwName && this.dwName.length>0?this.dwName:""
-                    })
+            // this.$emit('detail', record, {
+            //             ...this.query,
+            //             approvalTypeParam:this.homeType.type=='事项分类'?this.dept.approvalTypeParam? this.dept.approvalTypeParam:null: this.leixing && this.leixing.length>0? this.leixing[0]:null,
+            //             dbEjTypeParam:this.homeType.type=='事项分类'?this.leixing[0] :this.leixing[1] , 
+            //             pageNo: 1,
+            //             pageSize: 9999,
+            //             bt:this.bt,
+            //             startTime:this.times[0]?this.times[0]:"",
+            //             endTime:this.times[1]?this.times[1]:"",
+            //             fileStatus:this.active != '0' ? this.active : 0,
+            //             dwName:this.dwName && this.dwName.length>0?this.dwName:"",
+            //         })
+            console.log(record);
+            let url = this.a+ `ctrl/formControl/sysForm?moduleId=240508144008KksWD26gkR8FDH07bfS&formId=240508144446G9V6RVMn48B03NtLByV&nodeId=-1&validateByList=1&listId=DbNoValidate&pk=${record.approvalId }`
+            window.open(IDM.url.getWebPath(url))
         },
         urgeHandle(record) {
             console.log(11);
             this.$emit('urge', record)
+        },
+        //重置
+        reset(){
+            this.bt=""
+            this.leixing=[]
+            this.year=new Date().getFullYear()
+            this.dwName=""
+            this.$nextTick(()=>{
+                this.fetchData()
+            })
         }
     },
     beforeDestroy() {
@@ -455,6 +549,14 @@ export default {
     }
 }
 </script>
+<style lang="scss">
+    .ant-cascader-menus{
+        font-size: 2rem;
+        .ant-cascader-menu-item{
+            line-height: 2.5rem;
+        }
+    }
+</style>
 <style lang="scss" scoped>
 .empty {
     gap: 1.8rem;
@@ -511,7 +613,7 @@ export default {
             white-space: nowrap;
         }
         ::v-deep .ant-input{
-            width:17em;
+            width:10em;
             height: 2.1em;
             font-size: 2rem;
             // color: #333333;
@@ -536,6 +638,18 @@ export default {
                     line-height: 2.1em;
                 }
             }
+        }
+        ::v-deep  .ant-cascader-picker{
+            height: 2.1em;
+            font-size: 2rem;
+            .ant-cascader-input{
+                height: 100%;
+            }
+        }
+    }
+    .selectBox2{
+        ::v-deep .ant-select{
+            width:5em !important
         }
     }
     .dateArray{

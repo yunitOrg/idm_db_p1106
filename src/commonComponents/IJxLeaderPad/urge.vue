@@ -42,10 +42,23 @@
                     <tr>
                         <th>通知范围</th>
                         <td>
-                            <a-checkbox-group v-model="urgeUserList">
-                                <a-checkbox v-for="item in data.urgeUserList" :key="item.value" :checked="true" :value="item.value">
-                                    {{ item.text }}
-                                </a-checkbox>
+                            <a-checkbox-group v-model="urgeUserIds">
+                                <template >
+                                    <div class="group" v-show="item.unitName" v-for="item in urgeUserList" :key="item.value">
+                                        <span>{{ item.unitName }}：</span>
+                                        <a-checkbox  v-for="(e) in item.group" :key="e.value"  :checked="true" :value="e.value">
+                                            {{ e.text }}
+                                        </a-checkbox>
+                                    </div>
+                                </template>
+                                <template >
+                                    <div>
+                                        <a-checkbox v-show="!item.unitName" v-for="item in urgeUserList" :key="item.value" :checked="true" :value="item.value">
+                                            {{ item.text }}
+                                        </a-checkbox>
+                                    </div>
+                                </template>
+                              
                             </a-checkbox-group>
                         </td>
                     </tr>
@@ -76,14 +89,15 @@ export default {
     },
     data() {
         return {
-            urgeUserList: [],
+            urgeUserIds: [],
+            urgeUserList:[],
             saving: false,
             time: dayjs()
         }
     },
     computed: {
         submitDisabled() {
-            if (this.urgeUserList.length == 0) return true
+            if (this.urgeUserIds.length == 0) return true
             if (this.saving) return true
             return false
         }
@@ -99,12 +113,52 @@ export default {
         },
         data: {
             handler() {
-                this.urgeUserList = this.data.urgeUserList.map((n) => n.value)
+                this.urgeUserIds = this.data.urgeUserList.map((n) => n.value)
+                this.getUrgeUserList()
             },
             immediate: true
         }
     },
+    mounted() {
+       
+    },
     methods: {
+        getUrgeUserList(){
+            // 用于按 unitName 分组的临时对象
+            const groups = {};
+            const result = [];
+            let that = this
+            this.data.urgeUserList.forEach(item => {
+            const unitName = item.unitName;
+            if (unitName) {
+                if (!groups[unitName]) {
+                groups[unitName] = {
+                    group: [],
+                    unitName: unitName
+                };
+                }
+                // 创建新对象并移除 unitName 属性
+                const { unitName: _, ...rest } = item; // 使用解构移除 unitName
+                groups[unitName].group.push(rest);
+            } else {
+                // 直接添加未分组的项
+                result.push(item);
+            }
+            });
+            // 将分组后的结果合并到最终数组
+            console.log(Object.values(groups));
+            Object.values(groups).forEach(group => {
+                console.log( that.data.urgeUserList);
+               let index= that.data.urgeUserList.findIndex(el=> el.unitName==group.unitName);
+               console.log(index);
+                //将group插入到index所对应的位置
+                if(index!=-1){
+                    result.splice(index,0,group)    
+                }
+            });
+            console.log(result);
+            this.urgeUserList=result
+        },
         saveHandle() {
             this.saving = true
             window.IDM.http
@@ -113,7 +167,7 @@ export default {
                     {
                         ...this.params,
                         noticeId: this.data.id,
-                        urgeUserIds: this.urgeUserList
+                        urgeUserIds: this.urgeUserIds
                     },
                     {
                         headers: {
@@ -129,6 +183,7 @@ export default {
                 })
         },
         closeHandle() {
+            console.log(222);
             this.$emit('close')
         }
     }
@@ -203,6 +258,15 @@ export default {
                 background-color: white;
             }
         }
+    }
+    :deep(.ant-checkbox-group){
+        .group{
+            display: block;
+        }
+    }
+    :deep(.ant-checkbox-group .group){
+        font-size: 2.38rem;
+        // margin-left: 5px;
     }
     :deep(.ant-checkbox-wrapper) {
         font-size: 2.38rem;

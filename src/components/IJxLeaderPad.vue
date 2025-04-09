@@ -80,6 +80,7 @@ export default {
             dept: homeData(),
             urgeData: null,
             detailData: null,
+            isApproval:0,
             model: {
                 visible: false
             },
@@ -87,7 +88,7 @@ export default {
             homeType: {},
             collectModelVisible:false,
             urgeTobackDetail:{},
-            a:"http://localhost:8080/DreamOne/"
+            a:""
         }
     },
     computed: {
@@ -495,8 +496,11 @@ export default {
     },
     methods: {
         showDetail(value,params) {
-            let that =this
-            if(this.dept.label=='重要批示' || this.dept.label=='重点任务'){
+            // this.isApproval =value.isApproval? value.isApproval:0
+            if(this.dept.label=='重要批示' || this.dept.label=='重点任务' ){
+                //去除params中的attentionReasonType和padNoticeQueryType
+                delete params.padNoticeQueryType
+                delete params.attentionReasonType
                 this.urgeTobackDetail={
                         value,
                         params
@@ -530,7 +534,7 @@ export default {
                     .then(({ data }) => {
                         this.detailData = {
                             ...data.data,
-                            noticeInfo: value,
+                            noticeInfo: value
                         }
                     })
             }
@@ -539,7 +543,11 @@ export default {
             window.IDM.http
                 .get(this.a+'ctrl/dbWorkbench/getLeaderPadNoticeInfo', {
                     ...this.params,
-                    noticeId: value.id
+                    noticeId: value.id,
+                    approvalId:value.approvalId,
+                    handlerUnit:value.handlerUnit,
+                    handlerUnitSchema:value.handlerUnitSchema,
+                    handlerUnitText:value.handlerUnitText
                 })
                 .then(({ data }) => {
                     this.urgeData = data.data
@@ -551,16 +559,20 @@ export default {
             window.IDM.http
                 .get(this.a+'ctrl/dbWorkbench/getLeaderPadNoticeInfo', {
                     ...this.params,
-                    noticeId: el.noticeId
+                    noticeId: el.noticeId,
+                    approvalId:el.approvalId,
+                    handlerUnit:el.handlerUnit,
+                    handlerUnitSchema:el.handlerUnitSchema,
+                    handlerUnitText:el.handlerUnitText
                 })
                 .then(({ data }) => {
                     this.urgeData = data.data
                 })
         },
         urgeClose(){
-            if(this.dept.label=='重要批示' || this.dept.label=='重点任务'){
-                this.showDetail(this.urgeTobackDetail.value,this.urgeTobackDetail.params)
-            }
+            // if(this.dept.label=='重要批示' || this.dept.label=='重点任务'){
+            //     this.showDetail(this.urgeTobackDetail.value,this.urgeTobackDetail.params)
+            // }
             this.urgeData = null
         },
         homeHandle() {
@@ -760,7 +772,7 @@ html {
 <style lang="scss" scoped>
 .idm-db-IJxLeaderPad-container {
     gap: 2.5rem;
-    background: #8fc7ff;
+    // background: #8fc7ff;
 
     .main-container {
         padding: 0 3.75rem 3.75rem;
