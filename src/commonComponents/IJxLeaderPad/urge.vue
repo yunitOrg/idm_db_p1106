@@ -262,6 +262,11 @@ export default {
     :deep(.ant-checkbox-group){
         .group{
             display: block;
+            &>span{
+                display: inline-block;
+                width:  17rem;
+                text-align: right;
+            }
         }
     }
     :deep(.ant-checkbox-group .group){
@@ -280,11 +285,12 @@ export default {
         bottom: 0;
         left: 0;
         right: 0;
-        padding: 1.3rem 0;
+        padding: 1rem 0;
         background: #ffffff;
         box-shadow: 0rem 0.19rem 0.81rem 0rem rgba(0, 0, 0, 0.4);
+        z-index: 999;
         :deep(.ant-btn-lg) {
-            padding: 2rem 7rem;
+            padding: 1rem 4rem;
             font-size: 2.38rem;
             height: auto;
             border-radius: 1rem;

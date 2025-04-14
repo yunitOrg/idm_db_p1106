@@ -9,12 +9,12 @@
                 <shouye class="shouye" v-if="isShouye == true" :params="params" @onHomeType="onHomeType">
                 </shouye>
                 <Urge v-if="urgeData && isShouye == false" :params="params" :data="urgeData" @close="urgeClose()" />
-                <Detail v-else-if="dept.label!='重要批示' && dept.label!='重点任务' &&detailData && isShouye == false"  :params="params" :data="detailData"
+                <Detail v-else-if="dept.label!='重要批示' && dept.label!='重点任务' &&detailData && isShouye == false"  :params="params"  :data="detailData"
                     @urge="() => showUrge(detailData.noticeInfo)" @close="detailData = null" />
                 <Detail2 v-else-if="detailData && isShouye == false && (dept.label=='重要批示' || dept.label=='重点任务')" :params="params" :data="detailData"
                     @urge="showUrge2" @close="detailData = null" />
                 <Cube v-else-if="current == '2' && isShouye == false" :params="params" @home="homeHandle"></Cube>
-                <Follow v-else-if="current == '3' && isShouye == false" :dept="dept" :params="params" @detail="showDetail"
+                <Follow v-if="current == '3' && isShouye == false" :dept="dept"  :params="params" @detail="showDetail"
                     @urge="showUrge"
                     @ishowCollect="collectModelVisible=true"
                     @closeCollect="collectModelVisible=false">
@@ -22,7 +22,7 @@
                         <div @click="homeHandle" class="pointer btn-back">返回首页</div>
                     </template>
                 </Follow>
-                <Dept v-else-if="(current != '2' || current != '3') && isShouye == false" :homeType="homeType" :dept="dept" :params="params"
+                <Dept v-if="(current != '2' || current != '3') && isShouye == false" :homeType="homeType" :dept="dept" :params="params"
                     @detail="showDetail" @urge="showUrge"
                     @ishowCollect="collectModelVisible=true"
                     @closeCollect="collectModelVisible=false">
@@ -773,7 +773,7 @@ html {
 .idm-db-IJxLeaderPad-container {
     gap: 2.5rem;
     // background: #8fc7ff;
-
+    overflow-y: hidden;
     .main-container {
         padding: 0 3.75rem 3.75rem;
     }
