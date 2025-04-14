@@ -69,6 +69,7 @@ export default {
         renderHeader(headers) {
             return headers.map((column, columnIndex) => {
                 const option = {
+                    ...column,
                     title: column.text,
                     dataIndex: column.key,
                     align: 'center'
@@ -124,7 +125,7 @@ export default {
         padding: 12px 10px;
         gap: 8px;
         border: 1px solid #e6e6e6;
-        background-color: #F6FBFA;
+        background-color: #f6fbfa;
         .handlerIcon {
             width: 1.2em;
             height: 1.2em;
