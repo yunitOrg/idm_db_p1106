@@ -344,26 +344,24 @@ export default {
         active:{
             handler(val) {
                 if(val){
-                    console.log(val,"=====");
-                    this.active = val
-                    this.dept.isFanhui=false
-                    this.$nextTick(()=>{
-                        this.fetchData()
-                    })
+                    // console.log(val,"=====");
+                    // this.active = val
+                    // this.dept.isFanhui=false
+                    // this.$nextTick(()=>{
+                    //     this.fetchData()
+                    // })
                 }
             },
             immediate: true
         },
         query: {
             handler() {
-                console.log(11111111);
                 if(this.dept.label != ("全部"|| "超期"|| "临期" || "正常" || "已办")){
                     this.active = this.dept.value
                 }
                 if(this.dept?.isFanhui==true){
                     this.active = this.dept.value
                 }
-                console.log(this.active,"++++");
                 this.$nextTick(()=>{
                     this.getOptions()
                     this.fetchData()
@@ -403,7 +401,10 @@ export default {
         },
         changeHandle(active){
             this.active=active
-            console.log(this.active,this.tabs);
+            this.dept.isFanhui=false
+            this.$nextTick(()=>{
+                this.fetchData()
+            })
         },
         //获取类型下拉数据
         getOptions(){

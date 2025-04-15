@@ -105,7 +105,7 @@ export default {
                 //     num:"8",
                 // }
            ],
-           a:"http://localhost:8080/DreamOne/"
+           a:""
         }
     },
     computed: {

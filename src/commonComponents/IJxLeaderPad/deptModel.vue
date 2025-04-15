@@ -83,7 +83,7 @@ export default {
             .ant-tabs-tab-remind {
                 position: absolute;
                 top: 0;
-                right: 24px;
+                right: 38px;
                 border-radius: 12px;
                 padding: 0 5px;
                 width: auto;
