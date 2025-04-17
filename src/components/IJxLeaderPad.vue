@@ -363,7 +363,7 @@ export default {
                 return nav
             }
             if (this.homeType.type == "承办单位") {
-                if ([1, 5].includes(this.leaderInfo.type)) {
+                if ([1, 5, 6].includes(this.leaderInfo.type)) {
                     return [
                         {
                             label: '省政府各部门',
