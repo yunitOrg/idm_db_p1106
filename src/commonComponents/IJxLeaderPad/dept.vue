@@ -642,9 +642,14 @@ export default {
         }
         ::v-deep  .ant-cascader-picker{
             height: 2.1em;
+            width: 13em;
             font-size: 2rem;
             .ant-cascader-input{
                 height: 100%;
+                .ant-cascader-pic{
+                    height: 2em;
+                    line-height: 2em;
+                }
             }
         }
     }
