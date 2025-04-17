@@ -31,6 +31,10 @@
                     </a-select>
                 </div>
                 <div class="super-middle">
+                    <span class="super-mr10">督办分类</span>
+                    <a-input v-model="search.extApprovalTypeSzjwText" placeholder="请输入督办分类" allowClear class="super-inputbtn"></a-input>
+                </div>
+                <div class="super-middle">
                     <span class="super-mr10">项目状态</span>
                     <a-select v-model="search.dbStatus" allowClear style="width: 50%">
                         <a-select-option :value="item.value" v-for="(item, index) in superState" :key="index">
@@ -39,8 +43,8 @@
                     </a-select>
                 </div>
                 <div class="super-middle">
-                    <span class="super-mr10">立项人</span>
-                    <a-input v-model="search.approvalPersonQuery" placeholder="请输入立项人" allowClear class="super-inputbtn"></a-input>
+                    <span class="super-mr10">分管领导</span>
+                    <a-input v-model="search.directLeaderText" placeholder="请输入分管领导" allowClear class="super-inputbtn"></a-input>
                 </div>
                 <div class="super-middle">
                     <span class="super-mr10">立项日期</span>
@@ -294,6 +298,8 @@ export default {
                 whQuery: '', // 编号
                 contentQuery: '', // 检索内容
                 approvalType: '', // 督办类型
+                extApprovalTypeSzjwText:"",//督办分类
+                directLeaderText:'',//分管领导
                 dbStatus: '', // 项目状态
                 startDate: '', // 开始时间
                 endDate: '', // 结束时间
@@ -367,11 +373,11 @@ export default {
                 },
                 { title: '编号', dataIndex: 'wh', align: 'center', key: 'wh', width: '9%', sortField: 'wh' },
                 { title: '标题', dataIndex: 'bt', align: 'center', key: 'bt', width: '18%', sortField: 'bt', scopedSlots: { customRender: 'bt' } },
-                { title: '密级', dataIndex: 'mjText', align: 'center', key: 'mjText', width: '8%', sortField: 'mj' },
-                { title: '立项人', dataIndex: 'approvalPersonText', align: 'center', key: 'approvalPersonText', width: '9%' },
                 { title: '督办类型', dataIndex: 'approvalTypeText', align: 'center', key: 'approvalTypeText', width: '8%', sortField: 'approvalType' },
+                { title: '督办分类', dataIndex: 'extApprovalTypeSzjwText', align: 'center', key: 'extApprovalTypeSzjwText', width: '8%', sortField: 'extApprovalTypeSzjw' },
                 { title: '立项日期', dataIndex: 'ngrq', align: 'center', key: 'ngrq', width: '8%', sortField: 'ngrq' },
                 { title: '交办日期', dataIndex: 'handoverDate', align: 'center', key: 'handoverDate', width: '8%', sortField: 'handoverDate' },
+                { title: '分管领导', dataIndex: 'directLeaderText', align: 'center', key: 'directLeaderText', width: '9%'},
                 { title: '办结期限', dataIndex: 'endDate', align: 'center', key: 'endDate', width: '8%', sortField: 'endDate' },
                 { title: '主办部门', dataIndex: 'hostStr', align: 'center', key: 'hostStr', width: '8%' },
                 { title: '协办部门', dataIndex: 'assistStr', align: 'center', key: 'assistStr', width: '8%' },
@@ -418,7 +424,7 @@ export default {
     },
     methods: {
         addSorteField() {
-            let ary = ['dbStatusText', 'wh','mjText', 'bt', 'approvalTypeText', 'ngrq', 'handoverDate', 'endDate']
+            let ary = ['dbStatusText', 'wh','extApprovalTypeSzjw', 'bt', 'approvalTypeText', 'ngrq', 'handoverDate', 'endDate']
             this.columns.forEach((item) => {
                 if (this.propData.isSorte && ary.includes(item.dataIndex)) {
                     item.sorter = true
@@ -514,6 +520,8 @@ export default {
             this.search.whQuery = ''
             this.search.contentQuery = ''
             this.search.approvalType = ''
+            this.search.extApprovalTypeSzjwText = ''
+            this.search.directLeaderText = ''
             this.search.dbStatus = ''
             this.search.startDate = ''
             this.search.endDate = ''
@@ -1024,6 +1032,7 @@ export default {
         margin-right: 20px;
         font-size: 16px;
         font-weight: 500;
+        white-space: nowrap;
     }
     .h40 {
         height: 40px;
