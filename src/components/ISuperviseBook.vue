@@ -407,7 +407,7 @@ export default {
         // 删除列
         if (this.propData.columnAddNameList && this.propData.columnAddNameList.length > 0) {
             this.propData.columnAddNameList.forEach((item) => {
-                let obj = { title: item.name, dataIndex: item.field, align: 'center', key: item.field }
+                let obj = { title: item.name, dataIndex: item.field, align: 'center', key: item.field, width: item.width, }
                 this.columns.splice(item.key, 0, obj)
             })
         }

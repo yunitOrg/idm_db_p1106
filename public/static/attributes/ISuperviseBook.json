@@ -96,6 +96,12 @@
               "layoutType": "inline",
               "text": "字段",
               "bindKey": "field"
+            },
+            {
+              "type": "input",
+              "layoutType": "inline",
+              "text": "宽度",
+              "bindKey": "width"
             }
           ]
         }
