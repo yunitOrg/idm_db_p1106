@@ -196,6 +196,14 @@
       "helpUrl": "",
       "children": [
         {
+            "type": "actionSelect",
+            "layoutType": "block",
+            "text": "行点击自定义函数",
+            "bindKey": "customRowClick",
+            "desc": "设置行点击的自定义函数，接收参数格式为：{...自定义的,record, index}",
+            "multiple": true
+        },
+        {
           "type": "actionSelect",
           "layoutType": "block",
           "text": "表格数据源参数",

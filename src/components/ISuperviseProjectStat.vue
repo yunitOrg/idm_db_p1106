@@ -47,6 +47,7 @@
       <a-table
         ref="superTable"
         :columns="columns"
+        :customRow="customRow"
         :data-source="data"
         :locale="{emptyText: '暂无数据'}"
         :scroll="{ y: tableRealMaxHeight }"
@@ -179,6 +180,60 @@ export default {
     this.init();
   },
   methods: {
+    /**
+     * 设置行属性
+     */
+    customRow(record, index) {
+        let that = this
+        return {
+            props: {},
+            on: {
+                // 事件
+                click: event => {
+                    that.customRowFunHandle(
+                        record,
+                        index,
+                        event,
+                        'customRowClick'
+                    )
+                }
+            },
+        }
+    },
+    /**
+     * 行属性的通用自定义函数
+     */
+    customRowFunHandle(record, index, event, name) {
+        let that = this
+        var customRowHandle = that.propData[name]
+        customRowHandle &&
+            customRowHandle.forEach(item => {
+                window[item.name] &&
+                    window[item.name].call(this, {
+                        ...that.commonParam(),
+                        customParam: item.param,
+                        _this: that,
+                        event,
+                        record,
+                        index,
+                    })
+            })
+    },
+    /**
+     * 通用的url参数对象
+     * 所有地址的url参数转换
+     */
+    commonParam() {
+        let urlObject = IDM.url.queryObject()
+        var params = {
+            pageId:
+                window.IDM.broadcast && window.IDM.broadcast.pageModule
+                    ? window.IDM.broadcast.pageModule.id
+                    : '',
+            urlData: JSON.stringify(urlObject),
+        }
+        return params
+    },
     filterOption(input, option) {
       return (
         option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0
