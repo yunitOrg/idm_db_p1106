@@ -317,9 +317,9 @@ export default {
         },
         chartNavigateHandle(event){
             if (event.offsetX < event.currentTarget.offsetWidth / 2){
-                this.navigateHandle({taskStatusType:"taskFinishPercentage"})
+                this.navigateHandle({taskStatusType:"taskFinishTotal"})
             }else{
-                this.navigateHandle({taskStatusType:"taskFeedbackPercentage"})
+                this.navigateHandle({taskStatusType:"taskYesFeedbackTotal"})
             }
         }
     }
