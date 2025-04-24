@@ -16,8 +16,8 @@
                     <div class="stat-item-title">{{ stat.title }}</div>
                 </div>
             </div>
-            <div class="flex-1 h-0 flex items-stretch">
-                <Chart class="flex-1 w-0" :option="config" @click="navigateHandle"></Chart>
+            <div class="flex-1 h-0 flex items-stretch" @click="chartNavigateHandle($event)">
+                <Chart class="flex-1 w-0" :option="config"></Chart>
             </div>
         </div>
     </Section>
@@ -53,9 +53,9 @@ export default {
                     value: this.data.taskTotal
                 },
                 {
-                    key: 'taskInProcessTotal',
+                    key: 'taskNotFinishTotal',
                     title: '在办数',
-                    value: this.data.taskInProcessTotal
+                    value: this.data.taskNotFinishTotal
                 },
                 {
                     key: 'taskFinishTotal',
@@ -63,9 +63,9 @@ export default {
                     value: this.data.taskFinishTotal
                 },
                 {
-                    key: 'taskProcessDoneTotal',
+                    key: 'taskYesFeedbackTotal',
                     title: '反馈数',
-                    value: this.data.taskProcessDoneTotal
+                    value: this.data.taskYesFeedbackTotal
                 }
             ]
         },
@@ -314,6 +314,13 @@ export default {
         },
         navigateHandle(item) {
             this.$emit('navigate', item)
+        },
+        chartNavigateHandle(event){
+            if (event.offsetX < event.currentTarget.offsetWidth / 2){
+                this.navigateHandle({taskStatusType:"taskFinishPercentage"})
+            }else{
+                this.navigateHandle({taskStatusType:"taskFeedbackPercentage"})
+            }
         }
     }
 }
