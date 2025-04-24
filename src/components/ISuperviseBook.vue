@@ -32,7 +32,27 @@
                 </div>
                 <div class="super-middle">
                     <span class="super-mr10">督办分类</span>
-                    <a-input v-model="search.extApprovalTypeSzjwText" placeholder="请输入督办分类" allowClear class="super-inputbtn"></a-input>
+                    <a-select v-model="search.extApprovalTypeSzjwText" allowClear style="width: 50%">
+                        <a-select-option :value="item.value" v-for="(item, index) in superApprovalCategory" :key="index">
+                            {{ item.text }}
+                        </a-select-option>
+                    </a-select>
+                </div>
+                <div class="super-middle">
+                    <span class="super-mr10">办理方式</span>
+                    <a-select v-model="search.handlingMethodText" allowClear style="width: 50%">
+                        <a-select-option :value="item.value" v-for="(item, index) in superHandlingMethod" :key="index">
+                            {{ item.text }}
+                        </a-select-option>
+                    </a-select>
+                </div>
+                <div class="super-middle">
+                    <span class="super-mr10">分管领导</span>
+                    <a-select v-model="search.unitLeaders" allowClear style="width: 50%">
+                        <a-select-option :value="item.value" v-for="(item, index) in superUnitLeaders" :key="index">
+                            {{ item.text }}
+                        </a-select-option>
+                    </a-select>
                 </div>
                 <div class="super-middle">
                     <span class="super-mr10">项目状态</span>
@@ -41,10 +61,6 @@
                             {{ item.text }}
                         </a-select-option>
                     </a-select>
-                </div>
-                <div class="super-middle">
-                    <span class="super-mr10">分管领导</span>
-                    <a-input v-model="search.directLeaderText" placeholder="请输入分管领导" allowClear class="super-inputbtn"></a-input>
                 </div>
                 <div class="super-middle">
                     <span class="super-mr10">立项日期</span>
@@ -299,6 +315,8 @@ export default {
                 contentQuery: '', // 检索内容
                 approvalType: '', // 督办类型
                 extApprovalTypeSzjwText:"",//督办分类
+                handlingMethodText: '', // 办理方式
+                unitLeaders: '', // 分管领导
                 directLeaderText:'',//分管领导
                 dbStatus: '', // 项目状态
                 startDate: '', // 开始时间
@@ -309,6 +327,9 @@ export default {
             singMoreShowData: [], // 多任务里面
             superType: [], // 督办类型数据
             superState: [], // 项目状态数据
+            superApprovalCategory: [], // 督办分类数据
+            superHandlingMethod: [], // 督办类型数据
+            superUnitLeaders: [], // 项目状态数据
             sortOrder: 'ascend', // 默认正序排序
             moduleObject: {},
             propData: this.$root.propData.compositeAttr || {
@@ -375,6 +396,7 @@ export default {
                 { title: '标题', dataIndex: 'bt', align: 'center', key: 'bt', width: '18%', sortField: 'bt', scopedSlots: { customRender: 'bt' } },
                 { title: '督办类型', dataIndex: 'approvalTypeText', align: 'center', key: 'approvalTypeText', width: '8%', sortField: 'approvalType' },
                 { title: '督办分类', dataIndex: 'extApprovalTypeSzjwText', align: 'center', key: 'extApprovalTypeSzjwText', width: '8%', sortField: 'extApprovalTypeSzjw' },
+                { title: '办理方式', dataIndex: 'handlingMethodText', align: 'center', key: 'handlingMethodText', width: '8%', sortField: 'handlingMethodText' },
                 { title: '立项日期', dataIndex: 'ngrq', align: 'center', key: 'ngrq', width: '8%', sortField: 'ngrq' },
                 { title: '交办日期', dataIndex: 'handoverDate', align: 'center', key: 'handoverDate', width: '8%', sortField: 'handoverDate' },
                 { title: '分管领导', dataIndex: 'directLeaderText', align: 'center', key: 'directLeaderText', width: '9%'},
@@ -394,6 +416,9 @@ export default {
 
         this.handleSuperSelectData(1, 'superType')
         this.handleSuperSelectData(2, 'superState')
+        this.handleSuperSelectData(3, 'superApprovalCategory')
+        this.handleSuperSelectData(4, 'superHandlingMethod')
+        this.handleSuperSelectData(5, 'superUnitLeaders')
         this.init()
         window.ISuperviseBook = {
             initData: this.initData
@@ -424,7 +449,7 @@ export default {
     },
     methods: {
         addSorteField() {
-            let ary = ['dbStatusText', 'wh','extApprovalTypeSzjw', 'bt', 'approvalTypeText', 'ngrq', 'handoverDate', 'endDate']
+            let ary = ['dbStatusText', 'wh','extApprovalTypeSzjw','handlingMethodText', 'bt', 'approvalTypeText', 'ngrq', 'handoverDate', 'endDate']
             this.columns.forEach((item) => {
                 if (this.propData.isSorte && ary.includes(item.dataIndex)) {
                     item.sorter = true
@@ -484,7 +509,18 @@ export default {
         },
         // 督办类型选择
         async handleSuperSelectData(type, result) {
-            let res = type == 1 ? await API.ApiPprovalTypeSelect() : await API.ApiDbStatusSelect()
+            let res = null;
+            if (type == 1) {
+                res = await API.ApiPprovalTypeSelect()
+            }else if (type == 2) {
+                res = await API.ApiDbStatusSelect()
+            }else if (type == 3) {
+                res = await API.ApiDbApprovalCategorySelect()
+            }else if (type == 4) {
+                res = await API.ApiDbHandlingMethodSelect()
+            }else if (type == 5) {
+                res = await API.ApiDbUnitLeadersSelect()
+            }
             if (res.code == '200') {
                 this[result] = res.data
             }
@@ -521,6 +557,8 @@ export default {
             this.search.contentQuery = ''
             this.search.approvalType = ''
             this.search.extApprovalTypeSzjwText = ''
+            this.search.handlingMethodText = ''
+            this.search.unitLeaders = ''
             this.search.directLeaderText = ''
             this.search.dbStatus = ''
             this.search.startDate = ''

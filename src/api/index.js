@@ -40,6 +40,42 @@ export default {
       return data
     },
     /**
+     * @Desc 督办-获取台账办理方式下拉框
+     * @Author hjp
+     */
+    async ApiDbApprovalCategorySelect() {
+      const { data } = await window.IDM.http.post('ctrl/dbApproval/getApprovalCategory',  {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      })
+      return data
+    },
+    /**
+     * @Desc 督办-获取台账办理方式下拉框
+     * @Author hjp
+     */
+    async ApiDbHandlingMethodSelect() {
+      const { data } = await window.IDM.http.post('ctrl/dbApproval/getHandlingMethod',  {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      })
+      return data
+    },
+    /**
+     * @Desc 督办-获取台账分管领导下拉框
+     * @Author hjp
+     */
+    async ApiDbUnitLeadersSelect() {
+      const { data } = await window.IDM.http.post('ctrl/dbApproval/getUnitLeaderList',  {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      })
+      return data
+    },
+    /**
      * @Desc 督办-根据立项id获取任务
      * @Author hjp
      */
