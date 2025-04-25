@@ -32,7 +32,7 @@
                 </div>
                 <div class="super-middle">
                     <span class="super-mr10">督办分类</span>
-                    <a-select v-model="search.extApprovalTypeSzjwText" allowClear style="width: 50%">
+                    <a-select v-model="search.extApprovalTypeSzjw" allowClear style="width: 50%">
                         <a-select-option :value="item.value" v-for="(item, index) in superApprovalCategory" :key="index">
                             {{ item.text }}
                         </a-select-option>
@@ -40,7 +40,7 @@
                 </div>
                 <div class="super-middle">
                     <span class="super-mr10">办理方式</span>
-                    <a-select v-model="search.handlingMethodText" allowClear style="width: 50%">
+                    <a-select v-model="search.handlingMethod" allowClear style="width: 50%">
                         <a-select-option :value="item.value" v-for="(item, index) in superHandlingMethod" :key="index">
                             {{ item.text }}
                         </a-select-option>
@@ -48,7 +48,7 @@
                 </div>
                 <div class="super-middle">
                     <span class="super-mr10">分管领导</span>
-                    <a-select v-model="search.unitLeaders" allowClear style="width: 50%">
+                    <a-select v-model="search.directLeader" allowClear style="width: 50%">
                         <a-select-option :value="item.value" v-for="(item, index) in superUnitLeaders" :key="index">
                             {{ item.text }}
                         </a-select-option>
@@ -314,10 +314,10 @@ export default {
                 whQuery: '', // 编号
                 contentQuery: '', // 检索内容
                 approvalType: '', // 督办类型
-                extApprovalTypeSzjwText:"",//督办分类
-                handlingMethodText: '', // 办理方式
+                extApprovalTypeSzjw:"",//督办分类
+                handlingMethod: '', // 办理方式
                 unitLeaders: '', // 分管领导
-                directLeaderText:'',//分管领导
+                directLeader:'',//分管领导
                 dbStatus: '', // 项目状态
                 startDate: '', // 开始时间
                 endDate: '', // 结束时间
@@ -449,7 +449,7 @@ export default {
     },
     methods: {
         addSorteField() {
-            let ary = ['dbStatusText', 'wh','extApprovalTypeSzjw','handlingMethodText', 'bt', 'approvalTypeText', 'ngrq', 'handoverDate', 'endDate']
+            let ary = ['dbStatusText', 'wh','extApprovalTypeSzjw','handlingMethod', 'bt', 'approvalTypeText', 'ngrq', 'handoverDate', 'endDate']
             this.columns.forEach((item) => {
                 if (this.propData.isSorte && ary.includes(item.dataIndex)) {
                     item.sorter = true
@@ -556,10 +556,10 @@ export default {
             this.search.whQuery = ''
             this.search.contentQuery = ''
             this.search.approvalType = ''
-            this.search.extApprovalTypeSzjwText = ''
-            this.search.handlingMethodText = ''
+            this.search.extApprovalTypeSzjw = ''
+            this.search.handlingMethod = ''
             this.search.unitLeaders = ''
-            this.search.directLeaderText = ''
+            this.search.directLeader = ''
             this.search.dbStatus = ''
             this.search.startDate = ''
             this.search.endDate = ''
