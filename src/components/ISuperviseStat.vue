@@ -130,7 +130,7 @@ export default {
       );
     },
     handleReset() {
-      let url = `/ctrl/dbStatistics/project/type/export?startDate=${this.search.startDate}&endDate=${this.search.endDate}&extKeyword=${this.search.extKeyword}`
+      let url = `/ctrl/dbStatistics/project/type/export?startDate=${this.search.startDate}&endDate=${this.search.endDate}&extKeyword=${this.search.extKeyword}&selectType=approvalType`
       openWindow(url)
     },
     propDataWatchHandle(propData) {
