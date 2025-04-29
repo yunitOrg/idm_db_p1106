@@ -204,6 +204,13 @@
       "helpUrl": "",
       "children": [
         {
+          "type": "input",
+          "layoutType": "inline",
+          "text": "导出自定义参数",
+          "bindKey": "exportParams",
+          "default": ""
+        },
+        {
           "type": "actionSelect",
           "layoutType": "block",
           "text": "表格数据源参数",
