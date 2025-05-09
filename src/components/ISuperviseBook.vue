@@ -19,6 +19,10 @@
             </div>
             <div class="superviseSearch super-mb10">
                 <div class="super-middle">
+                    <span class="super-mr10">收文号</span>
+                    <a-input v-model="search.extRelevanceWh" placeholder="请输入收文号" allowClear class="super-inputbtn"></a-input>
+                </div>
+                <div class="super-middle">
                     <span class="super-mr10">编号</span>
                     <a-input v-model="search.whQuery" placeholder="请输入编号" allowClear class="super-inputbtn"></a-input>
                 </div>
@@ -311,6 +315,7 @@ export default {
                 pageNo: 1,
                 pageSize: 30,
                 totalCount: 0,
+                extRelevanceWh:'',// 收文号
                 whQuery: '', // 编号
                 contentQuery: '', // 检索内容
                 approvalType: '', // 督办类型
@@ -392,14 +397,15 @@ export default {
                     sortField: 'dbStatus',
                     scopedSlots: { customRender: 'dbStatusText' }
                 },
-                { title: '编号', dataIndex: 'wh', align: 'center', key: 'wh', width: '9%', sortField: 'wh' },
-                { title: '标题', dataIndex: 'bt', align: 'center', key: 'bt', width: '18%', sortField: 'bt', scopedSlots: { customRender: 'bt' } },
+                { title: '收文号', dataIndex: 'extRelevanceWh', align: 'center', key: 'extRelevanceWh', width: '8%', sortField: 'extRelevanceWh' },
+                { title: '编号', dataIndex: 'wh', align: 'center', key: 'wh', width: '8%', sortField: 'wh' },
+                { title: '标题', dataIndex: 'bt', align: 'center', key: 'bt', width: '16%', sortField: 'bt', scopedSlots: { customRender: 'bt' } },
                 { title: '督办类型', dataIndex: 'approvalTypeText', align: 'center', key: 'approvalTypeText', width: '8%', sortField: 'approvalType' },
                 { title: '督办分类', dataIndex: 'extApprovalTypeSzjwText', align: 'center', key: 'extApprovalTypeSzjwText', width: '8%', sortField: 'extApprovalTypeSzjw' },
                 { title: '办理方式', dataIndex: 'handlingMethodText', align: 'center', key: 'handlingMethodText', width: '8%', sortField: 'handlingMethodText' },
                 { title: '立项日期', dataIndex: 'ngrq', align: 'center', key: 'ngrq', width: '8%', sortField: 'ngrq' },
                 { title: '交办日期', dataIndex: 'handoverDate', align: 'center', key: 'handoverDate', width: '8%', sortField: 'handoverDate' },
-                { title: '分管领导', dataIndex: 'directLeaderText', align: 'center', key: 'directLeaderText', width: '9%'},
+                { title: '分管领导', dataIndex: 'directLeaderText', align: 'center', key: 'directLeaderText', width: '8%'},
                 { title: '办结期限', dataIndex: 'endDate', align: 'center', key: 'endDate', width: '8%', sortField: 'endDate' },
                 { title: '主办部门', dataIndex: 'hostStr', align: 'center', key: 'hostStr', width: '8%' },
                 { title: '协办部门', dataIndex: 'assistStr', align: 'center', key: 'assistStr', width: '8%' },
@@ -449,7 +455,7 @@ export default {
     },
     methods: {
         addSorteField() {
-            let ary = ['dbStatusText', 'wh','extApprovalTypeSzjw','handlingMethod', 'bt', 'approvalTypeText', 'ngrq', 'handoverDate', 'endDate']
+            let ary = ['dbStatusText','extRelevanceWh', 'wh','extApprovalTypeSzjw','handlingMethod', 'bt', 'approvalTypeText', 'ngrq', 'handoverDate', 'endDate']
             this.columns.forEach((item) => {
                 if (this.propData.isSorte && ary.includes(item.dataIndex)) {
                     item.sorter = true
@@ -553,6 +559,7 @@ export default {
         handleReset() {
             this.search.pageNo = 1
             this.search.pageSize = 30
+            this.search.extRelevanceWh = ''
             this.search.whQuery = ''
             this.search.contentQuery = ''
             this.search.approvalType = ''
@@ -995,6 +1002,7 @@ export default {
         color: #333333;
         font-size: 16px;
         font-weight: 500;
+        padding: 16px 8px;
     }
     ::v-deep .ant-table-thead > tr > th:nth-child(2) {
         text-align: center !important;
