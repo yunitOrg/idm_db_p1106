@@ -64,7 +64,17 @@ export default {
         },
         navigateHandle(e) {
             window.IDM.invokeCustomFunctions.call(this, this.propData.clickFunction, e)
-        }
+        },
+        /**
+         * 组件通信：接收消息的方法
+         */
+        receiveBroadcastMessage(messageObject) {
+            switch (messageObject.type) {
+                case 'linkMessageObject':
+                    this.fetchData()
+                break
+            }
+        },
     }
 }
 </script>
