@@ -13,7 +13,7 @@
                             <img v-if="item.handlerType == 1" src="../assets/250106174803uPnjA6NTo3NuG37lXdA.png" alt="" class="taskinfo-title-icon" />
                             <img v-else-if="item.handlerType == 2" src="../assets/250106174812lBxOtl8eBdDzderYvYO.png" alt="" class="taskinfo-title-icon" />
                             <img v-else src="../assets/home.png" alt="" class="taskinfo-title-icon" />
-                            <span>{{ item.handlerUnitText }} &nbsp;{{ item.feedbackPeriodText }}</span>
+                            <span>{{ item.handlerUnitText }} &nbsp;<i class="feedbackPeriod" style="font-style:normal">{{ item.feedbackPeriodText }}</i></span>
                         </div>
                         <div v-if="item.startDate" class="flex items-center">
                             <img src="../assets/time1.png" alt="" class="taskinfo-title-icon" />

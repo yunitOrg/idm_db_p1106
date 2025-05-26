@@ -17,7 +17,7 @@
                     <div class="subtask-popleft">
                         <div class="flex items-center">
                             <svg-icon :icon-class="homeIcon(item)" class="taskinfo-title-icon"></svg-icon>
-                            <span>{{ item.handlerUnitText }} &nbsp;{{ item.feedbackPeriodText }}</span>
+                            <span>{{ item.handlerUnitText }} &nbsp;<i class="feedbackPeriod" style="font-style:normal">{{ item.feedbackPeriodText }}</i></span>
                         </div>
                         <div v-if="item.startDate" class="flex items-center">
                             <img src="../assets/time1.png" alt="" class="taskinfo-title-icon" />
