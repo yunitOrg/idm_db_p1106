@@ -177,11 +177,17 @@ export function getSubTaskList() {
               "text": "终止承办",
               "groupType": "notice"
             }
-          ],
+            ],
+          "padLight":"1",
+          "lastFeedbackContentPeriodNum":"【第1期反馈】",
           "lastFeedbackId": "240522095618bdgVSAnzlA5NSpQGKXt",
           "lastPeriodNum": 8,
           "lastFeedbackDate": "2024-05-22",
-          "lastFeedbackContent": "【第8期反馈】执行情况：阿达撒大声地 下阶段计划：啊实打实大师大多大事",
+        "lastFeedbackContent": "【第8期反馈】执行情况：阿达撒大声地 下阶段计划：啊实打实大师大多大事",
+        "lastFeedbackContentList": [
+                "办结描述：2323",
+                "存在的问题和困难：2323"
+          ],
           "lastFeedbackUrl": "../../ctrl/formControl/sysForm?moduleId=240509092530mRuxWnM8z8cffpeelWd&formId=240510172741y8KIaKmlLs7xCu5ayUk&nodeId=-7&pk=240522095618bdgVSAnzlA5NSpQGKXt&validateByList=1&listId=DbNoValidate",
           "lastFeedbackAttachFiles": [
             {
@@ -232,7 +238,13 @@ export function getSubTaskList() {
           "lastFeedbackId": "",
           "lastPeriodNum": null,
           "lastFeedbackDate": null,
-          "lastFeedbackContent": null,
+            "lastFeedbackContent": null,
+          "padLight":"4",
+          "lastFeedbackContentPeriodNum":"【第1期反馈】",
+        "lastFeedbackContentList": [
+                "办结描述：2323",
+                "存在的问题和困难：2323"
+          ],
           "lastFeedbackUrl": null,
           "lastFeedbackAttachFiles": []
         }
@@ -242,6 +254,16 @@ export function getSubTaskList() {
 export function getTaskDialog() {
     return [
         {
+          "padLight":"1",
+          "lastFeedbackContentPeriodNum":"【第1期反馈】",
+        "lastFeedbackContentList": [
+                "办结描述：2323",
+                "存在的问题和困难：2323"
+            ],
+        "dbStatus":"1",
+            "dbStatusText":"已反馈",
+          "startDate": "2024-04-01 00:00:00",
+          "endDate": "2024-05-22 00:00:00",
             "feedbackTime": "2022-04-29 10:00:00",
             "feedbackContent": "执行情况：xxxx;下阶段计划：xxxx; 执行情况：xxxx执行情况：xxxx;下阶段计划：xxxx",
             "feedbackAttachFiles": [
@@ -251,6 +273,16 @@ export function getTaskDialog() {
             ]
         },
         {
+            "dbStatus": "1",
+            "dbStatusText":"已反馈",
+          "padLight":"2",
+          "lastFeedbackContentPeriodNum":"【第1期反馈】",
+        "lastFeedbackContentList": [
+                "办结描述：2323",
+                "存在的问题和困难：2323"
+          ],
+          "startDate": "2024-04-01 00:00:00",
+          "endDate": "2024-05-22 00:00:00",
             "feedbackTime": "2022-04-29 10:00:00",
             "feedbackContent": "执行情况：xxxx;下阶段计划：xxxx; 执行情况：xxxx执行情况：xxxx;下阶段计划：xxxx",
             "feedbackAttachFiles": [

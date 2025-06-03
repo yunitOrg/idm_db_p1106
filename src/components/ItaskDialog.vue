@@ -13,11 +13,41 @@
                         <template slot="dot">
                             <div class="subtaskdot"></div>
                         </template>
-                        <div class="right-time">{{ item[propData.timeField || 'feedbackTime'] }}</div>
+                        <div class="right-time">
+                            <span class="lastFeedbackContentPeriodNum">【第{{item.periodNum}}期反馈】</span>
+                            <span class="timeLine">{{ item.startDate }} ~ {{ item.endDate }}</span>
+                        </div>
+                        <div class="light">
+                            <img title="超期已反馈" v-if="item.overdueFeedbackState == '1'" src="../assets/finish.png">
+                            <img title="超期未反馈" v-if="item.overdueFeedbackState == '0'" src="../assets/todo.png">
+                        </div>
                         <div class="right-content">
                             <div @click="handleJump(item)" class="subtask-title">
-                                <img v-if="item.extendedFieldNumber == 2" src="../assets/zhongyao.png" class="icon" />
-                                <div v-html="item[propData.contentFiled || 'feedbackContent']" class="flex-1 w-0"></div>
+                                <div class="top">
+                                    
+                                    <div class="subtask-label">
+                                        <span
+                                            :class="{
+                                                'subtask-yellow': item.dbStatus == '1' || item.dbStatus == '4',
+                                                'subtask-blue': item.dbStatus == '2' || item.dbStatus == '3',
+                                                'subtask-green': item.dbStatus == '6' || item.dbStatus == '5',
+                                                'subtask-red': item.dbStatus == '7',
+                                                'subtask-other': item.dbStatus == '8'
+                                            }"
+                                            v-if="item.dbStatusText"
+                                            >{{ item.dbStatusText }}</span
+                                        >
+                                        <span class="subtask-red" v-if="item.timeoutStatusText && item.timeoutStatus != 0">{{ item.timeoutStatusText }}</span>
+                                    </div>
+                                    <div v-if="item.startDate">
+                                        <img :src="hanldeImg('time1.png')" alt="" class="taskinfo-title-icon" />
+                                        <span>{{ item.feedbackTime }}</span>
+                                    </div>
+                                </div>
+                                <div class="content">
+                                    <img v-if="item.extendedFieldNumber == 2" src="../assets/zhongyao.png" class="icon" />
+                                    <div v-html="item.feedbackContent" class="flex-1"></div>
+                                </div>
                             </div>
                             <div class="right-file">
                                 <div
@@ -82,6 +112,9 @@ export default {
         this.init()
     },
     methods: {
+        hanldeImg(img) {
+            return IDM.url.getModuleAssetsWebPath(require(`../assets/${img}`), this.moduleObject)
+        },
         // 子项跳转
         handleJump(item) {
             if (this.propData.handleChildFunc && this.propData.handleChildFunc.length > 0) {
@@ -216,7 +249,7 @@ export default {
             window.IDM.setStyleToPageHead(this.moduleObject.id + ' .subtaskdialog .ant-timeline-item-content', timeMarginLeftObject)
             window.IDM.setStyleToPageHead(this.moduleObject.id + ' .subtaskdialog .ant-timeline-item-content .right-time', timeTimeRightObject)
             window.IDM.setStyleToPageHead(this.moduleObject.id + ' .subtaskdialog .ant-timeline-item-tail', borderStyle)
-            window.IDM.setStyleToPageHead(this.moduleObject.id + ' .subtaskdialog .right-content span', contentFontObject)
+            window.IDM.setStyleToPageHead(this.moduleObject.id + ' .subtaskdialog .right-content .content span', contentFontObject)
             window.IDM.setStyleToPageHead(this.moduleObject.id + ' .subtaskdialog .right-content .right-file', fileStyleObject)
         },
         /**
@@ -234,13 +267,13 @@ export default {
             this.list = getTaskDialog()
         },
         initData() {
-            if (this.porpsList && this.porpsList?.length) {
-                return
-            }
-            // if (this.moduleObject.env !== 'production') {
-            //     this.getMockData()
+            // if (this.porpsList && this.porpsList?.length) {
             //     return
             // }
+            if (this.moduleObject.env !== 'production') {
+                this.getMockData()
+                return
+            }
             let params = this.commonParam()
             let customParams = {}
             this.fetching = true
@@ -282,6 +315,11 @@ export default {
 @use '../style/common.scss';
 .subtaskdialog {
     overflow: auto;
+    .taskinfo-title-icon {
+        width: 20px;
+        height: 20px;
+        margin-right: 10px;
+    }
     :deep(.ant-timeline) {
         .ant-timeline-item-tail {
             border-left-style: dotted;
@@ -297,12 +335,78 @@ export default {
             display: flex;
         }
     }
+    .right-time{
+        display: flex;
+        flex-direction: column;
+    }
+    .light{
+        margin-right: 20px;
+    }
     .right-content {
         flex: 1;
         font-size: 16px;
+        .subtask-label {
+            min-width: 73px;
+            display: flex;
+            flex-wrap: wrap;
+            span {
+                padding: 0px 5px;
+                margin-right: 5px;
+                border-radius: 3px;
+                height: 27px;
+                line-height: 26px;
+            }
+            .subtask-yellow {
+                background-color: rgb(250 100 0 / 10%);
+                color: #fa6400;
+                border: 1px solid #fa6400;
+            }
+            .subtask-blue {
+                background-color: rgb(0 134 217 / 10%);
+                color: #0086d9;
+                border: 1px solid #0086d9;
+            }
+            .subtask-gray {
+                background-color: rgb(204 204 204 / 10%);
+                color: #cccccc;
+                border: 1px solid #cccccc;
+            }
+            .subtask-red {
+                background-color: rgb(227 0 0 / 10%);
+                color: #e30000;
+                border: 1px solid #e30000;
+            }
+            .subtask-other {
+                background-color: rgba(30, 54, 35, 0.1);
+                color: #1e3623;
+                border: 1px solid #1e3623;
+            }
+            .subtask-green {
+                background-color: rgb(87 189 106 / 10%);
+                color: #57bd6a;
+                border: 1px solid #57bd6a;
+            }
+            .subtask-cheng {
+                background-color: #ffffff;
+                color: #ffba00;
+                border: 1px solid #ffba00;
+            }
+        }
         .subtask-title {
             display: flex;
+            flex-direction: column;
             gap: 5px;
+            .top{
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                div{
+                    vertical-align: middle;
+                    img,span{
+                        vertical-align: middle;
+                    }
+                }
+            }
             .icon {
                 width: 20px;
                 height: 20px;

@@ -4,7 +4,7 @@
             <div class="taskInfo-li" v-for="(item, index) in list" :key="index">
                 <!--左侧-->
                 <div class="subtaskLeft">
-                    <div class="subtask-label">
+                    <!-- <div class="subtask-label">
                         <span
                             :class="{
                                 'subtask-yellow': item.dbStatus == '1' || item.dbStatus == '4',
@@ -17,7 +17,7 @@
                             >{{ item.dbStatusText }}</span
                         >
                         <span class="subtask-red" v-if="item.timeoutStatusText && item.timeoutStatus != 0">{{ item.timeoutStatusText }}</span>
-                    </div>
+                    </div> -->
                     <div class="subtask-popleft">
                         <div>
                             <img v-if="item.handlerType == 1" src="../assets/250106174803uPnjA6NTo3NuG37lXdA.png" alt="" class="taskinfo-title-icon" />
@@ -25,31 +25,64 @@
                             <img v-else src="../assets/home.png" alt="" class="taskinfo-title-icon" />
                             <span style="margin-right: 10px">{{ item.handlerUnitText }}</span>
                             <template v-if="isMoOpen">
-                                <span>{{ item.feedbackPeriodText }}</span>
+                                <!-- <span>{{ item.feedbackPeriodText }}</span> -->
                             </template>
                             <template v-else>
                                 <span style="font-size: 14px">({{ item.startDate }} ~ {{ item.endDate }}) &nbsp;{{ item.feedbackPeriodText }}</span>
                             </template>
                         </div>
-                        <template v-show="isMoOpen">
+                        <!-- <template v-show="isMoOpen">
                             <div style="margin-top: 5px" v-if="item.startDate">
                                 <img :src="hanldeImg('time1.png')" alt="" class="taskinfo-title-icon" />
                                 <span>{{ item.startDate }} ~ {{ item.endDate }}</span>
                             </div>
-                        </template>
-                        <div :style="isMoOpen ? `margin-top: 5px` : `margin-top: 15px`" v-if="item.handlerText">
-                            <img src="../assets/phone.png" alt="" class="taskinfo-title-icon" />
-                            <span style="margin-right: 5px">{{ item.handlerText }}</span>
-                            <span v-if="item.handlerTel">({{ item.handlerTel }})</span>
+                        </template> -->
+                        <div :style="isMoOpen ? `margin-top: 5px` : `margin-top: 15px`" v-if="item.extImplementationStatusText">
+                            <img src="../assets/jindu.png" alt="" class="taskinfo-title-icon" />
+                            <span style="margin-right: 5px">{{ item.extImplementationStatusText }}</span>
+                        </div>
+
+                        <div :style="isMoOpen ? `margin-top: 5px` : `margin-top: 15px`">
+                            <img src="../assets/lingdang.png" alt="" class="taskinfo-title-icon" />
+                            <span style="margin-right: 5px">催办<i class="recordCount" @click="toRecordPage(item.id)">{{ item.recordCount || 0 }}</i>次</span>
                         </div>
                     </div>
                 </div>
                 <!--右侧-->
                 <div class="subtaskRight">
-                    <div class="right-time">{{ item.lastFeedbackDate }}</div>
+                    <!-- <div class="right-time">{{ item.lastFeedbackDate }}</div> -->
+                    <div class="light">
+                        <img title="已反馈" v-if="item.padLight == '1'" src="../assets/green-light.png">
+                        <img title="临期" v-if="item.padLight == '2'" src="../assets/yellow-light.png">
+                        <img title="超期"  v-if="item.padLight == '4'" src="../assets/red-light.png">
+                    </div>
                     <div class="right-content">
                         <span class="task-font">
-                            <div @click="handleJump(item)" v-if="item.lastFeedbackContent" v-html="item.lastFeedbackContent"></div>
+                            <div @click="handleJump(item)">
+                                <div class="top">
+                                    <span class="lastFeedbackContentPeriodNum" v-if="item.lastFeedbackContentPeriodNum">{{item.lastFeedbackContentPeriodNum}}</span>
+                                    <span class="lastFeedbackDate" v-if="item.lastFeedbackDate">{{item.lastFeedbackDate}}</span>
+                                    <div class="subtask-label">
+                                        <span
+                                            :class="{
+                                                'subtask-yellow': item.dbStatus == '1' || item.dbStatus == '4',
+                                                'subtask-blue': item.dbStatus == '2' || item.dbStatus == '3',
+                                                'subtask-green': item.dbStatus == '6' || item.dbStatus == '5',
+                                                'subtask-red': item.dbStatus == '7',
+                                                'subtask-other': item.dbStatus == '8'
+                                            }"
+                                            v-if="item.dbStatusText"
+                                            >{{ item.dbStatusText }}</span
+                                        >
+                                        <span class="subtask-red" v-if="item.timeoutStatusText && item.timeoutStatus != 0">{{ item.timeoutStatusText }}</span>
+                                    </div>
+                                    <div v-if="item.startDate">
+                                        <img :src="hanldeImg('time1.png')" alt="" class="taskinfo-title-icon" />
+                                        <span>{{ item.startDate }} ~ {{ item.endDate }}</span>
+                                    </div>
+                                </div>
+                                <div class="content">{{item.lastFeedbackContent}}</div>
+                            </div>
                             <div
                                 v-for="(file, fileIndex) in item.lastFeedbackAttachFiles"
                                 :key="fileIndex"
@@ -149,10 +182,24 @@ export default {
         this.moduleObject = this.$root.moduleObject
         if (this.porpsList && this.porpsList?.length) {
             this.list = this.porpsList
+            this.list.forEach((item,index)=>{
+                (function (item,index) {
+                    window.IDM.http
+                        .get('ctrl/urgeRecord/getUrgeRecordCount', {
+                            noticeId: item.id
+                        })
+                        .then(({ data }) => {
+                            this.list.recordCount = data.data
+                        })
+                })(item,index)
+            })
         }
         this.init()
     },
     methods: {
+        toRecordPage(id){
+            window.open(IDM.url.getWebPath("/ctrl/list/240627164529UQum8phjmAxV4GydBzO?moduleId=240509093547WwIEk66utTYmu3WTy1a&noticeId="+id))
+        },
         handleHistoryImg() {
             return IDM.url.getModuleAssetsWebPath(require('../assets/history.png'), this.moduleObject)
         },
@@ -171,6 +218,9 @@ export default {
         },
         handleDialogOk() {
             this.dialogObj.show = false
+        },
+        renderImg(path){
+            return IDM.url.getWebPath(path)
         },
         // 弹框
         async handleShowDialog(item) {
@@ -248,6 +298,7 @@ export default {
             this.list = getSubTaskList()
         },
         initData() {
+            console.log(this.list)
             if (this.porpsList && this.porpsList?.length) {
                 return
             }
@@ -272,7 +323,7 @@ export default {
     }
     .subtaskLeft {
         display: flex;
-        flex: 1;
+        width: 240px;
         .taskinfo-title-icon {
             width: 20px;
             height: 20px;
@@ -280,10 +331,18 @@ export default {
         }
     }
     .subtaskRight {
-        flex: 1.5;
+        flex: 1;
         width: 0;
         display: flex;
         font-size: 16px;
+        .light{
+            margin-right: 6px;
+        }
+        .taskinfo-title-icon {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+        }
         .right-content {
             width: calc(100% - 82px);
             display: flex;
@@ -295,6 +354,15 @@ export default {
             .task-font {
                 cursor: pointer;
                 padding-right: 10px;
+                .top{
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    white-space: nowrap;
+                }
+                .content{
+                    margin: 6px 0;
+                }
             }
             .task-file {
                 cursor: pointer;
@@ -320,17 +388,20 @@ export default {
             height: 22px;
         }
     }
+    .top .subtask-label:not(:first-child){
+        margin-left: 30px;
+    }
     .subtask-label {
-        min-width: 73px;
+        min-width: 60px;
         display: flex;
         flex-wrap: wrap;
-        margin-top: 3px;
+        margin-left: 10px;
         span {
             padding: 0px 5px;
-            margin-right: 5px;
             border-radius: 3px;
             height: 27px;
             line-height: 26px;
+            margin-right: 5px;
         }
         .subtask-yellow {
             background-color: rgb(250 100 0 / 10%);
@@ -370,6 +441,18 @@ export default {
     }
     .subtask-popleft {
         font-size: 16px;
+        word-break: break-all;
+        div{
+            vertical-align: middle;
+            img,span{
+                vertical-align: middle;
+            }
+        }
+    }
+    .recordCount{
+        font-style: normal;
+        color: #0086d9;
+        cursor: pointer;
     }
     .right-time {
         width: 82px;
