@@ -14,6 +14,9 @@
                     <div class="label">{{ tab.label }}</div>
                     <div class="badge">{{ tab.count }}</div>
                 </div>
+                <div class="showInfo" v-if="showInfo!=''">
+                    <span>{{showInfo}}</span>
+                </div>
             </div>
             <slot name="extra"></slot>
         </div>
@@ -23,6 +26,7 @@
     </div>
 </template>
 <script>
+
 export default {
     props: {
         value: {
@@ -34,6 +38,10 @@ export default {
             default() {
                 return []
             }
+        },
+        showInfo:{
+            type: String,
+            default: ''
         }
     },
     methods: {
@@ -54,6 +62,27 @@ export default {
         background-color: rgba(255, 255, 255, 0.2);
         border: 1px solid rgba(255, 255, 255, 0.35);
     }
+    .showInfo{
+        width: 100%;
+        height:100%;
+        position:relative;
+        z-index: 1;
+        padding: 0 2rem 0 3.4rem;
+        box-sizing: border-box;
+        align-self: center;
+        span{
+                line-height: 3.4rem;
+                font-family: PingFangSC-Regular;
+                font-size: 2.8rem;
+                color: #FFFFFF;
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: normal;
+        }
+    }
     .tab-scroll {
         overflow-x: auto;
         overflow-y: hidden;
@@ -63,7 +92,7 @@ export default {
     }
     .tab-item {
         color: white;
-        padding: 0 2.58rem;
+        padding: 2rem 2.58rem;
         position: relative;
         cursor: pointer;
         .label {
@@ -96,7 +125,7 @@ export default {
         &.active {
             gap: 0.63rem;
             position: relative;
-            padding: 1rem 3rem 0;
+            padding: 2rem 3rem 0;
             .label {
                 color: black;
                 font-weight: bold;

@@ -363,7 +363,7 @@ export default {
                 return nav
             }
             if (this.homeType.type == "承办单位") {
-                if ([1, 5].includes(this.leaderInfo.type)) {
+                if ([1,5,6].includes(this.leaderInfo.type)) {
                     return [
                         {
                             label: '省政府各部门',
@@ -469,6 +469,40 @@ export default {
                         }
                     ]
                 }
+            }
+            if(this.homeType.type == "厅内督办"){
+                   return [
+                      {
+                        label: '省政府办公厅',
+                        value: '1',
+                       active: this.current == '1' && this.dept.queryType == 3,
+                            on: {
+                                click: () => {
+                                    window.IDM.http
+                                        .post(
+                                            this.a+'ctrl/dbWorkbench/getPadLeaderUnit',
+                                            {
+                                                ...this.params,
+                                                queryType: 3
+                                            },
+                                            {
+                                                headers: {
+                                                    'Content-Type': 'application/json'
+                                                }
+                                            }
+                                        )
+                                        .then(({ data }) => {
+                                            this.model = {
+                                                queryType: 3,
+                                                title: '省政府办公厅',
+                                                data: data.data,
+                                                visible: true
+                                            }
+                                        })
+                                }
+                            }
+                    },
+                    ]
             }
             return []
         }
@@ -745,7 +779,29 @@ export default {
                         })
                 }
             }
-
+            if(this.homeType.type == "厅内督办"){
+                   window.IDM.http
+                        .post(
+                            this.a+'ctrl/dbWorkbench/getPadLeaderUnit',
+                            {
+                                ...this.params,
+                                queryType: 3
+                            },
+                            {
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                }
+                            }
+                        )
+                        .then(({ data }) => {
+                            this.model = {
+                                queryType: 3,
+                                title: obj.el[0].text,
+                                data: data.data,
+                                visible: true
+                            }
+                        })
+            }
         },
     }
 }

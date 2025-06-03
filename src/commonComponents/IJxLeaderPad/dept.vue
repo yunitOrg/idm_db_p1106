@@ -1,5 +1,5 @@
 <template>
-    <Tabs :items="tabs" v-model="active" class="h-full" @input="changeHandle">
+    <Tabs :items="tabs" v-model="active" class="h-full" @input="changeHandle" :showInfo="showInfo">
         <div class="h-full flex flex-col">
             <div class="flex justify-end " style="padding: 2rem 0; gap: 2.5rem;align-items: center; position: relative;">
                 <div class="searchBox">
@@ -29,6 +29,11 @@
                         <span>承办单位：</span>
                         <a-input  v-model="dwName" placeholder="" />
                     </div>
+                      <div class="selectBox" v-if="isClickType==true">
+                        <span>落实状态：</span>
+                        <!-- <a-input v-model="extImplementationStatusText"/> -->
+                          <a-cascader v-model="luoshizhuangtai" allowClear placeholder="" :options="luoshiOptions" change-on-select @change="getLuoshiZhuangtai"/>
+                    </div>
                     <!-- <div class="selectBox" v-if="homeType.type=='承办单位'">
                         <span>督办分类：</span>
                         <a-select v-model="dbfl" allowClear @change="getSuperType()">
@@ -44,17 +49,25 @@
                         重置
                     </div>
                 </div>
-                <Status v-for="i in [4, 2, 1]" :key="i" :value="i" :showLabel="true" />
+                <div class="statusbox">
+                    <Status v-for="i in [4, 2, 1]" :key="i" :value="i" :showLabel="true" />
+                </div>
             </div>
             <div class="flex-1 h-0 overflow-auto">
                 <a-config-provider :locale="locale">
                     <a-table :columns="columns" :dataSource="data" :loading="loading" :bordered="true" :pagination="false">
+                        <!-- <template #approvalBtHeader>
+                            <div>
+                                <span style="color: red; font-size: 16px;">特殊处理的内容</span>
+                                <span style="color: red; font-size: 16px;">标题</span>
+                            </div>
+                        </template> -->
                         <template slot="status" slot-scope="text">
                             <div class="flex justify-center">
                                 <Status :value="text" />
                             </div>
                         </template>
-                        <template slot="important" slot-scope="text, record">
+                        <!-- <template slot="important" slot-scope="text, record" >
                             <div
                                 class="flex justify-center"
                                 :style="{
@@ -63,9 +76,12 @@
                             >
                                 {{ record.approvalImportantText }}
                             </div>
-                        </template>
+                        </template> -->
                         <template slot="approvalBt" slot-scope="text, record">
-                            <div @click="detailHandle(record)" class="pointer text-start">{{ text }}</div>
+                            <div @click="detailHandle(record)" class="pointer text-start" style="display: flex;align-items: flex-start;">
+                                <span style="color:red;font-weight:700;font-size:4.4rem;display: inline-block;height: 5rem;" v-if="record.showImportant==true">*</span>
+                               <span style="line-height: 5rem;"> {{ text }}</span>
+                            </div>
                         </template>
                         <template slot="operation" slot-scope="text, record">
                             <div class="flex items-center justify-center">
@@ -167,7 +183,13 @@ export default {
                     ],
                 }
             ],
-            a:""
+            luoshiOptions:[],//落实状态下拉框数据
+
+            a:"",
+            luoshizhuangtai:'',//落实状态
+            showInfo:'',//表格上展示的文字
+            isClickType:false,//是否点击了分类下拉,
+
         }
     },
     computed: {
@@ -236,7 +258,23 @@ export default {
            
         },
         columns() {
-            return [
+            const hasRemark = this.data.some(item => item.showBtRemark === true);
+             let stra='（标注“'
+             let strb=''
+             let xing='*'
+             if(this.leixing[0]==52 && hasRemark==true){
+
+                strb='”为重点核查件）'
+             }else if(this.leixing[0]==64 && hasRemark==true){
+                    strb='”为重点提案）'
+             }else{
+                stra=''
+                strb=''
+                xing=''
+             }
+             
+            if(this.isClickType==true){
+                return  [
                 {
                     title: '序号',
                     dataIndex: 'index',
@@ -269,38 +307,55 @@ export default {
                     },
                     sorter: (prev, current) => current.padLight > prev.padLight
                 },
+                // {
+                //     title: '重要程度',
+                //     dataIndex: 'approvalImportant',
+                //     filters: [
+                //         {
+                //             text: '重要',
+                //             value: 2
+                //         },
+                //         {
+                //             text: '普通',
+                //             value: 1
+                //         },
+                //         {
+                //             text: '空',
+                //             value: 0
+                //         }
+                //     ],
+                //     onFilter: (value, record) => value == record.approvalImportant,
+                //     width: '19rem',
+                //     align: 'center',
+                //     scopedSlots: {
+                //         customRender: 'important'
+                //     },
+                //     sorter: (prev, current) => current.approvalImportant > prev.approvalImportant
+                // },
                 {
-                    title: '重要程度',
-                    dataIndex: 'approvalImportant',
-                    filters: [
-                        {
-                            text: '重要',
-                            value: 2
-                        },
-                        {
-                            text: '普通',
-                            value: 1
-                        },
-                        {
-                            text: '空',
-                            value: 0
-                        }
-                    ],
-                    onFilter: (value, record) => value == record.approvalImportant,
-                    width: '19rem',
-                    align: 'center',
-                    scopedSlots: {
-                        customRender: 'important'
-                    },
-                    sorter: (prev, current) => current.approvalImportant > prev.approvalImportant
-                },
-                {
-                    title: '标题',
+                    title: hasRemark ? [' 标题',this.$createElement('span',{ style: {'font-weight' : 400 } },stra),this.$createElement('span', { style: { color: 'red',"font-weight":700,"font-size":"4.4rem","display": "inline-block",'width':'5rem','margin-top':'1rem' } }, xing), this.$createElement('span',{ style: {'font-weight' : 400 } }, strb)] :[ '标题',this.$createElement('span', { style: {'font-weight' : 400 } }, stra),this.$createElement('span', { style: { color: 'red',"font-weight":700,"font-size":"4.4rem","display": "inline-block",'width':'5rem','margin-top':'1rem' } }, xing), this.$createElement('span',{ style: {'font-weight' : 400 } }, strb)],
+                    // title:() => {
+                    //     return (
+                    //         <div>
+                    //             <span>标题</span>
+                    //             <span>str1</span>
+                    //             <span style="color:red;font-weight:700;font-size:4.4rem;display: inline-block;height: 5rem;">*</span>
+                    //             <span>str2</span>
+                    //         </div>
+                    //     )
+                    // },
                     dataIndex: 'approvalBt',
                     align: 'center',
                     scopedSlots: {
-                        customRender: 'approvalBt'
-                    }
+                        customRender: 'approvalBt',
+                        header: 'approvalBtHeader' // 指定自定义表头渲染的插槽名
+                    },
+                },
+                {
+                    title: '落实状态',
+                    dataIndex: 'extImplementationStatusText',
+                    width: '21.38rem',
+                    align: 'center'
                 },
                 {
                     title: '承办单位',
@@ -324,6 +379,96 @@ export default {
                     }
                 }
             ]
+            }else{
+                return [
+                    {
+                        title: '序号',
+                        dataIndex: 'index',
+                        width: '9rem',
+                        align: 'center',
+                        customRender: (text, record, index) => index + 1
+                    },
+                    {
+                        title: '督办状态',
+                        dataIndex: 'padLight',
+                        filters: [
+                            {
+                                text: '超期',
+                                value: '4'
+                            },
+                            {
+                                text: '预警',
+                                value: '2'
+                            },
+                            {
+                                text: '正常',
+                                value: '1'
+                            }
+                        ],
+                        onFilter: (value, record) => value == record.padLight,
+                        width: '19rem',
+                        align: 'center',
+                        scopedSlots: {
+                            customRender: 'status'
+                        },
+                        sorter: (prev, current) => current.padLight > prev.padLight
+                    },
+                    // {
+                    //     title: '重要程度',
+                    //     dataIndex: 'approvalImportant',
+                    //     filters: [
+                    //         {
+                    //             text: '重要',
+                    //             value: 2
+                    //         },
+                    //         {
+                    //             text: '普通',
+                    //             value: 1
+                    //         },
+                    //         {
+                    //             text: '空',
+                    //             value: 0
+                    //         }
+                    //     ],
+                    //     onFilter: (value, record) => value == record.approvalImportant,
+                    //     width: '19rem',
+                    //     align: 'center',
+                    //     scopedSlots: {
+                    //         customRender: 'important'
+                    //     },
+                    //     sorter: (prev, current) => current.approvalImportant > prev.approvalImportant
+                    // },
+                    {
+                        title: hasRemark ? [' 标题',this.$createElement('span', { style: {'font-weight' : 400 } },stra),this.$createElement('span', { style: { color: 'red',"font-weight":700,"font-size":"4.4rem","display": "inline-block",'width':'5rem','margin-top':'1rem' } }, xing), this.$createElement('span',{ style: {'font-weight' : 400 } }, strb)] :[ '标题',this.$createElement('span',{ style: {'font-weight' : 400 } }, stra),this.$createElement('span', { style: { color: 'red',"font-weight":700,"font-size":"4.4rem","display": "inline-block",'width':'5rem','margin-top':'1rem' } }, xing), this.$createElement('span',{ style: {'font-weight' : 400 } }, strb)],
+                        dataIndex: 'approvalBt',
+                        align: 'center',
+                        scopedSlots: {
+                            customRender: 'approvalBt'
+                        },
+                    },
+                    {
+                        title: '承办单位',
+                        dataIndex: 'handlerUnitText',
+                        width: '21.38rem',
+                        align: 'center'
+                    },
+                    {
+                        title: '办结期限',
+                        dataIndex: 'endDate',
+                        width: '26rem',
+                        align: 'center'
+                    },
+                    {
+                        title: '操作',
+                        dataIndex: 'operation',
+                        width: '18.19rem',
+                        align: 'center',
+                        scopedSlots: {
+                            customRender: 'operation'
+                        }
+                    }
+                ]
+            }
         },
         query() {
             return {
@@ -333,11 +478,21 @@ export default {
         }
     },
     watch: {
+        leixing:{
+              handler(val) {
+                if(val==''){
+                    this.luoshizhuangtai=''
+                    this.getDbGkData()
+                    this.getLuoshiOption()
+                }
+              }
+        },
         dept: {
             handler(val) {
+            console.log(val,"====");
                 this.year=new Date().getFullYear()
+                this.getDbGkData()
                 this.leixing=[]
-                this
             },
             immediate: true
         },
@@ -371,6 +526,9 @@ export default {
         }
     },
     created() {
+        if(this.homeType.type=='事项分类'){
+            this.isClickType=true
+        }
         EventBus.$on('getCollect', (message) => {
             console.log(1111,message);
             this.attentionReason = message;
@@ -385,6 +543,8 @@ export default {
     },
     mounted() {
         this.getOptions()
+        this.getDbGkData()
+        this.getLuoshiOption()
     },
     methods: {
         //获取年份
@@ -393,11 +553,19 @@ export default {
                 // this.fetchData()
             })
         },
+        //落实状态
+        getLuoshiZhuangtai(value,selectedOptions){
+            console.log(value,selectedOptions);
+        },
         //得到类型的值
         getLeixing(value,selectedOptions){
-            this.$nextTick(()=>{
-                // this.fetchData()
-            })
+            if(this.homeType.type=='事项分类'){
+                this.$nextTick(()=>{
+                    this.getLuoshiOption()
+                    this.getDbGkData()
+                    this.fetchData()
+                })
+            }
         },
         changeHandle(active){
             this.active=active
@@ -415,15 +583,25 @@ export default {
                 this.options=data.data
             })
         },
+        //获取落实状况下拉
+        getLuoshiOption(){
+            window.IDM.http.get(this.a+'/ctrl/dbWorkbench/getExtImplementationStatus', {
+                approvalType:this.dept.approvalTypeParam? this.dept.approvalTypeParam:null
+            })
+            .then(({ data }) => {
+                this.luoshiOptions=data.data
+            })
+        },
         //获取日期时间
         getTimes(times){
             console.log(this.times);
         },
-        fetchData() {
-            this.loading = true
+        fetchData() { 
+             this.loading = true
+            let url=(this.homeType.type=='事项分类' || this.homeType.type=='厅内督办')? this.a+'ctrl/dbWorkbench/getUndertakeLeaderPadNoticeList' :this.a+'ctrl/dbWorkbench/getLeaderPadNoticeList'
             window.IDM.http
                 .post(
-                    this.a+'ctrl/dbWorkbench/getLeaderPadNoticeList',
+                   url,
                     {
                         ...this.query,
                         approvalTypeParam:this.homeType.type=='事项分类'?this.dept.approvalTypeParam? this.dept.approvalTypeParam:null: this.leixing && this.leixing.length>0? this.leixing[0]:null,
@@ -436,6 +614,7 @@ export default {
                         fileStatus:this.active != '0' ? this.active : 0,
                         dwName:this.dwName && this.dwName.length>0?this.dwName:"",
                         yearParam: this.year,
+                        extImplementationStatus:this.luoshizhuangtai[0],
                     },
                     {
                         headers: {
@@ -445,17 +624,48 @@ export default {
                 )
                 .then(({ data }) => {
                     this.data = data.data
-                   this.$nextTick(()=>{
-                    if (this.params.isShouye == "false" && this.params.type == "0") {
-
-                        this.fetchStat()
-                    }
-                   })
+                    this.$nextTick(()=>{
+                        if (this.params.isShouye == "false" && this.params.type == "0") {
+                            this.fetchStat()
+                        }
+                    })
                 })
                 .finally(() => {
                     this.loading = false
                 })
             
+        },
+        //获取督办概况的数据/ctrl/dbWorkbench/getDbSummaryContent
+        getDbGkData(){
+            if(this.homeType.type=='事项分类'){
+                window.IDM.http.post('/ctrl/dbWorkbench/getDbSummaryContent',
+                        {
+                            ...this.query,
+                            approvalTypeParam:this.homeType.type=='事项分类'?this.dept.approvalTypeParam? this.dept.approvalTypeParam:null: this.leixing && this.leixing.length>0? this.leixing[0]:null,
+                            dbEjTypeParam:this.homeType.type=='事项分类'?this.leixing[0] :this.leixing[1] , 
+                            pageNo: 1,
+                            pageSize: 9999,
+                            bt:this.bt,
+                            startTime:this.times[0]?this.times[0]:"",
+                            endTime:this.times[1]?this.times[1]:"",
+                            fileStatus:this.active != '0' ? this.active : 0,
+                            dwName:this.dwName && this.dwName.length>0?this.dwName:"",
+                            yearParam: this.year,
+                            extImplementationStatus:this.luoshizhuangtai[0],
+                        },
+                        {
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        }
+                    )
+                    .then(({ data }) => {
+                        this.showInfo=(data.message && this.homeType.type=='事项分类')?data.message:''
+                    })
+                    .finally(() => {
+                     
+                    })
+            }
         },
         //获取有全部tab的时候所有tab页签的count
         fetchStat() {
@@ -551,6 +761,11 @@ export default {
 }
 </script>
 <style lang="scss">
+    .ant-table-column-title{
+        display: flex;
+        align-items: center;
+
+    }
     .ant-cascader-menus{
         font-size: 2rem;
         .ant-cascader-menu-item{
@@ -598,12 +813,13 @@ export default {
     }
 }
 .searchBox{
+    width: 86%;
     display: flex;
     align-items: center;
-    position: absolute;
+    position: relative;
     left: 0;
     &>div{
-        margin-right: 2em;
+        margin-right: 1.4em;
     }
     .bt{
         display: flex;
@@ -682,5 +898,11 @@ export default {
         justify-content: space-between;
         cursor: default;
     }
+}
+.statusbox{
+    width: 14%;
+    // position: relative;
+    display: flex;
+    justify-content: space-between;
 }
 </style>

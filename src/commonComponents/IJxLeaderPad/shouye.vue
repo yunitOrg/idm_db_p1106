@@ -28,6 +28,16 @@
                     </div>
                 </div>
             </div>
+            <div class=tndb>
+                <div class="title">厅内督办</div>
+                <div class="content" v-for="(el,index,) in tndbData" :key="index"> 
+                    <div class="imgbox_icon"></div>
+                    <span class="text-name" @click="onHomeType('厅内督办',index+1,tndbData)">{{el.text}}</span>
+                    <span class="num" @click="onHomeType('厅内督办',index+1,tndbData)">{{el.num}}</span>
+                    <span class="count">项目数</span>
+                    <div class="imgbox"></div>
+                </div>
+            </div>
             <div class="tbgz">
                 <div class="title">特别关注</div>
                 <div class="content">
@@ -56,30 +66,30 @@ export default {
     data() {
         return {
            sxflData:[ 
-                // {
-                //     num:"119",
-                //     text:"重点批示"
-                // },
-                // {
-                //     num:"180",
-                //     text:"重要文件"
-                // },
-                // {
-                //     num:"219",
-                //     text:"重要任务"
-                // },
-                // {
-                //     num:"98",
-                //     text:"交办事项"
-                // },
-                // {
-                //     num:"219",
-                //     text:"调查核实"
-                // },
-                // {
-                //     num:"219",
-                //     text:"提案建议"
-                // },
+            //    {
+            //         num:"119",
+            //         text:"重点批示"
+            //     },
+            //     {
+            //         num:"180",
+            //         text:"重要文件"
+            //     },
+            //     {
+            //         num:"219",
+            //         text:"重要任务"
+            //     },
+            //     {
+            //         num:"98",
+            //         text:"交办事项"
+            //     },
+            //     {
+            //         num:"219",
+            //         text:"调查核实"
+            //     },
+            //     {
+            //         num:"219",
+            //         text:"提案建议"
+            //     },
            ],
            cbdwData:[
                 // {
@@ -91,6 +101,13 @@ export default {
                 //     num:"1,000"
                 // }
            ],
+           tndbData:[
+            // {
+            //     num:'513',
+            //     text:"省政府办公厅"
+            // }
+           ],
+
            tbgzData:[
                 // {
                 //     text:"亮点",
@@ -139,6 +156,7 @@ export default {
                 .then(({ data }) => {
                     this.sxflData=data.data.sxflData
                     this.cbdwData=data.data.cbdwData
+                    this.tndbData=data.data.tndbData
                     this.tbgzData=data.data.tbgzData
                 })
                 .finally(() => {
@@ -322,7 +340,7 @@ export default {
         justify-content: space-between;
         .cbdw{
             height: 100%;
-            width: 39%;
+            width: 34%;
             background: #FFFFFF;
             border-radius: 1.67rem;
             padding: 1rem 2rem 1.5rem 2rem;
@@ -420,9 +438,95 @@ export default {
                 }
             }
         }
+        .tndb{
+            height: 100%;
+            width: 24%;
+            background: url(./images/tndb.png)no-repeat;
+            background-size: 100% 100%;
+            border-radius: 1.67rem;
+            padding: 1rem 2rem 1.5rem 2rem;
+              .title{
+                display: block;
+                font-family: PingFangSC-Medium;
+                font-size: 4rem;
+                color: #333333;
+                font-weight: 500;
+                margin-bottom: 1rem;
+            }
+             .content{
+                width: 100%;
+                height: 80%;
+                background: rgba(255, 255, 255,0.7);
+                box-shadow: inset 0rem 0.08rem 1rem 0rem rgba(71,163,255,0.53);
+                border-radius: 3.08rem;
+                padding: 4rem 6rem;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                position: relative;
+                .imgbox_icon{
+                    width: 8rem;
+                    height: 8rem;
+                    background: url(./images/tndb-img.png) no-repeat;
+                    background-size: 100% 100%;
+                }
+                .text-name{
+                    font-family: PingFangSC-Medium;
+                    font-size: 3.17rem;
+                    color: #333333;
+                    letter-spacing: 0;
+                    line-height: 2.87rem;
+                    font-weight: 500;
+                    margin-left: 3rem;
+                    margin-top: 2.4rem;
+                    position: relative;
+                    cursor: pointer;
+                    &::after{
+                        content: '';
+                        display: inline-block;
+                        width:6rem;
+                        height: 0.4rem;
+                        background:#2b72ee66; 
+                        position: absolute;
+                        top: 4.5rem;
+                        left:50%;
+                        transform: translateX(-50%);
+
+
+                    }
+                }
+                .num{
+                     font-family: Helvetica-Bold;
+                        font-size: 5rem;
+                        color: #2B72EE;
+                        letter-spacing: 0;
+                        line-height: 5rem;
+                        font-weight: 700;
+                         margin-top: 6.6rem;
+                          cursor: pointer;
+                }
+                .count{
+                    color: #333333;
+                    font-size: 3.2rem;
+                    font-weight: 400;
+                    margin-top: 3.3rem;
+                }
+                .imgbox{
+                    width:13rem;
+                    height: 13.2rem;
+                    background: url(./images/icon.png) no-repeat;
+                    background-size: 100% 100%;
+                    position: absolute;
+                    bottom: 0;
+                    right: 0.2rem;
+
+                }
+             }
+        }
         .tbgz{
             height: 100%;
-            width: 59%;
+            width: 38%;
             background: url(./images/tbgzbg.png)no-repeat;
             background-size: 100% 100%;
             border-radius: 1.67rem;

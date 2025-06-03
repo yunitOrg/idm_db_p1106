@@ -342,7 +342,14 @@ export default {
         },
         fetchData() {
             this.loading = true
-            let url = this.current == 1 ? "ctrl/dbWorkbench/getLeaderPadFollowList" : "ctrl/dbWorkbench/getLeaderPadNoticeList"
+            let url = ''
+            if(this.current ==='3'){
+                url='ctrl/dbWorkbench/getUndertakeLeaderPadNoticeList'
+            }else if(this.current ==='1'){    
+                   url='ctrl/dbWorkbench/getLeaderPadFollowList'
+            }else if(this.current ==='2'){
+                url="ctrl/dbWorkbench/getUndertakeLeaderPadNoticeList"
+            }
             window.IDM.http
                 .post(
                     this.a + url,
