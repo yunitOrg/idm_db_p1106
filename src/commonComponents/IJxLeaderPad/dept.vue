@@ -23,14 +23,14 @@
                         <span>办结期限：</span>
                         <a-config-provider :locale="locale">
                             <a-range-picker valueFormat="YYYY-MM-DD" :placeholder="['开始时间', '结束时间']" mode="['month', 'month']" v-model="times" @change="getTimes()"/>
-                        </a-config-provider>
+                        </a-config-provider> && (dept.label=='重点任务'|| dept.label=='重要批示')"
                     </div> -->
-                    <div class="bt" v-if="homeType.type=='事项分类' && (dept.label=='重点任务'|| dept.label=='重要批示')">
+                    <div class="bt" v-if="homeType.type=='事项分类'">
                         <span>承办单位：</span>
                         <a-input  v-model="dwName" placeholder="" />
                     </div>
                       <div class="selectBox" v-if="isClickType==true">
-                        <span>落实状态：</span>
+                        <span>{{dept.label == '重点任务' ? '落实状态：' :'办理状态：'}}</span>
                         <!-- <a-input v-model="extImplementationStatusText"/> -->
                           <a-cascader v-model="luoshizhuangtai" allowClear placeholder="" :options="luoshiOptions" change-on-select @change="getLuoshiZhuangtai"/>
                     </div>
@@ -274,111 +274,225 @@ export default {
              }
              
             if(this.isClickType==true){
-                return  [
-                {
-                    title: '序号',
-                    dataIndex: 'index',
-                    width: '9rem',
-                    align: 'center',
-                    customRender: (text, record, index) => index + 1
-                },
-                {
-                    title: '督办状态',
-                    dataIndex: 'padLight',
-                    filters: [
+                if (this.dept.label == '重要批示') {
+                    return [
                         {
-                            text: '超期',
-                            value: '4'
+                            title: '序号',
+                            dataIndex: 'index',
+                            width: '9rem',
+                            align: 'center',
+                            customRender: (text, record, index) => index + 1
                         },
                         {
-                            text: '预警',
-                            value: '2'
+                            title: '督办状态',
+                            dataIndex: 'padLight',
+                            filters: [
+                                {
+                                    text: '超期',
+                                    value: '4'
+                                },
+                                {
+                                    text: '预警',
+                                    value: '2'
+                                },
+                                {
+                                    text: '正常',
+                                    value: '1'
+                                }
+                            ],
+                            onFilter: (value, record) => value == record.padLight,
+                            width: '19rem',
+                            align: 'center',
+                            scopedSlots: {
+                                customRender: 'status'
+                            },
+                            sorter: (prev, current) => current.padLight > prev.padLight
+                        },
+                        // {
+                        //     title: '重要程度',
+                        //     dataIndex: 'approvalImportant',
+                        //     filters: [
+                        //         {
+                        //             text: '重要',
+                        //             value: 2
+                        //         },
+                        //         {
+                        //             text: '普通',
+                        //             value: 1
+                        //         },
+                        //         {
+                        //             text: '空',
+                        //             value: 0
+                        //         }
+                        //     ],
+                        //     onFilter: (value, record) => value == record.approvalImportant,
+                        //     width: '19rem',
+                        //     align: 'center',
+                        //     scopedSlots: {
+                        //         customRender: 'important'
+                        //     },
+                        //     sorter: (prev, current) => current.approvalImportant > prev.approvalImportant
+                        // },
+                        {
+                            title: hasRemark ? [' 标题', this.$createElement('span', { style: { 'font-weight': 400 } }, stra), this.$createElement('span', { style: { color: 'red', "font-weight": 700, "font-size": "4.4rem", "display": "inline-block", 'width': '5rem', 'margin-top': '1rem' } }, xing), this.$createElement('span', { style: { 'font-weight': 400 } }, strb)] : ['标题', this.$createElement('span', { style: { 'font-weight': 400 } }, stra), this.$createElement('span', { style: { color: 'red', "font-weight": 700, "font-size": "4.4rem", "display": "inline-block", 'width': '5rem', 'margin-top': '1rem' } }, xing), this.$createElement('span', { style: { 'font-weight': 400 } }, strb)],
+                            // title:() => {
+                            //     return (
+                            //         <div>
+                            //             <span>标题</span>
+                            //             <span>str1</span>
+                            //             <span style="color:red;font-weight:700;font-size:4.4rem;display: inline-block;height: 5rem;">*</span>
+                            //             <span>str2</span>
+                            //         </div>
+                            //     )
+                            // },
+                            dataIndex: 'approvalBt',
+                            align: 'center',
+                            scopedSlots: {
+                                customRender: 'approvalBt',
+                                header: 'approvalBtHeader' // 指定自定义表头渲染的插槽名
+                            },
                         },
                         {
-                            text: '正常',
-                            value: '1'
+                            title: this.dept.label == '重点任务' ? '落实状态' : '办理状态',
+                            dataIndex: 'extImplementationStatusText',
+                            width: '21.38rem',
+                            align: 'center'
+                        },
+                        {
+                            title: '立项单位',
+                            dataIndex: 'createDeptName',
+                            width: '21.38rem',
+                            align: 'center'
+                        },
+                        {
+                            title: '承办单位',
+                            dataIndex: 'handlerUnitText',
+                            width: '21.38rem',
+                            align: 'center'
+                        },
+                        {
+                            title: '办结期限',
+                            dataIndex: 'endDate',
+                            width: '26rem',
+                            align: 'center'
+                        },
+                        {
+                            title: '操作',
+                            dataIndex: 'operation',
+                            width: '18.19rem',
+                            align: 'center',
+                            scopedSlots: {
+                                customRender: 'operation'
+                            }
                         }
-                    ],
-                    onFilter: (value, record) => value == record.padLight,
-                    width: '19rem',
-                    align: 'center',
-                    scopedSlots: {
-                        customRender: 'status'
-                    },
-                    sorter: (prev, current) => current.padLight > prev.padLight
-                },
-                // {
-                //     title: '重要程度',
-                //     dataIndex: 'approvalImportant',
-                //     filters: [
-                //         {
-                //             text: '重要',
-                //             value: 2
-                //         },
-                //         {
-                //             text: '普通',
-                //             value: 1
-                //         },
-                //         {
-                //             text: '空',
-                //             value: 0
-                //         }
-                //     ],
-                //     onFilter: (value, record) => value == record.approvalImportant,
-                //     width: '19rem',
-                //     align: 'center',
-                //     scopedSlots: {
-                //         customRender: 'important'
-                //     },
-                //     sorter: (prev, current) => current.approvalImportant > prev.approvalImportant
-                // },
-                {
-                    title: hasRemark ? [' 标题',this.$createElement('span',{ style: {'font-weight' : 400 } },stra),this.$createElement('span', { style: { color: 'red',"font-weight":700,"font-size":"4.4rem","display": "inline-block",'width':'5rem','margin-top':'1rem' } }, xing), this.$createElement('span',{ style: {'font-weight' : 400 } }, strb)] :[ '标题',this.$createElement('span', { style: {'font-weight' : 400 } }, stra),this.$createElement('span', { style: { color: 'red',"font-weight":700,"font-size":"4.4rem","display": "inline-block",'width':'5rem','margin-top':'1rem' } }, xing), this.$createElement('span',{ style: {'font-weight' : 400 } }, strb)],
-                    // title:() => {
-                    //     return (
-                    //         <div>
-                    //             <span>标题</span>
-                    //             <span>str1</span>
-                    //             <span style="color:red;font-weight:700;font-size:4.4rem;display: inline-block;height: 5rem;">*</span>
-                    //             <span>str2</span>
-                    //         </div>
-                    //     )
-                    // },
-                    dataIndex: 'approvalBt',
-                    align: 'center',
-                    scopedSlots: {
-                        customRender: 'approvalBt',
-                        header: 'approvalBtHeader' // 指定自定义表头渲染的插槽名
-                    },
-                },
-                {
-                    title: '落实状态',
-                    dataIndex: 'extImplementationStatusText',
-                    width: '21.38rem',
-                    align: 'center'
-                },
-                {
-                    title: '承办单位',
-                    dataIndex: 'handlerUnitText',
-                    width: '21.38rem',
-                    align: 'center'
-                },
-                {
-                    title: '办结期限',
-                    dataIndex: 'endDate',
-                    width: '26rem',
-                    align: 'center'
-                },
-                {
-                    title: '操作',
-                    dataIndex: 'operation',
-                    width: '18.19rem',
-                    align: 'center',
-                    scopedSlots: {
-                        customRender: 'operation'
-                    }
+                    ]
+                }else{
+                    return [
+                        {
+                            title: '序号',
+                            dataIndex: 'index',
+                            width: '9rem',
+                            align: 'center',
+                            customRender: (text, record, index) => index + 1
+                        },
+                        {
+                            title: '督办状态',
+                            dataIndex: 'padLight',
+                            filters: [
+                                {
+                                    text: '超期',
+                                    value: '4'
+                                },
+                                {
+                                    text: '预警',
+                                    value: '2'
+                                },
+                                {
+                                    text: '正常',
+                                    value: '1'
+                                }
+                            ],
+                            onFilter: (value, record) => value == record.padLight,
+                            width: '19rem',
+                            align: 'center',
+                            scopedSlots: {
+                                customRender: 'status'
+                            },
+                            sorter: (prev, current) => current.padLight > prev.padLight
+                        },
+                        // {
+                        //     title: '重要程度',
+                        //     dataIndex: 'approvalImportant',
+                        //     filters: [
+                        //         {
+                        //             text: '重要',
+                        //             value: 2
+                        //         },
+                        //         {
+                        //             text: '普通',
+                        //             value: 1
+                        //         },
+                        //         {
+                        //             text: '空',
+                        //             value: 0
+                        //         }
+                        //     ],
+                        //     onFilter: (value, record) => value == record.approvalImportant,
+                        //     width: '19rem',
+                        //     align: 'center',
+                        //     scopedSlots: {
+                        //         customRender: 'important'
+                        //     },
+                        //     sorter: (prev, current) => current.approvalImportant > prev.approvalImportant
+                        // },
+                        {
+                            title: hasRemark ? [' 标题', this.$createElement('span', { style: { 'font-weight': 400 } }, stra), this.$createElement('span', { style: { color: 'red', "font-weight": 700, "font-size": "4.4rem", "display": "inline-block", 'width': '5rem', 'margin-top': '1rem' } }, xing), this.$createElement('span', { style: { 'font-weight': 400 } }, strb)] : ['标题', this.$createElement('span', { style: { 'font-weight': 400 } }, stra), this.$createElement('span', { style: { color: 'red', "font-weight": 700, "font-size": "4.4rem", "display": "inline-block", 'width': '5rem', 'margin-top': '1rem' } }, xing), this.$createElement('span', { style: { 'font-weight': 400 } }, strb)],
+                            // title:() => {
+                            //     return (
+                            //         <div>
+                            //             <span>标题</span>
+                            //             <span>str1</span>
+                            //             <span style="color:red;font-weight:700;font-size:4.4rem;display: inline-block;height: 5rem;">*</span>
+                            //             <span>str2</span>
+                            //         </div>
+                            //     )
+                            // },
+                            dataIndex: 'approvalBt',
+                            align: 'center',
+                            scopedSlots: {
+                                customRender: 'approvalBt',
+                                header: 'approvalBtHeader' // 指定自定义表头渲染的插槽名
+                            },
+                        },
+                        {
+                            title: this.dept.label == '重点任务' ? '落实状态' : '办理状态',
+                            dataIndex: 'extImplementationStatusText',
+                            width: '21.38rem',
+                            align: 'center'
+                        },
+                        {
+                            title: '承办单位',
+                            dataIndex: 'handlerUnitText',
+                            width: '21.38rem',
+                            align: 'center'
+                        },
+                        {
+                            title: '办结期限',
+                            dataIndex: 'endDate',
+                            width: '26rem',
+                            align: 'center'
+                        },
+                        {
+                            title: '操作',
+                            dataIndex: 'operation',
+                            width: '18.19rem',
+                            align: 'center',
+                            scopedSlots: {
+                                customRender: 'operation'
+                            }
+                        }
+                    ]
                 }
-            ]
             }else{
                 return [
                     {
@@ -550,7 +664,8 @@ export default {
         //获取年份
         getYear(){
             this.$nextTick(()=>{
-                // this.fetchData()
+                this.getDbGkData()
+                this.fetchData()
             })
         },
         //落实状态

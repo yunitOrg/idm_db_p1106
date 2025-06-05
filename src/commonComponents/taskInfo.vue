@@ -61,7 +61,7 @@
                             <div @click="handleJump(item)">
                                 <div class="top">
                                     <span class="lastFeedbackContentPeriodNum" v-if="item.lastFeedbackContentPeriodNum">{{item.lastFeedbackContentPeriodNum}}</span>
-                                    <span class="lastFeedbackDate" v-if="item.lastFeedbackDate">{{item.lastFeedbackDate}}</span>
+                                    <span class="lastFeedbackDate" v-if="item.nowPeriodEndDate">{{item.nowPeriodEndDate}}</span>
                                     <div class="subtask-label">
                                         <span
                                             :class="{
@@ -76,9 +76,9 @@
                                         >
                                         <span class="subtask-red" v-if="item.timeoutStatusText && item.timeoutStatus != 0">{{ item.timeoutStatusText }}</span>
                                     </div>
-                                    <div v-if="item.startDate">
+                                    <div v-if="item.lastFeedbackDate">
                                         <img :src="hanldeImg('time1.png')" alt="" class="taskinfo-title-icon" />
-                                        <span>{{ item.startDate }} ~ {{ item.endDate }}</span>
+                                        <span>{{ item.lastFeedbackDate }}</span>
                                     </div>
                                 </div>
                                 <div class="content">{{item.lastFeedbackContent}}</div>
@@ -100,7 +100,7 @@
                     <a-badge v-if="item.unreadInstruction != null" :count="item.unreadInstruction" @click="handleOptions({ key: 'notice_leader_instruction_view', record: item })">
                         <img src="../assets/linqi.png" alt="查看批示" />
                     </a-badge>
-                    <div v-if="item.lastFeedbackContent" @click="handleShowDialog(item)">
+                    <div @click="handleShowDialog(item)">
                         <svg-icon icon-class="history"></svg-icon>
                     </div>
                     <template v-if="btngroup">
@@ -181,6 +181,7 @@ export default {
     mounted() {
         this.moduleObject = this.$root.moduleObject
         if (this.porpsList && this.porpsList?.length) {
+            var _this = this;
             this.list = this.porpsList
             this.list.forEach((item,index)=>{
                 (function (item,index) {
@@ -189,7 +190,7 @@ export default {
                             noticeId: item.id
                         })
                         .then(({ data }) => {
-                            this.list.recordCount = data.data
+                            _this.list[index].recordCount = data.data
                         })
                 })(item,index)
             })

@@ -457,16 +457,16 @@ export default {
                                 }
                             }
                         },
-                        {
-                            label: '办理质效',
-                            value: '2',
-                            active: this.current == '2',
-                            on: {
-                                click: () => {
-                                    this.current = '2'
-                                }
-                            }
-                        }
+                        // {
+                        //     label: '办理质效',
+                        //     value: '2',
+                        //     active: this.current == '2',
+                        //     on: {
+                        //         click: () => {
+                        //             this.current = '2'
+                        //         }
+                        //     }
+                        // }
                     ]
                 }
             }

@@ -14,8 +14,8 @@
                             <div class="subtaskdot"></div>
                         </template>
                         <div class="right-time">
-                            <span class="lastFeedbackContentPeriodNum">【第{{item.periodNum}}期反馈】</span>
-                            <span class="timeLine">{{ item.startDate }} ~ {{ item.endDate }}</span>
+                            <span class="lastFeedbackContentPeriodNum" v-if="item.feedbackContentPeriodNum">{{item.feedbackContentPeriodNum}}</span>
+                            <span class="timeLine">{{ item.endDate }}</span>
                         </div>
                         <div class="light">
                             <img title="超期已反馈" v-if="item.overdueFeedbackState == '1'" src="../assets/finish.png">
@@ -28,7 +28,7 @@
                                     <div class="subtask-label">
                                         <span
                                             :class="{
-                                                'subtask-yellow': item.dbStatus == '1' || item.dbStatus == '4',
+                                                'subtask-yellow': item.dbStatus == '0' || item.dbStatus == '1' || item.dbStatus == '4',
                                                 'subtask-blue': item.dbStatus == '2' || item.dbStatus == '3',
                                                 'subtask-green': item.dbStatus == '6' || item.dbStatus == '5',
                                                 'subtask-red': item.dbStatus == '7',
@@ -340,6 +340,7 @@ export default {
         flex-direction: column;
     }
     .light{
+        width: 20px;
         margin-right: 20px;
     }
     .right-content {
