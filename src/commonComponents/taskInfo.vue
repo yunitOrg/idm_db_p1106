@@ -190,7 +190,8 @@ export default {
                             noticeId: item.id
                         })
                         .then(({ data }) => {
-                            _this.list[index].recordCount = data.data
+                            _this.list[index].recordCount = data.data;
+                            _this.$forceUpdate();
                         })
                 })(item,index)
             })
