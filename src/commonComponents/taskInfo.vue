@@ -44,7 +44,7 @@
 
                         <div :style="isMoOpen ? `margin-top: 5px` : `margin-top: 15px`">
                             <img src="../assets/lingdang.png" alt="" class="taskinfo-title-icon" />
-                            <span style="margin-right: 5px">催办<i class="recordCount" @click="toRecordPage(item.id)">{{ item.recordCount || 0 }}</i>次</span>
+                            <span style="margin-right: 5px">催办<i class="recordCount" @click="toRecordPage(item.id)">{{ item.urgeNum || 0 }}</i>次</span>
                         </div>
                     </div>
                 </div>
@@ -181,20 +181,7 @@ export default {
     mounted() {
         this.moduleObject = this.$root.moduleObject
         if (this.porpsList && this.porpsList?.length) {
-            var _this = this;
             this.list = this.porpsList
-            this.list.forEach((item,index)=>{
-                (function (item,index) {
-                    window.IDM.http
-                        .get('ctrl/urgeRecord/getUrgeRecordCount', {
-                            noticeId: item.id
-                        })
-                        .then(({ data }) => {
-                            _this.list[index].recordCount = data.data;
-                            _this.$forceUpdate();
-                        })
-                })(item,index)
-            })
         }
         this.init()
     },
@@ -228,7 +215,7 @@ export default {
         async handleShowDialog(item) {
             if (this.origin == 'ItasklistDetail') {
                 const query = {
-                    id: item.id
+                    id: item.id 
                 }
                 const roles = []
                 if (item.buttonList.some((n) => n.value == 'notice_leader_instruction')) roles.push('comment.create')
