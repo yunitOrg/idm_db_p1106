@@ -16,14 +16,23 @@
             <div class="cbdw">
                 <div class="title">承办单位</div>
                 <div class="content">
-                    <div class="item" @click="onHomeType('承办单位',index+1,cbdwData)" v-for="(el,index,) in cbdwData" :key="index">
-                        <div class="left">
-                            <div class="icon"></div>
-                            <div class="text">{{el.text}}</div>
-                        </div>
+                    <div class="thead">
+                        <div class="left">单位</div>
                         <div class="right">
-                            <div><span>项目数</span>&nbsp; {{el.num}}</div>
-                            <div><span>单位数</span>&nbsp; {{el.orgNum}}</div>
+                            <div>项目数</div>
+                            <div>单位数</div>
+                        </div>
+                    </div>
+                    <div class="cardBox">
+                        <div class="item" @click="onHomeType('承办单位',index+1,cbdwData)" v-for="(el,index,) in cbdwData" :key="index">
+                            <div class="left">
+                                <div class="icon"></div>
+                                <div class="text">{{el.text}}</div>
+                            </div>
+                            <div class="right">
+                                <div class="xms">{{el.num}}</div>
+                                <div class="dws">{{el.orgNum}}</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -163,7 +172,7 @@ export default {
                 })
         },
         onHomeType(type,value,el){
-            this.$emit('onHomeType',{type,value:el[0].text=='分管部门'?3:value,el})
+            this.$emit('onHomeType',{type,value:el[value-1].text=='分管部门'?3:el[value-1].text=='中央驻赣单位'?4:value,el})
         }
     },
     mounted() {
@@ -180,7 +189,7 @@ export default {
     justify-content: space-between;
     .top{
         width: 100%;
-        height: 42%;
+        height: 41%;
         background: #fff;
         background: #FFFFFF;
         border-radius: 1.67rem;
@@ -334,13 +343,13 @@ export default {
     }
     .bottom{
         width: 100%;
-        height: 55%;
+        height: 54%;
         display: flex;
         align-items: center;
         justify-content: space-between;
         .cbdw{
             height: 100%;
-            width: 34%;
+            width: 37%;
             background: #FFFFFF;
             border-radius: 1.67rem;
             padding: 1rem 2rem 1.5rem 2rem;
@@ -354,93 +363,142 @@ export default {
             }
             .content{
                 width: 100%;
-                height: 80%;
+                height: calc(100% - 7rem);
                 display: flex;
                 flex-direction: column;
-                justify-content: space-between;
-                .item{
-                    padding:  3rem;
-                    cursor: pointer;
+        
+                .thead{
+                    display: flex;
+                    align-items: center;
+                    font-family: PingFangSC-Regular;
+                    font-size: 3.17rem;
+                    color: #8F8F8F;
+                    letter-spacing: 0;
+                    text-align: center;
+                    line-height: 5rem;
+                    font-weight: 400;
+                    padding: 0 20px;
+                    margin-bottom: 1rem;
                     .left{
+                        width: 50%;
+                    }
+                    .right{
+                        width: 50%;
                         display: flex;
                         align-items: center;
-                        .text{
-                            font-family: PingFangSC-Medium;
-                            font-size: 3.17rem;
-                            color: #333333;
-                            letter-spacing: 0;
-                            line-height: 2.87rem;
-                            font-weight: 500;
-                            margin-left: 3rem;
+                        &>div{
+                            flex: 1;
+                            text-align: center;
                         }
                     }
-                    .right{
-                           display: flex;
-                           margin-top: 5px;
-                            &>div{
-                                flex: 1;
-                                display: flex;
-                                align-items: center;
-                                justify-content: center;
-                                &>span{
-                                    color: #333333;
-                                    font-size: 3.2rem;
-                                    font-weight: 400;
+                }
+                .cardBox{
+                    overflow-y:auto ;
+                    height: calc(100% - 6rem);
+                    .item{
+                        // padding:  3rem;
+                        height: 30%;
+                        cursor: pointer;
+                        width: 100%;
+                        background:url(./images/cbdw.png) no-repeat;
+                        background-size: 100% 100%;
+                        border-radius: 0.98rem;
+                        display: flex;
+                        align-items: center;
+                        padding: 0 20px;
+                      
+    
+                        .left{
+                            display: flex;
+                            align-items: center;
+                            width: 50%;
+                            position: relative;
+                            .icon{
+                                width: 5rem;
+                                height:5rem;
+                                background: url(./images/cbdw-icon1.png) no-repeat;
+                                background-size: 100% 100%;
+                            }
+                            .text{
+                                font-family: PingFangSC-Medium;
+                                font-size: 3.17rem;
+                                color: #333333;
+                                letter-spacing: 0;
+                                line-height: 2.87rem;
+                                font-weight: 500;
+                                margin-left: 1.5rem;
+                            }
+                        }
+                        .left::after{
+                            position: absolute;
+                            content: "";
+                            height: 80%;
+                            width: 2px;
+                            background: #C9DBFA;
+                            right: 0;
+    
+                        }
+                        .right{
+                                width: 50%;
+                               display: flex;
+                               font-family: Helvetica-Bold;
+                                font-size: 5rem;
+                                color: #2B72EE;
+                                letter-spacing: 0;
+                                line-height: 5rem;
+                                font-weight: 700;
+                                &>div{
+                                    flex: 1;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    text-align: center;
                                 }
-                            }
-                            &>div:nth-child(1){
-                            border-right: 1px solid #CACBEE;
-                            }
+                               
+                        }
+                    }
+                    
+                    .item:nth-child(2){
+                        .icon{
+                            width: 5rem;
+                            height:5rem;
+                            background: url(./images/cbdw-icon2.png) no-repeat;
+                            background-size: 100% 100%;
+                        }
+                    }
+                    .item:nth-child(3){
+                        .icon{
+                            width: 5rem;
+                            height:5rem;
+                            background: url(./images/cbdw-icon3.png) no-repeat;
+                            background-size: 100% 100%;
+                        }
+                    }
+                    .item:not(:first-child){
+                        margin-top: 1.5rem;
                     }
                 }
-                &>div:nth-child(1){
-                    width: 100%;
-                    height: 47%;
-                    background:url(./images/cbdw1.png) no-repeat;
-                    background-size: 100% 100%;
-                    border-radius: 0.98rem;
-                    .icon{
-                        width: 8rem;
-                        height:8rem;
-                        background: url(./images/cbdw-icon1.png) no-repeat;
-                        background-size: 100% 100%;
-                    }
-                    .right{
-                        font-family: Helvetica-Bold;
-                        font-size: 5rem;
-                        color: #2B72EE;
-                        letter-spacing: 0;
-                        line-height: 5rem;
-                        font-weight: 700;
-                    }
+                .cardBox::-webkit-scrollbar{
+                    width: 5px;
                 }
-                &>div:nth-child(2){
-                    width: 100%;
-                     height: 47%;
-                    background:url(./images/cbdw2.png) no-repeat;
-                    background-size: 100% 100%;
-                    border-radius: 0.98rem;
-                    .icon{
-                        width: 8rem;
-                        height: 8rem;
-                        background: url(./images/cbdw-icon2.png) no-repeat;
-                        background-size: 100% 100%;
-                    }
-                    .right{
-                        font-family: Helvetica-Bold;
-                        font-size: 5rem;
-                        color: #51B78E;
-                        letter-spacing: 0;
-                        text-align: right;
-                        line-height: 5rem;
-                        font-weight: 700;
-                    }
+                .cardBox::-webkit-scrollbar-thumb {
+                    /*滚动条里面小方块*/
+                    border-radius: 10px;
+                    background-color: #9fc1e3;
+                }
+                
+                .cardBox::-webkit-scrollbar-track {
+                    /*滚动条里面轨道*/
+                    box-shadow: inset 0 0 5px rgba(106, 108, 110, 0.4);
+                    /* background: #ededed; */
+                    border-radius: 10px;
+                
                 }
             }
         }
         .tndb{
             height: 100%;
-            width: 24%;
+            width: 19%;
             background: url(./images/tndb.png)no-repeat;
             background-size: 100% 100%;
             border-radius: 1.67rem;
@@ -452,6 +510,7 @@ export default {
                 color: #333333;
                 font-weight: 500;
                 margin-bottom: 1rem;
+                
             }
              .content{
                 width: 100%;
@@ -459,7 +518,7 @@ export default {
                 background: rgba(255, 255, 255,0.7);
                 box-shadow: inset 0rem 0.08rem 1rem 0rem rgba(71,163,255,0.53);
                 border-radius: 3.08rem;
-                padding: 4rem 6rem;
+                padding: 2rem 4rem;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
@@ -478,7 +537,7 @@ export default {
                     letter-spacing: 0;
                     line-height: 2.87rem;
                     font-weight: 500;
-                    margin-left: 3rem;
+                    // margin-left: 3rem;
                     margin-top: 2.4rem;
                     position: relative;
                     cursor: pointer;
@@ -503,7 +562,7 @@ export default {
                         letter-spacing: 0;
                         line-height: 5rem;
                         font-weight: 700;
-                         margin-top: 6.6rem;
+                        margin-top: 4.4rem;
                           cursor: pointer;
                 }
                 .count{
@@ -526,7 +585,7 @@ export default {
         }
         .tbgz{
             height: 100%;
-            width: 38%;
+            width: 39%;
             background: url(./images/tbgzbg.png)no-repeat;
             background-size: 100% 100%;
             border-radius: 1.67rem;

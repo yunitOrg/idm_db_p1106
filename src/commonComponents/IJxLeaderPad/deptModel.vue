@@ -5,7 +5,7 @@
             <div class="flex-1 h-0 overflow-auto data-list">
                 <div v-for="item in data" :key="item.unitId" @click="changeHandle(item)"
                     class="turncate pointer flex items-center justify-center h-full data-item">
-                    <span>{{ item.unitName }}</span>
+                    <span class="unitName" :title="item.unitName">{{ item.unitName }}</span>
                     <label class="ant-tabs-tab-remind" v-if="item.count && item.count!=0">{{item.count}}</label>
                 </div>
             </div>
@@ -79,7 +79,14 @@ export default {
                 border-color: #096efe;
                 color: #096efe;
             }
-
+            .unitName{
+                width: 100%;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                text-align: center;
+                padding: 0 1rem;
+            }
             .ant-tabs-tab-remind {
                 position: absolute;
                 top: 0;

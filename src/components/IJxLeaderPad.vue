@@ -424,6 +424,36 @@ export default {
                                         })
                                 }
                             }
+                        },
+                        {
+                            label: '中央驻赣单位',
+                            value: '5',
+                            active: this.current == '1' && this.dept.queryType == 4,
+                            on: {
+                                click: () => {
+                                    window.IDM.http
+                                        .post(
+                                            this.a+'ctrl/dbWorkbench/getPadLeaderUnit',
+                                            {
+                                                ...this.params,
+                                                queryType: 4
+                                            },
+                                            {
+                                                headers: {
+                                                    'Content-Type': 'application/json'
+                                                }
+                                            }
+                                        )
+                                        .then(({ data }) => {
+                                            this.model = {
+                                                queryType: 4,
+                                                title: '中央驻赣单位',
+                                                data: data.data,
+                                                visible: true
+                                            }
+                                        })
+                                }
+                            }
                         }
                     ]
                 }
@@ -752,6 +782,29 @@ export default {
                             this.model = {
                                 queryType: 1,
                                 title: '各设区市政府',
+                                data: data.data,
+                                visible: true
+                            }
+                        })
+                }
+                if (this.homeType.value == '4') {//中央驻赣单位
+                    window.IDM.http
+                        .post(
+                            this.a+'ctrl/dbWorkbench/getPadLeaderUnit',
+                            {
+                                ...this.params,
+                                queryType: 4
+                            },
+                            {
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                }
+                            }
+                        )
+                        .then(({ data }) => {
+                            this.model = {
+                                queryType: 4,
+                                title: '中央驻赣单位',
                                 data: data.data,
                                 visible: true
                             }

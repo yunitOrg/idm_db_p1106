@@ -53,6 +53,9 @@
                     <Status v-for="i in [4, 2, 1]" :key="i" :value="i" :showLabel="true" />
                 </div>
             </div>
+            <div v-if="ylContent && ylContent.content&& ylContent.content!=''" class="flex" style="padding:0 0 1rem 0;color: #2477C9;font-size: 3rem; font-weight: 600; cursor: pointer;" @click="yuLan()">
+                {{ylContent.content}}
+            </div>
             <div class="flex-1 h-0 overflow-auto">
                 <a-config-provider :locale="locale">
                     <a-table :columns="columns" :dataSource="data" :loading="loading" :bordered="true" :pagination="false">
@@ -139,6 +142,8 @@ export default {
             leixing:[],
             dwName:"",
             dbfl:"",
+            ylContent:{
+            },
             times:[],
             locale,
             data: [],
@@ -184,11 +189,10 @@ export default {
                 }
             ],
             luoshiOptions:[],//落实状态下拉框数据
-
-            a:"",
             luoshizhuangtai:'',//落实状态
             showInfo:'',//表格上展示的文字
             isClickType:false,//是否点击了分类下拉,
+            a:""
 
         }
     },
@@ -676,11 +680,29 @@ export default {
         getLeixing(value,selectedOptions){
             if(this.homeType.type=='事项分类'){
                 this.$nextTick(()=>{
+                    this.latestProgress()
                     this.getLuoshiOption()
                     this.getDbGkData()
                     this.fetchData()
                 })
             }
+        },
+        yuLan(){
+            window.open(this.ylContent.url,"_blank")
+        },
+        //是事项分类的时候调用latestProgress接口获取预览信息
+        latestProgress(){
+            let url=this.a+`ctrl/leaderDbWorkbenchl/latestProgress`
+            window.IDM.http
+                .get(url, {
+                    extApprovalTypeLv2:this.leixing
+                })
+                .then((res) => {
+                    this.ylContent=res.data.data
+
+                    console.log(res,"是事项分类的时候调用latestProgress接口获取预览信息");
+
+                })
         },
         changeHandle(active){
             this.active=active
@@ -691,7 +713,7 @@ export default {
         },
         //获取类型下拉数据
         getOptions(){
-            window.IDM.http.get(this.a+'/ctrl/dbWorkbench/getApprovalTypePull', {
+            window.IDM.http.get(this.a+'ctrl/dbWorkbench/getApprovalTypePull', {
                 approvalTypeParam:this.dept.approvalTypeParam? this.dept.approvalTypeParam:null
             })
             .then(({ data }) => {
@@ -700,7 +722,7 @@ export default {
         },
         //获取落实状况下拉
         getLuoshiOption(){
-            window.IDM.http.get(this.a+'/ctrl/dbWorkbench/getExtImplementationStatus', {
+            window.IDM.http.get(this.a+'ctrl/dbWorkbench/getExtImplementationStatus', {
                 approvalType:this.dept.approvalTypeParam? this.dept.approvalTypeParam:null
             })
             .then(({ data }) => {
@@ -753,7 +775,7 @@ export default {
         //获取督办概况的数据/ctrl/dbWorkbench/getDbSummaryContent
         getDbGkData(){
             if(this.homeType.type=='事项分类'){
-                window.IDM.http.post('/ctrl/dbWorkbench/getDbSummaryContent',
+                window.IDM.http.post(this.a+'ctrl/dbWorkbench/getDbSummaryContent',
                         {
                             ...this.query,
                             approvalTypeParam:this.homeType.type=='事项分类'?this.dept.approvalTypeParam? this.dept.approvalTypeParam:null: this.leixing && this.leixing.length>0? this.leixing[0]:null,
