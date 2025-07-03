@@ -94,3 +94,8 @@ export const getChinesePinyinAbbreviation = (str) => {
     })
     return PINYIN_INITIAL_CONSONANT_LETTERS[index]
 }
+
+export const availableArray = value => _.isArray(value) && value.length > 0
+export default {
+    availableArray,
+}

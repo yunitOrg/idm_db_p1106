@@ -81,6 +81,7 @@
 </template>
 
 <script>
+import { availableArray } from '../utils'
 import locale from 'ant-design-vue/es/locale/zh_CN';
 import API from '../api/index'
 import moment from "moment";
@@ -130,7 +131,7 @@ export default {
       );
     },
     handleReset() {
-      let url = `/ctrl/dbStatistics/project/type/export?startDate=${this.search.startDate}&endDate=${this.search.endDate}&extKeyword=${this.search.extKeyword}` + (this.propData.exportParams? ('&'+ this.propData.exportParams) :'');
+      let url = `/ctrl/dbStatistics/project/type/export?startDate=${this.search.startDate}&endDate=${this.search.endDate}&extKeyword=${this.search.extKeyword}`
       openWindow(url)
     },
     propDataWatchHandle(propData) {
@@ -267,6 +268,7 @@ export default {
     },
     async initData() {
       let params = {};
+      var _this = this;
       if (this.propData.handleTableParams && this.propData.handleTableParams.length > 0) {
         let name = this.propData.handleTableParams[0].name
         params = window[name] && window[name].call(this, {
@@ -286,11 +288,20 @@ export default {
             let data = res.data || {}
             let ary = data.header || []
             const addCenter = function(ary) {
-              ary.forEach(item => {
+              ary.forEach((item,columnIndex) => {
                 item.align = 'center'
                 item.width = '100px'
                 if (item.children) {
                   addCenter(item.children)
+                }
+                item.customRender = (value, record, index) =>{
+                  return _this.customRender({
+                      value,
+                      record,
+                      index,
+                      column:item,
+                      columnIndex,
+                  })
                 }
               })
             }
@@ -339,13 +350,66 @@ export default {
       this.handleStyle()
       this.convertThemeListAttrToStyleObject()
       this.initData()
-    }
+    },
+    customRender({ value, record, index, column, columnIndex }) {
+      switch (column.type) {
+          case 'href':
+              return (
+                  <span
+                      class='href'
+                      onClick={() => {
+                          const link = this.getLink(value, record, column)
+                          link && window.open(link, column.target)
+                      }}
+                  >
+                      {value}
+                  </span>
+              )
+          default:
+              return value
+      }
+    },
+    urlGetWebPath: window.IDM?.url?.getWebPath,
+    expressReplace: window.IDM?.express?.replace,
+    getLink(value, record, column) {
+        if (availableArray(column.hrefFunc)) {
+            return window.IDM.invokeCustomFunctions
+                .call(this, column.hrefFunc, {
+                    moduleObject: this.moduleObject,
+                    record,
+                    value,
+                    column,
+                })
+                .join()
+        }
+        if (column.href) {
+            return this.urlGetWebPath(
+                this.expressReplace(
+                    column.href,
+                    {
+                        moduleObject: this.moduleObject,
+                        record,
+                    },
+                    true
+                )
+            )
+        }
+        return ''
+    },
   }
 }
 </script>
 
 <style lang="scss" scoped>
 .superviseStat{
+  a,
+  .href {
+      color: #2673d3;
+      color: var(--main-color, #2673d3);
+      &:hover {
+          text-decoration: underline;
+      }
+  }
   ::v-deep .ant-table-thead > tr >th {
     color: #333 !important;
     font-size: 16px !important;
