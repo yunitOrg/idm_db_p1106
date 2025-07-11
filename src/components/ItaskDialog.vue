@@ -41,12 +41,12 @@
                                     </div>
                                     <div v-if="item.startDate">
                                         <img :src="hanldeImg('time1.png')" alt="" class="taskinfo-title-icon" />
-                                        <span>{{ item.feedbackTime }}</span>
+                                        <span>{{ item[propData.timeField] }}</span>
                                     </div>
                                 </div>
                                 <div class="content">
                                     <img v-if="item.extendedFieldNumber == 2" src="../assets/zhongyao.png" class="icon" />
-                                    <div v-html="item.feedbackContent" class="flex-1"></div>
+                                    <div v-html="item[propData.contentFiled]" class="flex-1"></div>
                                 </div>
                             </div>
                             <div class="right-file">
@@ -103,13 +103,18 @@ export default {
                         hex: '#333',
                         hex8: '#333'
                     }
-                }
+                },
+                timeField:"feedbackTime",
+                contentFiled:"feedbackContent",
+                fileGroupField:"feedbackAttachFiles",
+                fileNameField:"fileName"
             }
         }
     },
     mounted() {
         this.moduleObject = this.$root.moduleObject
         this.init()
+        
     },
     methods: {
         hanldeImg(img) {
