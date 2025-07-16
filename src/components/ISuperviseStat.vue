@@ -131,7 +131,7 @@ export default {
       );
     },
     handleReset() {
-      let url = `/ctrl/dbStatistics/project/type/export?startDate=${this.search.startDate}&endDate=${this.search.endDate}&extKeyword=${this.search.extKeyword}`
+      let url = `/ctrl/dbStatistics/project/type/export?startDate=${this.search.startDate}&endDate=${this.search.endDate}&extKeyword=${this.search.extKeyword}&${this.propData.exportParams}`
       openWindow(url)
     },
     propDataWatchHandle(propData) {
