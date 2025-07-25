@@ -102,6 +102,7 @@
                     </a-badge>
                     <div @click="handleShowDialog(item)">
                         <svg-icon icon-class="history"></svg-icon>
+                        <div>更多</div>
                     </div>
                     <template v-if="btngroup">
                         <img @click="handleCuiCata(item)" :src="hanldeImg('bell.png')" alt="" />
