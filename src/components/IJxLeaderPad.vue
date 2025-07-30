@@ -894,7 +894,7 @@ html {
 <style lang="scss" scoped>
 .idm-db-IJxLeaderPad-container {
     gap: 2.5rem;
-    background: #8fc7ff;
+    // background: #8fc7ff;
     overflow-y: hidden;
     .main-container {
         padding: 0 3.75rem 3.75rem;
