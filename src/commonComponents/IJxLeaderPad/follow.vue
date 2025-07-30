@@ -1,7 +1,7 @@
 <template>
     <Tabs :items="tabs" v-model="current" class="h-full" :showInfo="showInfo"  @input="changeHandle">
         <div class="h-full flex flex-col">
-            <div class="flex justify-end" style="padding: 2rem 0; gap: 2.5rem;align-items: center;position: relative;">
+            <div class="flex justify-end" style="padding: 2rem 0; gap: 2.5rem;align-items: center;position: relative;justify-content: start;">
                 <div class="searchBox">
                     <div class="bt">
                         <span>标题：</span>
@@ -15,10 +15,15 @@
                             </a-select-option>
                         </a-select>
                     </div>
-                    <div class="selectBox">
+                    <!-- <div class="selectBox">
                         <span>类型：</span>
                         <a-cascader v-model="leixing" allowClear placeholder="" :options="options" change-on-select
                             @change="getLeixing" />
+                    </div> -->
+                    <div class="selectBox">
+                        <span>落实状态：</span>
+                        <a-cascader v-model="lszt" allowClear placeholder="" :options="options2" change-on-select
+                            @change="getLszt" />
                     </div>
                     <!-- <div class="dateArray">
                         <span>办结期限：</span>
@@ -33,7 +38,7 @@
                         重置
                     </div>
                 </div>
-                <Status v-for="i in [4, 2, 1]" :key="i" :value="i" :showLabel="true" />
+                <!-- <Status v-for="i in [4, 2, 1]" :key="i" :value="i" :showLabel="true" /> -->
             </div>
             <div class="flex-1 h-0 overflow-auto">
                 <a-config-provider :locale="locale">
@@ -50,8 +55,11 @@
                                 {{ record.approvalImportantText }}
                             </div>
                         </template>
-                        <template slot="approvalBt" slot-scope="text, record">
+                        <!-- <template slot="approvalBt" slot-scope="text, record">
                             <div @click="detailHandle(record)" class="pointer text-start">{{ text }}</div>
+                        </template> -->
+                        <template slot="jvgzrwyq" slot-scope="text, record">
+                            <div @click="jtgzrwHandle(record)" class="pointer text-start">{{ record.jvgzrwyq }}</div>
                         </template>
                         <template slot="operation" slot-scope="text, record">
                             <div class="flex items-center justify-center">
@@ -104,6 +112,7 @@ export default {
             bt: "",
             year: new Date().getFullYear(),
             leixing: [],
+            lszt:[],
             times: [],
             locale,
             stat: {
@@ -115,6 +124,28 @@ export default {
             loading: false,
             attentionReason: "",
             options: [
+                {
+                    label: 'zhejiang',
+                    value: '1',
+                    children: [
+                        {
+                            label: 'hangzhou',
+                            value: '2',
+                        }
+                    ],
+                },
+                {
+                    label: 'zhejiang',
+                    value: '1',
+                    children: [
+                        {
+                            label: 'hangzhou',
+                            value: '2',
+                        }
+                    ],
+                }
+            ],
+            options2:[
                 {
                     label: 'zhejiang',
                     value: '1',
@@ -187,31 +218,31 @@ export default {
                         align: 'center',
                         customRender: (text, record, index) => index + 1
                     },
-                    {
-                        title: '督办状态',
-                        dataIndex: 'padLight',
-                        filters: [
-                            {
-                                text: '超期',
-                                value: '4'
-                            },
-                            {
-                                text: '预警',
-                                value: '2'
-                            },
-                            {
-                                text: '正常',
-                                value: '1'
-                            }
-                        ],
-                        onFilter: (value, record) => value == record.padLight,
-                        width: '19rem',
-                        align: 'center',
-                        scopedSlots: {
-                            customRender: 'status'
-                        },
-                        sorter: (prev, current) => current.padLight > prev.padLight
-                    },
+                    // {
+                    //     title: '督办状态',
+                    //     dataIndex: 'padLight',
+                    //     filters: [
+                    //         {
+                    //             text: '超期',
+                    //             value: '4'
+                    //         },
+                    //         {
+                    //             text: '预警',
+                    //             value: '2'
+                    //         },
+                    //         {
+                    //             text: '正常',
+                    //             value: '1'
+                    //         }
+                    //     ],
+                    //     onFilter: (value, record) => value == record.padLight,
+                    //     width: '19rem',
+                    //     align: 'center',
+                    //     scopedSlots: {
+                    //         customRender: 'status'
+                    //     },
+                    //     sorter: (prev, current) => current.padLight > prev.padLight
+                    // },
                     // {
                     //     title: '重要程度',
                     //     dataIndex: 'approvalImportant',
@@ -237,32 +268,59 @@ export default {
                     //     },
                     //     sorter: (prev, current) => current.approvalImportant > prev.approvalImportant
                     // },
+                    // {
+                    //     title: '标题',
+                    //     dataIndex: 'approvalBt',
+                    //     align: 'center',
+                    //     scopedSlots: {
+                    //         customRender: 'approvalBt'
+                    //     }
+                    // },
                     {
-                        title: '标题',
-                        dataIndex: 'approvalBt',
+                        title: '具体工作任务和要求',
+                        dataIndex: 'jvgzrwyq',
+                        width: '30rem',
                         align: 'center',
                         scopedSlots: {
-                            customRender: 'approvalBt'
+                            customRender: 'jvgzrwyq'
                         }
                     },
                     {
-                        title: '落实状态',
-                        dataIndex: 'extImplementationStatusText',
+                        title: '牵头部门',
+                        dataIndex: 'qtbm',
+                        width: '21.38rem',
+                        align: 'center'
+                    },
+                    {
+                        title: '责任处室',
+                        dataIndex: 'zrcs',
                         width: '21.38rem',
                         align: 'center',
                     },
                     {
-                        title: '承办单位',
-                        dataIndex: 'handlerUnitText',
+                        title: '落实状态',
+                        dataIndex: 'jointRsztText',
                         width: '21.38rem',
-                        align: 'center'
+                        align: 'center',
                     },
-                    {
-                        title: '办结期限',
-                        dataIndex: 'endDate',
-                        width: '26rem',
-                        align: 'center'
-                    },
+                    // {
+                    //     title: '落实状态',
+                    //     dataIndex: 'extImplementationStatusText',
+                    //     width: '21.38rem',
+                    //     align: 'center',
+                    // },
+                    // {
+                    //     title: '承办单位',
+                    //     dataIndex: 'handlerUnitText',
+                    //     width: '21.38rem',
+                    //     align: 'center'
+                    // },
+                    // {
+                    //     title: '办结期限',
+                    //     dataIndex: 'endDate',
+                    //     width: '26rem',
+                    //     align: 'center'
+                    // },
                     {
                         title: '操作',
                         dataIndex: 'operation',
@@ -409,6 +467,7 @@ export default {
     },
     mounted() {
         this.getOptions()
+        this.getOptions2()
         this.getDbGkData()
     },
     methods: {
@@ -422,6 +481,16 @@ export default {
         },
          //得到类型的值
         getLeixing(value,selectedOptions){
+            console.log(this.leixing);
+            if(this.current=='3'){
+                this.$nextTick(()=>{
+                    this.getDbGkData()
+                })
+            }
+        },
+        //得到落实状态的值
+        getLszt(value,selectedOptions){
+            console.log(this.lszt);
             if(this.current=='3'){
                 this.$nextTick(()=>{
                     this.getDbGkData()
@@ -444,6 +513,15 @@ export default {
             })
                 .then(({ data }) => {
                     this.options = data.data
+                })
+        },
+        //获取落实状态下拉数据
+        getOptions2() {
+            window.IDM.http.get(this.a + '/ctrl/dbWorkbench/getNewExtImplementationStatus', {
+                approvalTypeParam: this.dept.approvalTypeParam ? this.dept.approvalTypeParam : null
+            })
+                .then(({ data }) => {
+                    this.options2 = data.data
                 })
         },
         fetchStat() {
@@ -469,7 +547,7 @@ export default {
         getDbGkData(){
             console.log(this.current,';;;');
             if(this.current=='3'){
-                window.IDM.http.post('/ctrl/dbWorkbench/getDbSummaryContent',
+                window.IDM.http.post( this.a +'/ctrl/dbWorkbench/getDbSummaryContent',
                         {
                              ...this.query,
                             approvalTypeParam: this.leixing && this.leixing.length > 0 ? this.leixing[0] : null,
@@ -480,6 +558,7 @@ export default {
                             startTime: this.times[0] ? this.times[0] : "",
                             endTime: this.times[1] ? this.times[1] : "",
                             yearParam: this.year,
+                            lszt:this.lszt && this.lszt.length > 0 ? this.lszt[0] : ""
                         },
                         {
                             headers: {
@@ -505,6 +584,7 @@ export default {
             }else if(this.current ==='2'){
                 url="ctrl/dbWorkbench/getUndertakeLeaderPadNoticeList"
             }
+            console.log(this.l);
             window.IDM.http
                 .post(
                     this.a + url,
@@ -518,6 +598,7 @@ export default {
                         startTime: this.times[0] ? this.times[0] : "",
                         endTime: this.times[1] ? this.times[1] : "",
                         yearParam: this.year,
+                        lszt:this.lszt && this.lszt.length > 0 ? this.lszt[0] : ""
                     },
                     {
                         headers: {
@@ -558,6 +639,11 @@ export default {
             }
             this.$emit("closeCollect")
         },
+        //点击具体工作和任务的详情
+        jtgzrwHandle(record) {
+            this.$emit('jtgzrw', record)
+        },
+        //之前点击标题的详情
         detailHandle(record) {
             // if (record.isApproval == 1) {
             //     this.$emit('detail', record, {
@@ -668,8 +754,8 @@ export default {
 .searchBox {
     display: flex;
     align-items: center;
-    position: absolute;
-    left: 0;
+    // position: absolute;
+    // left: 0;
 
     &>div {
         margin-right: 2em;

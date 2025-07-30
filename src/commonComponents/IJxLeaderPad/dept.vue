@@ -271,6 +271,8 @@ export default {
                 strb='”为重点核查件）'
              }else if(this.leixing[0]==64 && hasRemark==true){
                     strb='”为重点提案）'
+             }else if(this.leixing[0]==62 && hasRemark==true){
+                    strb='”为重点建议）'
              }else{
                 stra=''
                 strb=''

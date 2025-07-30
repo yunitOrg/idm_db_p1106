@@ -8,14 +8,16 @@
                 <!-- 领导工作首页 -->
                 <shouye class="shouye" v-if="isShouye == true" :params="params" @onHomeType="onHomeType">
                 </shouye>
+                <Jtgzrw v-if="jtgzrwData && isShouye == false" :params="params" :data="jtgzrwData" @close="jtgzrwClose()" />
                 <Urge v-if="urgeData && isShouye == false" :params="params" :data="urgeData" @close="urgeClose()" />
-                <Detail v-else-if="dept.label!='重要批示' && dept.label!='重点任务' &&detailData && isShouye == false"  :params="params"  :data="detailData"
+                <Detail v-else-if="dept.label!='重要批示' && dept.label!='重点任务' && detailData && isShouye == false"  :params="params"  :data="detailData"
                     @urge="() => showUrge(detailData.noticeInfo)" @close="detailData = null" />
                 <Detail2 v-else-if="detailData && isShouye == false && (dept.label=='重要批示' || dept.label=='重点任务')" :params="params" :data="detailData"
                     @urge="showUrge2" @close="detailData = null" />
                 <Cube v-else-if="current == '2' && isShouye == false" :params="params" @home="homeHandle"></Cube>
                 <Follow v-if="current == '3' && isShouye == false" :dept="dept"  :params="params" @detail="showDetail"
                     @urge="showUrge"
+                    @jtgzrw="showJtgzrw"
                     @ishowCollect="collectModelVisible=true"
                     @closeCollect="collectModelVisible=false">
                     <template #extra>
@@ -48,6 +50,7 @@ import Dept from '../commonComponents/IJxLeaderPad/dept.vue' //承办单位以�
 import Cube from '../commonComponents/IJxLeaderPad/cube.vue'
 import Follow from '../commonComponents/IJxLeaderPad/follow.vue' //特别关注的列表项
 import Urge from '../commonComponents/IJxLeaderPad/urge.vue'
+import Jtgzrw from '../commonComponents/IJxLeaderPad/jtgzrw.vue'//特别关注点击具体工作任务的详情
 import Detail from '../commonComponents/IJxLeaderPad/detail.vue' //首页的列表详情项
 import Detail2 from '../commonComponents/IJxLeaderPad/detail2.vue' //首页的重点批示和重点任务列表详情项
 import DeptModel from '../commonComponents/IJxLeaderPad/deptModel.vue'
@@ -67,6 +70,7 @@ export default {
         Dept,
         Cube,
         Follow,
+        Jtgzrw,
         Urge,
         Detail,
         Detail2,
@@ -78,6 +82,7 @@ export default {
             isShouye: window.IDM?.url.queryObject().isShouye=="false"?false:true || true,
             current: window.IDM?.url.queryObject().type || '0',
             dept: homeData(),
+            jtgzrwData: null,
             urgeData: null,
             detailData: null,
             isApproval:0,
@@ -603,6 +608,11 @@ export default {
                     })
             }
         },
+        // 特别关注点击具体工作任务和要求详情
+        showJtgzrw(data){
+            this.jtgzrwData = data
+            console.log(this.jtgzrwData,"===");
+        },
         showUrge(value) {
             window.IDM.http
                 .get(this.a+'ctrl/dbWorkbench/getLeaderPadNoticeInfo', {
@@ -632,6 +642,9 @@ export default {
                 .then(({ data }) => {
                     this.urgeData = data.data
                 })
+        },
+        jtgzrwClose(){
+            this.jtgzrwData = null
         },
         urgeClose(){
             // if(this.dept.label=='重要批示' || this.dept.label=='重点任务'){
@@ -881,7 +894,7 @@ html {
 <style lang="scss" scoped>
 .idm-db-IJxLeaderPad-container {
     gap: 2.5rem;
-    // background: #8fc7ff;
+    background: #8fc7ff;
     overflow-y: hidden;
     .main-container {
         padding: 0 3.75rem 3.75rem;
