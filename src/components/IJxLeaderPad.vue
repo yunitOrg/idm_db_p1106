@@ -15,7 +15,7 @@
                 <Detail2 v-else-if="detailData && isShouye == false && (dept.label=='重要批示' || dept.label=='重点任务')" :params="params" :data="detailData"
                     @urge="showUrge2" @close="detailData = null" />
                 <Cube v-else-if="current == '2' && isShouye == false" :params="params" @home="homeHandle"></Cube>
-                <Follow v-if="current == '3' && isShouye == false" :dept="dept"  :params="params" @detail="showDetail"
+                <Follow v-if="current == '3' && isShouye == false " :dept="dept"  :params="params" @detail="showDetail"
                     @urge="showUrge"
                     @jtgzrw="showJtgzrw"
                     @ishowCollect="collectModelVisible=true"
@@ -24,7 +24,7 @@
                         <div @click="homeHandle" class="pointer btn-back">返回首页</div>
                     </template>
                 </Follow>
-                <Dept v-if="(current != '2' || current != '3') && isShouye == false" :homeType="homeType" :dept="dept" :params="params"
+                <Dept v-if="current != '2' && current != '3' && isShouye == false" :homeType="homeType" :dept="dept" :params="params"
                     @detail="showDetail" @urge="showUrge"
                     @ishowCollect="collectModelVisible=true"
                     @closeCollect="collectModelVisible=false">
@@ -898,6 +898,9 @@ html {
     overflow-y: hidden;
     .main-container {
         padding: 0 3.75rem 3.75rem;
+        &>div:nth-child(2){
+            margin-top: 3.75rem;
+        }
     }
 
     .btn-back {
