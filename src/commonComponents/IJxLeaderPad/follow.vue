@@ -15,16 +15,16 @@
                             </a-select-option>
                         </a-select>
                     </div>
-                    <!-- <div class="selectBox">
+                    <div class="selectBox">
                         <span>类型：</span>
                         <a-cascader v-model="leixing" allowClear placeholder="" :options="options" change-on-select
                             @change="getLeixing" />
-                    </div> -->
-                    <div class="selectBox">
+                    </div>
+                    <!-- <div class="selectBox">
                         <span>落实状态：</span>
                         <a-cascader v-model="lszt" allowClear placeholder="" :options="options2" change-on-select
                             @change="getLszt" />
-                    </div>
+                    </div> -->
                     <!-- <div class="dateArray">
                         <span>办结期限：</span>
                         <a-config-provider :locale="locale">
@@ -38,7 +38,7 @@
                         重置
                     </div>
                 </div>
-                <!-- <Status v-for="i in [4, 2, 1]" :key="i" :value="i" :showLabel="true" /> -->
+                <Status v-for="i in [4, 2, 1]" :key="i" :value="i" :showLabel="true" />
             </div>
             <div class="flex-1 h-0 overflow-auto">
                 <a-config-provider :locale="locale">
@@ -55,12 +55,12 @@
                                 {{ record.approvalImportantText }}
                             </div>
                         </template>
-                        <!-- <template slot="approvalBt" slot-scope="text, record">
+                        <template slot="approvalBt" slot-scope="text, record">
                             <div @click="detailHandle(record)" class="pointer text-start">{{ text }}</div>
-                        </template> -->
-                        <template slot="jvgzrwyq" slot-scope="text, record">
-                            <div @click="jtgzrwHandle(record)" class="pointer text-start">{{ record.jvgzrwyq }}</div>
                         </template>
+                        <!-- <template slot="jvgzrwyq" slot-scope="text, record">
+                            <div @click="jtgzrwHandle(record)" class="pointer text-start">{{ record.jvgzrwyq }}</div>
+                        </template> -->
                         <template slot="operation" slot-scope="text, record">
                             <div class="flex items-center justify-center">
                                 <div @click="followHandle(record)" class="pointer btn-operation">
@@ -218,31 +218,31 @@ export default {
                         align: 'center',
                         customRender: (text, record, index) => index + 1
                     },
-                    // {
-                    //     title: '督办状态',
-                    //     dataIndex: 'padLight',
-                    //     filters: [
-                    //         {
-                    //             text: '超期',
-                    //             value: '4'
-                    //         },
-                    //         {
-                    //             text: '预警',
-                    //             value: '2'
-                    //         },
-                    //         {
-                    //             text: '正常',
-                    //             value: '1'
-                    //         }
-                    //     ],
-                    //     onFilter: (value, record) => value == record.padLight,
-                    //     width: '19rem',
-                    //     align: 'center',
-                    //     scopedSlots: {
-                    //         customRender: 'status'
-                    //     },
-                    //     sorter: (prev, current) => current.padLight > prev.padLight
-                    // },
+                    {
+                        title: '督办状态',
+                        dataIndex: 'padLight',
+                        filters: [
+                            {
+                                text: '超期',
+                                value: '4'
+                            },
+                            {
+                                text: '预警',
+                                value: '2'
+                            },
+                            {
+                                text: '正常',
+                                value: '1'
+                            }
+                        ],
+                        onFilter: (value, record) => value == record.padLight,
+                        width: '19rem',
+                        align: 'center',
+                        scopedSlots: {
+                            customRender: 'status'
+                        },
+                        sorter: (prev, current) => current.padLight > prev.padLight
+                    },
                     // {
                     //     title: '重要程度',
                     //     dataIndex: 'approvalImportant',
@@ -268,58 +268,58 @@ export default {
                     //     },
                     //     sorter: (prev, current) => current.approvalImportant > prev.approvalImportant
                     // },
-                    // {
-                    //     title: '标题',
-                    //     dataIndex: 'approvalBt',
-                    //     align: 'center',
-                    //     scopedSlots: {
-                    //         customRender: 'approvalBt'
-                    //     }
-                    // },
                     {
-                        title: '具体工作任务和要求',
-                        dataIndex: 'jvgzrwyq',
-                        width: '30rem',
+                        title: '标题',
+                        dataIndex: 'approvalBt',
                         align: 'center',
                         scopedSlots: {
-                            customRender: 'jvgzrwyq'
+                            customRender: 'approvalBt'
                         }
                     },
                     {
-                        title: '牵头部门',
-                        dataIndex: 'qtbm',
+                        title: '落实状态',
+                        dataIndex: 'extImplementationStatusText',
+                        width: '21.38rem',
+                        align: 'center',
+                    },
+                    {
+                        title: '承办单位',
+                        dataIndex: 'handlerUnitText',
                         width: '21.38rem',
                         align: 'center'
                     },
                     {
-                        title: '责任处室',
-                        dataIndex: 'zrcs',
-                        width: '21.38rem',
-                        align: 'center',
-                    },
-                    {
-                        title: '落实状态',
-                        dataIndex: 'jointRsztText',
-                        width: '21.38rem',
-                        align: 'center',
+                        title: '办结期限',
+                        dataIndex: 'endDate',
+                        width: '26rem',
+                        align: 'center'
                     },
                     // {
-                    //     title: '落实状态',
-                    //     dataIndex: 'extImplementationStatusText',
+                    //     title: '具体工作任务和要求',
+                    //     dataIndex: 'jvgzrwyq',
+                    //     width: '30rem',
+                    //     align: 'center',
+                    //     scopedSlots: {
+                    //         customRender: 'jvgzrwyq'
+                    //     }
+                    // },
+                    // {
+                    //     title: '牵头部门',
+                    //     dataIndex: 'qtbm',
+                    //     width: '21.38rem',
+                    //     align: 'center'
+                    // },
+                    // {
+                    //     title: '责任处室',
+                    //     dataIndex: 'zrcs',
                     //     width: '21.38rem',
                     //     align: 'center',
                     // },
                     // {
-                    //     title: '承办单位',
-                    //     dataIndex: 'handlerUnitText',
+                    //     title: '落实状态',
+                    //     dataIndex: 'jointRsztText',
                     //     width: '21.38rem',
-                    //     align: 'center'
-                    // },
-                    // {
-                    //     title: '办结期限',
-                    //     dataIndex: 'endDate',
-                    //     width: '26rem',
-                    //     align: 'center'
+                    //     align: 'center',
                     // },
                     {
                         title: '操作',
@@ -467,7 +467,7 @@ export default {
     },
     mounted() {
         this.getOptions()
-        this.getOptions2()
+        // this.getOptions2()
         this.getDbGkData()
     },
     methods: {
@@ -558,7 +558,7 @@ export default {
                             startTime: this.times[0] ? this.times[0] : "",
                             endTime: this.times[1] ? this.times[1] : "",
                             yearParam: this.year,
-                            lszt:this.lszt && this.lszt.length > 0 ? this.lszt[0] : ""
+                            // lszt:this.lszt && this.lszt.length > 0 ? this.lszt[0] : ""
                         },
                         {
                             headers: {
@@ -598,7 +598,7 @@ export default {
                         startTime: this.times[0] ? this.times[0] : "",
                         endTime: this.times[1] ? this.times[1] : "",
                         yearParam: this.year,
-                        lszt:this.lszt && this.lszt.length > 0 ? this.lszt[0] : ""
+                        // lszt:this.lszt && this.lszt.length > 0 ? this.lszt[0] : ""
                     },
                     {
                         headers: {
