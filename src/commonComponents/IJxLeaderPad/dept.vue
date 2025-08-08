@@ -262,16 +262,17 @@ export default {
            
         },
         columns() {
-            const hasRemark = this.data.some(item => item.showBtRemark === true);
+            // const hasRemark = this.data.some(item => item.showBtRemark === true);
+            const hasRemark=true
              let stra='（标注“'
              let strb=''
              let xing='*'
-             if(this.leixing[0]==52 && hasRemark==true){
+             if(this.leixing[0]==52 ){
 
                 strb='”为重点核查件）'
-             }else if(this.leixing[0]==64 && hasRemark==true){
+             }else if(this.leixing[0]==64 ){
                     strb='”为重点提案）'
-             }else if(this.leixing[0]==62 && hasRemark==true){
+             }else if(this.leixing[0]==62 ){
                     strb='”为重点建议）'
              }else{
                 stra=''
@@ -340,7 +341,7 @@ export default {
                         //     sorter: (prev, current) => current.approvalImportant > prev.approvalImportant
                         // },
                         {
-                            title: hasRemark ? [' 标题', this.$createElement('span', { style: { 'font-weight': 400 } }, stra), this.$createElement('span', { style: { color: 'red', "font-weight": 700, "font-size": "4.4rem", "display": "inline-block", 'width': '5rem', 'margin-top': '1rem' } }, xing), this.$createElement('span', { style: { 'font-weight': 400 } }, strb)] : ['标题', this.$createElement('span', { style: { 'font-weight': 400 } }, stra), this.$createElement('span', { style: { color: 'red', "font-weight": 700, "font-size": "4.4rem", "display": "inline-block", 'width': '5rem', 'margin-top': '1rem' } }, xing), this.$createElement('span', { style: { 'font-weight': 400 } }, strb)],
+                            title: ['标题', this.$createElement('span', { style: { 'font-weight': 400 } }, stra), this.$createElement('span', { style: { color: 'red', "font-weight": 700, "font-size": "4.4rem", "display": "inline-block", 'width': '5rem', 'margin-top': '1rem' } }, xing), this.$createElement('span', { style: { 'font-weight': 400 } }, strb)],
                             // title:() => {
                             //     return (
                             //         <div>
@@ -452,7 +453,7 @@ export default {
                         //     sorter: (prev, current) => current.approvalImportant > prev.approvalImportant
                         // },
                         {
-                            title: hasRemark ? [' 标题', this.$createElement('span', { style: { 'font-weight': 400 } }, stra), this.$createElement('span', { style: { color: 'red', "font-weight": 700, "font-size": "4.4rem", "display": "inline-block", 'width': '5rem', 'margin-top': '1rem' } }, xing), this.$createElement('span', { style: { 'font-weight': 400 } }, strb)] : ['标题', this.$createElement('span', { style: { 'font-weight': 400 } }, stra), this.$createElement('span', { style: { color: 'red', "font-weight": 700, "font-size": "4.4rem", "display": "inline-block", 'width': '5rem', 'margin-top': '1rem' } }, xing), this.$createElement('span', { style: { 'font-weight': 400 } }, strb)],
+                            title: ['标题', this.$createElement('span', { style: { 'font-weight': 400 } }, stra), this.$createElement('span', { style: { color: 'red', "font-weight": 700, "font-size": "4.4rem", "display": "inline-block", 'width': '5rem', 'margin-top': '1rem' } }, xing), this.$createElement('span', { style: { 'font-weight': 400 } }, strb)],
                             // title:() => {
                             //     return (
                             //         <div>
@@ -559,7 +560,7 @@ export default {
                     //     sorter: (prev, current) => current.approvalImportant > prev.approvalImportant
                     // },
                     {
-                        title: hasRemark ? [' 标题',this.$createElement('span', { style: {'font-weight' : 400 } },stra),this.$createElement('span', { style: { color: 'red',"font-weight":700,"font-size":"4.4rem","display": "inline-block",'width':'5rem','margin-top':'1rem' } }, xing), this.$createElement('span',{ style: {'font-weight' : 400 } }, strb)] :[ '标题',this.$createElement('span',{ style: {'font-weight' : 400 } }, stra),this.$createElement('span', { style: { color: 'red',"font-weight":700,"font-size":"4.4rem","display": "inline-block",'width':'5rem','margin-top':'1rem' } }, xing), this.$createElement('span',{ style: {'font-weight' : 400 } }, strb)],
+                        title: ['标题', this.$createElement('span', { style: { 'font-weight': 400 } }, stra), this.$createElement('span', { style: { color: 'red', "font-weight": 700, "font-size": "4.4rem", "display": "inline-block", 'width': '5rem', 'margin-top': '1rem' } }, xing), this.$createElement('span', { style: { 'font-weight': 400 } }, strb)],
                         dataIndex: 'approvalBt',
                         align: 'center',
                         scopedSlots: {
