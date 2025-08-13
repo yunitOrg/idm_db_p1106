@@ -15,16 +15,16 @@
                             </a-select-option>
                         </a-select>
                     </div>
-                    <div class="selectBox">
+                    <!-- <div class="selectBox">
                         <span>类型：</span>
                         <a-cascader v-model="leixing" allowClear placeholder="" :options="options" change-on-select
                             @change="getLeixing" />
-                    </div>
-                    <!-- <div class="selectBox">
+                    </div> -->
+                    <div class="selectBox">
                         <span>落实状态：</span>
                         <a-cascader v-model="lszt" allowClear placeholder="" :options="options2" change-on-select
                             @change="getLszt" />
-                    </div> -->
+                    </div>
                     <!-- <div class="dateArray">
                         <span>办结期限：</span>
                         <a-config-provider :locale="locale">
@@ -48,16 +48,16 @@
                                 <Status :value="text" />
                             </div>
                         </template>
-                        <template slot="important" slot-scope="text, record">
+                        <!-- <template slot="important" slot-scope="text, record">
                             <div class="flex justify-center" :style="{
                                 color: record.approvalImportant == 2 ? 'red' : '#333'
                             }">
                                 {{ record.approvalImportantText }}
                             </div>
-                        </template>
-                        <template slot="approvalBt" slot-scope="text, record">
+                        </template> -->
+                        <!-- <template slot="approvalBt" slot-scope="text, record">
                             <div @click="detailHandle(record)" class="pointer text-start">{{ text }}</div>
-                        </template>
+                        </template> -->
                         <!-- <template slot="jvgzrwyq" slot-scope="text, record">
                             <div @click="jtgzrwHandle(record)" class="pointer text-start">{{ record.jvgzrwyq }}</div>
                         </template> -->
@@ -211,38 +211,61 @@ export default {
         columns() {
             if (this.current == '3') {
                 return [
-                    {
+                {
                         title: '序号',
                         dataIndex: 'index',
                         width: '9rem',
                         align: 'center',
-                        customRender: (text, record, index) => index + 1
-                    },
-                    {
-                        title: '督办状态',
-                        dataIndex: 'padLight',
-                        filters: [
-                            {
-                                text: '超期',
-                                value: '4'
-                            },
-                            {
-                                text: '预警',
-                                value: '2'
-                            },
-                            {
-                                text: '正常',
-                                value: '1'
+                        customRender: (text, record, index) => {
+                            // 只有在需要显示的行（_jointIndex === 0）才显示序号并设置 rowSpan
+                            if (record._jointIndex === 0) {
+                            // 计算合并后的序号
+                            let visibleIndex = 1;
+                            for (let i = 0; i < index; i++) {
+                                if (this.data[i]._jointIndex === 0) {
+                                visibleIndex++;
+                                }
                             }
-                        ],
-                        onFilter: (value, record) => value == record.padLight,
-                        width: '19rem',
-                        align: 'center',
-                        scopedSlots: {
-                            customRender: 'status'
-                        },
-                        sorter: (prev, current) => current.padLight > prev.padLight
+                            
+                            // 返回序号并设置 rowSpan
+                            return {
+                                children: visibleIndex,
+                                attrs: { rowSpan: record._jvgzrwyq_rowSpan || 1 }
+                            };
+                            }
+                            
+                            // 对于不需要显示的行，不显示内容并设置 rowSpan 为 0
+                            return {
+                            children: '',
+                            attrs: { rowSpan: 0 }
+                            };
+                        }
                     },
+                    // {
+                    //     title: '督办状态',
+                    //     dataIndex: 'padLight',
+                    //     filters: [
+                    //         {
+                    //             text: '超期',
+                    //             value: '4'
+                    //         },
+                    //         {
+                    //             text: '预警',
+                    //             value: '2'
+                    //         },
+                    //         {
+                    //             text: '正常',
+                    //             value: '1'
+                    //         }
+                    //     ],
+                    //     onFilter: (value, record) => value == record.padLight,
+                    //     width: '19rem',
+                    //     align: 'center',
+                    //     scopedSlots: {
+                    //         customRender: 'status'
+                    //     },
+                    //     sorter: (prev, current) => current.padLight > prev.padLight
+                    // },
                     // {
                     //     title: '重要程度',
                     //     dataIndex: 'approvalImportant',
@@ -268,59 +291,88 @@ export default {
                     //     },
                     //     sorter: (prev, current) => current.approvalImportant > prev.approvalImportant
                     // },
-                    {
-                        title: '标题',
-                        dataIndex: 'approvalBt',
-                        align: 'center',
-                        scopedSlots: {
-                            customRender: 'approvalBt'
-                        }
-                    },
-                    {
-                        title: '落实状态',
-                        dataIndex: 'extImplementationStatusText',
-                        width: '21.38rem',
-                        align: 'center',
-                    },
-                    {
-                        title: '承办单位',
-                        dataIndex: 'handlerUnitText',
-                        width: '21.38rem',
-                        align: 'center'
-                    },
-                    {
-                        title: '办结期限',
-                        dataIndex: 'endDate',
-                        width: '26rem',
-                        align: 'center'
-                    },
                     // {
-                    //     title: '具体工作任务和要求',
-                    //     dataIndex: 'jvgzrwyq',
-                    //     width: '30rem',
+                    //     title: '标题',
+                    //     dataIndex: 'approvalBt',
                     //     align: 'center',
                     //     scopedSlots: {
-                    //         customRender: 'jvgzrwyq'
+                    //         customRender: 'approvalBt'
                     //     }
                     // },
                     // {
-                    //     title: '牵头部门',
-                    //     dataIndex: 'qtbm',
+                    //     title: '落实状态',
+                    //     dataIndex: 'extImplementationStatusText',
+                    //     width: '21.38rem',
+                    //     align: 'center',
+                    // },
+                    // {
+                    //     title: '承办单位',
+                    //     dataIndex: 'handlerUnitText',
                     //     width: '21.38rem',
                     //     align: 'center'
                     // },
                     // {
-                    //     title: '责任处室',
-                    //     dataIndex: 'zrcs',
-                    //     width: '21.38rem',
-                    //     align: 'center',
+                    //     title: '办结期限',
+                    //     dataIndex: 'endDate',
+                    //     width: '26rem',
+                    //     align: 'center'
                     // },
-                    // {
-                    //     title: '落实状态',
-                    //     dataIndex: 'jointRsztText',
-                    //     width: '21.38rem',
-                    //     align: 'center',
-                    // },
+                    {
+                        title: '具体工作任务和要求',
+                        dataIndex: 'jvgzrwyq',
+                        width: '30rem',
+                        align: 'center',
+                        customRender: (text, record) => {
+                            const rowSpan = record._jvgzrwyq_rowSpan;
+                            // 只有 rowSpan 为 0 时不显示内容，其他情况都应该显示
+                            if (rowSpan === 0) {
+                            return {
+                                children: '',
+                                attrs: { rowSpan: 0 }  // 尝试使用 attrs 而不是 props
+                            };
+                            }
+                            // rowSpan > 0 时显示内容并设置 rowSpan
+                            return {
+                            children: this.$createElement('div', {
+                                class: ['text-start']
+                            }, record.jvgzrwyq || ''),
+                            attrs: { rowSpan: rowSpan || 1 }  // 尝试使用 attrs 而不是 props
+                            };
+                        }
+                    },
+                    {
+                        title: '牵头部门',
+                        dataIndex: '_qtbm',
+                        width: '21.38rem',
+                        align: 'center',
+                        //添加点击事件
+                        customRender: (text, record) => {
+                            return this.$createElement('div', {
+                                on: {
+                                    click: () => this.jtgzrwHandle(record)
+                                },
+                                class: ['pointer']
+                            }, record._qtbm || '');
+                        }
+                    },
+                    {
+                    title: '责任处室',
+                    dataIndex: '_zrcs',
+                    width: '21.38rem',
+                    align: 'center',
+                    customRender: (text, record) => {
+                        return record._zrcs || '';
+                    }
+                    },
+                    {
+                    title: '落实状态',
+                    dataIndex: '_jointRsztText',
+                    width: '21.38rem',
+                    align: 'center',
+                    customRender: (text, record) => {
+                        return record._jointRsztText || '';
+                    }
+                    },
                     {
                         title: '操作',
                         dataIndex: 'operation',
@@ -467,7 +519,7 @@ export default {
     },
     mounted() {
         this.getOptions()
-        // this.getOptions2()
+        this.getOptions2()
         this.getDbGkData()
     },
     methods: {
@@ -558,7 +610,7 @@ export default {
                             startTime: this.times[0] ? this.times[0] : "",
                             endTime: this.times[1] ? this.times[1] : "",
                             yearParam: this.year,
-                            // lszt:this.lszt && this.lszt.length > 0 ? this.lszt[0] : ""
+                            lszt:this.lszt && this.lszt.length > 0 ? this.lszt[0] : ""
                         },
                         {
                             headers: {
@@ -573,6 +625,76 @@ export default {
                      
                     })
             }
+        },
+        // 修改数据处理方法，根据 jointJsonArray 展开数据
+        processTableData(rawData) {
+            const expandedData = [];
+            
+            rawData.forEach((item, index) => {
+            const jointArray = item.jointJsonArray || [];
+            
+            // 如果 jointJsonArray 为空或长度为0，添加一条记录
+            if (jointArray.length === 0) {
+                expandedData.push({
+                ...item,
+                _originalIndex: index,
+                _jointIndex: 0,
+                _jointTotal: 1,
+                _qtbm: item.qtbm || '',
+                _zrcs: item.zrcs || '',
+                _jtrsqk: item.jtrsqk || '',
+                _rsztText: item.rsztText || '',
+                _jointRsztText: item.jointRsztText || ''
+                });
+            } else {
+                // 根据 jointJsonArray 长度展开数据
+                jointArray.forEach((jointItem, jointIndex) => {
+                expandedData.push({
+                    ...item,
+                    _originalIndex: index,
+                    _jointIndex: jointIndex,
+                    _jointTotal: jointArray.length,
+                    _qtbm: jointItem.qtbms || '',
+                    _zrcs: jointItem.zrcs || '',
+                    _jtrsqk: jointItem.jtrsqk || '',
+                    _rsztText: jointItem.rsztText || '',
+                    _jointRsztText: jointItem.jointRsztText || ''
+                });
+                });
+            }
+            });
+            console.log(expandedData,"----");
+            // 添加合并信息
+            return this.addMergeInfo(expandedData);
+        },
+        
+        // 添加合并信息
+        addMergeInfo(data) {
+            const mergedData = [...data];
+            let i = 0;
+            
+            while (i < mergedData.length) {
+            const currentRow = mergedData[i];
+            
+            // 只有第一个子项才需要设置 rowSpan
+            if (currentRow._jointIndex === 0) {
+                const total = currentRow._jointTotal;
+                currentRow._jvgzrwyq_rowSpan = total;
+                
+                // 后续相同原始记录的行设置 rowSpan 为 0
+                for (let j = 1; j < total; j++) {
+                if (i + j < mergedData.length && mergedData[i + j]._originalIndex === currentRow._originalIndex) {
+                    mergedData[i + j]._jvgzrwyq_rowSpan = 0;
+                }
+                }
+                
+                i += total;
+            } else {
+                i++;
+            }
+            }
+            
+            return mergedData;
         },
         fetchData() {
             this.loading = true
@@ -598,7 +720,7 @@ export default {
                         startTime: this.times[0] ? this.times[0] : "",
                         endTime: this.times[1] ? this.times[1] : "",
                         yearParam: this.year,
-                        // lszt:this.lszt && this.lszt.length > 0 ? this.lszt[0] : ""
+                        lszt:this.lszt && this.lszt.length > 0 ? this.lszt[0] : ""
                     },
                     {
                         headers: {
@@ -607,7 +729,11 @@ export default {
                     }
                 )
                 .then(({ data }) => {
-                    this.data = data.data
+                    // this.data = data.data
+                    // 对需要合并的列进行处理，例如 handlerUnitText 列
+                     // 使用新的数据处理方法
+                    this.data = this.processTableData(data.data);
+                    console.log(this.data,"++++");
                 })
                 .finally(() => {
                     this.loading = false
@@ -686,6 +812,7 @@ export default {
         reset(){
             this.bt=""
             this.leixing=[]
+            this.lszt=[]
             this.year=new Date().getFullYear()
             this.$nextTick(()=>{
                 this.fetchStat()

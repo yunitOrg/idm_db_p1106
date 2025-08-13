@@ -14,13 +14,13 @@
                     </tr>
                     <tr>
                         <th>牵头部门</th>
-                        <td>{{ data.qtbm }}</td>
+                        <td>{{ data._qtbm }}</td>
                         <th>责任处室</th>
-                        <td>{{ data.zrcs }}</td>
+                        <td>{{ data._zrcs }}</td>
                     </tr>
                     <tr>
                         <th>落实状态</th>
-                        <td colspan="3">{{ data.rsztText }}</td>
+                        <td colspan="3">{{ data._rsztText }}</td>
                     </tr>
                     <tr>
                         <th>细化落实举措</th>
@@ -28,7 +28,7 @@
                     </tr>
                     <tr>
                         <th>具体落实情况</th>
-                        <td colspan="3">{{ data.jtrsqk }}</td>
+                        <td colspan="3">{{ data._jtrsqk }}</td>
                     </tr>
                 </table>
             </div>
