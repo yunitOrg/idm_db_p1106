@@ -28,7 +28,7 @@
                 </div>
                 <div class="super-middle" v-if="!propData.isMoOpen">
                     <span class="super-mr10">督办类型</span>
-                    <a-select v-model="search.approvalType" allowClear style="width: 50%">
+                    <a-select v-model="search.approvalType" allowClear>
                         <a-select-option :value="item.value" v-for="(item, index) in superType" :key="index">
                             {{ item.text }}
                         </a-select-option>
@@ -36,7 +36,7 @@
                 </div>
                 <div class="super-middle">
                     <span class="super-mr10">督办分类</span>
-                    <a-select v-model="search.extApprovalTypeSzjw" allowClear style="width: 50%">
+                    <a-select v-model="search.extApprovalTypeSzjw" allowClear>
                         <a-select-option :value="item.value" v-for="(item, index) in superApprovalCategory" :key="index">
                             {{ item.text }}
                         </a-select-option>
@@ -44,15 +44,19 @@
                 </div>
                 <div class="super-middle">
                     <span class="super-mr10">办理方式</span>
-                    <a-select v-model="search.handlingMethod" allowClear style="width: 50%">
+                    <a-select v-model="search.handlingMethod" allowClear>
                         <a-select-option :value="item.value" v-for="(item, index) in superHandlingMethod" :key="index">
                             {{ item.text }}
                         </a-select-option>
                     </a-select>
                 </div>
                 <div class="super-middle">
+                    <span class="super-mr10">主办部门</span>
+                    <a-input v-model="search.hostStrQuery" placeholder="请输入主办部门" allowClear class="super-inputbtn"></a-input>
+                </div>
+                <div class="super-middle">
                     <span class="super-mr10">分管领导</span>
-                    <a-select v-model="search.directLeader" allowClear style="width: 50%">
+                    <a-select v-model="search.directLeader" allowClear>
                         <a-select-option :value="item.value" v-for="(item, index) in superUnitLeaders" :key="index">
                             {{ item.text }}
                         </a-select-option>
@@ -60,21 +64,21 @@
                 </div>
                 <div class="super-middle">
                     <span class="super-mr10">项目状态</span>
-                    <a-select v-model="search.dbStatus" allowClear style="width: 50%">
+                    <a-select v-model="search.dbStatus" allowClear>
                         <a-select-option :value="item.value" v-for="(item, index) in superState" :key="index">
                             {{ item.text }}
                         </a-select-option>
                     </a-select>
                 </div>
-                <div class="super-middle">
+                <div class="super-middle dateRange">
                     <span class="super-mr10">立项日期</span>
                     <template v-if="propData.isMoOpen">
                         <a-config-provider :locale="locale">
-                            <a-date-picker v-model="search.startDate" valueFormat="YYYY-MM-DD" />
+                            <a-date-picker v-model="search.startDate" placeholder="请选择" valueFormat="YYYY-MM-DD" />
                         </a-config-provider>
                         <span class="super-split">~</span>
                         <a-config-provider :locale="locale">
-                            <a-date-picker v-model="search.endDate" valueFormat="YYYY-MM-DD" />
+                            <a-date-picker v-model="search.endDate" placeholder="请选择" valueFormat="YYYY-MM-DD" />
                         </a-config-provider>
                     </template>
                     <template v-else>
@@ -315,18 +319,19 @@ export default {
                 pageNo: 1,
                 pageSize: 30,
                 totalCount: 0,
-                extRelevanceWh:'',// 收文号
+                extRelevanceWh: '', // 收文号
                 whQuery: '', // 编号
                 contentQuery: '', // 检索内容
                 approvalType: '', // 督办类型
-                extApprovalTypeSzjw:"",//督办分类
+                extApprovalTypeSzjw: '', //督办分类
                 handlingMethod: '', // 办理方式
                 unitLeaders: '', // 分管领导
-                directLeader:'',//分管领导
+                directLeader: '', //分管领导
                 dbStatus: '', // 项目状态
                 startDate: '', // 开始时间
                 endDate: '', // 结束时间
-                dbTime: [] // 立项日期
+                dbTime: [], // 立项日期
+                hostStrQuery: '' // 主办部门
             },
             reload: true,
             singMoreShowData: [], // 多任务里面
@@ -355,16 +360,17 @@ export default {
                     },
                     {
                         name: '主办部门'
-                    },
-                    {
-                        name: '协办部门'
                     }
+                    // {
+                    //     name: '协办部门'
+                    // }
                 ],
                 columnAddNameList: [
                     {
                         key: 7,
                         name: '承办部门',
-                        field: 'hostStr'
+                        field: 'hostStr',
+                        width: '8%'
                     }
                 ],
                 ulbox: {
@@ -405,10 +411,10 @@ export default {
                 { title: '办理方式', dataIndex: 'handlingMethodText', align: 'center', key: 'handlingMethodText', width: '8%', sortField: 'handlingMethodText' },
                 { title: '立项日期', dataIndex: 'ngrq', align: 'center', key: 'ngrq', width: '8%', sortField: 'ngrq' },
                 { title: '交办日期', dataIndex: 'handoverDate', align: 'center', key: 'handoverDate', width: '8%', sortField: 'handoverDate' },
-                { title: '分管领导', dataIndex: 'directLeaderText', align: 'center', key: 'directLeaderText', width: '8%'},
+                { title: '分管领导', dataIndex: 'directLeaderText', align: 'center', key: 'directLeaderText', width: '8%' },
                 { title: '办结期限', dataIndex: 'endDate', align: 'center', key: 'endDate', width: '8%', sortField: 'endDate' },
                 { title: '主办部门', dataIndex: 'hostStr', align: 'center', key: 'hostStr', width: '8%' },
-                { title: '协办部门', dataIndex: 'assistStr', align: 'center', key: 'assistStr', width: '8%' },
+                // { title: '协办部门', dataIndex: 'assistStr', align: 'center', key: 'assistStr', width: '8%' },
                 { title: '操作', key: 'operation', align: 'center', width: '100px', scopedSlots: { customRender: 'operation' } }
             ],
             listData: [],
@@ -438,7 +444,7 @@ export default {
         // 删除列
         if (this.propData.columnAddNameList && this.propData.columnAddNameList.length > 0) {
             this.propData.columnAddNameList.forEach((item) => {
-                let obj = { title: item.name, dataIndex: item.field, align: 'center', key: item.field, width: item.width, }
+                let obj = { title: item.name, dataIndex: item.field, align: 'center', key: item.field, width: item.width }
                 this.columns.splice(item.key, 0, obj)
             })
         }
@@ -455,7 +461,7 @@ export default {
     },
     methods: {
         addSorteField() {
-            let ary = ['dbStatusText','extRelevanceWh', 'wh','extApprovalTypeSzjw','handlingMethod', 'bt', 'approvalTypeText', 'ngrq', 'handoverDate', 'endDate']
+            let ary = ['dbStatusText', 'extRelevanceWh', 'wh', 'extApprovalTypeSzjw', 'handlingMethod', 'bt', 'approvalTypeText', 'ngrq', 'handoverDate', 'endDate']
             this.columns.forEach((item) => {
                 if (this.propData.isSorte && ary.includes(item.dataIndex)) {
                     item.sorter = true
@@ -515,16 +521,16 @@ export default {
         },
         // 督办类型选择
         async handleSuperSelectData(type, result) {
-            let res = null;
+            let res = null
             if (type == 1) {
                 res = await API.ApiPprovalTypeSelect()
-            }else if (type == 2) {
+            } else if (type == 2) {
                 res = await API.ApiDbStatusSelect()
-            }else if (type == 3) {
+            } else if (type == 3) {
                 res = await API.ApiDbApprovalCategorySelect()
-            }else if (type == 4) {
+            } else if (type == 4) {
                 res = await API.ApiDbHandlingMethodSelect()
-            }else if (type == 5) {
+            } else if (type == 5) {
                 res = await API.ApiDbUnitLeadersSelect()
             }
             if (res.code == '200') {
@@ -895,6 +901,7 @@ export default {
                             data: data
                         })
                 }
+                console.log('listData', data);
                 this.search.totalCount = data.count
                 this.listData = data.data
                 if (this.listData && this.listData.length > 0) {
@@ -970,14 +977,20 @@ export default {
     }
 }
 .super-inputbtn {
-    width: 200px !important;
-    margin-right: 20px !important;
+    flex: 1;
+    margin-right: 10px !important;
 }
 .super-input {
     width: 200px !important;
     margin-right: 20px !important;
     input {
         height: 40px !important;
+    }
+}
+.dateRange {
+    width: auto !important;
+    .ant-calendar-picker {
+        min-width: 95px;
     }
 }
 </style>
@@ -1075,7 +1088,7 @@ export default {
     }
     .super-mr10 {
         color: #333333;
-        margin-right: 20px;
+        margin-right: 10px;
         font-size: 16px;
         font-weight: 500;
         white-space: nowrap;
@@ -1100,6 +1113,10 @@ export default {
         display: flex;
         background-color: #f5f5f5;
         padding: 5px 0;
+        .ant-select {
+            flex: 1;
+            margin-right: 10px;
+        }
     }
     .optionSvg {
         font-size: 18px;

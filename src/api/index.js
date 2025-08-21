@@ -8,7 +8,8 @@ export default {
     * @Author hjp
     */
     async ApiGetDBList(params) {
-      const { data } = await window.IDM.http.post('ctrl/dbApproval/getApprovalList', params, {
+      //ctrl/dbApproval/getApprovalList   
+      const { data } = await window.IDM.http.post('ctrl/dbApprovalCustom/getApprovalList', params, {
         headers: {
           'Content-Type': 'application/json'
         },
