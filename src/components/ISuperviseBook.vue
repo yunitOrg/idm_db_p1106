@@ -468,7 +468,9 @@ export default {
                         item: item
                     })
             } else {
+              if(item.lastFeedbackUrl){
                 window.open(item.lastFeedbackUrl)
+              }
             }
         },
         // 切换时间
