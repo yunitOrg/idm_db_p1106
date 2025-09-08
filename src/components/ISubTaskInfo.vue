@@ -80,7 +80,9 @@ export default {
                         item: item
                     })
             } else {
+              if(item.lastFeedbackUrl){
                 window.open(item.lastFeedbackUrl)
+              }
             }
         },
         // 催办
