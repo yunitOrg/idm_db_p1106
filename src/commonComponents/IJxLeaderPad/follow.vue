@@ -168,7 +168,7 @@ export default {
                 }
             ],
             a:"",
-             showInfo:'',//表格上展示的文字
+            showInfo:'',//表格上展示的文字
         }
     },
     computed: {
@@ -545,7 +545,7 @@ export default {
             console.log(this.lszt);
             if(this.current=='3'){
                 this.$nextTick(()=>{
-                    this.getDbGkData()
+                    // this.getDbGkData()
                 })
             }
         },
