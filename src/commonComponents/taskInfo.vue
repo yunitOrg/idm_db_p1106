@@ -81,7 +81,9 @@
                                         <span>{{ item.lastFeedbackDate }}</span>
                                     </div>
                                 </div>
-                                <div class="content">{{item.lastFeedbackContent}}</div>
+                                <div class="content">
+                                  <span v-html="item.lastFeedbackContent"></span>
+                                </div>
                             </div>
                             <div
                                 v-for="(file, fileIndex) in item.lastFeedbackAttachFiles"
@@ -100,7 +102,7 @@
                     <a-badge v-if="item.unreadInstruction != null" :count="item.unreadInstruction" @click="handleOptions({ key: 'notice_leader_instruction_view', record: item })">
                         <img src="../assets/linqi.png" alt="查看批示" />
                     </a-badge>
-                    <div @click="handleShowDialog(item)">
+                    <div v-if="item.dbStatus != 3" @click="handleShowDialog(item)">
                         <svg-icon icon-class="history"></svg-icon>
                         <div>更多</div>
                     </div>
@@ -131,7 +133,9 @@
                             <div class="subtaskdot"></div>
                         </template>
                         <div class="right-content">
-                            <span class="task-font" @click="handleJump(item)">{{ item.feedbackContent }}</span>
+                            <span class="task-font" @click="handleJump(item)">
+                              <span v-html="item.feedbackContent"></span>
+                            </span>
                             <div class="right-file">
                                 <div v-for="(subitem, subindex) in item.feedbackAttachFiles" :key="subindex" :title="subitem.fileName" @click.stop="handleOpen(subitem)">
                                     <svg-icon icon-class="file"></svg-icon>
