@@ -652,6 +652,8 @@ export default {
             // }
             //这里需要调用一下fllow组件中的fetchStat方法
             this.$refs.follow.fetchStat()
+            //这里需要调用一下fllow组件中的fetchData方法刷新下列表数据
+            this.$refs.follow.fetchData()
             this.urgeData = null
         },
         homeHandle() {
