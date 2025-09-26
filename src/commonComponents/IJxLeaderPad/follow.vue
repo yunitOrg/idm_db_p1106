@@ -775,14 +775,18 @@ export default {
                     opType: this.attentionReason.length <= 0 ? 0 : 1,
                     attentionReason: this.attentionReason
                 })
-                .then(({ data }) => { })
-            if (record.attentionstatus == 1) {
-                record.attentionstatus = 0
-            } else {
-                record.attentionstatus = 1
-            }
-            this.fetchStat()
-            this.$emit("closeCollect")
+                .then(({ data }) => { 
+
+                    if (record.attentionstatus == 1) {
+                        record.attentionstatus = 0
+                    } else {
+                        record.attentionstatus = 1
+                    }
+                    this.fetchStat()
+                    this.$emit("closeCollect")
+                }).catch(() => {
+                   
+                })
         },
         //点击具体工作和任务的详情
         jtgzrwHandle(record) {
