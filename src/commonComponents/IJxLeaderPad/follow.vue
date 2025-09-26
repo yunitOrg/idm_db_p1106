@@ -764,7 +764,7 @@ export default {
                 this.attentionReason = ''
                 this.collectHandle(record)
             }
-            this.fetchStat()
+            
         },
         //确定收藏后调用此方法
         collectHandle(record) {
@@ -781,6 +781,7 @@ export default {
             } else {
                 record.attentionstatus = 1
             }
+            this.fetchStat()
             this.$emit("closeCollect")
         },
         //点击具体工作和任务的详情
