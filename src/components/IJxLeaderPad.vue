@@ -15,7 +15,7 @@
                 <Detail2 v-else-if="detailData && isShouye == false && (dept.label=='重要批示' || dept.label=='重点任务')" :params="params" :data="detailData"
                     @urge="showUrge2" @close="detailData = null" />
                 <Cube v-else-if="current == '2' && isShouye == false" :params="params" @home="homeHandle"></Cube>
-                <Follow v-if="current == '3' && isShouye == false " :dept="dept"  :params="params" @detail="showDetail"
+                <Follow ref="follow" v-if="current == '3' && isShouye == false " :dept="dept"  :params="params" @detail="showDetail"
                     @urge="showUrge"
                     @jtgzrw="showJtgzrw"
                     @ishowCollect="collectModelVisible=true"
@@ -650,6 +650,8 @@ export default {
             // if(this.dept.label=='重要批示' || this.dept.label=='重点任务'){
             //     this.showDetail(this.urgeTobackDetail.value,this.urgeTobackDetail.params)
             // }
+            //这里需要调用一下fllow组件中的fetchStat方法
+            this.$refs.follow.fetchStat()
             this.urgeData = null
         },
         homeHandle() {

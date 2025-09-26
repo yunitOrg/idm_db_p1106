@@ -92,7 +92,8 @@ export default {
             urgeUserIds: [],
             urgeUserList:[],
             saving: false,
-            time: dayjs()
+            time: dayjs(),
+            a:""
         }
     },
     computed: {
@@ -161,9 +162,10 @@ export default {
         },
         saveHandle() {
             this.saving = true
+            
             window.IDM.http
                 .post(
-                    'ctrl/dbWorkbench/padNoticeUrge',
+                    this.a+'ctrl/dbWorkbench/padNoticeUrge',
                     {
                         ...this.params,
                         noticeId: this.data.id,

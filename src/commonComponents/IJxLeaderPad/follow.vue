@@ -38,7 +38,7 @@
                         重置
                     </div>
                 </div>
-                <Status v-for="i in [4, 2, 1]" :key="i" :value="i" :showLabel="true" />
+                <!-- <Status v-for="i in [4, 2, 1]" :key="i" :value="i" :showLabel="true" /> -->
             </div>
             <div class="flex-1 h-0 overflow-auto">
                 <a-config-provider :locale="locale">
@@ -446,8 +446,17 @@ export default {
                         title: '标题',
                         dataIndex: 'approvalBt',
                         align: 'center',
-                        scopedSlots: {
-                            customRender: 'approvalBt'
+                        // scopedSlots: {
+                        //     customRender: 'approvalBt'
+                        // }
+                        //添加点击事件
+                        customRender: (text, record) => {
+                            return this.$createElement('div', {
+                                on: {
+                                    click: () => this.detailHandle(record)
+                                },
+                                class: ['pointer']
+                            }, record.approvalBt || '');
                         }
                     },
                     {
@@ -486,23 +495,30 @@ export default {
         dept: {
             handler(val) {
                 this.year = new Date().getFullYear()
-                this.getDbGkData()
                 this.leixing = []
+                this.$nextTick(()=>{
+                    this.getDbGkData()
+                })
             },
             immediate: true
         },
         params: {
             handler() {
-                this.fetchStat()
-                this.fetchStat()
+                this.lszt = []
+                this.$nextTick(()=>{
+                    this.fetchStat()
+                })
             },
             immediate: true
         },
         query: {
             handler() {
+                this.lszt = []
                 console.log(this.query, "----hhhhh");
-                this.fetchStat()
-                this.fetchData()
+                this.$nextTick(()=>{
+                    this.fetchStat()
+                    this.fetchData()
+                })
             },
             immediate: true
         }
@@ -552,6 +568,7 @@ export default {
         //tab切换的事件
         changeHandle(active){
             // this.active=active
+            // this.lszt=[]
             if(active!='3'){
                 this.showInfo=''
             }else if(active=='3'){
@@ -595,7 +612,7 @@ export default {
                     this.stat = data.data
                 })
         },
-          //获取督办概况的数据/ctrl/dbWorkbench/getDbSummaryContent
+        //获取督办概况的数据/ctrl/dbWorkbench/getDbSummaryContent
         getDbGkData(){
             console.log(this.current,';;;');
             if(this.current=='3'){
@@ -747,6 +764,7 @@ export default {
                 this.attentionReason = ''
                 this.collectHandle(record)
             }
+            this.fetchStat()
         },
         //确定收藏后调用此方法
         collectHandle(record) {
