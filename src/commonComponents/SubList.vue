@@ -26,6 +26,7 @@
                 @handleOptions="handleOptions"
                 @handleContentJump="handleContentJump"
                 @handleFileOpen="handleFileOpen"
+                @handleFileDownload="handleFileDownload"
             />
         </template>
     </div>
@@ -113,6 +114,22 @@ export default {
                 if (top.Public) {
                     // 使用public.js调用方法
                     top.Public.officeLook(item.fileName, item.id, '', true)
+                }
+            }
+        },
+        // 附件下载跳转
+        handleFileDownload(item) {
+            if (this.propData.handleFileDownloadFunc && this.propData.handleFileDownloadFunc.length > 0) {
+                let name = this.propData.handleFileDownloadFunc[0].name
+                window[name] &&
+                    window[name].call(this, {
+                        _this: this,
+                        item: item
+                    })
+            } else {
+                if (top.Public) {
+                    // 使用public.js调用方法
+                    top.Public.downloadFile(item.id,item.fileName,null,null)
                 }
             }
         },

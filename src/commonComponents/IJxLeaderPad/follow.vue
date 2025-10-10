@@ -4,6 +4,7 @@
             <div class="flex justify-end" style="padding: 2rem 0; gap: 2.5rem;align-items: center;position: relative;justify-content: start;">
                 <div class="searchBox">
                     <div class="bt">
+                        
                         <span>标题：</span>
                         <a-input v-model="bt" placeholder="" />
                     </div>
@@ -567,7 +568,7 @@ export default {
         },
         //tab切换的事件
         changeHandle(active){
-            // this.active=active
+            this.tabactive=active
             // this.lszt=[]
             if(active!='3'){
                 this.showInfo=''
@@ -784,6 +785,9 @@ export default {
                     }
                     this.fetchStat()
                     this.$emit("closeCollect")
+                    if(this.tabactive == '1'){
+                        this.fetchData()
+                    }
                 }).catch(() => {
                    
                 })

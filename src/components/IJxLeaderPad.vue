@@ -24,7 +24,7 @@
                         <div @click="homeHandle" class="pointer btn-back">返回首页</div>
                     </template>
                 </Follow>
-                <Dept v-if="current != '2' && current != '3' && isShouye == false" :homeType="homeType" :dept="dept" :params="params"
+                <Dept ref="dept" v-if="current != '2' && current != '3' && isShouye == false" :homeType="homeType" :dept="dept" :params="params"
                     @detail="showDetail" @urge="showUrge"
                     @ishowCollect="collectModelVisible=true"
                     @closeCollect="collectModelVisible=false">
@@ -650,10 +650,16 @@ export default {
             // if(this.dept.label=='重要批示' || this.dept.label=='重点任务'){
             //     this.showDetail(this.urgeTobackDetail.value,this.urgeTobackDetail.params)
             // }
-            //这里需要调用一下fllow组件中的fetchStat方法
-            this.$refs.follow.fetchStat()
-            //这里需要调用一下fllow组件中的fetchData方法刷新下列表数据
-            this.$refs.follow.fetchData()
+            if(this.current == '3' && this.isShouye == false){
+                //这里需要调用一下fllow组件中的fetchStat方法
+                this.$refs.follow.fetchStat()
+                //这里需要调用一下fllow组件中的fetchData方法刷新下列表数据
+                this.$refs.follow.fetchData()
+
+            }
+            if(this.current != '2' && this.current != '3' && this.isShouye == false){
+                this.$refs.dept.fetchData()
+            }
             this.urgeData = null
         },
         homeHandle() {
@@ -898,7 +904,7 @@ html {
 <style lang="scss" scoped>
 .idm-db-IJxLeaderPad-container {
     gap: 2.5rem;
-    // background: #8fc7ff;
+    //background: #8fc7ff;
     overflow-y: hidden;
     .main-container {
         padding: 0 3.75rem 3.75rem;

@@ -137,6 +137,14 @@
                     "desc": "接口参数：自定义函数参数：{_this: this, item: item}",
                     "multiple": false
                 },
+                  {
+                    "type": "actionSelect",
+                    "layoutType": "block",
+                    "text": "附件下载函数",
+                    "bindKey": "handleFileDownloadFunc",
+                    "desc": "接口参数：自定义函数参数：{_this: this, item: item}",
+                    "multiple": false
+                },
                 {
                     "type": "actionSelect",
                     "layoutType": "block",

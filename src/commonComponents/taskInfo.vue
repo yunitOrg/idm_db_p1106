@@ -102,7 +102,7 @@
                     <a-badge v-if="item.unreadInstruction != null" :count="item.unreadInstruction" @click="handleOptions({ key: 'notice_leader_instruction_view', record: item })">
                         <img src="../assets/linqi.png" alt="查看批示" />
                     </a-badge>
-                    <div v-if="item.dbStatus != 3" @click="handleShowDialog(item)">
+                    <div @click="handleShowDialog(item)">
                         <svg-icon icon-class="history"></svg-icon>
                         <div>更多</div>
                     </div>

@@ -39,12 +39,17 @@
                             <div
                                 v-for="(file, fileIndex) in item.lastFeedbackAttachFiles"
                                 :key="fileIndex"
-                                @click.stop="handleOpen(file)"
                                 :file-id="file.id"
                                 class="attachment-row task-file"
+                                style="display: flex;align-items: center;"
                             >
-                                <svg-icon icon-class="file"></svg-icon>
-                                {{ file.fileName }}
+                                <div   @click.stop="handleOpen(file)">
+                                    <svg-icon icon-class="file"></svg-icon>
+                                     {{ file.fileName }}
+                                </div>
+                                <div style="margin-left: 5px;color: red;cursor: pointer;" @click.stop="handleDownload(file)">
+                                    下载
+                                </div>
                             </div>
                         </div>
                         <div class="right-svg">
@@ -173,6 +178,10 @@ export default {
         // 预览文件
         handleOpen(item) {
             this.$emit('handleFileOpen', item)
+        },
+        // 下载文件
+        handleDownload(item) {
+            this.$emit('handleFileDownload', item)
         },
         handleOptions(item) {
             this.$emit('handleOptions', item)
