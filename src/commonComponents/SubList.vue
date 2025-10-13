@@ -143,7 +143,7 @@ export default {
                         item: item
                     })
             } else {
-                window.open(window.IDM.url.getWebPath(item.lastFeedbackUrl))
+                window.open(window.IDM.url.getWebPath(item.lastFeedbackUrl || item.feedbackUrl))
             }
         },
         // 操作项
