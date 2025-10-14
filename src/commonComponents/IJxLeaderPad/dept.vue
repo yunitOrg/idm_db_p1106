@@ -610,7 +610,7 @@ export default {
         },
         dept: {
             handler(val) {
-            console.log(val,"====");
+            console.log(val,"====+");
                 this.year=new Date().getFullYear()
                 this.getDbGkData()
                 this.leixing=[]

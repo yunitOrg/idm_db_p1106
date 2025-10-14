@@ -192,7 +192,8 @@ export default {
                 ]
                 return navs
             }
-            if (this.homeType.type == "事项分类") {         
+            if (this.homeType.type == "事项分类") {     
+                    
                 let navs = [
                     {
                         label: '重要批示',
@@ -463,6 +464,7 @@ export default {
                     ]
                 }
                 if ([2, 3].includes(this.leaderInfo.type)) {
+                    log('leaderInfo', this.leaderInfo)
                     return [
                         {
                             label: '分管部门',
@@ -547,6 +549,7 @@ export default {
             this.urgeData = null
             this.detailData = null
             if (this.isShouye == true) {
+                
                 this.dept = homeData()
             }
         },
@@ -563,7 +566,70 @@ export default {
             immediate: true
         }
     },
+    mounted() {
+        // 判断window.IDM?.url.queryObject().pageCategory是否存在并且有值
+        if (window.IDM?.url.queryObject().pageCategory) {
+            this.fetchShouyeData()
+        }
+        
+    },
+
     methods: {
+        //获取首页的数据
+        fetchShouyeData() {
+            window.IDM.http
+                .post(
+                    this.a+'ctrl/dbWorkbench/getLeaderPadNoticeStatisticsData',
+                    {
+                        ...this.params,
+                        pageNo: 1,
+                        pageSize: 9999,
+                        bt:"",
+                        startTime:"",
+                        endTime:""
+                    },
+                    {
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    }
+                )
+                .then(({ data }) => {
+                   this.shouyeData=data.data
+                   let pageCategory=window.IDM?.url.queryObject().pageCategory
+                    let obj  = {
+                        type: pageCategory=="approval"?"事项分类":pageCategory=="undertake"?"承办单位":pageCategory=="generalOffice"?"厅内督办":pageCategory=="specialFocus"?"特别关注":"",
+                        value:pageCategory=="approval"? Number(window.IDM?.url.queryObject().approvalTypeParam):pageCategory=="undertake"? Number(window.IDM?.url.queryObject().queryType):pageCategory=="generalOffice"?"":pageCategory=="specialFocus"?Number(window.IDM?.url.queryObject().attentionReasonType):"",
+                        el: pageCategory=="approval"?data.data.sxflData:pageCategory=="undertake"?data.data.cbdwData:pageCategory=="generalOffice"?data.data.tndbData:pageCategory=="specialFocus"?data.data.tbgzData:"",
+                    }
+                    if (window.IDM?.url.queryObject().unitId) {
+                        let item= {
+                            count:window.IDM?.url.queryObject().count,
+                            unitId:window.IDM?.url.queryObject().unitId,
+                            unitName:decodeURIComponent(window.IDM?.url.queryObject().unitName) ,
+                        }
+                        this.homeType = obj
+                        let queryType= pageCategory=="undertake"? window.IDM?.url.queryObject().queryType:pageCategory=="generalOffice"?3:""
+                        if(pageCategory=="undertake"){
+                            queryType = window.IDM?.url.queryObject().queryType==1?2:window.IDM?.url.queryObject().queryType==2?1:window.IDM?.url.queryObject().queryType==4?4:3
+ 
+                        }
+                        this.model = {
+                            queryType:pageCategory=="undertake"? queryType:3,
+                            title: '省政府办公厅',
+                            data: [],
+                            visible: true
+                        }
+                        
+                        this.deptChangeHandle(item)
+                    }else{
+                        this.onHomeType(obj)
+                    }
+                   
+                })
+                .finally(() => {
+                })
+        },
         showDetail(value,params) {
             // this.isApproval =value.isApproval? value.isApproval:0
             if(this.dept.label=='重要批示' || this.dept.label=='重点任务' ){
@@ -586,7 +652,6 @@ export default {
                     }
                     )
                     .then(({ data }) => {
-                        console.log(data);
                         this.detailData = {
                             data: data.data,
                             data2:value,
@@ -611,7 +676,6 @@ export default {
         // 特别关注点击具体工作任务和要求详情
         showJtgzrw(data){
             this.jtgzrwData = data
-            console.log(this.jtgzrwData,"===");
         },
         showUrge(value) {
             window.IDM.http
@@ -629,7 +693,6 @@ export default {
         },
         //显示从重要批示和重点任务详情页点击过来要打开催办页面
         showUrge2(el){
-            console.log(el,"========");
             window.IDM.http
                 .get(this.a+'ctrl/dbWorkbench/getLeaderPadNoticeInfo', {
                     ...this.params,
@@ -663,6 +726,7 @@ export default {
             this.urgeData = null
         },
         homeHandle() {
+            
             if (this.params.isShouye == "false" && this.params.type == "0") {
                 this.homeType = {}
                 this.detailData = null
@@ -709,6 +773,7 @@ export default {
         },
         //获取点击首页的type类型
         onHomeType(obj) {
+            
             this.homeType = obj
             if (this.homeType.type == "事项分类") {
                 this.isShouye = false
@@ -904,7 +969,7 @@ html {
 <style lang="scss" scoped>
 .idm-db-IJxLeaderPad-container {
     gap: 2.5rem;
-    //background: #8fc7ff;
+    // background: #8fc7ff;
     overflow-y: hidden;
     .main-container {
         padding: 0 3.75rem 3.75rem;
