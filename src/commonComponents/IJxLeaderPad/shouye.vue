@@ -172,7 +172,7 @@ export default {
                 })
         },
         onHomeType(type,value,el){
-            this.$emit('onHomeType',{type,value:el[value-1].text=='分管部门'?3:el[value-1].text=='中央驻赣单位'?4:value,el})
+            this.$emit('onHomeType',{type,value:el[value-1].text=='省政府部门'?2:el[value-1].text=='设区市政府'?1:el[value-1].text=='分管部门'?3:el[value-1].text=='中央驻赣单位'?4:value,el})
         }
     },
     mounted() {

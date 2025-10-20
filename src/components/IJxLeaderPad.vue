@@ -10,24 +10,22 @@
                 </shouye>
                 <Jtgzrw v-if="jtgzrwData && isShouye == false" :params="params" :data="jtgzrwData" @close="jtgzrwClose()" />
                 <Urge v-if="urgeData && isShouye == false" :params="params" :data="urgeData" @close="urgeClose()" />
-                <Detail v-else-if="dept.label!='重要批示' && dept.label!='重点任务' && detailData && isShouye == false"  :params="params"  :data="detailData"
-                    @urge="() => showUrge(detailData.noticeInfo)" @close="detailData = null" />
-                <Detail2 v-else-if="detailData && isShouye == false && (dept.label=='重要批示' || dept.label=='重点任务')" :params="params" :data="detailData"
-                    @urge="showUrge2" @close="detailData = null" />
+                <Detail v-else-if="dept.label != '重要批示' && dept.label != '重点任务' && detailData && isShouye == false"
+                    :params="params" :data="detailData" @urge="() => showUrge(detailData.noticeInfo)"
+                    @close="detailData = null" />
+                <Detail2 v-else-if="detailData && isShouye == false && (dept.label == '重要批示' || dept.label == '重点任务')"
+                    :params="params" :data="detailData" @urge="showUrge2" @close="detailData = null" />
                 <Cube v-else-if="current == '2' && isShouye == false" :params="params" @home="homeHandle"></Cube>
-                <Follow ref="follow" v-if="current == '3' && isShouye == false " :dept="dept"  :params="params" @detail="showDetail"
-                    @urge="showUrge"
-                    @jtgzrw="showJtgzrw"
-                    @ishowCollect="collectModelVisible=true"
-                    @closeCollect="collectModelVisible=false">
+                <Follow ref="follow" v-if="current == '3' && isShouye == false" :dept="dept" :params="params"
+                    @detail="showDetail" @urge="showUrge" @jtgzrw="showJtgzrw" @ishowCollect="collectModelVisible = true"
+                    @closeCollect="collectModelVisible = false">
                     <template #extra>
                         <div @click="homeHandle" class="pointer btn-back">返回首页</div>
                     </template>
                 </Follow>
-                <Dept ref="dept" v-if="current != '2' && current != '3' && isShouye == false" :homeType="homeType" :dept="dept" :params="params"
-                    @detail="showDetail" @urge="showUrge"
-                    @ishowCollect="collectModelVisible=true"
-                    @closeCollect="collectModelVisible=false">
+                <Dept ref="dept" v-if="current != '2' && current != '3' && isShouye == false" :homeType="homeType"
+                    :dept="dept" :params="params" @detail="showDetail" @urge="showUrge"
+                    @ishowCollect="collectModelVisible = true" @closeCollect="collectModelVisible = false">
                     <template #extra>
                         <div v-if="dept.value != '0'" @click="homeHandle" class="pointer btn-back">返回首页</div>
                     </template>
@@ -59,7 +57,7 @@ import dayjs from 'dayjs'
 const homeData = () => ({
     label: '全部',
     value: '0',
-    isFanhui:true
+    isFanhui: true
 })
 export default {
     mixins: [bindProp(), bindStyle()],
@@ -79,21 +77,21 @@ export default {
     },
     data() {
         return {
-            isShouye: window.IDM?.url.queryObject().isShouye=="false"?false:true || true,
+            isShouye: window.IDM?.url.queryObject().isShouye == "false" ? false : true || true,
             current: window.IDM?.url.queryObject().type || '0',
             dept: homeData(),
             jtgzrwData: null,
             urgeData: null,
             detailData: null,
-            isApproval:0,
+            isApproval: 0,
             model: {
                 visible: false
             },
             leaderInfo: {},
             homeType: {},
-            collectModelVisible:false,
-            urgeTobackDetail:{},
-            a:""
+            collectModelVisible: false,
+            urgeTobackDetail: {},
+            a: ""
         }
     },
     computed: {
@@ -117,7 +115,7 @@ export default {
                 let navs = [
                     {
                         label: '省政府各部门',
-                        value: '1',
+                        value: '2',
                         active: this.dept.value != 0 && this.current == '1' && this.dept.queryType == 2,
                         on: {
                             click: () => {
@@ -147,7 +145,7 @@ export default {
                     },
                     {
                         label: '各设区市政府',
-                        value: '4',
+                        value: '1',
                         active: this.current == '1' && this.dept.queryType == 1,
                         on: {
                             click: () => {
@@ -192,8 +190,8 @@ export default {
                 ]
                 return navs
             }
-            if (this.homeType.type == "事项分类") {     
-                    
+            if (this.homeType.type == "事项分类") {
+
                 let navs = [
                     {
                         label: '重要批示',
@@ -201,13 +199,13 @@ export default {
                         active: this.dept.approvalTypeParam == 1,
                         on: {
                             click: () => {
-                                this.detailData=null
-                                this.urgeData=null
-                                this.urgeTobackDetail={}
+                                this.detailData = null
+                                this.urgeData = null
+                                this.urgeTobackDetail = {}
                                 this.dept = {
                                     label: '重要批示',
                                     value: "",
-                                    approvalTypeParam:1
+                                    approvalTypeParam: 1
                                 }
                                 this.current = "1"
                             }
@@ -219,13 +217,13 @@ export default {
                         active: this.dept.approvalTypeParam == 2,
                         on: {
                             click: () => {
-                                this.detailData=null
-                                this.urgeData=null
-                                this.urgeTobackDetail={}
+                                this.detailData = null
+                                this.urgeData = null
+                                this.urgeTobackDetail = {}
                                 this.dept = {
                                     label: '重要文件',
                                     value: "",
-                                    approvalTypeParam:2
+                                    approvalTypeParam: 2
                                 }
                                 this.current = "1"
                             }
@@ -237,13 +235,13 @@ export default {
                         active: this.dept.approvalTypeParam == 3,
                         on: {
                             click: () => {
-                                this.detailData=null
-                                this.urgeData=null
-                                this.urgeTobackDetail={}
+                                this.detailData = null
+                                this.urgeData = null
+                                this.urgeTobackDetail = {}
                                 this.dept = {
                                     label: '重点任务',
                                     value: "",
-                                    approvalTypeParam:3
+                                    approvalTypeParam: 3
                                 }
                                 this.current = "1"
                             }
@@ -255,13 +253,13 @@ export default {
                         active: this.dept.approvalTypeParam == 4,
                         on: {
                             click: () => {
-                                this.detailData=null
-                                this.urgeData=null
-                                this.urgeTobackDetail={}
+                                this.detailData = null
+                                this.urgeData = null
+                                this.urgeTobackDetail = {}
                                 this.dept = {
                                     label: '交办事项',
                                     value: "",
-                                    approvalTypeParam:4
+                                    approvalTypeParam: 4
                                 }
                                 this.current = "1"
                             }
@@ -273,13 +271,13 @@ export default {
                         active: this.dept.approvalTypeParam == 5,
                         on: {
                             click: () => {
-                                this.detailData=null
-                                this.urgeData=null
-                                this.urgeTobackDetail={}
+                                this.detailData = null
+                                this.urgeData = null
+                                this.urgeTobackDetail = {}
                                 this.dept = {
                                     label: '调查核实',
                                     value: "",
-                                    approvalTypeParam:5
+                                    approvalTypeParam: 5
                                 }
                                 this.current = "1"
                             }
@@ -291,35 +289,35 @@ export default {
                         active: this.dept.approvalTypeParam == 6,
                         on: {
                             click: () => {
-                                this.detailData=null
-                                this.urgeData=null
-                                this.urgeTobackDetail={}
+                                this.detailData = null
+                                this.urgeData = null
+                                this.urgeTobackDetail = {}
                                 this.dept = {
                                     label: '建议提案',
                                     value: "",
-                                    approvalTypeParam:6
+                                    approvalTypeParam: 6
                                 }
                                 this.current = "1"
                             }
                         }
                     }
                 ]
-                navs.map((el,index)=>{
-                    el.num=this.homeType.el[index].num
+                navs.map((el, index) => {
+                    el.num = this.homeType.el[index].num
                 })
                 return navs
             }
             if (this.homeType.type == "特别关注") {
-                let nav=[
+                let nav = [
                     {
                         label: '亮点',
                         value: '1',
                         active: this.dept.value == 1,
                         on: {
                             click: () => {
-                                this.detailData=null
-                                this.urgeData=null
-                                this.urgeTobackDetail={}
+                                this.detailData = null
+                                this.urgeData = null
+                                this.urgeTobackDetail = {}
                                 this.dept = {
                                     label: '亮点',
                                     value: 1
@@ -334,9 +332,9 @@ export default {
                         active: this.dept.value == 2,
                         on: {
                             click: () => {
-                                this.detailData=null
-                                this.urgeData=null
-                                this.urgeTobackDetail={}
+                                this.detailData = null
+                                this.urgeData = null
+                                this.urgeTobackDetail = {}
                                 this.dept = {
                                     label: '难点',
                                     value: 2
@@ -351,9 +349,9 @@ export default {
                         active: this.dept.value == 3,
                         on: {
                             click: () => {
-                                this.detailData=null
-                                this.urgeData=null
-                                this.urgeTobackDetail={}
+                                this.detailData = null
+                                this.urgeData = null
+                                this.urgeTobackDetail = {}
                                 this.dept = {
                                     label: '风险点',
                                     value: 3
@@ -363,23 +361,24 @@ export default {
                         }
                     }
                 ]
-                nav.map((el,index)=>{
-                    el.num=this.homeType.el[index].num
+                nav.map((el, index) => {
+                    el.num = this.homeType.el[index].num
                 })
                 return nav
             }
             if (this.homeType.type == "承办单位") {
-                if ([1,5,6].includes(this.leaderInfo.type)) {
+
+                if ([1, 5, 6].includes(this.leaderInfo.type)) {
                     return [
                         {
                             label: '省政府各部门',
-                            value: '1',
+                            value: '2',
                             active: this.dept.value != 0 && this.current == '1' && this.dept.queryType == 2,
                             on: {
                                 click: () => {
                                     window.IDM.http
                                         .post(
-                                            this.a+'ctrl/dbWorkbench/getPadLeaderUnit',
+                                            this.a + 'ctrl/dbWorkbench/getPadLeaderUnit',
                                             {
                                                 ...this.params,
                                                 queryType: 2
@@ -403,13 +402,13 @@ export default {
                         },
                         {
                             label: '各设区市政府',
-                            value: '4',
+                            value: '1',
                             active: this.current == '1' && this.dept.queryType == 1,
                             on: {
                                 click: () => {
                                     window.IDM.http
                                         .post(
-                                            this.a+'ctrl/dbWorkbench/getPadLeaderUnit',
+                                            this.a + 'ctrl/dbWorkbench/getPadLeaderUnit',
                                             {
                                                 ...this.params,
                                                 queryType: 1
@@ -433,13 +432,13 @@ export default {
                         },
                         {
                             label: '中央驻赣单位',
-                            value: '5',
+                            value: '4',
                             active: this.current == '1' && this.dept.queryType == 4,
                             on: {
                                 click: () => {
                                     window.IDM.http
                                         .post(
-                                            this.a+'ctrl/dbWorkbench/getPadLeaderUnit',
+                                            this.a + 'ctrl/dbWorkbench/getPadLeaderUnit',
                                             {
                                                 ...this.params,
                                                 queryType: 4
@@ -474,7 +473,7 @@ export default {
                                 click: () => {
                                     window.IDM.http
                                         .post(
-                                            this.a+'ctrl/dbWorkbench/getPadLeaderUnit',
+                                            this.a + 'ctrl/dbWorkbench/getPadLeaderUnit',
                                             {
                                                 ...this.params
                                             },
@@ -507,39 +506,39 @@ export default {
                     ]
                 }
             }
-            if(this.homeType.type == "厅内督办"){
-                   return [
-                      {
+            if (this.homeType.type == "厅内督办") {
+                return [
+                    {
                         label: '省政府办公厅',
                         value: '1',
-                       active: this.current == '1' && this.dept.queryType == 3,
-                            on: {
-                                click: () => {
-                                    window.IDM.http
-                                        .post(
-                                            this.a+'ctrl/dbWorkbench/getPadLeaderUnit',
-                                            {
-                                                ...this.params,
-                                                queryType: 3
-                                            },
-                                            {
-                                                headers: {
-                                                    'Content-Type': 'application/json'
-                                                }
+                        active: this.current == '1' && this.dept.queryType == 3,
+                        on: {
+                            click: () => {
+                                window.IDM.http
+                                    .post(
+                                        this.a + 'ctrl/dbWorkbench/getPadLeaderUnit',
+                                        {
+                                            ...this.params,
+                                            queryType: 3
+                                        },
+                                        {
+                                            headers: {
+                                                'Content-Type': 'application/json'
                                             }
-                                        )
-                                        .then(({ data }) => {
-                                            this.model = {
-                                                queryType: 3,
-                                                title: '省政府办公厅',
-                                                data: data.data,
-                                                visible: true
-                                            }
-                                        })
-                                }
+                                        }
+                                    )
+                                    .then(({ data }) => {
+                                        this.model = {
+                                            queryType: 3,
+                                            title: '省政府办公厅',
+                                            data: data.data,
+                                            visible: true
+                                        }
+                                    })
                             }
+                        }
                     },
-                    ]
+                ]
             }
             return []
         }
@@ -549,14 +548,14 @@ export default {
             this.urgeData = null
             this.detailData = null
             if (this.isShouye == true) {
-                
+
                 this.dept = homeData()
             }
         },
         params: {
             handler(value) {
                 window.IDM.http
-                    .get(this.a+'ctrl/dbWorkbench/getPadLeaderInfo', {
+                    .get(this.a + 'ctrl/dbWorkbench/getPadLeaderInfo', {
                         userId: value.userId
                     })
                     .then(({ data }) => {
@@ -571,7 +570,7 @@ export default {
         if (window.IDM?.url.queryObject().pageCategory) {
             this.fetchShouyeData()
         }
-        
+
     },
 
     methods: {
@@ -579,14 +578,14 @@ export default {
         fetchShouyeData() {
             window.IDM.http
                 .post(
-                    this.a+'ctrl/dbWorkbench/getLeaderPadNoticeStatisticsData',
+                    this.a + 'ctrl/dbWorkbench/getLeaderPadNoticeStatisticsData',
                     {
                         ...this.params,
                         pageNo: 1,
                         pageSize: 9999,
-                        bt:"",
-                        startTime:"",
-                        endTime:""
+                        bt: "",
+                        startTime: "",
+                        endTime: ""
                     },
                     {
                         headers: {
@@ -595,73 +594,74 @@ export default {
                     }
                 )
                 .then(({ data }) => {
-                   this.shouyeData=data.data
-                   let pageCategory=window.IDM?.url.queryObject().pageCategory
-                    let obj  = {
-                        type: pageCategory=="approval"?"事项分类":pageCategory=="undertake"?"承办单位":pageCategory=="generalOffice"?"厅内督办":pageCategory=="specialFocus"?"特别关注":"",
-                        value:pageCategory=="approval"? Number(window.IDM?.url.queryObject().approvalTypeParam):pageCategory=="undertake"? Number(window.IDM?.url.queryObject().queryType):pageCategory=="generalOffice"?"":pageCategory=="specialFocus"?Number(window.IDM?.url.queryObject().attentionReasonType):"",
-                        el: pageCategory=="approval"?data.data.sxflData:pageCategory=="undertake"?data.data.cbdwData:pageCategory=="generalOffice"?data.data.tndbData:pageCategory=="specialFocus"?data.data.tbgzData:"",
+                    this.shouyeData = data.data
+                    let pageCategory = window.IDM?.url.queryObject().pageCategory
+                    let obj = {
+                        type: pageCategory == "approval" ? "事项分类" : pageCategory == "undertake" ? "承办单位" : pageCategory == "generalOffice" ? "厅内督办" : pageCategory == "specialFocus" ? "特别关注" : "",
+                        value: pageCategory == "approval" ? Number(window.IDM?.url.queryObject().approvalTypeParam) : pageCategory == "undertake" ? Number(window.IDM?.url.queryObject().queryType) : pageCategory == "generalOffice" ? "" : pageCategory == "specialFocus" ? Number(window.IDM?.url.queryObject().attentionReasonType) : "",
+                        el: pageCategory == "approval" ? data.data.sxflData : pageCategory == "undertake" ? data.data.cbdwData : pageCategory == "generalOffice" ? data.data.tndbData : pageCategory == "specialFocus" ? data.data.tbgzData : "",
                     }
                     if (window.IDM?.url.queryObject().unitId) {
-                        let item= {
-                            count:window.IDM?.url.queryObject().count,
-                            unitId:window.IDM?.url.queryObject().unitId,
-                            unitName:decodeURIComponent(window.IDM?.url.queryObject().unitName) ,
+                        let item = {
+                            count: window.IDM?.url.queryObject().count,
+                            unitId: window.IDM?.url.queryObject().unitId,
+                            unitName: decodeURIComponent(window.IDM?.url.queryObject().unitName),
                         }
                         this.homeType = obj
-                        let queryType= pageCategory=="undertake"? window.IDM?.url.queryObject().queryType:pageCategory=="generalOffice"?3:""
-                        if(pageCategory=="undertake"){
-                            queryType = window.IDM?.url.queryObject().queryType==1?2:window.IDM?.url.queryObject().queryType==2?1:window.IDM?.url.queryObject().queryType==4?4:3
- 
-                        }
+                       
+
+                        let queryType = pageCategory == "undertake" ? window.IDM?.url.queryObject().queryType : pageCategory == "generalOffice" ? 3 : ""
+                        
                         this.model = {
-                            queryType:pageCategory=="undertake"? queryType:3,
+                            queryType: pageCategory == "undertake" ? queryType : 3,
                             title: '省政府办公厅',
                             data: [],
                             visible: true
                         }
                         
                         this.deptChangeHandle(item)
-                    }else{
+
+                    } else {
+                        
                         this.onHomeType(obj)
                     }
-                   
+
                 })
                 .finally(() => {
                 })
         },
-        showDetail(value,params) {
+        showDetail(value, params) {
             // this.isApproval =value.isApproval? value.isApproval:0
-            if(this.dept.label=='重要批示' || this.dept.label=='重点任务' ){
+            if (this.dept.label == '重要批示' || this.dept.label == '重点任务') {
                 //去除params中的attentionReasonType和padNoticeQueryType
                 delete params.padNoticeQueryType
                 delete params.attentionReasonType
-                this.urgeTobackDetail={
-                        value,
-                        params
-                    }
+                this.urgeTobackDetail = {
+                    value,
+                    params
+                }
                 window.IDM.http
-                    .post(this.a+'ctrl/dbScreen/getLeaderPadlargeSizeFeedbackInfo', {
-                       ...params,
-                       approvalId:value.id
+                    .post(this.a + 'ctrl/dbScreen/getLeaderPadlargeSizeFeedbackInfo', {
+                        ...params,
+                        approvalId: value.id
                     },
-                    {
-                        headers: {
-                            'Content-Type': 'application/json'
+                        {
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
                         }
-                    }
                     )
                     .then(({ data }) => {
                         this.detailData = {
                             data: data.data,
-                            data2:value,
+                            data2: value,
                             noticeInfo: value,
                         }
                     })
-            }else{
+            } else {
 
                 window.IDM.http
-                    .get(this.a+'ctrl/dbWorkbench/getLastfeedbackInfo', {
+                    .get(this.a + 'ctrl/dbWorkbench/getLastfeedbackInfo', {
                         ...this.params,
                         noticeId: value.id,
                     })
@@ -674,59 +674,59 @@ export default {
             }
         },
         // 特别关注点击具体工作任务和要求详情
-        showJtgzrw(data){
+        showJtgzrw(data) {
             this.jtgzrwData = data
         },
         showUrge(value) {
             window.IDM.http
-                .get(this.a+'ctrl/dbWorkbench/getLeaderPadNoticeInfo', {
+                .get(this.a + 'ctrl/dbWorkbench/getLeaderPadNoticeInfo', {
                     ...this.params,
                     noticeId: value.id,
-                    approvalId:value.approvalId,
-                    handlerUnit:value.handlerUnit,
-                    handlerUnitSchema:value.handlerUnitSchema,
-                    handlerUnitText:value.handlerUnitText
+                    approvalId: value.approvalId,
+                    handlerUnit: value.handlerUnit,
+                    handlerUnitSchema: value.handlerUnitSchema,
+                    handlerUnitText: value.handlerUnitText
                 })
                 .then(({ data }) => {
                     this.urgeData = data.data
                 })
         },
         //显示从重要批示和重点任务详情页点击过来要打开催办页面
-        showUrge2(el){
+        showUrge2(el) {
             window.IDM.http
-                .get(this.a+'ctrl/dbWorkbench/getLeaderPadNoticeInfo', {
+                .get(this.a + 'ctrl/dbWorkbench/getLeaderPadNoticeInfo', {
                     ...this.params,
                     noticeId: el.noticeId,
-                    approvalId:el.approvalId,
-                    handlerUnit:el.handlerUnit,
-                    handlerUnitSchema:el.handlerUnitSchema,
-                    handlerUnitText:el.handlerUnitText
+                    approvalId: el.approvalId,
+                    handlerUnit: el.handlerUnit,
+                    handlerUnitSchema: el.handlerUnitSchema,
+                    handlerUnitText: el.handlerUnitText
                 })
                 .then(({ data }) => {
                     this.urgeData = data.data
                 })
         },
-        jtgzrwClose(){
+        jtgzrwClose() {
             this.jtgzrwData = null
         },
-        urgeClose(){
+        urgeClose() {
             // if(this.dept.label=='重要批示' || this.dept.label=='重点任务'){
             //     this.showDetail(this.urgeTobackDetail.value,this.urgeTobackDetail.params)
             // }
-            if(this.current == '3' && this.isShouye == false){
+            if (this.current == '3' && this.isShouye == false) {
                 //这里需要调用一下fllow组件中的fetchStat方法
                 this.$refs.follow.fetchStat()
                 //这里需要调用一下fllow组件中的fetchData方法刷新下列表数据
                 this.$refs.follow.fetchData()
 
             }
-            if(this.current != '2' && this.current != '3' && this.isShouye == false){
+            if (this.current != '2' && this.current != '3' && this.isShouye == false) {
                 this.$refs.dept.fetchData()
             }
             this.urgeData = null
         },
         homeHandle() {
-            
+
             if (this.params.isShouye == "false" && this.params.type == "0") {
                 this.homeType = {}
                 this.detailData = null
@@ -735,7 +735,7 @@ export default {
                 this.dept.isFanhui = true
                 this.current = '1'
                 this.isShouye = false
-            }else{
+            } else {
                 this.detailData = null
                 this.urgeData = null
                 this.dept = homeData()
@@ -749,7 +749,7 @@ export default {
                 this.isShouye = false
                 this.detailData = null
                 this.urgeData = null
-                this.urgeTobackDetail={}
+                this.urgeTobackDetail = {}
                 this.model.visible = false
                 this.dept = {
                     queryType: this.model.queryType,
@@ -757,11 +757,11 @@ export default {
                     value: dept.unitId
                 }
                 this.current = '1'
-            }else{
+            } else {
                 this.isShouye = false
                 this.detailData = null
                 this.urgeData = null
-                this.urgeTobackDetail={}
+                this.urgeTobackDetail = {}
                 this.model.visible = false
                 this.dept = {
                     queryType: this.model.queryType,
@@ -773,7 +773,7 @@ export default {
         },
         //获取点击首页的type类型
         onHomeType(obj) {
-            
+
             this.homeType = obj
             if (this.homeType.type == "事项分类") {
                 this.isShouye = false
@@ -781,32 +781,32 @@ export default {
                     case 1:
                         this.dept.label = "重要批示"
                         this.dept.value = ""
-                        this.dept.approvalTypeParam=this.homeType.value
+                        this.dept.approvalTypeParam = this.homeType.value
                         break;
                     case 2:
                         this.dept.label = "重点文件"
                         this.dept.value = ""
-                        this.dept.approvalTypeParam=this.homeType.value
+                        this.dept.approvalTypeParam = this.homeType.value
                         break;
                     case 3:
                         this.dept.label = "重点任务"
-                        this.dept.value =  ""
-                        this.dept.approvalTypeParam=this.homeType.value
+                        this.dept.value = ""
+                        this.dept.approvalTypeParam = this.homeType.value
                         break;
                     case 4:
                         this.dept.label = "交办事项"
-                        this.dept.value =  ""
-                        this.dept.approvalTypeParam=this.homeType.value
+                        this.dept.value = ""
+                        this.dept.approvalTypeParam = this.homeType.value
                         break;
                     case 5:
                         this.dept.label = "调查核实"
-                        this.dept.value =  ""
-                        this.dept.approvalTypeParam=this.homeType.value
+                        this.dept.value = ""
+                        this.dept.approvalTypeParam = this.homeType.value
                         break;
                     case 6:
                         this.dept.label = "建议提案"
-                        this.dept.value =  ""
-                        this.dept.approvalTypeParam=this.homeType.value
+                        this.dept.value = ""
+                        this.dept.approvalTypeParam = this.homeType.value
                         break;
                 }
             }
@@ -829,10 +829,10 @@ export default {
                 }
             }
             if (this.homeType.type == "承办单位") {
-                if (this.homeType.value == '1') {//省政府各部门
+                if (this.homeType.value == '2') {//省政府各部门
                     window.IDM.http
                         .post(
-                            this.a+'ctrl/dbWorkbench/getPadLeaderUnit',
+                            this.a + 'ctrl/dbWorkbench/getPadLeaderUnit',
                             {
                                 ...this.params,
                                 queryType: 2
@@ -852,10 +852,10 @@ export default {
                             }
                         })
                 }
-                if (this.homeType.value == '2') {//各设区市政府
+                if (this.homeType.value == '1') {//各设区市政府
                     window.IDM.http
                         .post(
-                            this.a+'ctrl/dbWorkbench/getPadLeaderUnit',
+                            this.a + 'ctrl/dbWorkbench/getPadLeaderUnit',
                             {
                                 ...this.params,
                                 queryType: 1
@@ -878,7 +878,7 @@ export default {
                 if (this.homeType.value == '4') {//中央驻赣单位
                     window.IDM.http
                         .post(
-                            this.a+'ctrl/dbWorkbench/getPadLeaderUnit',
+                            this.a + 'ctrl/dbWorkbench/getPadLeaderUnit',
                             {
                                 ...this.params,
                                 queryType: 4
@@ -901,7 +901,7 @@ export default {
                 if (this.homeType.value == '3') {//分管部门
                     window.IDM.http
                         .post(
-                            this.a+'ctrl/dbWorkbench/getPadLeaderUnit',
+                            this.a + 'ctrl/dbWorkbench/getPadLeaderUnit',
                             {
                                 ...this.params
                             },
@@ -920,28 +920,28 @@ export default {
                         })
                 }
             }
-            if(this.homeType.type == "厅内督办"){
-                   window.IDM.http
-                        .post(
-                            this.a+'ctrl/dbWorkbench/getPadLeaderUnit',
-                            {
-                                ...this.params,
-                                queryType: 3
-                            },
-                            {
-                                headers: {
-                                    'Content-Type': 'application/json'
-                                }
+            if (this.homeType.type == "厅内督办") {
+                window.IDM.http
+                    .post(
+                        this.a + 'ctrl/dbWorkbench/getPadLeaderUnit',
+                        {
+                            ...this.params,
+                            queryType: 3
+                        },
+                        {
+                            headers: {
+                                'Content-Type': 'application/json'
                             }
-                        )
-                        .then(({ data }) => {
-                            this.model = {
-                                queryType: 3,
-                                title: obj.el[0].text,
-                                data: data.data,
-                                visible: true
-                            }
-                        })
+                        }
+                    )
+                    .then(({ data }) => {
+                        this.model = {
+                            queryType: 3,
+                            title: obj.el[0].text,
+                            data: data.data,
+                            visible: true
+                        }
+                    })
             }
         },
     }
@@ -971,9 +971,11 @@ html {
     gap: 2.5rem;
     // background: #8fc7ff;
     overflow-y: hidden;
+
     .main-container {
         padding: 0 3.75rem 3.75rem;
-        &>div:nth-child(2){
+
+        &>div:nth-child(2) {
             margin-top: 3.75rem;
         }
     }
