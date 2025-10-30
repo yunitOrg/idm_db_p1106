@@ -191,8 +191,11 @@ export default {
         // 判断是否有top.window
         if (top && top.window && top.window._Q_.nodeId) {
             this.nodeId = top.window._Q_.nodeId
-        }else{
+        }else if (window && window._Q_){
             this.nodeId = window._Q_.nodeId;
+        }else{
+           // 设置默认值或进行错误处理
+            this.nodeId = null; 
         }
     },
     mounted() {
