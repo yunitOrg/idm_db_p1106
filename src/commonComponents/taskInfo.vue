@@ -102,6 +102,10 @@
                     <a-badge v-if="item.unreadInstruction != null" :count="item.unreadInstruction" @click="handleOptions({ key: 'notice_leader_instruction_view', record: item })">
                         <img src="../assets/linqi.png" alt="查看批示" />
                     </a-badge>
+                    <div v-if="nodeId  == -2 || nodeId  == 0" class="copyBtn" @click="copyTaskId(item)">
+                    <!-- <div  class="copyBtn" @click="copyTaskId(item)"> -->
+                        复制
+                    </div>
                     <div @click="handleShowDialog(item)">
                         <svg-icon icon-class="history"></svg-icon>
                         <div>更多</div>
@@ -183,6 +187,14 @@ export default {
             }
         }
     },
+    created() {
+        // 判断是否有top.window
+        if (top && top.window && top.window._Q_.nodeId) {
+            this.nodeId = top.window._Q_.nodeId
+        }else{
+            this.nodeId = window._Q_.nodeId;
+        }
+    },
     mounted() {
         this.moduleObject = this.$root.moduleObject
         if (this.porpsList && this.porpsList?.length) {
@@ -215,6 +227,14 @@ export default {
         },
         renderImg(path){
             return IDM.url.getWebPath(path)
+        },
+        copyTaskId(item){
+            //当有top.window.copyImplementation方法时，使用该方法复制
+            if(top.window && top.window.copyImplementation){
+                top.window.copyImplementation(item.lastFeedbackId)
+            }else{
+                window.copyImplementation(item.lastFeedbackId)
+            }
         },
         // 弹框
         async handleShowDialog(item) {
@@ -373,6 +393,7 @@ export default {
         align-items: center;
         text-align: center;
         cursor: pointer;
+        position: relative;
         gap: 10px;
         svg,
         img {
@@ -380,6 +401,17 @@ export default {
             font-size: 22px;
             width: 22px;
             height: 22px;
+        }
+        .copyBtn{
+            position: absolute;
+            top: -12px;
+            left: -20px;
+            color: #333333;
+            font-size: 13px;
+            padding: 1px 10px;
+            border-radius: 3px;
+            border: 1px solid #49A9E3;
+            white-space: nowrap;
         }
     }
     .top .subtask-label:not(:first-child){

@@ -463,7 +463,6 @@ export default {
                     ]
                 }
                 if ([2, 3].includes(this.leaderInfo.type)) {
-                    log('leaderInfo', this.leaderInfo)
                     return [
                         {
                             label: '分管部门',
