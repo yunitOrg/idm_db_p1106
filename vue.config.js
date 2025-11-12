@@ -164,7 +164,7 @@ module.exports = {
     devServer: {
         proxy: {
             '^/DreamOne/*': {
-                target: "http://10.1.2.170:8089/",
+                target: "http://10.100.0.219:8089/",
                 changeOrigin: true
             }
         }

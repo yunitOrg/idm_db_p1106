@@ -139,6 +139,8 @@ export default {
         return {
             bt:"",
             year:new Date().getFullYear(),
+            activeYear:new Date().getFullYear(),
+            yearOptions:[],
             leixing:[],
             dwName:"",
             dbfl:"",
@@ -197,23 +199,23 @@ export default {
         }
     },
     computed: {
-        yearOptions(){
-            //获取从2024年到当年的年份
-            let year = new Date().getFullYear()
-            let arr = [
-                {
-                    text: "至今",
-                    value:9999
-                }
-            ]
-            for (let i = 2024; i <= year; i++) {
-                arr.push({
-                    text: i,
-                    value:i
-                })
-            }
-            return arr
-        },
+        // yearOptions(){
+        //     //获取从2024年到当年的年份
+        //     let year = new Date().getFullYear()
+        //     let arr = [
+        //         {
+        //             text: "至今",
+        //             value:9999
+        //         }
+        //     ]
+        //     for (let i = 2024; i <= year; i++) {
+        //         arr.push({
+        //             text: i,
+        //             value:i
+        //         })
+        //     }
+        //     return arr
+        // },
         tabs(){
             if (this.params.isShouye == "false" && this.params.type == "0") {
                 let a = [
@@ -611,7 +613,7 @@ export default {
         dept: {
             handler(val) {
             console.log(val,"====+");
-                this.year=new Date().getFullYear()
+                this.year=this.activeYear
                 this.getDbGkData()
                 this.leixing=[]
             },
@@ -663,11 +665,27 @@ export default {
         
     },
     mounted() {
-        this.getOptions()
-        this.getDbGkData()
-        this.getLuoshiOption()
+        this.getYearOptions()
+        
     },
     methods: {
+        //获取年份下拉数据
+        getYearOptions() { 
+            let url=this.a+'ctrl/dbScreen/getYearPull'
+            window.IDM.http
+                .get(url, {
+                   
+                })
+                .then((res) => {
+                    console.log(res,"====年份111");
+                    this.activeYear=res.data.data.activeYear
+                    this.year=res.data.data.activeYear
+                    this.yearOptions=res.data.data.yearOptions
+                    this.getOptions()
+                    this.getDbGkData()
+                    this.getLuoshiOption()
+                })
+        },
         //获取年份
         getYear(){
             this.$nextTick(()=>{
@@ -888,7 +906,7 @@ export default {
         reset(){
             this.bt=""
             this.leixing=[]
-            this.year=new Date().getFullYear()
+            this.year=this.activeYear
             this.dwName=""
             this.$nextTick(()=>{
                 this.fetchData()
