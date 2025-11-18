@@ -164,6 +164,13 @@
             "className": "ICheckList",
             "comType": "common",
             "comLangue": "vue"
+        },
+        {
+            "classId": "idm.componet.db.isupervisebookwbj",
+            "comName": "督办台账-委办局",
+            "className": "ISuperviseBookWbj",
+            "comType": "common",
+            "comLangue": "vue"
         }
     ]
 }
