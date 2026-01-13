@@ -662,10 +662,10 @@ export default {
             this.attentionReason = "";
             this.$emit("closeCollect")
         });
-        
+        this.getYearOptions()
     },
     mounted() {
-        this.getYearOptions()
+        
         
     },
     methods: {

@@ -535,9 +535,9 @@ export default {
             this.attentionReason = "";
             this.$emit("closeCollect")
         });
+        this.getYearOptions()
     },
     mounted() {
-        this.getYearOptions()
         this.getOptions()
         this.getOptions2()
         this.getDbGkData()

@@ -91,6 +91,7 @@ export default {
             homeType: {},
             collectModelVisible: false,
             urgeTobackDetail: {},
+            year: "",
             a:""
         }
     },
@@ -103,7 +104,7 @@ export default {
                 {
                     userId: user.userid,
                     userName: user.username,
-                    year: date.format('YYYY'),
+                    year: this.year,
                     // year:2024,
                     month: 12
                 },
@@ -564,6 +565,9 @@ export default {
             immediate: true
         }
     },
+    created() { 
+        this.getYearOptions()
+    },
     mounted() {
         // 判断window.IDM?.url.queryObject().pageCategory是否存在并且有值
         if (window.IDM?.url.queryObject().pageCategory) {
@@ -573,6 +577,17 @@ export default {
     },
 
     methods: {
+        getYearOptions() { 
+            let url=this.a+'ctrl/dbScreen/getYearPull'
+            window.IDM.http
+                .get(url, {
+                   
+                })
+                .then((res) => {
+                    console.log(res,"====年份111");
+                    this.year=res.data.data.activeYear
+                })
+        },
         //获取首页的数据
         fetchShouyeData() {
             window.IDM.http
