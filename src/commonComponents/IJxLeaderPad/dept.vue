@@ -683,6 +683,7 @@ export default {
                     this.yearOptions=res.data.data.yearOptions
                     this.getOptions()
                     this.getDbGkData()
+                    this.fetchData()
                     this.getLuoshiOption()
                 })
         },

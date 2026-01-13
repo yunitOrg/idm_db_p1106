@@ -111,8 +111,10 @@ export default {
     data() {
         return {
             bt: "",
-            year:new Date().getFullYear(),
-            activeYear:new Date().getFullYear(),
+           // year:new Date().getFullYear(),
+            //activeYear:new Date().getFullYear(),
+            year:"",
+            activeYear:"",
             yearOptions:[],
             leixing: [],
             lszt:[],
@@ -556,6 +558,7 @@ export default {
                     this.year=res.data.data.activeYear
                     this.yearOptions=res.data.data.yearOptions
                      this.getDbGkData()
+                     this.fetchData()
                 })
         },
         //获取年份
